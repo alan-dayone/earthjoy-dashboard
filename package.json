@@ -6,7 +6,7 @@
     "npm": "6.x"
   },
   "scripts": {
-    "dev": "next",
+    "dev": "nodemon --exec ts-node server.ts",
     "build": "npm run clean && npm run build:server && npm run build:client",
     "start": "next start",
     "lint": "gts check ./**/*.{ts,tsx}",
