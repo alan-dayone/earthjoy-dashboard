@@ -1,9 +1,9 @@
-import { AuthGateway } from '../gateways/AuthGateway';
+// import { AuthGateway } from '../gateways/AuthGateway'
 
 class AuthService {
-  private authGateway: AuthGateway;
+  // private authGateway: AuthGateway;
 
-  loginWithEmail(email, password) {}
+  loginWithEmail (email, password) {}
 }
 
-export { AuthService };
+export { AuthService }

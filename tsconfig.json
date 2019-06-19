@@ -2,17 +2,13 @@
   "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
     "esModuleInterop": true,
-    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "outDir": "build"
   },
   "include": [
-    "services",
-    "gateways",
-    "pages"
-  ],
-  "exclude": [
-    "build"
+    "routes.ts",
+    "server.ts"
   ]
 }

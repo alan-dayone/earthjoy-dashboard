@@ -23,7 +23,7 @@ async function startServer() {
   await nextApp.prepare();
 
   server.use(handler).listen(port, () => {
-    console.info(`Server started on port ${process.env.BASE_URL}`);
+    console.info(`Server started at ${process.env.BASE_URL}`);
   });
 }
 

@@ -1,5 +1,5 @@
-import { AuthService } from './AuthService';
+import { AuthService } from './AuthService'
 
-const authService = new AuthService();
+const authService = new AuthService()
 
-export { authService };
+export { authService }

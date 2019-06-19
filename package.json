@@ -7,10 +7,11 @@
   },
   "scripts": {
     "dev": "nodemon --exec ts-node server.ts",
-    "build": "npm run clean && npm run build:server && npm run build:client",
-    "lint": "gts check",
-    "lint:fix": "gts fix",
-    "lint:clean": "gts clean",
+    "lint": "standard **/*.{js,ts,tsx}",
+    "lint:fix": "standard **/*.{js,ts,tsx} --fix",
+    "test": "echo \"Need to write test\"",
+    "prebuild": "npm run lint && npm run test && npm run clean",
+    "build": "npm run build:server && npm run build:client",
     "build:server": "tsc -p .",
     "build:client": "next build",
     "clean": "rm -rf .next build"
@@ -38,18 +39,30 @@
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
-    "@types/express": "^4.17.0",
-    "@types/js-cookie": "^2.2.2",
-    "@types/next": "^8.0.5",
     "@commitlint/cli": "^8.0.0",
     "@commitlint/config-conventional": "^8.0.0",
     "@types/dotenv": "^6.1.1",
+    "@types/express": "^4.17.0",
     "@types/http-proxy-middleware": "^0.19.2",
-    "gts": "^1.0.0",
+    "@types/js-cookie": "^2.2.2",
+    "@types/next": "^8.0.5",
+    "@typescript-eslint/eslint-plugin": "^1.10.2",
+    "@typescript-eslint/parser": "^1.10.2",
     "husky": "^2.3.0",
     "nodemon": "^1.19.1",
+    "standard": "^12.0.1",
     "ts-node": "8.1.0",
     "typescript": "^3.4.5"
+  },
+  "standard": {
+    "ignore": [
+      "build",
+      ".next"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint/eslint-plugin"
+    ]
   },
   "husky": {
     "hooks": {

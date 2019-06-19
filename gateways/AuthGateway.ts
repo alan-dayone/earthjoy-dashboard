@@ -1,11 +1,11 @@
-import { RestConnector } from './interfaces/RestConnector';
+// import { RestConnector } from './interfaces/RestConnector'
 
 class AuthGateway {
-  private restConnector: RestConnector;
+  // private restConnector: RestConnector;
 
-  loginWithEmail(email: string, password: string) {
+  loginWithEmail (email: string, password: string) {
     // this.restConnector.post('/users/login', {email, password});
   }
 }
 
-export { AuthGateway };
+export { AuthGateway }
