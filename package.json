@@ -8,9 +8,8 @@
   "scripts": {
     "dev": "nodemon --exec ts-node server.ts",
     "build": "npm run clean && npm run build:server && npm run build:client",
-    "start": "next start",
-    "lint": "gts check ./**/*.{ts,tsx}",
-    "lint:fix": "gts fix ./**/*.{ts,tsx}",
+    "lint": "gts check",
+    "lint:fix": "gts fix",
     "lint:clean": "gts clean",
     "build:server": "tsc -p .",
     "build:client": "next build",
