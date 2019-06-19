@@ -1,9 +1,9 @@
-const routes = require('next-routes')();
+const routes = require('next-routes')()
 
-routes.add('/', 'IndexPage');
+routes.add('/', 'IndexPage')
 
-routes.add('/sign-up', 'CoachSignUpPage');
+routes.add('/sign-up', 'CoachSignUpPage')
 
-routes.add('/setup', 'SetupPage');
+routes.add('/setup', 'SetupPage')
 
-export default routes;
+export { routes }

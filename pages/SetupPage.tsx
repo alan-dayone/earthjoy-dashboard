@@ -1,3 +1,4 @@
+/* tslint:disable:no-default-export */
 import { Component } from 'react'
 // import { authService } from '../services'
 

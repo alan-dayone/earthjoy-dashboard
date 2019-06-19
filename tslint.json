@@ -1,0 +1,12 @@
+{
+  "extends": "gts/tslint.json",
+  "rules": {
+    "semicolon": [false, "always", "ignore-bound-class-methods"]
+  },
+  "linterOptions": {
+    "exclude": [
+      "**/*.js",
+      "**/*.json"
+    ]
+  }
+}
