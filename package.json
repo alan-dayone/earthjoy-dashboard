@@ -15,7 +15,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node server.ts",
     "lint": "standard {**/*,*}.{js,ts,tsx} | snazzy && stylelint scss",
-    "lint:fix": "prettier-standard **/*.{js,ts,tsx} *.{js,ts}",
+    "lint:fix": "prettier-standard {**/*,*}.{js,ts,tsx}",
     "test": "echo \"Need to write test\"",
     "prebuild": "npm run lint && npm run test && npm run clean",
     "build": "npm run build:server && npm run build:client",
