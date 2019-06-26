@@ -1,4 +1,3 @@
-/* tslint:disable:no-default-export */
 import { Component } from 'react'
 
 export default class IndexPage extends Component {
