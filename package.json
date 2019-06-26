@@ -1,9 +1,16 @@
 {
   "name": "int-nextjs-ts",
+  "description": "Boilerplate for front-end code using nextjs and typescript",
+  "author": "DayOne Software Technology Co., Ltd",
+  "license": "ISC",
   "version": "1.0.0",
   "engines": {
     "node": "10.x",
     "npm": "6.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.com:dayone-teams/int-boilerplates/int-nextjs-ts.git"
   },
   "scripts": {
     "dev": "nodemon --exec ts-node server.ts",
@@ -12,8 +19,8 @@
     "test": "echo \"Need to write test\"",
     "prebuild": "npm run lint && npm run test && npm run clean",
     "build": "npm run build:server && npm run build:client",
-    "build:server": "tsc -p .",
-    "build:client": "next build",
+    "build:server": "tsc -p tsconfig-server.json && cp {package,package-lock}.json build",
+    "build:client": "next build && cp -R .next build",
     "clean": "rm -rf .next build"
   },
   "dependencies": {
@@ -50,8 +57,10 @@
     "@types/http-proxy-middleware": "^0.19.2",
     "@types/js-cookie": "^2.2.2",
     "@types/next": "^8.0.5",
+    "@types/react-redux": "^7.1.0",
     "@typescript-eslint/eslint-plugin": "^1.10.2",
     "@typescript-eslint/parser": "^1.10.2",
+    "gts": "^1.0.0",
     "husky": "^2.3.0",
     "nodemon": "^1.19.1",
     "prettier-standard": "^9.1.1",
@@ -83,12 +92,5 @@
       "pre-commit": "npm run lint",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@gitlab.com:dayone-teams/int-boilerplates/int-nextjs-ts.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "description": "Boilerplate for front-end code using nextjs"
+  }
 }

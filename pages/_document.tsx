@@ -23,7 +23,6 @@ export default class AppDocument extends Document {
             rel='stylesheet'
             href='//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css'
           />
-          <script src='/static/js/app.js' />
         </Head>
         <body>
           <Main />
