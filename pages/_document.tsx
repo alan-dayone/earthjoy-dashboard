@@ -14,15 +14,6 @@ export default class AppDocument extends Document {
           <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
           <meta name='viewport' content='width=device-width, initial-scale=1' />
           <link rel='icon' type='image/png' href='/static/icons/favicon.png' />
-          <link
-            href='https://use.fontawesome.com/releases/v5.3.1/css/all.css'
-            rel='stylesheet'
-            type='text/css'
-          />
-          <link
-            rel='stylesheet'
-            href='//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css'
-          />
         </Head>
         <body>
           <Main />

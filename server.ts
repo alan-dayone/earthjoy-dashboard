@@ -2,7 +2,7 @@ import express from 'express'
 import next from 'next'
 import dotenv from 'dotenv'
 // import proxy from 'http-proxy-middleware';
-import { routes } from './routes'
+import routes from './routes'
 
 dotenv.config()
 

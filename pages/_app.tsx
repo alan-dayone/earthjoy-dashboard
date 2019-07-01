@@ -3,8 +3,8 @@ import { compose } from 'redux'
 import { Provider } from 'react-redux'
 import App, { Container } from 'next/app'
 import withRedux from 'next-redux-wrapper'
+import { nprogress } from '../hocs'
 import { makeStore } from '../redux/store'
-// import nprogress from '../hocs/nprogress'
 import '../scss/style.scss'
 
 class ComposedApp extends App {
@@ -28,6 +28,6 @@ class ComposedApp extends App {
 }
 
 export default compose(
-  // nprogress(300, { showSpinner: false }),
+  nprogress(300, { showSpinner: true }),
   withRedux(makeStore)
 )(ComposedApp)
