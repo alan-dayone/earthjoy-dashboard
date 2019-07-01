@@ -11,3 +11,4 @@ routes.add('/setup', 'SetupPage')
 
 export default routes
 export const Link = routes.Link
+export const Router = routes.Router
