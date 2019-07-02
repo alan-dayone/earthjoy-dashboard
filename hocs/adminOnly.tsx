@@ -1,8 +1,40 @@
 import React from 'react'
 import Head from 'next/head'
+// import { Router } from '../routes'
+import { authService } from '../services'
+// import { isAdmin } from '../models/User'
+import { NextJSContext } from 'next-redux-wrapper'
+// import {
+//   actions as authActions,
+//   selectors as authSelectors
+// } from '../redux/authRedux'
 
 export const adminOnly = Content => {
   class AdminWrapper extends React.Component {
+    static async getInitialProps (ctx: NextJSContext) {
+      const { req, res, store, isServer } = ctx
+      const composedProps = Content.getInitialProps
+        ? await Content.getInitialProps(ctx)
+        : {}
+
+      if (isServer) {
+        authService.setAccessToken(req.signedCookies.access_token)
+        // const user = await store.dispatch(authActions.getLoginUser())
+
+        // if (!user || !isAdmin(user)) {
+        //   res.redirect('/admin/login')
+        //   res.end()
+        // }
+      } else {
+        // const user = authSelectors.getLoginUser(store.getState())
+        // if (!user || !isAdmin(user)) {
+        //   Router.pushRoute('/admin/login')
+        // }
+      }
+
+      return composedProps
+    }
+
     render () {
       return (
         <div className='app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show'>

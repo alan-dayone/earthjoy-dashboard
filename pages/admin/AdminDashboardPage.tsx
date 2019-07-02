@@ -1,21 +1,5 @@
 import React, {Component} from 'react';
 import {adminOnly} from "../../hocs";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardGroup,
-  Col,
-  Container,
-  Form,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Row
-} from 'reactstrap';
-import {guestOnly} from "../../hocs";
-import {Link} from "../../routes";
 
 class AdminDashboardPage extends Component {
   render() {

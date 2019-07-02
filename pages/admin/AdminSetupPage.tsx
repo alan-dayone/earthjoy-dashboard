@@ -1,8 +1,10 @@
 import { Component } from 'react'
-// import { authService } from '../services'
+import { everyone } from "../../hocs"
 
-export default class AdminSetupPage extends Component {
+class AdminSetupPage extends Component {
   render () {
     return <h1>IndexPage</h1>
   }
 }
+
+export default everyone(AdminSetupPage)
