@@ -5,7 +5,6 @@ import App, { Container } from 'next/app'
 import withRedux from 'next-redux-wrapper'
 import { nprogress } from '../hocs'
 import { makeStore } from '../redux/store'
-import '../scss/style.scss'
 
 class ComposedApp extends App {
   static async getInitialProps ({ Component, ctx }) {
