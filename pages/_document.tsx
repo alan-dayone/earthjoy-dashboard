@@ -6,14 +6,14 @@ export default class AppDocument extends Document {
     return (
       <html>
         <Head>
-          <meta charSet='utf-8' />
-          <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
-          <meta name='viewport' content='width=device-width, initial-scale=1' />
-          <link rel='icon' type='image/png' href='/static/icons/favicon.png' />
+          <meta charSet="utf-8" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" type="image/png" href="/static/icons/favicon.png" />
           <link
-            href='https://unpkg.com/nprogress@0.2.0/nprogress.css'
-            rel='stylesheet'
-            type='text/css'
+            href="https://unpkg.com/nprogress@0.2.0/nprogress.css"
+            rel="stylesheet"
+            type="text/css"
           />
         </Head>
         <body>

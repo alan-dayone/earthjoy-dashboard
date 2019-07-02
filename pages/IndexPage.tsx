@@ -6,20 +6,20 @@ import { everyone } from '../hocs';
 class IndexPage extends Component {
   render() {
     return (
-      <main className='app-masthead' role='main'>
+      <main className="app-masthead" role="main">
         <Head>
           <title>LoopNext</title>
         </Head>
-        <div className='container'>
-          <div className='align-items-center order-md-1 text-md-left pr-md-5'>
-            <h1 className='mb-3 app-text--brand text-primary'>LoopNext</h1>
-            <p className='lead'>
+        <div className="container">
+          <div className="align-items-center order-md-1 text-md-left pr-md-5">
+            <h1 className="mb-3 app-text--brand text-primary">LoopNext</h1>
+            <p className="lead">
               Scaffolding project template with common functionality implemented
               out-of-the-box with best practices and general standards.
               Including:
             </p>
-            <div className='masthead-followup row m-0 border border-white'>
-              <div className='col-md-4 p-3 p-md-5 bg-light border border-white'>
+            <div className="masthead-followup row m-0 border border-white">
+              <div className="col-md-4 p-3 p-md-5 bg-light border border-white">
                 <h3>User pages</h3>
                 <ul>
                   <li>Login</li>
@@ -30,7 +30,7 @@ class IndexPage extends Component {
                   <li>Change password</li>
                 </ul>
               </div>
-              <div className='col-md-4 p-3 p-md-5 bg-light border border-white'>
+              <div className="col-md-4 p-3 p-md-5 bg-light border border-white">
                 <h3>Admin dashboard</h3>
                 <ul>
                   <li>Login</li>
@@ -51,7 +51,7 @@ class IndexPage extends Component {
                   <li>Server availability management</li>
                 </ul>
               </div>
-              <div className='col-md-4 p-3 p-md-5 bg-light border border-white'>
+              <div className="col-md-4 p-3 p-md-5 bg-light border border-white">
                 <h3>There're more things</h3>
                 <ul>
                   <li>Multi-languages implementation</li>
@@ -63,30 +63,30 @@ class IndexPage extends Component {
                 </ul>
               </div>
             </div>
-            <div className='d-flex flex-column flex-md-row lead mb-3 mt-5'>
+            <div className="d-flex flex-column flex-md-row lead mb-3 mt-5">
               <a
-                href='/#getting-started'
-                className='btn btn-lg btn-outline-primary mb-3 mb-md-0 mr-md-3 btn--large'
+                href="/#getting-started"
+                className="btn btn-lg btn-outline-primary mb-3 mb-md-0 mr-md-3 btn--large"
               >
                 Get started
               </a>
               <a
-                target='_blank'
-                href='https://gitlab.com/dayone-teams/int-boilerplates/int-loopnext'
-                className='btn btn-lg btn-outline-secondary btn--large'
+                target="_blank"
+                href="https://gitlab.com/dayone-teams/int-boilerplates/int-loopnext"
+                className="btn btn-lg btn-outline-secondary btn--large"
               >
                 Check out source code
               </a>
             </div>
-            <p className='text-muted mb-0'>Currently v1.0.0</p>
+            <p className="text-muted mb-0">Currently v1.0.0</p>
           </div>
           <h2
-            id='getting_started'
-            className='mt-5 app-text--brand text-primary'
+            id="getting_started"
+            className="mt-5 app-text--brand text-primary"
           >
             Getting Started
           </h2>
-          <div className='bg-light p-3 mt-3'>
+          <div className="bg-light p-3 mt-3">
             <pre>
               <code>
                 git clone

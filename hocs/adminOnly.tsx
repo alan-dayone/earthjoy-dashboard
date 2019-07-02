@@ -38,38 +38,38 @@ export const adminOnly = Content => {
 
     render() {
       return (
-        <div className='app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show'>
+        <div className="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
           <Head>
             <link
-              href='https://use.fontawesome.com/releases/v5.3.1/css/all.css'
-              rel='stylesheet'
-              type='text/css'
+              href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+              rel="stylesheet"
+              type="text/css"
             />
             <link
-              href='https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css'
-              type='text/css'
-              rel='stylesheet'
+              href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css"
+              type="text/css"
+              rel="stylesheet"
             />
             <link
-              href='https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css'
-              type='text/css'
-              rel='stylesheet'
+              href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css"
+              type="text/css"
+              rel="stylesheet"
             />
             <link
-              href='https://unpkg.com/@coreui/icons/css/coreui-icons.min.css'
-              rel='stylesheet'
-              type='text/css'
+              href="https://unpkg.com/@coreui/icons/css/coreui-icons.min.css"
+              rel="stylesheet"
+              type="text/css"
             />
             <link
-              href='https://unpkg.com/@coreui/coreui/dist/css/coreui.min.css'
-              rel='stylesheet'
-              type='text/css'
+              href="https://unpkg.com/@coreui/coreui/dist/css/coreui.min.css"
+              rel="stylesheet"
+              type="text/css"
             />
           </Head>
           {this._renderNavbar()}
-          <div className='app-body'>
+          <div className="app-body">
             {this._renderSidebar()}
-            <div id='main'>
+            <div id="main">
               <Content {...this.props} />
             </div>
           </div>
@@ -79,144 +79,144 @@ export const adminOnly = Content => {
 
     _renderNavbar = () => {
       return (
-        <header className='app-header navbar'>
+        <header className="app-header navbar">
           <button
-            className='navbar-toggler sidebar-toggler d-lg-none mr-auto'
-            type='button'
-            data-toggle='sidebar-show'
+            className="navbar-toggler sidebar-toggler d-lg-none mr-auto"
+            type="button"
+            data-toggle="sidebar-show"
           >
-            <span className='navbar-toggler-icon' />
+            <span className="navbar-toggler-icon" />
           </button>
-          <a className='navbar-brand' href='#'>
+          <a className="navbar-brand" href="#">
             <img
-              className='navbar-brand-full'
-              src='/static/img/admin-logo.jpg'
+              className="navbar-brand-full"
+              src="/static/img/admin-logo.jpg"
               height={25}
-              alt='CoreUI Logo'
+              alt="CoreUI Logo"
             />
             <img
-              className='navbar-brand-minimized'
-              src='/static/img/admin-logo.jpg'
+              className="navbar-brand-minimized"
+              src="/static/img/admin-logo.jpg"
               height={30}
-              alt='CoreUI Logo'
+              alt="CoreUI Logo"
             />
           </a>
           <button
-            className='navbar-toggler sidebar-toggler d-md-down-none'
-            type='button'
-            data-toggle='sidebar-lg-show'
+            className="navbar-toggler sidebar-toggler d-md-down-none"
+            type="button"
+            data-toggle="sidebar-lg-show"
           >
-            <span className='navbar-toggler-icon' />
+            <span className="navbar-toggler-icon" />
           </button>
-          <ul className='nav navbar-nav d-md-down-none'>
-            <li className='nav-item px-3'>
-              <a className='nav-link' href='#'>
+          <ul className="nav navbar-nav d-md-down-none">
+            <li className="nav-item px-3">
+              <a className="nav-link" href="#">
                 Dashboard
               </a>
             </li>
-            <li className='nav-item px-3'>
-              <a className='nav-link' href='#'>
+            <li className="nav-item px-3">
+              <a className="nav-link" href="#">
                 Users
               </a>
             </li>
-            <li className='nav-item px-3'>
-              <a className='nav-link' href='#'>
+            <li className="nav-item px-3">
+              <a className="nav-link" href="#">
                 Settings
               </a>
             </li>
           </ul>
-          <ul className='nav navbar-nav ml-auto'>
-            <li className='nav-item d-md-down-none'>
-              <a className='nav-link' href='#'>
-                <i className='icon-bell' />
-                <span className='badge badge-pill badge-danger'>5</span>
+          <ul className="nav navbar-nav ml-auto">
+            <li className="nav-item d-md-down-none">
+              <a className="nav-link" href="#">
+                <i className="icon-bell" />
+                <span className="badge badge-pill badge-danger">5</span>
               </a>
             </li>
-            <li className='nav-item d-md-down-none'>
-              <a className='nav-link' href='#'>
-                <i className='icon-list' />
+            <li className="nav-item d-md-down-none">
+              <a className="nav-link" href="#">
+                <i className="icon-list" />
               </a>
             </li>
-            <li className='nav-item d-md-down-none'>
-              <a className='nav-link' href='#'>
-                <i className='icon-location-pin' />
+            <li className="nav-item d-md-down-none">
+              <a className="nav-link" href="#">
+                <i className="icon-location-pin" />
               </a>
             </li>
-            <li className='nav-item dropdown'>
+            <li className="nav-item dropdown">
               <a
-                className='nav-link'
-                data-toggle='dropdown'
-                href='#'
-                role='button'
-                aria-haspopup='true'
-                aria-expanded='false'
+                className="nav-link"
+                data-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded="false"
               >
                 <img
-                  className='img-avatar'
-                  src='img/avatars/6.jpg'
-                  alt='admin@bootstrapmaster.com'
+                  className="img-avatar"
+                  src="img/avatars/6.jpg"
+                  alt="admin@bootstrapmaster.com"
                 />
               </a>
-              <div className='dropdown-menu dropdown-menu-right'>
-                <div className='dropdown-header text-center'>
+              <div className="dropdown-menu dropdown-menu-right">
+                <div className="dropdown-header text-center">
                   <strong>Account</strong>
                 </div>
-                <a className='dropdown-item' href='#'>
-                  <i className='fa fa-bell-o' /> Updates
-                  <span className='badge badge-info'>42</span>
+                <a className="dropdown-item" href="#">
+                  <i className="fa fa-bell-o" /> Updates
+                  <span className="badge badge-info">42</span>
                 </a>
-                <a className='dropdown-item' href='#'>
-                  <i className='fa fa-envelope-o' /> Messages
-                  <span className='badge badge-success'>42</span>
+                <a className="dropdown-item" href="#">
+                  <i className="fa fa-envelope-o" /> Messages
+                  <span className="badge badge-success">42</span>
                 </a>
-                <a className='dropdown-item' href='#'>
-                  <i className='fa fa-tasks' /> Tasks
-                  <span className='badge badge-danger'>42</span>
+                <a className="dropdown-item" href="#">
+                  <i className="fa fa-tasks" /> Tasks
+                  <span className="badge badge-danger">42</span>
                 </a>
-                <a className='dropdown-item' href='#'>
-                  <i className='fa fa-comments' /> Comments
-                  <span className='badge badge-warning'>42</span>
+                <a className="dropdown-item" href="#">
+                  <i className="fa fa-comments" /> Comments
+                  <span className="badge badge-warning">42</span>
                 </a>
-                <div className='dropdown-header text-center'>
+                <div className="dropdown-header text-center">
                   <strong>Settings</strong>
                 </div>
-                <a className='dropdown-item' href='#'>
-                  <i className='fa fa-user' /> Profile
+                <a className="dropdown-item" href="#">
+                  <i className="fa fa-user" /> Profile
                 </a>
-                <a className='dropdown-item' href='#'>
-                  <i className='fa fa-wrench' /> Settings
+                <a className="dropdown-item" href="#">
+                  <i className="fa fa-wrench" /> Settings
                 </a>
-                <a className='dropdown-item' href='#'>
-                  <i className='fa fa-usd' /> Payments
-                  <span className='badge badge-secondary'>42</span>
+                <a className="dropdown-item" href="#">
+                  <i className="fa fa-usd" /> Payments
+                  <span className="badge badge-secondary">42</span>
                 </a>
-                <a className='dropdown-item' href='#'>
-                  <i className='fa fa-file' /> Projects
-                  <span className='badge badge-primary'>42</span>
+                <a className="dropdown-item" href="#">
+                  <i className="fa fa-file" /> Projects
+                  <span className="badge badge-primary">42</span>
                 </a>
-                <div className='dropdown-divider' />
-                <a className='dropdown-item' href='#'>
-                  <i className='fa fa-shield' /> Lock Account
+                <div className="dropdown-divider" />
+                <a className="dropdown-item" href="#">
+                  <i className="fa fa-shield" /> Lock Account
                 </a>
-                <a className='dropdown-item' href='#'>
-                  <i className='fa fa-lock' /> Logout
+                <a className="dropdown-item" href="#">
+                  <i className="fa fa-lock" /> Logout
                 </a>
               </div>
             </li>
           </ul>
           <button
-            className='navbar-toggler aside-menu-toggler d-md-down-none'
-            type='button'
-            data-toggle='aside-menu-lg-show'
+            className="navbar-toggler aside-menu-toggler d-md-down-none"
+            type="button"
+            data-toggle="aside-menu-lg-show"
           >
-            <span className='navbar-toggler-icon' />
+            <span className="navbar-toggler-icon" />
           </button>
           <button
-            className='navbar-toggler aside-menu-toggler d-lg-none'
-            type='button'
-            data-toggle='aside-menu-show'
+            className="navbar-toggler aside-menu-toggler d-lg-none"
+            type="button"
+            data-toggle="aside-menu-show"
           >
-            <span className='navbar-toggler-icon' />
+            <span className="navbar-toggler-icon" />
           </button>
         </header>
       );
@@ -224,254 +224,254 @@ export const adminOnly = Content => {
 
     _renderSidebar = () => {
       return (
-        <div className='sidebar'>
-          <nav className='sidebar-nav'>
-            <ul className='nav'>
-              <li className='nav-item'>
-                <a className='nav-link' href='index.html'>
-                  <i className='nav-icon icon-speedometer' /> Dashboard
-                  <span className='badge badge-primary'>NEW</span>
+        <div className="sidebar">
+          <nav className="sidebar-nav">
+            <ul className="nav">
+              <li className="nav-item">
+                <a className="nav-link" href="index.html">
+                  <i className="nav-icon icon-speedometer" /> Dashboard
+                  <span className="badge badge-primary">NEW</span>
                 </a>
               </li>
-              <li className='nav-title'>Theme</li>
-              <li className='nav-item'>
-                <a className='nav-link' href='colors.html'>
-                  <i className='nav-icon icon-drop' /> Colors
+              <li className="nav-title">Theme</li>
+              <li className="nav-item">
+                <a className="nav-link" href="colors.html">
+                  <i className="nav-icon icon-drop" /> Colors
                 </a>
               </li>
-              <li className='nav-item'>
-                <a className='nav-link' href='typography.html'>
-                  <i className='nav-icon icon-pencil' /> Typography
+              <li className="nav-item">
+                <a className="nav-link" href="typography.html">
+                  <i className="nav-icon icon-pencil" /> Typography
                 </a>
               </li>
-              <li className='nav-title'>Components</li>
-              <li className='nav-item nav-dropdown'>
-                <a className='nav-link nav-dropdown-toggle' href='#'>
-                  <i className='nav-icon icon-puzzle' /> Base
+              <li className="nav-title">Components</li>
+              <li className="nav-item nav-dropdown">
+                <a className="nav-link nav-dropdown-toggle" href="#">
+                  <i className="nav-icon icon-puzzle" /> Base
                 </a>
-                <ul className='nav-dropdown-items'>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/breadcrumb.html'>
-                      <i className='nav-icon icon-puzzle' /> Breadcrumb
+                <ul className="nav-dropdown-items">
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/breadcrumb.html">
+                      <i className="nav-icon icon-puzzle" /> Breadcrumb
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/cards.html'>
-                      <i className='nav-icon icon-puzzle' /> Cards
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/cards.html">
+                      <i className="nav-icon icon-puzzle" /> Cards
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/carousel.html'>
-                      <i className='nav-icon icon-puzzle' /> Carousel
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/carousel.html">
+                      <i className="nav-icon icon-puzzle" /> Carousel
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/collapse.html'>
-                      <i className='nav-icon icon-puzzle' /> Collapse
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/collapse.html">
+                      <i className="nav-icon icon-puzzle" /> Collapse
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/forms.html'>
-                      <i className='nav-icon icon-puzzle' /> Forms
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/forms.html">
+                      <i className="nav-icon icon-puzzle" /> Forms
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/jumbotron.html'>
-                      <i className='nav-icon icon-puzzle' /> Jumbotron
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/jumbotron.html">
+                      <i className="nav-icon icon-puzzle" /> Jumbotron
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/list-group.html'>
-                      <i className='nav-icon icon-puzzle' /> List group
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/list-group.html">
+                      <i className="nav-icon icon-puzzle" /> List group
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/navs.html'>
-                      <i className='nav-icon icon-puzzle' /> Navs
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/navs.html">
+                      <i className="nav-icon icon-puzzle" /> Navs
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/pagination.html'>
-                      <i className='nav-icon icon-puzzle' /> Pagination
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/pagination.html">
+                      <i className="nav-icon icon-puzzle" /> Pagination
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/popovers.html'>
-                      <i className='nav-icon icon-puzzle' /> Popovers
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/popovers.html">
+                      <i className="nav-icon icon-puzzle" /> Popovers
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/progress.html'>
-                      <i className='nav-icon icon-puzzle' /> Progress
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/progress.html">
+                      <i className="nav-icon icon-puzzle" /> Progress
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/scrollspy.html'>
-                      <i className='nav-icon icon-puzzle' /> Scrollspy
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/scrollspy.html">
+                      <i className="nav-icon icon-puzzle" /> Scrollspy
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/switches.html'>
-                      <i className='nav-icon icon-puzzle' /> Switches
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/switches.html">
+                      <i className="nav-icon icon-puzzle" /> Switches
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/tables.html'>
-                      <i className='nav-icon icon-puzzle' /> Tables
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/tables.html">
+                      <i className="nav-icon icon-puzzle" /> Tables
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/tabs.html'>
-                      <i className='nav-icon icon-puzzle' /> Tabs
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/tabs.html">
+                      <i className="nav-icon icon-puzzle" /> Tabs
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='base/tooltips.html'>
-                      <i className='nav-icon icon-puzzle' /> Tooltips
+                  <li className="nav-item">
+                    <a className="nav-link" href="base/tooltips.html">
+                      <i className="nav-icon icon-puzzle" /> Tooltips
                     </a>
                   </li>
                 </ul>
               </li>
-              <li className='nav-item nav-dropdown'>
-                <a className='nav-link nav-dropdown-toggle' href='#'>
-                  <i className='nav-icon icon-cursor' /> Buttons
+              <li className="nav-item nav-dropdown">
+                <a className="nav-link nav-dropdown-toggle" href="#">
+                  <i className="nav-icon icon-cursor" /> Buttons
                 </a>
-                <ul className='nav-dropdown-items'>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='buttons/buttons.html'>
-                      <i className='nav-icon icon-cursor' /> Buttons
+                <ul className="nav-dropdown-items">
+                  <li className="nav-item">
+                    <a className="nav-link" href="buttons/buttons.html">
+                      <i className="nav-icon icon-cursor" /> Buttons
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='buttons/button-group.html'>
-                      <i className='nav-icon icon-cursor' /> Buttons Group
+                  <li className="nav-item">
+                    <a className="nav-link" href="buttons/button-group.html">
+                      <i className="nav-icon icon-cursor" /> Buttons Group
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='buttons/dropdowns.html'>
-                      <i className='nav-icon icon-cursor' /> Dropdowns
+                  <li className="nav-item">
+                    <a className="nav-link" href="buttons/dropdowns.html">
+                      <i className="nav-icon icon-cursor" /> Dropdowns
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='buttons/brand-buttons.html'>
-                      <i className='nav-icon icon-cursor' /> Brand Buttons
+                  <li className="nav-item">
+                    <a className="nav-link" href="buttons/brand-buttons.html">
+                      <i className="nav-icon icon-cursor" /> Brand Buttons
                     </a>
                   </li>
                 </ul>
               </li>
-              <li className='nav-item'>
-                <a className='nav-link' href='charts.html'>
-                  <i className='nav-icon icon-pie-chart' /> Charts
+              <li className="nav-item">
+                <a className="nav-link" href="charts.html">
+                  <i className="nav-icon icon-pie-chart" /> Charts
                 </a>
               </li>
-              <li className='nav-item nav-dropdown'>
-                <a className='nav-link nav-dropdown-toggle' href='#'>
-                  <i className='nav-icon icon-star' /> Icons
+              <li className="nav-item nav-dropdown">
+                <a className="nav-link nav-dropdown-toggle" href="#">
+                  <i className="nav-icon icon-star" /> Icons
                 </a>
-                <ul className='nav-dropdown-items'>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='icons/coreui-icons.html'>
-                      <i className='nav-icon icon-star' /> CoreUI Icons
-                      <span className='badge badge-success'>NEW</span>
+                <ul className="nav-dropdown-items">
+                  <li className="nav-item">
+                    <a className="nav-link" href="icons/coreui-icons.html">
+                      <i className="nav-icon icon-star" /> CoreUI Icons
+                      <span className="badge badge-success">NEW</span>
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='icons/flags.html'>
-                      <i className='nav-icon icon-star' /> Flags
+                  <li className="nav-item">
+                    <a className="nav-link" href="icons/flags.html">
+                      <i className="nav-icon icon-star" /> Flags
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='icons/font-awesome.html'>
-                      <i className='nav-icon icon-star' /> Font Awesome
-                      <span className='badge badge-secondary'>4.7</span>
+                  <li className="nav-item">
+                    <a className="nav-link" href="icons/font-awesome.html">
+                      <i className="nav-icon icon-star" /> Font Awesome
+                      <span className="badge badge-secondary">4.7</span>
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='icons/simple-line-icons.html'>
-                      <i className='nav-icon icon-star' /> Simple Line Icons
+                  <li className="nav-item">
+                    <a className="nav-link" href="icons/simple-line-icons.html">
+                      <i className="nav-icon icon-star" /> Simple Line Icons
                     </a>
                   </li>
                 </ul>
               </li>
-              <li className='nav-item nav-dropdown'>
-                <a className='nav-link nav-dropdown-toggle' href='#'>
-                  <i className='nav-icon icon-bell' /> Notifications
+              <li className="nav-item nav-dropdown">
+                <a className="nav-link nav-dropdown-toggle" href="#">
+                  <i className="nav-icon icon-bell" /> Notifications
                 </a>
-                <ul className='nav-dropdown-items'>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='notifications/alerts.html'>
-                      <i className='nav-icon icon-bell' /> Alerts
+                <ul className="nav-dropdown-items">
+                  <li className="nav-item">
+                    <a className="nav-link" href="notifications/alerts.html">
+                      <i className="nav-icon icon-bell" /> Alerts
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='notifications/badge.html'>
-                      <i className='nav-icon icon-bell' /> Badge
+                  <li className="nav-item">
+                    <a className="nav-link" href="notifications/badge.html">
+                      <i className="nav-icon icon-bell" /> Badge
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='notifications/modals.html'>
-                      <i className='nav-icon icon-bell' /> Modals
+                  <li className="nav-item">
+                    <a className="nav-link" href="notifications/modals.html">
+                      <i className="nav-icon icon-bell" /> Modals
                     </a>
                   </li>
                 </ul>
               </li>
-              <li className='nav-item'>
-                <a className='nav-link' href='widgets.html'>
-                  <i className='nav-icon icon-calculator' /> Widgets
-                  <span className='badge badge-primary'>NEW</span>
+              <li className="nav-item">
+                <a className="nav-link" href="widgets.html">
+                  <i className="nav-icon icon-calculator" /> Widgets
+                  <span className="badge badge-primary">NEW</span>
                 </a>
               </li>
-              <li className='divider' />
-              <li className='nav-title'>Extras</li>
-              <li className='nav-item nav-dropdown'>
-                <a className='nav-link nav-dropdown-toggle' href='#'>
-                  <i className='nav-icon icon-star' /> Pages
+              <li className="divider" />
+              <li className="nav-title">Extras</li>
+              <li className="nav-item nav-dropdown">
+                <a className="nav-link nav-dropdown-toggle" href="#">
+                  <i className="nav-icon icon-star" /> Pages
                 </a>
-                <ul className='nav-dropdown-items'>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='login.html' target='_top'>
-                      <i className='nav-icon icon-star' /> Login
+                <ul className="nav-dropdown-items">
+                  <li className="nav-item">
+                    <a className="nav-link" href="login.html" target="_top">
+                      <i className="nav-icon icon-star" /> Login
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='register.html' target='_top'>
-                      <i className='nav-icon icon-star' /> Register
+                  <li className="nav-item">
+                    <a className="nav-link" href="register.html" target="_top">
+                      <i className="nav-icon icon-star" /> Register
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='404.html' target='_top'>
-                      <i className='nav-icon icon-star' /> Error 404
+                  <li className="nav-item">
+                    <a className="nav-link" href="404.html" target="_top">
+                      <i className="nav-icon icon-star" /> Error 404
                     </a>
                   </li>
-                  <li className='nav-item'>
-                    <a className='nav-link' href='500.html' target='_top'>
-                      <i className='nav-icon icon-star' /> Error 500
+                  <li className="nav-item">
+                    <a className="nav-link" href="500.html" target="_top">
+                      <i className="nav-icon icon-star" /> Error 500
                     </a>
                   </li>
                 </ul>
               </li>
-              <li className='nav-item mt-auto'>
+              <li className="nav-item mt-auto">
                 <a
-                  className='nav-link nav-link-success'
-                  href='https://coreui.io'
-                  target='_top'
+                  className="nav-link nav-link-success"
+                  href="https://coreui.io"
+                  target="_top"
                 >
-                  <i className='nav-icon icon-cloud-download' /> Download CoreUI
+                  <i className="nav-icon icon-cloud-download" /> Download CoreUI
                 </a>
               </li>
-              <li className='nav-item'>
+              <li className="nav-item">
                 <a
-                  className='nav-link nav-link-danger'
-                  href='https://coreui.io/pro/'
-                  target='_top'
+                  className="nav-link nav-link-danger"
+                  href="https://coreui.io/pro/"
+                  target="_top"
                 >
-                  <i className='nav-icon icon-layers' /> Try CoreUI
+                  <i className="nav-icon icon-layers" /> Try CoreUI
                   <strong>PRO</strong>
                 </a>
               </li>
             </ul>
           </nav>
-          <button className='sidebar-minimizer brand-minimizer' type='button' />
+          <button className="sidebar-minimizer brand-minimizer" type="button" />
         </div>
       );
     };

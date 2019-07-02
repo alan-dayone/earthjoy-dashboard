@@ -2,8 +2,8 @@ import getConfig from 'next/config';
 import { AuthService } from './AuthService';
 import { AuthGateway } from '../gateways/AuthGateway';
 import { PubsubGateway } from '../gateways/PubsubGateway';
-import {create as createRestConnector} from '../connectors/RestConnector';
-import {create as createPubsubConnector} from '../connectors/PubsubConnector';
+import { create as createRestConnector } from '../connectors/RestConnector';
+import { create as createPubsubConnector } from '../connectors/PubsubConnector';
 
 const { publicRuntimeConfig } = getConfig();
 

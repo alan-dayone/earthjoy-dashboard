@@ -10,19 +10,19 @@ export const guestOnly = (Content, options?) => {
           {options.useAdminLayout && (
             <Head>
               <link
-                href='https://use.fontawesome.com/releases/v5.3.1/css/all.css'
-                rel='stylesheet'
-                type='text/css'
+                href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+                rel="stylesheet"
+                type="text/css"
               />
               <link
-                href='https://unpkg.com/@coreui/icons/css/coreui-icons.min.css'
-                rel='stylesheet'
-                type='text/css'
+                href="https://unpkg.com/@coreui/icons/css/coreui-icons.min.css"
+                rel="stylesheet"
+                type="text/css"
               />
               <link
-                href='https://unpkg.com/@coreui/coreui/dist/css/coreui.min.css'
-                rel='stylesheet'
-                type='text/css'
+                href="https://unpkg.com/@coreui/coreui/dist/css/coreui.min.css"
+                rel="stylesheet"
+                type="text/css"
               />
             </Head>
           )}

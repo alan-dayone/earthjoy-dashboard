@@ -1,6 +1,6 @@
 import {
   errorCode as ValidationErrorCode,
-  ValidationError
+  ValidationError,
 } from '../errors/ValidationError';
 import { constraint } from '../models/User';
 import { validate } from './BaseValidator';
