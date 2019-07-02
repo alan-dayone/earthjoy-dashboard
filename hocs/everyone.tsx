@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import { Link } from '../routes';
 
-/* tslint:disable:variable-name */
+/* tslint:disable-next-line:variable-name */
 export const everyone = Content => {
   class Wrapper extends React.Component {
     render() {

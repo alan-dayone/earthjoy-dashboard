@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 
-/* tslint:disable:variable-name */
+/* tslint:disable-next-line:variable-name */
 export const guestOnly = (Content, options?) => {
   class GuestWrapper extends React.Component {
     render() {

@@ -9,7 +9,7 @@ import { NextJSContext } from 'next-redux-wrapper';
 //   selectors as authSelectors
 // } from '../redux/authRedux'
 
-/* tslint:disable:variable-name */
+/* tslint:disable-next-line:variable-name */
 export const adminOnly = Content => {
   class AdminWrapper extends React.Component {
     static async getInitialProps(ctx: NextJSContext) {
