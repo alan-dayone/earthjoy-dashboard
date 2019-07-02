@@ -13,7 +13,7 @@
     "url": "git@gitlab.com:dayone-teams/int-boilerplates/int-nextjs-ts.git"
   },
   "scripts": {
-    "dev": "nodemon --exec ts-node server.ts -P tsconfig-server.json",
+    "dev": "nodemon --exec ts-node --project tsconfig-server.json server.ts",
     "lint": "standard {**/*,*}.{js,ts,tsx} | snazzy && stylelint scss",
     "lint:fix": "prettier-standard {**/*,*}.{js,ts,tsx}",
     "test": "echo \"Need to write test\"",
@@ -32,10 +32,8 @@
     "ag-grid-community": "^21.0.1",
     "ag-grid-react": "^21.0.1",
     "axios": "^0.19.0",
-    "bootstrap": "^4.3.1",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
-    "font-awesome": "^4.7.0",
     "http-proxy-middleware": "^0.19.1",
     "lodash": "^4.17.11",
     "next": "^8.1.0",
