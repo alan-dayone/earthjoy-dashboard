@@ -1,7 +1,8 @@
-import Document, { Head, Main, NextScript } from 'next/document'
+/* tslint:disable:no-default-export */
+import Document, { Head, Main, NextScript } from 'next/document';
 
 export default class AppDocument extends Document {
-  render () {
+  render() {
     return (
       <html>
         <Head>
@@ -20,6 +21,6 @@ export default class AppDocument extends Document {
           <NextScript />
         </body>
       </html>
-    )
+    );
   }
 }

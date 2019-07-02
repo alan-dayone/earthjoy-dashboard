@@ -1,62 +1,62 @@
 import {
-  ErrorCode as ValidationErrorCode,
+  errorCode as ValidationErrorCode,
   ValidationError
-} from '../errors/ValidationError'
-import { Constraint } from '../models/User'
-import { validate } from './BaseValidator'
+} from '../errors/ValidationError';
+import { constraint } from '../models/User';
+import { validate } from './BaseValidator';
 
-const Spec = {
+const spec = {
   email: {
     presence: {
       message: `^${ValidationErrorCode.REQUIRED}`,
-      allowEmpty: false
+      allowEmpty: false,
     },
     email: { message: `^${ValidationErrorCode.INVALID_EMAIL}` },
     length: {
-      maximum: Constraint.email.MAX_LENGTH,
-      message: `^${ValidationErrorCode.INVALID_LENGTH}`
-    }
+      maximum: constraint.email.MAX_LENGTH,
+      message: `^${ValidationErrorCode.INVALID_LENGTH}`,
+    },
   },
   password: {
     presence: {
       message: `^${ValidationErrorCode.REQUIRED}`,
-      allowEmpty: false
+      allowEmpty: false,
     },
     length: {
-      minimum: Constraint.password.MIN_LENGTH,
-      maximum: Constraint.password.MAX_LENGTH,
-      message: `^${ValidationErrorCode.INVALID_LENGTH}`
-    }
+      minimum: constraint.password.MIN_LENGTH,
+      maximum: constraint.password.MAX_LENGTH,
+      message: `^${ValidationErrorCode.INVALID_LENGTH}`,
+    },
   },
   name: {
     presence: {
       message: `^${ValidationErrorCode.REQUIRED}`,
-      allowEmpty: false
+      allowEmpty: false,
     },
     length: {
-      minimum: Constraint.name.MIN_LENGTH,
-      maximum: Constraint.name.MAX_LENGTH,
-      message: `^${ValidationErrorCode.INVALID_LENGTH}`
-    }
-  }
+      minimum: constraint.name.MIN_LENGTH,
+      maximum: constraint.name.MAX_LENGTH,
+      message: `^${ValidationErrorCode.INVALID_LENGTH}`,
+    },
+  },
+};
+
+export function validateUser(userData) {
+  validate(userData, spec);
 }
 
-export function validateUser (userData) {
-  validate(userData, Spec)
-}
+export function validateAvatarUpload(file) {
+  const errorCodes = [];
 
-export function validateAvatarUpload (file) {
-  const errorCodes = []
-
-  if (!Constraint.avatar.ALLOWED_FILE_TYPES.includes(file.type)) {
-    errorCodes.push(ValidationErrorCode.INVALID_FILE_TYPE)
+  if (!constraint.avatar.ALLOWED_FILE_TYPES.includes(file.type)) {
+    errorCodes.push(ValidationErrorCode.INVALID_FILE_TYPE);
   }
 
-  if (file.size > Constraint.avatar.MAX_FILE_SIZE) {
-    errorCodes.push(ValidationErrorCode.INVALID_FILE_SIZE)
+  if (file.size > constraint.avatar.MAX_FILE_SIZE) {
+    errorCodes.push(ValidationErrorCode.INVALID_FILE_SIZE);
   }
 
   if (errorCodes.length) {
-    throw new ValidationError(errorCodes)
+    throw new ValidationError(errorCodes);
   }
 }

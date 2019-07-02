@@ -1,10 +1,11 @@
-import { Component } from 'react'
-import { everyone } from "../../hocs"
+/* tslint:disable:no-default-export */
+import { Component } from 'react';
+import { everyone } from '../../hocs';
 
 class AdminSetupPage extends Component {
-  render () {
-    return <h1>IndexPage</h1>
+  render() {
+    return <h1>IndexPage</h1>;
   }
 }
 
-export default everyone(AdminSetupPage)
+export default everyone(AdminSetupPage);

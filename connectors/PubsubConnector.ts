@@ -1,5 +1,5 @@
-import EventEmitter from 'events'
+import EventEmitter from 'events';
 
-export function create () {
-  return new EventEmitter()
+export function create() {
+  return new EventEmitter();
 }

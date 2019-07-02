@@ -1,10 +1,11 @@
-import React from 'react'
-import Head from 'next/head'
-import { Link } from '../routes'
+import React from 'react';
+import Head from 'next/head';
+import { Link } from '../routes';
 
+/* tslint:disable:variable-name */
 export const everyone = Content => {
   class Wrapper extends React.Component {
-    render () {
+    render() {
       return (
         <div>
           <Head>
@@ -20,7 +21,7 @@ export const everyone = Content => {
           <Content {...this.props} />
           {this._renderFooter()}
         </div>
-      )
+      );
     }
 
     _renderNavBar = () => {
@@ -36,8 +37,8 @@ export const everyone = Content => {
             </ul>
           </div>
         </header>
-      )
-    }
+      );
+    };
 
     _renderFooter = () => {
       return (
@@ -63,9 +64,9 @@ export const everyone = Content => {
             </p>
           </div>
         </footer>
-      )
-    }
+      );
+    };
   }
 
-  return Wrapper
-}
+  return Wrapper;
+};

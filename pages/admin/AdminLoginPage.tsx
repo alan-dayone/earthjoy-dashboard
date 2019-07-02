@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+/* tslint:disable:no-default-export */
+import React, { Component } from 'react';
 import {
   Button,
   Card,
@@ -13,8 +14,8 @@ import {
   InputGroupText,
   Row
 } from 'reactstrap';
-import {guestOnly} from "../../hocs";
-import {Link} from "../../routes";
+import { guestOnly } from '../../hocs';
+import { Link } from '../../routes';
 
 class AdminLoginPage extends Component {
   render() {
@@ -34,8 +35,11 @@ class AdminLoginPage extends Component {
                           <i className='fa fa-envelope' />
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input type='text' placeholder='Email'
-                             autoComplete='email' />
+                      <Input
+                        type='text'
+                        placeholder='Email'
+                        autoComplete='email'
+                      />
                     </InputGroup>
                     <InputGroup className='mb-4'>
                       <InputGroupAddon addonType='prepend'>
@@ -43,20 +47,25 @@ class AdminLoginPage extends Component {
                           <i className='fa fa-lock' />
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input type='password' placeholder='Password'
-                             autoComplete='current-password' />
+                      <Input
+                        type='password'
+                        placeholder='Password'
+                        autoComplete='current-password'
+                      />
                     </InputGroup>
                     <Row>
                       <Link route='/admin'>
                         <a>Go to dashboard</a>
                       </Link>
                       <Col xs='6'>
-                        <Button color='primary'
-                                className='px-4'>Login</Button>
+                        <Button color='primary' className='px-4'>
+                          Login
+                        </Button>
                       </Col>
                       <Col xs='6' className='text-right'>
-                        <Button color='link' className='px-0'>Forgot
-                          password?</Button>
+                        <Button color='link' className='px-0'>
+                          Forgot password?
+                        </Button>
                       </Col>
                     </Row>
                   </Form>
@@ -70,4 +79,4 @@ class AdminLoginPage extends Component {
   }
 }
 
-export default guestOnly(AdminLoginPage, {useAdminLayout: true});
+export default guestOnly(AdminLoginPage, { useAdminLayout: true });

@@ -1,23 +1,23 @@
 export const isAdmin = user => {
-  return user.role === 'admin'
-}
+  return user.role === 'admin';
+};
 
-export const Constraint = {
+export const constraint = {
   email: {
-    MAX_LENGTH: 256
+    MAX_LENGTH: 256,
   },
   name: {
     MIN_LENGTH: 1,
-    MAX_LENGTH: 256
+    MAX_LENGTH: 256,
   },
   password: {
     MIN_LENGTH: 6,
-    MAX_LENGTH: 50
+    MAX_LENGTH: 50,
   },
   avatar: {
     ALLOWED_FILE_TYPES: ['image/jpeg', 'image/png'],
-    MAX_FILE_SIZE: 2 * 1024 * 1024 // 2MB
-  }
-}
+    MAX_FILE_SIZE: 2 * 1024 * 1024, // 2MB
+  },
+};
 
-export const Languages = ['en', 'vn']
+export const languages = ['en', 'vn'];

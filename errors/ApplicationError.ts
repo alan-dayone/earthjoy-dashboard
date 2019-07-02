@@ -12,11 +12,11 @@
  * const error = new ApplicationError('LOGIN_FAILED')
  */
 export class ApplicationError extends Error {
-  static name = 'ApplicationError'
+  static name = 'ApplicationError';
 
-  constructor (code) {
-    super()
-    this.name = ApplicationError.name
-    this.code = code
+  constructor(code) {
+    super();
+    this.name = ApplicationError.name;
+    this.code = code;
   }
 }

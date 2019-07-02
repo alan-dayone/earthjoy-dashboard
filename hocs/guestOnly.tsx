@@ -1,9 +1,10 @@
-import React from 'react'
-import Head from 'next/head'
+import React from 'react';
+import Head from 'next/head';
 
+/* tslint:disable:variable-name */
 export const guestOnly = (Content, options?) => {
   class GuestWrapper extends React.Component {
-    render () {
+    render() {
       return (
         <div>
           {options.useAdminLayout && (
@@ -27,9 +28,9 @@ export const guestOnly = (Content, options?) => {
           )}
           <Content {...this.props} />
         </div>
-      )
+      );
     }
   }
 
-  return GuestWrapper
-}
+  return GuestWrapper;
+};

@@ -1,9 +1,10 @@
-import { Component } from 'react'
-import Head from 'next/head'
-import { everyone } from '../hocs'
+/* tslint:disable:no-default-export */
+import { Component } from 'react';
+import Head from 'next/head';
+import { everyone } from '../hocs';
 
 class IndexPage extends Component {
-  render () {
+  render() {
     return (
       <main className='app-masthead' role='main'>
         <Head>
@@ -99,8 +100,8 @@ class IndexPage extends Component {
           </div>
         </div>
       </main>
-    )
+    );
   }
 }
 
-export default everyone(IndexPage)
+export default everyone(IndexPage);

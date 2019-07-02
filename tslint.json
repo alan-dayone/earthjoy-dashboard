@@ -1,5 +1,5 @@
 {
-  "extends": "tslint-config-standard",
+  "extends": "gts/tslint.json",
   "linterOptions": {
     "exclude": [
       "**/*.js",

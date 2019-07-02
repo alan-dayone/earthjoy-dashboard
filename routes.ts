@@ -1,14 +1,15 @@
-const routes = require('next-routes')()
+/* tslint:disable:no-default-export */
+const routes = require('next-routes')();
 
 routes
   .add('/', 'IndexPage')
   .add('/admin/login', 'admin/AdminLoginPage')
-  .add('/admin', 'admin/AdminDashboardPage')
+  .add('/admin', 'admin/AdminDashboardPage');
 
-routes.add('/sign-up', 'CoachSignUpPage')
+routes.add('/sign-up', 'CoachSignUpPage');
 
-routes.add('/setup', 'SetupPage')
+routes.add('/setup', 'SetupPage');
 
-export default routes
-export const Link = routes.Link
-export const Router = routes.Router
+export default routes;
+export const Link = routes.Link;
+export const Router = routes.Router;

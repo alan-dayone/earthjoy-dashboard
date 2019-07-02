@@ -1,30 +1,30 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
-import { reducer as globalReducer } from './globalRedux'
-import * as services from '../services'
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { reducer as globalReducer } from './globalRedux';
+import * as services from '../services';
 
 const DEFAULT_INITIAL_STATE = {
   global: {
     loginUser: {
       id: 'loginUser',
-      data: null
+      data: null,
     },
     uiState: {
       id: 'uiState',
-      data: {}
-    }
-  }
-}
+      data: {},
+    },
+  },
+};
 
 export const makeStore = initialState => {
   return createStore(
     combineReducers({
-      global: globalReducer
+      global: globalReducer,
     }),
     {
       ...DEFAULT_INITIAL_STATE,
-      ...initialState
+      ...initialState,
     },
     applyMiddleware(thunk.withExtraArgument(services))
-  )
-}
+  );
+};
