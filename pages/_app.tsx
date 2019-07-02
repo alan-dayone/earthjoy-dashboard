@@ -1,14 +1,13 @@
 import React from 'react'
 import { compose } from 'redux'
 import { Provider } from 'react-redux'
-import App, { Container } from 'next/app'
-import withRedux from 'next-redux-wrapper'
+import App, { Container, AppProps, NextAppContext } from 'next/app'
+import withRedux, { AppProps as NextReduxAppProps } from 'next-redux-wrapper'
+import { nprogress } from '../hocs'
 import { makeStore } from '../redux/store'
-// import nprogress from '../hocs/nprogress'
-import '../scss/style.scss'
 
-class ComposedApp extends App {
-  static async getInitialProps ({ Component, ctx }) {
+class ComposedApp extends App<AppProps & NextReduxAppProps> {
+  static async getInitialProps ({ Component, ctx }: NextAppContext) {
     const pageProps = Component.getInitialProps
       ? await Component.getInitialProps(ctx)
       : {}
@@ -28,6 +27,6 @@ class ComposedApp extends App {
 }
 
 export default compose(
-  // nprogress(300, { showSpinner: false }),
+  nprogress(300, { showSpinner: true }),
   withRedux(makeStore)
 )(ComposedApp)

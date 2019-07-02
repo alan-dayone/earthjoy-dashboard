@@ -1,14 +1,16 @@
 import express from 'express'
 import next from 'next'
 import dotenv from 'dotenv'
+import cookieParser from 'cookie-parser'
 // import proxy from 'http-proxy-middleware';
-import { routes } from './routes'
+import routes from './routes'
 
 dotenv.config()
 
-const server = express()
 const port = process.env.PORT
 
+const server = express()
+server.use(cookieParser(process.env.COOKIE_SECRET))
 // server.use(
 //   '/api',
 //   proxy({

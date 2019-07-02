@@ -2,7 +2,9 @@
   "watch": [
     "index.ts",
     "routes.ts",
-    ".env"
+    ".env",
+    "tsconfig.json",
+    "tsconfig-server.json"
   ],
   "ext": "js ts json"
 }
