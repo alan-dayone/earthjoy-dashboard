@@ -1,10 +1,20 @@
 /* tslint:disable:no-default-export */
 import React, { Component } from 'react';
-import { Formik } from 'formik';
 import { guestOnly } from '../../../hocs';
-import { systemService } from '../../../services';
+import { EnterPasswordForm } from './EnterPasswordForm';
+import { CreateFirstAdminForm } from './CreateFirstAdminForm';
+
+const STEP = {
+  ENTER_PASSWORD: 'enter-password',
+  CREATE_FIRST_ADMIN: 'create-first-admin',
+};
 
 class AdminSetupPage extends Component {
+  state = {
+    step: STEP.ENTER_PASSWORD,
+    correctSystemInitPassword: null,
+  };
+
   render() {
     return (
       <div className="app flex-row align-items-center">
@@ -13,74 +23,22 @@ class AdminSetupPage extends Component {
             <div className="col-md-6">
               <div className="p-4 card">
                 <div className="card-body">
-                  <h1>System initialization</h1>
-                  <p className="text-muted">
-                    Use secret system initialization password to initialize the
-                    system and create your first admin account.
-                  </p>
-                  <Formik
-                    initialValues={{ password: '' }}
-                    validate={values => {
-                      const errors = {};
-
-                      if (values.password === '') {
-                        errors.password = 'Required';
+                  {this.state.step === STEP.CREATE_FIRST_ADMIN ? (
+                    <CreateFirstAdminForm
+                      correctSystemInitPassword={
+                        this.state.correctSystemInitPassword
                       }
-
-                      return errors;
-                    }}
-                    onSubmit={async (values, { setSubmitting }) => {
-                      setSubmitting(true);
-                      try {
-                        const passwordIsCorrect = await systemService.validateSystemInitializationPassword(
-                          values.password
-                        );
-
-                        if (!passwordIsCorrect) {
-                          alert('Invalid password');
-                          return;
-                        }
-                      } catch (e) {
-                        alert(e.message);
+                    />
+                  ) : (
+                    <EnterPasswordForm
+                      onSuccess={correctPassword =>
+                        this.setState({
+                          step: STEP.CREATE_FIRST_ADMIN,
+                          correctSystemInitPassword: correctPassword,
+                        })
                       }
-                      setSubmitting(false);
-                    }}
-                  >
-                    {({
-                      values,
-                      handleChange,
-                      handleSubmit,
-                      isSubmitting,
-                      isValid,
-                    }) => (
-                      <form onSubmit={handleSubmit}>
-                        <div className="mb-4 input-group">
-                          <div className="input-group-prepend">
-                            <span className="input-group-text">
-                              <i className="fa fa-lock" />
-                            </span>
-                          </div>
-                          <input
-                            name="password"
-                            value={values.password}
-                            onChange={handleChange}
-                            placeholder="System initialization password"
-                            type="password"
-                            className="form-control"
-                          />
-                        </div>
-                        <div>
-                          <button
-                            type="submit"
-                            disabled={!isValid || isSubmitting}
-                            className="px-4 btn btn-primary"
-                          >
-                            Next
-                          </button>
-                        </div>
-                      </form>
-                    )}
-                  </Formik>
+                    />
+                  )}
                 </div>
               </div>
             </div>
