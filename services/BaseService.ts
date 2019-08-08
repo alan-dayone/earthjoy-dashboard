@@ -1,4 +1,7 @@
 export class BaseService {
+  /* tslint:disable:no-any */
+  pubsubGateway: any;
+
   constructor({ pubsubGateway }) {
     this.pubsubGateway = pubsubGateway;
   }

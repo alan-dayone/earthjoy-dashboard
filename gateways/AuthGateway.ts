@@ -4,6 +4,9 @@ import { AuthService } from '../services/AuthService';
 import { ApplicationError } from '../errors/ApplicationError';
 
 export class AuthGateway {
+  /* tslint:disable:no-any */
+  restConnector: any;
+
   constructor({ restConnector }) {
     this.restConnector = restConnector;
   }

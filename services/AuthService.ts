@@ -16,6 +16,9 @@ export class AuthService extends BaseService {
     USER_LOGOUT: 'USER_LOGOUT',
   };
 
+  /* tslint:disable:no-any */
+  authGateway: any;
+
   constructor(options) {
     super(options);
     this.authGateway = options.authGateway;
