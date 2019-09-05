@@ -3,6 +3,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import classnames from 'classnames';
 import { systemService } from '../../../services';
+import { actions as authActions } from '../../../redux/authRedux';
 
 const formSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
@@ -41,14 +42,15 @@ export class CreateFirstAdminForm extends Component {
           onSubmit={async (values, { setSubmitting }) => {
             setSubmitting(true);
             try {
-              await systemService.createFirstAdmin(this.props.password, values);
-              await this.props.dispatch(
-                authActions.login({
+              const { password, dispatch, router } = this.props;
+              await systemService.createFirstAdmin(password, values);
+              await dispatch(
+                authActions.loginWithEmail({
                   email: values.email,
                   password: values.password,
                 })
               );
-              this.props.router.replaceRoute('/admin');
+              router.replaceRoute('/admin');
             } catch (e) {
               alert(e.message);
             }

@@ -12,4 +12,8 @@ export class SystemService extends BaseService {
   validateSystemInitializationPassword(password: string): boolean {
     return this.systemGateway.validateSystemInitializationPassword(password);
   }
+
+  createFirstAdmin(systemInitPassword: string, userData: {}) {
+    return this.systemGateway.createFirstAdmin(systemInitPassword, userData);
+  }
 }

@@ -18,9 +18,10 @@
     "lint:fix": "gts fix",
     "test": "echo \"Need to write test\"",
     "prebuild": "npm run lint && npm run test && npm run clean",
-    "build": "npm run build:server && npm run build:client",
+    "build": "npm run build:server && npm run build:client && npm run build:bundle",
     "build:server": "tsc -p tsconfig-server.json && cp {package,package-lock}.json build",
-    "build:client": "next build && cp -R .next build",
+    "build:client": "next build && cp -R .next build && cp -R static build/static",
+    "build:bundle": "mkdir -p build-bundle && tar -cvzf build-bundle/bundle.tar.gz build",
     "clean": "rm -rf .next build"
   },
   "dependencies": {
