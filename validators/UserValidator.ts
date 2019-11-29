@@ -2,7 +2,7 @@ import {
   errorCode as ValidationErrorCode,
   ValidationError,
 } from '../errors/ValidationError';
-import { constraint } from '../models/User';
+import { constraint } from '../models/user';
 import { validate } from './BaseValidator';
 
 const spec = {

@@ -1,22 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { NextComponentType, NextContext } from 'next';
-import { SingletonRouter } from 'next/router';
-
-import { selectors } from '../redux/authRedux';
-import { actions as authRedux } from '../redux/authRedux';
+import Cookies from 'js-cookie';
+import { actions as authRedux, selectors } from '../redux/authRedux';
 import { authService } from '../services/';
-import { Router } from '../routes';
+import Router from 'next/router';
 
 interface PropTypes {
   token: string;
-  router: SingletonRouter;
+  router: unknown;
 }
 
 /* tslint:disable-next-line:variable-name */
-export const guestOnly = (Content: NextComponentType) => {
-  class GuestWrapper extends React.Component<PropTypes> {
+export const userOnly = Content => {
+  class UserWrapper extends React.Component<PropTypes> {
     static async getInitialProps(context) {
       const props = {
         req: context.req,
@@ -24,36 +21,50 @@ export const guestOnly = (Content: NextComponentType) => {
         store: context.store,
         isServer: context.isServer,
       };
+      let currentUser = {};
+      let token = '';
       const initialProps = Content.getInitialProps
         ? await Content.getInitialProps(props)
         : {};
       if (context.isServer) {
         if (!context.req.cookies.access_token) {
+          context.res.redirect('/admin/login');
           return initialProps;
         }
         authService.setAccessToken(context.req.cookies.access_token);
+        token = context.req.cookies.access_token;
         const user = await context.store.dispatch(authRedux.getLoginUser());
-        if (user) {
-          context.res.redirect('/');
+        currentUser = user;
+        if (!user) {
+          context.res.redirect('/admin/login');
           context.res.end();
         }
       } else {
-        const user = selectors.getLoginUser(context.store.getState());
-        if (user) {
-          Router.pushRoute('/');
+        let user = selectors.getLoginUser(context.store.getState());
+        if (!user) {
+          user = await context.store.dispatch(authRedux.getLoginUser());
+        }
+        currentUser = user;
+        token = Cookies.get('access_token') || '';
+        if (!user) {
+          Router.push('/admin/login');
         }
       }
-      return { ...initialProps };
+      return {
+        ...initialProps,
+        token,
+        currentUser,
+      };
     }
 
     componentDidMount() {
-      if (this.props.token) {
-        Router.replaceRoute('/');
+      if (!this.props.token) {
+        Router.replace('/admin/login');
       }
     }
 
     render() {
-      if (this.props.token) {
+      if (!this.props.token) {
         return null;
       }
 
@@ -61,7 +72,7 @@ export const guestOnly = (Content: NextComponentType) => {
     }
   }
 
-  return composedHoc(GuestWrapper);
+  return composedHoc(UserWrapper);
 };
 
 const mapStateToProps = state => ({

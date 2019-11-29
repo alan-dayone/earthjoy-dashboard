@@ -1,0 +1,17 @@
+@import "./variables/color.scss";
+
+.bg {
+  @each $color, $value in $background-color {
+    &--#{$color} {
+      background-color: $value;
+    }
+  }
+}
+
+.opacity {
+  @for $i from 1 through 10 {
+    &__#{$i} {
+      opacity: $i * 0.1;
+    }
+  }
+}

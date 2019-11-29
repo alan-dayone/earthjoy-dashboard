@@ -1,5 +1,5 @@
 import { BaseService } from './BaseService';
-import { validateUser } from '../validators/UserValidator';
+import { validateUser } from '../validators/userValidator';
 
 export class AuthService extends BaseService {
   static error = {
@@ -16,16 +16,8 @@ export class AuthService extends BaseService {
     USER_LOGOUT: 'USER_LOGOUT',
   };
 
-  /* tslint:disable:no-any */
-  authGateway: any;
-
-  constructor(options) {
-    super(options);
-    this.authGateway = options.authGateway;
-  }
-
-  async loginWithEmail({ email, password }) {
-    const user = await this.authGateway.loginWithEmail({ email, password });
+  async loginWithEmail(body: { email: string, password: string }) {
+    const user = await this.authGateway.loginWithEmail(body);
     this.emit(AuthService.event.USER_LOGIN, { type: 'email', user });
     return user;
   }
@@ -34,13 +26,17 @@ export class AuthService extends BaseService {
     return this.authGateway.getLoginUser();
   }
 
-  async signupWithEmail({ name, email, password }) {
-    validateUser({ name, email, password });
+  async signupWithEmail(body: {
+    name: string,
+    email: string,
+    password: string,
+  }) {
+    validateUser(body);
 
-    const user = await this.userGateway.create({ name, email, password });
-    this.emit(AuthService.event.USER_SIGNUP, { type: email, user });
+    const user = await this.authGateway.create(body);
+    this.emit(AuthService.event.USER_SIGNUP, { type: body.email, user });
 
-    return this.loginWithEmail({ email, password });
+    return this.loginWithEmail(body);
   }
 
   async logout() {
@@ -48,31 +44,34 @@ export class AuthService extends BaseService {
     this.emit(AuthService.event.USER_LOGOUT);
   }
 
-  async sendResetPasswordEmail(email) {
+  async sendResetPasswordEmail(email: string) {
     validateUser({ email });
     return this.authGateway.sendResetPasswordEmail(email);
   }
 
-  async updateAccountInfo({ name, email, preferredLanguage }) {
-    validateUser({ name, email });
-    await this.authGateway.updateAccountInfo({
-      name,
-      email,
-      preferredLanguage,
-    });
+  async updateAccountInfo(body: {
+    name: string,
+    email: string,
+    preferredLanguage: string,
+  }) {
+    validateUser({ name: body.name, email: body.email });
+    await this.authGateway.updateAccountInfo(body);
   }
 
-  async updatePassword({ oldPassword, newPassword }) {
-    validateUser({ password: newPassword });
-    await this.authGateway.updatePassword({ oldPassword, newPassword });
+  async updatePassword(body: { oldPassword: string, newPassword: string }) {
+    validateUser(body);
+    await this.authGateway.updatePassword(body);
   }
 
-  async setNewPassword({ userId, newPassword }, accessToken) {
-    validateUser({ password: newPassword });
-    await this.authGateway.setNewPassword({ userId, newPassword }, accessToken);
+  async setNewPassword(
+    body: { userId: string, newPassword: string },
+    accessToken: string
+  ) {
+    validateUser(body);
+    await this.authGateway.setNewPassword(body, accessToken);
   }
 
-  setAccessToken(accessToken) {
+  setAccessToken(accessToken: string) {
     this.authGateway.setAccessToken(accessToken);
   }
 }

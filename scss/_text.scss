@@ -1,0 +1,48 @@
+@import './variables/size.scss';
+@import './variables/color.scss';
+
+.text {
+  @each $color, $value in $text-color {
+    &__#{$color} {
+      color: #{$value} !important;
+    }
+  }
+
+  @each $size, $value in $sizes {
+    &__#{$size} {
+      font-size: #{$value} !important;
+    }
+  }
+}
+
+.font__weight {
+  @for $i from 1 through 9 {
+    &--#{$i} {
+      font-weight: 100 * $i;
+    }
+  }
+}
+
+.text {
+  &__center {
+    text-align: center;
+  }
+
+  &__underline {
+    text-decoration: underline;
+  }
+
+  &__italic {
+    font-style: italic;
+  }
+
+  &__right {
+    text-align: right;
+  }
+}
+
+label {
+  color: $label;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}

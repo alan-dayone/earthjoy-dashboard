@@ -1,0 +1,116 @@
+@import "./variables/color.scss";
+@import "./variables/size";
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+
+  &:focus {
+    box-shadow: none !important;
+  }
+
+  position: relative;
+
+  .brand {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: white;
+    border-radius: 4px 0 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: "center";
+  }
+
+  &__large {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: $large;
+
+    .brand {
+      height: calc(3rem - 2px);
+      width: calc(3rem - 2px);
+    }
+  }
+
+  &__normal {
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    font-size: $normal;
+
+    .brand {
+      height: calc(2.5rem - 2px);
+      width: calc(2.5rem - 2px);
+    }
+  }
+
+  &__medium {
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    font-size: $medium;
+
+    .brand {
+      height: calc(2.25rem - 2px);
+      width: calc(2.25rem - 2px);
+    }
+  }
+
+  &__small {
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    font-size: $small;
+
+    .brand {
+      height: calc(2rem - 2px);
+      width: calc(2rem - 2px);
+    }
+  }
+
+  &__tiny {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    font-size: $tiny;
+
+    .brand {
+      height: calc(1.5rem - 2px);
+      width: calc(1.5rem - 2px);
+    }
+  }
+
+  &__transparent {
+    background: transparent;
+
+    &:hover {
+      background: $lightgrey;
+    }
+  }
+
+  @each $color, $value in $background-color {
+    &__#{$color} {
+      background-color: $value;
+    }
+
+    &__outline--#{$color} {
+      border: solid $value 1px;
+      border-radius: 4px;
+      background: transparent;
+    }
+  }
+
+  @each $color, $value in $hover-color {
+    &__#{$color} {
+      &:hover {
+        background-color: $value;
+      }
+    }
+    &__outline--#{$color} {
+      &:hover {
+        background: rgba($value, 0.04);
+      }
+    }
+  }
+}

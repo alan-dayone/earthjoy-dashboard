@@ -3,7 +3,6 @@ const routes = require('next-routes')();
 
 routes
   .add('/', 'IndexPage')
-  .add('/admin/login', 'admin/AdminLoginPage')
   .add('/admin', 'admin/AdminDashboardPage')
   .add('/admin/setup', 'admin/AdminSetupPage');
 

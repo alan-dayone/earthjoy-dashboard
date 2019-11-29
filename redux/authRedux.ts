@@ -1,9 +1,19 @@
 import _ from 'lodash';
 import globalRedux from './globalRedux';
 import uiStateRedux from './uiStateRedux';
-import { isAdmin } from '../models/User';
+import { isAdmin } from '../models/user';
 
-const actions = {};
+const actions = {
+  // getLoginUser: ,
+  // loginWithEmail,
+  // signupWithEmail(body: {name: string, email: string, password: string}): unknown,
+  // logout(): unknown,
+  // updateAccountInfo(body: {email: string, name: string, preferredLanguage: string}): unknown,
+  // updateAvatar(file: File): unknown,
+  // updatePassword(oldPassword: string, newPassword: string): unknown,
+  // fetchLoginUserSuccess(user: unknown): unknown,
+  // updateLoginUserSuccess(data: unknown): unknown,
+};
 
 actions.getLoginUser = () => async (dispatch, getState, { authService }) => {
   const user = await authService.getLoginUser();
@@ -70,7 +80,7 @@ actions.updateAvatar = file => async (dispatch, getState, { authService }) => {
   );
 };
 
-actions.updatePassword = (oldPassword, newPassword) => async (
+actions.updatePassword = (oldPassword: string, newPassword: string) => async (
   dispatch,
   getState,
   { authService }

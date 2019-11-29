@@ -2,19 +2,41 @@ import _ from 'lodash';
 import { ValidationError, errorCode } from '../errors/ValidationError';
 import { AuthService } from '../services/AuthService';
 import { ApplicationError } from '../errors/ApplicationError';
+import { RestConnector } from '../connectors/RestConnector';
 
 export class AuthGateway {
   /* tslint:disable:no-any */
-  restConnector: any;
+  restConnector: RestConnector;
 
-  constructor({ restConnector }) {
-    this.restConnector = restConnector;
+  constructor(connector: { restConnector: RestConnector }) {
+    this.restConnector = connector.restConnector;
   }
 
-  async loginWithEmail({ email, password }) {
+  async loginWithEmail(body: { email: string, password: string }) {
     try {
-      await this.restConnector.post('/users/login', { email, password });
+      const { data } = await this.restConnector.post('/users/login', body);
+      this.restConnector.setAccessToken(data.token);
       return this.getLoginUser();
+    } catch (e) {
+      switch (_.get(e, 'response.data.error.code')) {
+        case 'USERNAME_EMAIL_REQUIRED':
+        case 'LOGIN_FAILED': {
+          throw new ApplicationError(AuthService.error.LOGIN_FAILED);
+        }
+        default: {
+        }
+      }
+      if (_.get(e, 'response.data.error.message') === 'ACCOUNT_INACTIVATED') {
+        throw new ApplicationError(AuthService.error.ACCOUNT_INACTIVATED);
+      }
+      throw e;
+    }
+  }
+
+  async create(body: { email: string, password: string }) {
+    try {
+      await this.restConnector.post('/users', body);
+      return this.loginWithEmail(body);
     } catch (e) {
       switch (_.get(e, 'response.data.error.code')) {
         case 'USERNAME_EMAIL_REQUIRED':
@@ -33,9 +55,7 @@ export class AuthGateway {
 
   async getLoginUser() {
     try {
-      const resp = await this.restConnector.get(
-        '/users/me?filter={"include":"roles"}'
-      );
+      const resp = await this.restConnector.get('/users');
       return resp.data;
     } catch (e) {
       return null;
@@ -54,7 +74,7 @@ export class AuthGateway {
     this.restConnector.removeAccessToken();
   }
 
-  async sendResetPasswordEmail(email) {
+  async sendResetPasswordEmail(email: string) {
     try {
       await this.restConnector.post('/users/reset', { email });
     } catch (e) {
@@ -70,13 +90,13 @@ export class AuthGateway {
     }
   }
 
-  async updateAccountInfo({ name, email, preferredLanguage }) {
+  async updateAccountInfo(body: {
+    name: string,
+    email: string,
+    preferredLanguage: string,
+  }) {
     try {
-      await this.restConnector.patch(`/users/me`, {
-        name,
-        email,
-        preferredLanguage,
-      });
+      await this.restConnector.patch(`/users/me`, body);
     } catch (e) {
       const errResp = _.get(e, 'response.data.error', e);
       switch (errResp.name) {
@@ -84,6 +104,7 @@ export class AuthGateway {
           if (_.get(errResp, 'details.codes.email[0]') === 'uniqueness') {
             throw new ValidationError({ email: [errorCode.EMAIL_EXISTED] });
           }
+          throw new ValidationError({ email: [errorCode.INVALID_EMAIL] });
         }
         default: {
         }
@@ -92,12 +113,9 @@ export class AuthGateway {
     }
   }
 
-  async updatePassword({ oldPassword, newPassword }) {
+  async updatePassword(body: { oldPassword: string, newPassword: string }) {
     try {
-      await this.restConnector.post('/users/change-password', {
-        oldPassword,
-        newPassword,
-      });
+      await this.restConnector.post('/users/change-password', body);
     } catch (e) {
       console.log(e.response);
       const err = _.get(e, 'response.data.error', e);
@@ -113,7 +131,11 @@ export class AuthGateway {
     }
   }
 
-  async setNewPassword({ userId, newPassword }, accessToken) {
+  async setNewPassword(
+    body: { userId: string, newPassword: string },
+    accessToken: string
+  ) {
+    const { userId, newPassword } = body;
     try {
       await this.restConnector.post(
         `/users/reset-password?access_token=${accessToken}`,
@@ -131,13 +153,13 @@ export class AuthGateway {
     }
   }
 
-  async updateAvatar(avatar) {
+  async updateAvatar(avatar: string) {
     return this.restConnector
       .patch(`/users/me`, { avatar })
       .then(resp => resp.data);
   }
 
-  setAccessToken(accessToken) {
+  setAccessToken(accessToken: string) {
     this.restConnector.setAccessToken(accessToken);
   }
 }

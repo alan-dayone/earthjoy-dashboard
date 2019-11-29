@@ -1,0 +1,104 @@
+@import './variables/color';
+
+.box__shadow {
+  &--small {
+    box-shadow: 0 1px 1px 0 rgba(10, 22, 70, 0.1),
+      0 0 1px 0 rgba(10, 22, 70, 0.06);
+  }
+
+  &--medium {
+    box-shadow: 0 3px 3px -1px rgba(10, 22, 70, 0.1),
+      0 0 1px 0 rgba(10, 22, 70, 0.06);
+  }
+
+  &--normal {
+    box-shadow: 0 6px 6px -1px rgba(10, 22, 70, 0.1),
+      0 0 1px 0 rgba(10, 22, 70, 0.06);
+  }
+
+  &--large {
+    box-shadow: 0 16px 16px -1px rgba(10, 22, 70, 0.1),
+      0 0 1px 0 rgba(10, 22, 70, 0.06);
+  }
+
+  &--larger {
+    box-shadow: 0 32px 40px -2px rgba(10, 22, 70, 0.12),
+      0 0 1px 0 rgba(10, 22, 70, 0.06);
+  }
+}
+
+.border__radius {
+  &--round {
+    border-radius: 50%;
+  }
+
+  &--circle {
+    border-radius: 1000px;
+  }
+
+  @for $i from 0 through 8 {
+    &--#{$i} {
+      border-radius: $i * 0.125rem !important;
+    }
+  }
+}
+
+.border {
+  @each $color, $value in $background-color {
+    &__#{$color} {
+      @for $i from 0 through 5 {
+        &--#{$i} {
+          border: solid $i * 1px $value;
+        }
+      }
+    }
+  }
+}
+
+.bottom {
+  @each $color, $value in $background-color {
+    &__#{$color} {
+      @for $i from 0 through 5 {
+        &--#{$i} {
+          border-bottom: solid $i * 1px $value;
+        }
+      }
+    }
+  }
+}
+
+.top {
+  @each $color, $value in $background-color {
+    &__#{$color} {
+      @for $i from 0 through 5 {
+        &--#{$i} {
+          border-top: solid $i * 1px $value;
+        }
+      }
+    }
+  }
+}
+
+.right {
+  @each $color, $value in $background-color {
+    &__#{$color} {
+      @for $i from 0 through 5 {
+        &--#{$i} {
+          border-right: solid $i * 1px $value;
+        }
+      }
+    }
+  }
+}
+
+.left {
+  @each $color, $value in $background-color {
+    &__#{$color} {
+      @for $i from 0 through 5 {
+        &--#{$i} {
+          border-left: solid $i * 1px $value;
+        }
+      }
+    }
+  }
+}

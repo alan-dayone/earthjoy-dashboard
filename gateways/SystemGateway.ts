@@ -6,6 +6,20 @@ export class SystemGateway {
     this.restConnector = restConnector;
   }
 
+  initSystem = async (body: {
+    password: string,
+    admin: {
+      email: string,
+      password: string,
+    },
+  }) => {
+    const { data } = this.restConnector.post(
+      `/configurations/initialize-system`,
+      body
+    );
+    return data;
+  };
+
   async validateSystemInitializationPassword(
     password: string
   ): Promise<boolean> {

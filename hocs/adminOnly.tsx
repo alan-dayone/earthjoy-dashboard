@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 // import { Router } from '../routes'
 import { authService } from '../services';
-// import { isAdmin } from '../models/User'
+// import { isAdmin } from '../models/user'
 import { NextJSContext } from 'next-redux-wrapper';
 // import {
 //   actions as authActions,

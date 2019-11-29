@@ -1,8 +1,14 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { ApplicationError } from '../errors/ApplicationError';
+import { AxiosInstance } from 'axios';
 
-export function create({ baseUrl }: { baseUrl: string }) {
+export interface RestConnector extends AxiosInstance {
+  setAccessToken(token: string): void;
+  removeAccessToken(): void;
+}
+
+export function create({ baseUrl }: { baseUrl: string }): RestConnector {
   const instance = axios.create({ baseURL: baseUrl });
 
   instance.interceptors.response.use(
@@ -23,18 +29,18 @@ export function create({ baseUrl }: { baseUrl: string }) {
    * access_token to browser on successful login.
    * @param token
    */
-  instance.setAccessToken = token => {
-    if (token) {
-      instance.defaults.headers['access_token'] = token;
-    } else {
-      instance.removeAccessToken(token);
-    }
-  };
-
-  instance.removeAccessToken = () => {
-    delete instance.defaults.headers.access_token;
-    Cookies.remove('access_token');
-  };
+  Object.assign(instance, {
+    setAccessToken: (token: string) => {
+      if (token) {
+        Cookies.set('access_token', token);
+        instance.defaults.headers['Authorization'] = `Bearer ${token}`;
+      }
+    },
+    removeAccessToken: () => {
+      Cookies.remove('access_token');
+      delete instance.defaults.headers.Authorization;
+    },
+  });
 
   return instance;
 }
