@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { compose } from 'recompose';
 
 import { ContentContainer } from '../../components';
-import { guestOnly } from '../../hocs';
+import { index } from '../../hocs';
 
 class Guest extends Component {
   render() {
@@ -14,4 +14,4 @@ class Guest extends Component {
   }
 }
 
-export default compose(guestOnly)(Guest);
+export default compose(index)(Guest);

@@ -1,7 +1,7 @@
 /* tslint:disable:no-default-export */
 import React, { Component } from 'react';
 
-import { guestOnly } from '../../../hocs';
+import { index } from '../../../hocs';
 import { ContentContainer, Modal, TextInput } from '../../../components';
 import { systemService, authService } from '../../../services';
 import { compose } from 'recompose';
@@ -84,4 +84,4 @@ class SystemInit extends Component {
   }
 }
 
-export default compose(guestOnly)(SystemInit);
+export default compose(index)(SystemInit);
