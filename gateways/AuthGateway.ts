@@ -12,7 +12,7 @@ export class AuthGateway {
     this.restConnector = connector.restConnector;
   }
 
-  async loginWithEmail(body: { email: string, password: string }) {
+  async loginWithEmail(body: { email: string; password: string }) {
     try {
       const { data } = await this.restConnector.post('/users/login', body);
       this.restConnector.setAccessToken(data.token);
@@ -33,7 +33,7 @@ export class AuthGateway {
     }
   }
 
-  async create(body: { email: string, password: string }) {
+  async create(body: { email: string; password: string }) {
     try {
       await this.restConnector.post('/users', body);
       return this.loginWithEmail(body);
@@ -91,9 +91,9 @@ export class AuthGateway {
   }
 
   async updateAccountInfo(body: {
-    name: string,
-    email: string,
-    preferredLanguage: string,
+    name: string;
+    email: string;
+    preferredLanguage: string;
   }) {
     try {
       await this.restConnector.patch(`/users/me`, body);
@@ -113,7 +113,7 @@ export class AuthGateway {
     }
   }
 
-  async updatePassword(body: { oldPassword: string, newPassword: string }) {
+  async updatePassword(body: { oldPassword: string; newPassword: string }) {
     try {
       await this.restConnector.post('/users/change-password', body);
     } catch (e) {
@@ -132,7 +132,7 @@ export class AuthGateway {
   }
 
   async setNewPassword(
-    body: { userId: string, newPassword: string },
+    body: { userId: string; newPassword: string },
     accessToken: string
   ) {
     const { userId, newPassword } = body;

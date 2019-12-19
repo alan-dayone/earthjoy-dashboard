@@ -22,15 +22,10 @@ server.use(
 async function startServer() {
   const nextApp = next({ dev: process.env.NODE_ENV !== 'production' });
   const handler = routes.getRequestHandler(nextApp);
-  // await nextApp.prepare();
-  nextApp
-    .prepare()
-    .then(() => {
-      server.use(handler).listen(port, () => {
-        console.info(`Server started at ${process.env.BASE_URL}`);
-      });
-    })
-    .catch(e => console.log(e));
+  await nextApp.prepare();
+  server.use(handler).listen(port, () => {
+    console.info(`Server started at ${process.env.BASE_URL}`);
+  });
 }
 
 startServer();

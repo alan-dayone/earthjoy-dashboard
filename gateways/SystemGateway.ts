@@ -7,11 +7,11 @@ export class SystemGateway {
   }
 
   initSystem = async (body: {
-    password: string,
+    password: string;
     admin: {
-      email: string,
-      password: string,
-    },
+      email: string;
+      password: string;
+    };
   }) => {
     const { data } = this.restConnector.post(
       `/configurations/initialize-system`,

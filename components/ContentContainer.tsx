@@ -1,6 +1,6 @@
 const contentContainer = (props: {
-  children: JSX.Element[] | JSX.Element,
-  className?: string,
+  children: JSX.Element[] | JSX.Element;
+  className?: string;
 }) => {
   const { children, className } = props;
 

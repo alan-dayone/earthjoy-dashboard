@@ -16,7 +16,7 @@ export class AuthService extends BaseService {
     USER_LOGOUT: 'USER_LOGOUT',
   };
 
-  async loginWithEmail(body: { email: string, password: string }) {
+  async loginWithEmail(body: { email: string; password: string }) {
     const user = await this.authGateway.loginWithEmail(body);
     this.emit(AuthService.event.USER_LOGIN, { type: 'email', user });
     return user;
@@ -27,9 +27,9 @@ export class AuthService extends BaseService {
   }
 
   async signupWithEmail(body: {
-    name: string,
-    email: string,
-    password: string,
+    name: string;
+    email: string;
+    password: string;
   }) {
     validateUser(body);
 
@@ -50,21 +50,21 @@ export class AuthService extends BaseService {
   }
 
   async updateAccountInfo(body: {
-    name: string,
-    email: string,
-    preferredLanguage: string,
+    name: string;
+    email: string;
+    preferredLanguage: string;
   }) {
     validateUser({ name: body.name, email: body.email });
     await this.authGateway.updateAccountInfo(body);
   }
 
-  async updatePassword(body: { oldPassword: string, newPassword: string }) {
+  async updatePassword(body: { oldPassword: string; newPassword: string }) {
     validateUser(body);
     await this.authGateway.updatePassword(body);
   }
 
   async setNewPassword(
-    body: { userId: string, newPassword: string },
+    body: { userId: string; newPassword: string },
     accessToken: string
   ) {
     validateUser(body);

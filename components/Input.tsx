@@ -4,7 +4,7 @@ import zxcvbn from 'zxcvbn';
 
 interface NewTextInputPropTypes {
   value?: string;
-  onChange?: (change: { value: string, error: string }) => void;
+  onChange?: (change: { value: string; error: string }) => void;
   containerClassName?: string;
   inputClassName?: string;
   label?: string;

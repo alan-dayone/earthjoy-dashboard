@@ -16,7 +16,7 @@ class Login extends Component {
     },
   };
 
-  onChange = (change: { value: string, error: string }, name: string) => {
+  onChange = (change: { value: string; error: string }, name: string) => {
     const { value, error } = change;
     this.setState({
       form: { ...this.state.form, [name]: value },

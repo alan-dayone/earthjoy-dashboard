@@ -15,13 +15,13 @@ export class SystemService extends BaseService {
   // }
 
   initSystem = async (body: {
-    password: string,
+    password: string;
     admin: {
-      email: string,
-      password: string,
-    },
+      email: string;
+      password: string;
+    };
   }): Promise<{
-    success: boolean,
+    success: boolean;
   }> => {
     const resp = await this.systemGateway.initSystem(body);
     return resp;

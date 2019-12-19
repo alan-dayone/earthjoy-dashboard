@@ -36,7 +36,7 @@ class SystemInit extends Component {
     }
   };
 
-  onFormChange = (change: { value: string, error: string }, name: string) => {
+  onFormChange = (change: { value: string; error: string }, name: string) => {
     this.setState({
       admin: { ...this.state.admin, [name]: change.value },
       adminError: { ...this.state.adminError, [name]: change.error },
