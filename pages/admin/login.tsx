@@ -2,38 +2,11 @@
 import React, { Component } from 'react';
 import Router from 'next/router';
 import Head from 'next/head';
+import { Formik } from 'formik';
 import { guestOnly } from '../../hocs';
 import { authService } from '../../services';
 
 class AdminLoginPage extends Component {
-  state = {
-    form: {
-      email: '',
-      password: '',
-    },
-    formError: {
-      email: '',
-      password: '',
-    },
-  };
-
-  onFormChange = (change: { value: string, error: string }, name: string) => {
-    this.setState({
-      form: { ...this.state.form, [name]: change.value },
-      formError: { ...this.state.formError, [name]: change.error },
-    });
-  };
-
-  login = async () => {
-    try {
-      const user = await authService.loginWithEmail(this.state.form);
-      console.log(user);
-      Router.replace('/user');
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   render() {
     return (
       <div
@@ -49,44 +22,87 @@ class AdminLoginPage extends Component {
               <div className="card-group">
                 <div className="card p-4">
                   <div className="card-body">
-                    <h1>Login</h1>
-                    <p className="text-muted">Sign In to your account</p>
-                    <div className="input-group mb-3">
-                      <div className="input-group-prepend">
-                        <span className="input-group-text">
-                          <i className="cil-user" />
-                        </span>
-                      </div>
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder="Email"
-                      />
-                    </div>
-                    <div className="input-group mb-4">
-                      <div className="input-group-prepend">
-                        <span className="input-group-text">
-                          <i className="cil-lock-locked" />
-                        </span>
-                      </div>
-                      <input
-                        className="form-control"
-                        type="password"
-                        placeholder="Password"
-                      />
-                    </div>
-                    <div className="row">
-                      <div className="col-6">
-                        <button className="btn btn-primary px-4" type="button">
-                          Login
-                        </button>
-                      </div>
-                      <div className="col-6 text-right">
-                        <button className="btn btn-link px-0" type="button">
-                          Forgot password?
-                        </button>
-                      </div>
-                    </div>
+                    <Formik
+                      initialValues={{
+                        email: '',
+                        password: '',
+                      }}
+                      onSubmit={async (values, actions) => {
+                        actions.setSubmitting(true);
+                        try {
+                          await authService.loginWithEmail(values);
+                          Router.replace('/admin');
+                        } catch (e) {
+                          alert(e.message);
+                        } finally {
+                          actions.setSubmitting(false);
+                        }
+                      }}
+                    >
+                      {props => (
+                        <form onSubmit={props.handleSubmit}>
+                          <h1>Login</h1>
+                          <p className="text-muted">Sign In to your account</p>
+                          <div className="input-group mb-3">
+                            <div className="input-group-prepend">
+                              <span className="input-group-text">
+                                <i className="cil-user" />
+                              </span>
+                            </div>
+                            <input
+                              name="email"
+                              className="form-control"
+                              type="text"
+                              placeholder="Email"
+                              onChange={props.handleChange}
+                              value={props.values.name}
+                            />
+                          </div>
+                          <div className="input-group mb-4">
+                            <div className="input-group-prepend">
+                              <span className="input-group-text">
+                                <i className="cil-lock-locked" />
+                              </span>
+                            </div>
+                            <input
+                              className="form-control"
+                              type="password"
+                              name="password"
+                              placeholder="Password"
+                              onChange={props.handleChange}
+                              value={props.values.password}
+                            />
+                          </div>
+                          <div className="row">
+                            <div className="col-6">
+                              <button
+                                className="btn btn-primary px-4"
+                                type="submit"
+                              >
+                                Login
+                              </button>
+                            </div>
+                            <div className="col-6 text-right">
+                              <button
+                                className="btn btn-link px-0"
+                                type="button"
+                              >
+                                Forgot password?
+                              </button>
+                            </div>
+                          </div>
+                          {/*<input*/}
+                          {/*  type="text"*/}
+                          {/*  onChange={props.handleChange}*/}
+                          {/*  onBlur={props.handleBlur}*/}
+                          {/*  value={props.values.name}*/}
+                          {/*  name="name"*/}
+                          {/*/>*/}
+                          {/*{props.errors.name && <div id="feedback">{props.errors.name}</div>}*/}
+                          {/*<button type="submit">Submit</button>*/}
+                        </form>
+                      )}
+                    </Formik>
                   </div>
                 </div>
               </div>
