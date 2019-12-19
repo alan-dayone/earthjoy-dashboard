@@ -2,7 +2,7 @@
 import React from 'react';
 import { compose } from 'redux';
 import { Provider } from 'react-redux';
-import App, { Container, AppProps, NextAppContext } from 'next/app';
+import App, { AppProps, NextAppContext } from 'next/app';
 import withRedux, { AppProps as NextReduxAppProps } from 'next-redux-wrapper';
 import { nprogress } from '../hocs';
 import { makeStore } from '../redux/store';
@@ -19,11 +19,9 @@ class ComposedApp extends App<AppProps & NextReduxAppProps> {
   render() {
     const { Component, pageProps, store } = this.props;
     return (
-      <Container>
-        <Provider store={store}>
-          <Component {...pageProps} />
-        </Provider>
-      </Container>
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
     );
   }
 }

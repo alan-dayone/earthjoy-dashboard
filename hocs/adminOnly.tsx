@@ -1,9 +1,11 @@
 import React from 'react';
-import Head from 'next/head';
+import Link from 'next/link';
+// import Head from 'next/head';
 // import { Router } from '../routes'
 import { authService } from '../services';
 // import { isAdmin } from '../models/user'
 import { NextJSContext } from 'next-redux-wrapper';
+import '../scss/admin/index.scss';
 // import {
 //   actions as authActions,
 //   selectors as authSelectors
@@ -38,440 +40,125 @@ export const adminOnly = Content => {
 
     render() {
       return (
-        <div className="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-          <Head>
-            <link
-              href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-              rel="stylesheet"
-              type="text/css"
-            />
-            <link
-              href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css"
-              type="text/css"
-              rel="stylesheet"
-            />
-            <link
-              href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css"
-              type="text/css"
-              rel="stylesheet"
-            />
-            <link
-              href="https://unpkg.com/@coreui/icons/css/coreui-icons.min.css"
-              rel="stylesheet"
-              type="text/css"
-            />
-            <link
-              href="https://unpkg.com/@coreui/coreui/dist/css/coreui.min.css"
-              rel="stylesheet"
-              type="text/css"
-            />
-          </Head>
-          {this._renderNavbar()}
-          <div className="app-body">
-            {this._renderSidebar()}
-            <div id="main">
-              <Content {...this.props} />
+        <div className="c-app pace-done">
+          {this._renderSidebar()}
+          <div className="c-wrapper">
+            {this._renderNavbar()}
+            <div className="c-body">
+              <main className="c-main">
+                <div className="container-fluid">
+                  <Content {...this.props} />
+                </div>
+              </main>
             </div>
           </div>
         </div>
       );
+      // return (
+      //   <div className="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+      //     {this._renderNavbar()}
+      //     <div className="app-body">
+      //       {this._renderSidebar()}
+      //       <div id="main">
+      //         <Content {...this.props} />
+      //       </div>
+      //     </div>
+      //   </div>
+      // );
     }
 
     _renderNavbar = () => {
       return (
-        <header className="app-header navbar">
+        <header className="c-header c-header-light c-header-fixed px-3">
           <button
-            className="navbar-toggler sidebar-toggler d-lg-none mr-auto"
+            className="c-header-toggler c-class-toggler d-md-down-none"
             type="button"
-            data-toggle="sidebar-show"
           >
-            <span className="navbar-toggler-icon" />
+            <span className="c-header-toggler-icon" />
           </button>
-          <a className="navbar-brand" href="#">
-            <img
-              className="navbar-brand-full"
-              src="/static/img/admin-logo.jpg"
-              height={25}
-              alt="CoreUI Logo"
-            />
-            <img
-              className="navbar-brand-minimized"
-              src="/static/img/admin-logo.jpg"
-              height={30}
-              alt="CoreUI Logo"
-            />
-          </a>
-          <button
-            className="navbar-toggler sidebar-toggler d-md-down-none"
-            type="button"
-            data-toggle="sidebar-lg-show"
-          >
-            <span className="navbar-toggler-icon" />
-          </button>
-          <ul className="nav navbar-nav d-md-down-none">
-            <li className="nav-item px-3">
-              <a className="nav-link" href="#">
-                Dashboard
-              </a>
-            </li>
-            <li className="nav-item px-3">
-              <a className="nav-link" href="#">
-                Users
-              </a>
-            </li>
-            <li className="nav-item px-3">
-              <a className="nav-link" href="#">
-                Settings
-              </a>
-            </li>
-          </ul>
-          <ul className="nav navbar-nav ml-auto">
-            <li className="nav-item d-md-down-none">
-              <a className="nav-link" href="#">
-                <i className="icon-bell" />
-                <span className="badge badge-pill badge-danger">5</span>
-              </a>
-            </li>
-            <li className="nav-item d-md-down-none">
-              <a className="nav-link" href="#">
-                <i className="icon-list" />
-              </a>
-            </li>
-            <li className="nav-item d-md-down-none">
-              <a className="nav-link" href="#">
-                <i className="icon-location-pin" />
-              </a>
-            </li>
-            <li className="nav-item dropdown">
+          <ul className="c-header-nav mfs-auto">
+            <li className="c-header-nav-item dropdown">
               <a
-                className="nav-link"
+                className="c-header-nav-link"
                 data-toggle="dropdown"
                 href="#"
                 role="button"
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                <img
-                  className="img-avatar"
-                  src="img/avatars/6.jpg"
-                  alt="admin@bootstrapmaster.com"
-                />
+                <div className="c-avatar">
+                  <img
+                    className="c-avatar-img"
+                    src="https://coreui.io/demo/3.0-beta.0/assets/img/avatars/6.jpg"
+                    alt="user@email.com"
+                  />
+                </div>
               </a>
-              <div className="dropdown-menu dropdown-menu-right">
-                <div className="dropdown-header text-center">
-                  <strong>Account</strong>
-                </div>
+              <div className="dropdown-menu dropdown-menu-right pt-0">
                 <a className="dropdown-item" href="#">
-                  <i className="fa fa-bell-o" /> Updates
-                  <span className="badge badge-info">42</span>
+                  <i className="c-icon mfe-2 cil-settings" />
+                  Settings
                 </a>
                 <a className="dropdown-item" href="#">
-                  <i className="fa fa-envelope-o" /> Messages
-                  <span className="badge badge-success">42</span>
-                </a>
-                <a className="dropdown-item" href="#">
-                  <i className="fa fa-tasks" /> Tasks
-                  <span className="badge badge-danger">42</span>
-                </a>
-                <a className="dropdown-item" href="#">
-                  <i className="fa fa-comments" /> Comments
-                  <span className="badge badge-warning">42</span>
-                </a>
-                <div className="dropdown-header text-center">
-                  <strong>Settings</strong>
-                </div>
-                <a className="dropdown-item" href="#">
-                  <i className="fa fa-user" /> Profile
-                </a>
-                <a className="dropdown-item" href="#">
-                  <i className="fa fa-wrench" /> Settings
-                </a>
-                <a className="dropdown-item" href="#">
-                  <i className="fa fa-usd" /> Payments
-                  <span className="badge badge-secondary">42</span>
-                </a>
-                <a className="dropdown-item" href="#">
-                  <i className="fa fa-file" /> Projects
-                  <span className="badge badge-primary">42</span>
-                </a>
-                <div className="dropdown-divider" />
-                <a className="dropdown-item" href="#">
-                  <i className="fa fa-shield" /> Lock Account
-                </a>
-                <a className="dropdown-item" href="#">
-                  <i className="fa fa-lock" /> Logout
+                  <i className="c-icon mfe-2 cil-account-logout" />
+                  Logout
                 </a>
               </div>
             </li>
           </ul>
-          <button
-            className="navbar-toggler aside-menu-toggler d-md-down-none"
-            type="button"
-            data-toggle="aside-menu-lg-show"
-          >
-            <span className="navbar-toggler-icon" />
-          </button>
-          <button
-            className="navbar-toggler aside-menu-toggler d-lg-none"
-            type="button"
-            data-toggle="aside-menu-show"
-          >
-            <span className="navbar-toggler-icon" />
-          </button>
         </header>
       );
     };
 
     _renderSidebar = () => {
       return (
-        <div className="sidebar">
-          <nav className="sidebar-nav">
-            <ul className="nav">
-              <li className="nav-item">
-                <a className="nav-link" href="index.html">
-                  <i className="nav-icon icon-speedometer" /> Dashboard
-                  <span className="badge badge-primary">NEW</span>
+        <div
+          className="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show"
+          id="sidebar"
+        >
+          <div className="c-sidebar-brand">
+            <h5>ADMIN PORTAL</h5>
+          </div>
+          <ul
+            className="c-sidebar-nav ps ps--active-y"
+            data-drodpown-accordion="true"
+          >
+            <li className="c-sidebar-nav-item">
+              <Link href="/admin">
+                <a className="c-sidebar-nav-link">
+                  <i className="c-sidebar-nav-icon cil-speedometer" />
+                  Dashboard
                 </a>
-              </li>
-              <li className="nav-title">Theme</li>
-              <li className="nav-item">
-                <a className="nav-link" href="colors.html">
-                  <i className="nav-icon icon-drop" /> Colors
+              </Link>
+            </li>
+            <li className="c-sidebar-nav-title">EMAIL</li>
+            <li className="c-sidebar-nav-item">
+              <Link href="/admin/configurations/smtp-settings">
+                <a className="c-sidebar-nav-link">
+                  <i className="c-sidebar-nav-icon cil-settings" />
+                  SMTP settings
                 </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="typography.html">
-                  <i className="nav-icon icon-pencil" /> Typography
+              </Link>
+              <Link href="/admin/configurations/email-address-verification">
+                <a className="c-sidebar-nav-link">
+                  <i className="c-sidebar-nav-icon cil-send" />
+                  Email address verification
                 </a>
-              </li>
-              <li className="nav-title">Components</li>
-              <li className="nav-item nav-dropdown">
-                <a className="nav-link nav-dropdown-toggle" href="#">
-                  <i className="nav-icon icon-puzzle" /> Base
+              </Link>
+              <Link href="/admin/configurations/password-reset">
+                <a className="c-sidebar-nav-link">
+                  <i className="c-sidebar-nav-icon cil-send" />
+                  Password reset
                 </a>
-                <ul className="nav-dropdown-items">
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/breadcrumb.html">
-                      <i className="nav-icon icon-puzzle" /> Breadcrumb
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/cards.html">
-                      <i className="nav-icon icon-puzzle" /> Cards
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/carousel.html">
-                      <i className="nav-icon icon-puzzle" /> Carousel
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/collapse.html">
-                      <i className="nav-icon icon-puzzle" /> Collapse
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/forms.html">
-                      <i className="nav-icon icon-puzzle" /> Forms
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/jumbotron.html">
-                      <i className="nav-icon icon-puzzle" /> Jumbotron
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/list-group.html">
-                      <i className="nav-icon icon-puzzle" /> List group
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/navs.html">
-                      <i className="nav-icon icon-puzzle" /> Navs
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/pagination.html">
-                      <i className="nav-icon icon-puzzle" /> Pagination
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/popovers.html">
-                      <i className="nav-icon icon-puzzle" /> Popovers
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/progress.html">
-                      <i className="nav-icon icon-puzzle" /> Progress
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/scrollspy.html">
-                      <i className="nav-icon icon-puzzle" /> Scrollspy
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/switches.html">
-                      <i className="nav-icon icon-puzzle" /> Switches
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/tables.html">
-                      <i className="nav-icon icon-puzzle" /> Tables
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/tabs.html">
-                      <i className="nav-icon icon-puzzle" /> Tabs
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="base/tooltips.html">
-                      <i className="nav-icon icon-puzzle" /> Tooltips
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li className="nav-item nav-dropdown">
-                <a className="nav-link nav-dropdown-toggle" href="#">
-                  <i className="nav-icon icon-cursor" /> Buttons
-                </a>
-                <ul className="nav-dropdown-items">
-                  <li className="nav-item">
-                    <a className="nav-link" href="buttons/buttons.html">
-                      <i className="nav-icon icon-cursor" /> Buttons
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="buttons/button-group.html">
-                      <i className="nav-icon icon-cursor" /> Buttons Group
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="buttons/dropdowns.html">
-                      <i className="nav-icon icon-cursor" /> Dropdowns
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="buttons/brand-buttons.html">
-                      <i className="nav-icon icon-cursor" /> Brand Buttons
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="charts.html">
-                  <i className="nav-icon icon-pie-chart" /> Charts
-                </a>
-              </li>
-              <li className="nav-item nav-dropdown">
-                <a className="nav-link nav-dropdown-toggle" href="#">
-                  <i className="nav-icon icon-star" /> Icons
-                </a>
-                <ul className="nav-dropdown-items">
-                  <li className="nav-item">
-                    <a className="nav-link" href="icons/coreui-icons.html">
-                      <i className="nav-icon icon-star" /> CoreUI Icons
-                      <span className="badge badge-success">NEW</span>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="icons/flags.html">
-                      <i className="nav-icon icon-star" /> Flags
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="icons/font-awesome.html">
-                      <i className="nav-icon icon-star" /> Font Awesome
-                      <span className="badge badge-secondary">4.7</span>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="icons/simple-line-icons.html">
-                      <i className="nav-icon icon-star" /> Simple Line Icons
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li className="nav-item nav-dropdown">
-                <a className="nav-link nav-dropdown-toggle" href="#">
-                  <i className="nav-icon icon-bell" /> Notifications
-                </a>
-                <ul className="nav-dropdown-items">
-                  <li className="nav-item">
-                    <a className="nav-link" href="notifications/alerts.html">
-                      <i className="nav-icon icon-bell" /> Alerts
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="notifications/badge.html">
-                      <i className="nav-icon icon-bell" /> Badge
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="notifications/modals.html">
-                      <i className="nav-icon icon-bell" /> Modals
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="widgets.html">
-                  <i className="nav-icon icon-calculator" /> Widgets
-                  <span className="badge badge-primary">NEW</span>
-                </a>
-              </li>
-              <li className="divider" />
-              <li className="nav-title">Extras</li>
-              <li className="nav-item nav-dropdown">
-                <a className="nav-link nav-dropdown-toggle" href="#">
-                  <i className="nav-icon icon-star" /> Pages
-                </a>
-                <ul className="nav-dropdown-items">
-                  <li className="nav-item">
-                    <a className="nav-link" href="login.html" target="_top">
-                      <i className="nav-icon icon-star" /> Login
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="register.html" target="_top">
-                      <i className="nav-icon icon-star" /> Register
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="404.html" target="_top">
-                      <i className="nav-icon icon-star" /> Error 404
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="500.html" target="_top">
-                      <i className="nav-icon icon-star" /> Error 500
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li className="nav-item mt-auto">
-                <a
-                  className="nav-link nav-link-success"
-                  href="https://coreui.io"
-                  target="_top"
-                >
-                  <i className="nav-icon icon-cloud-download" /> Download CoreUI
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link nav-link-danger"
-                  href="https://coreui.io/pro/"
-                  target="_top"
-                >
-                  <i className="nav-icon icon-layers" /> Try CoreUI
-                  <strong>PRO</strong>
-                </a>
-              </li>
-            </ul>
-          </nav>
-          <button className="sidebar-minimizer brand-minimizer" type="button" />
+              </Link>
+            </li>
+          </ul>
+          <button
+            className="c-sidebar-minimizer c-class-toggler"
+            type="button"
+            data-target="_parent"
+            data-class="c-sidebar-unfoldable"
+          />
         </div>
       );
     };
