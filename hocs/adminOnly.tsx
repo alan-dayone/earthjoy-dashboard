@@ -1,10 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
-// import Head from 'next/head';
-// import { Router } from '../routes'
+import {
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  UncontrolledDropdown,
+} from 'reactstrap';
+import { NextJSContext } from 'next-redux-wrapper';
 import { authService } from '../services';
 // import { isAdmin } from '../models/user'
-import { NextJSContext } from 'next-redux-wrapper';
 import '../scss/admin/index.scss';
 // import {
 //   actions as authActions,
@@ -54,17 +58,6 @@ export const adminOnly = Content => {
           </div>
         </div>
       );
-      // return (
-      //   <div className="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-      //     {this._renderNavbar()}
-      //     <div className="app-body">
-      //       {this._renderSidebar()}
-      //       <div id="main">
-      //         <Content {...this.props} />
-      //       </div>
-      //     </div>
-      //   </div>
-      // );
     }
 
     _renderNavbar = () => {
@@ -86,24 +79,22 @@ export const adminOnly = Content => {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                <div className="c-avatar">
-                  <img
-                    className="c-avatar-img"
-                    src="https://coreui.io/demo/3.0-beta.0/assets/img/avatars/6.jpg"
-                    alt="user@email.com"
-                  />
-                </div>
+                <UncontrolledDropdown>
+                  <DropdownToggle nav>
+                    <div className="c-avatar">
+                      <img
+                        className="c-avatar-img"
+                        src="https://coreui.io/demo/3.0-beta.0/assets/img/avatars/6.jpg"
+                        alt="user@email.com"
+                      />
+                    </div>
+                  </DropdownToggle>
+                  <DropdownMenu right>
+                    <DropdownItem>Profile</DropdownItem>
+                    <DropdownItem>Logout</DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
               </a>
-              <div className="dropdown-menu dropdown-menu-right pt-0">
-                <a className="dropdown-item" href="#">
-                  <i className="c-icon mfe-2 cil-settings" />
-                  Settings
-                </a>
-                <a className="dropdown-item" href="#">
-                  <i className="c-icon mfe-2 cil-account-logout" />
-                  Logout
-                </a>
-              </div>
             </li>
           </ul>
         </header>

@@ -79,7 +79,11 @@ class AdminLoginPage extends Component {
                                 className="btn btn-primary px-4"
                                 type="submit"
                               >
-                                Login
+                                {props.isSubmitting ? (
+                                  <div className="spinner-border spinner-border-sm" />
+                                ) : (
+                                  'Login'
+                                )}
                               </button>
                             </div>
                             <div className="col-6 text-right">
