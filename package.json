@@ -1,20 +1,12 @@
 {
   "name": "int-nextjs-ts",
-  "description": "Boilerplate for front-end code using Next.js and Typescript",
-  "author": "DayOne Software Technology Co., Ltd",
-  "license": "ISC",
   "version": "1.0.0",
   "engines": {
     "node": "10.x",
     "npm": "6.x"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@gitlab.com:dayone-teams/int-boilerplates/int-nextjs-ts.git"
-  },
   "scripts": {
     "dev": "nodemon --exec ts-node --project tsconfig-server.json server.ts",
-    "newdev": "next",
     "lint": "gts check",
     "lint:fix": "gts fix",
     "test": "echo \"Need to write test\"",
@@ -55,6 +47,7 @@
     "redux": "^4.0.1",
     "redux-crud": "^3.3.0",
     "redux-thunk": "^2.3.0",
+    "toastr": "^2.1.4",
     "validate.js": "^0.13.1",
     "validator": "^12.0.0",
     "yup": "^0.27.0",
@@ -77,6 +70,7 @@
     "@types/react-redux": "^7.1.0",
     "@types/reactstrap": "^8.0.1",
     "@types/recompose": "^0.30.7",
+    "@types/toastr": "^2.1.37",
     "@types/validator": "^10.11.3",
     "@types/yup": "^0.26.22",
     "@types/zxcvbn": "^4.4.0",

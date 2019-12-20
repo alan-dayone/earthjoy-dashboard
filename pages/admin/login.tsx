@@ -2,9 +2,15 @@
 import React, { Component } from 'react';
 import Router from 'next/router';
 import Head from 'next/head';
-import { Formik } from 'formik';
+import toastr from 'toastr';
+import { Formik, FormikActions } from 'formik';
 import { guestOnly } from '../../hocs';
 import { authService } from '../../services';
+
+interface LoginForm {
+  email: string;
+  password: string;
+}
 
 class AdminLoginPage extends Component {
   render() {
@@ -27,17 +33,7 @@ class AdminLoginPage extends Component {
                         email: '',
                         password: '',
                       }}
-                      onSubmit={async (values, actions) => {
-                        actions.setSubmitting(true);
-                        try {
-                          await authService.loginWithEmail(values);
-                          Router.replace('/admin');
-                        } catch (e) {
-                          alert(e.message);
-                        } finally {
-                          actions.setSubmitting(false);
-                        }
-                      }}
+                      onSubmit={this._handleLogin}
                     >
                       {props => (
                         <form onSubmit={props.handleSubmit}>
@@ -55,7 +51,7 @@ class AdminLoginPage extends Component {
                               type="text"
                               placeholder="Email"
                               onChange={props.handleChange}
-                              value={props.values.name}
+                              value={props.values.email}
                             />
                           </div>
                           <div className="input-group mb-4">
@@ -95,15 +91,6 @@ class AdminLoginPage extends Component {
                               </button>
                             </div>
                           </div>
-                          {/*<input*/}
-                          {/*  type="text"*/}
-                          {/*  onChange={props.handleChange}*/}
-                          {/*  onBlur={props.handleBlur}*/}
-                          {/*  value={props.values.name}*/}
-                          {/*  name="name"*/}
-                          {/*/>*/}
-                          {/*{props.errors.name && <div id="feedback">{props.errors.name}</div>}*/}
-                          {/*<button type="submit">Submit</button>*/}
                         </form>
                       )}
                     </Formik>
@@ -116,6 +103,21 @@ class AdminLoginPage extends Component {
       </div>
     );
   }
+
+  _handleLogin = async (
+    values: LoginForm,
+    actions: FormikActions<LoginForm>
+  ) => {
+    actions.setSubmitting(true);
+    try {
+      await authService.loginWithEmail(values);
+      Router.replace('/admin');
+    } catch (e) {
+      toastr.error(e.message);
+    } finally {
+      actions.setSubmitting(false);
+    }
+  };
 }
 
 export default guestOnly(AdminLoginPage, { useAdminLayout: true });
