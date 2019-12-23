@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { ValidationError, errorCode } from '../errors/ValidationError';
+import Cookies from 'js-cookie';
+import { errorCode, ValidationError } from '../errors/ValidationError';
 import { AuthService } from '../services/AuthService';
 import { ApplicationError } from '../errors/ApplicationError';
 import { RestConnector } from '../connectors/RestConnector';
@@ -12,25 +13,35 @@ export class AuthGateway {
     this.restConnector = connector.restConnector;
   }
 
-  async loginWithEmail(body: { email: string; password: string }) {
-    try {
-      const { data } = await this.restConnector.post('/users/login', body);
-      this.restConnector.setAccessToken(data.token);
-      return this.getLoginUser();
-    } catch (e) {
-      switch (_.get(e, 'response.data.error.code')) {
-        case 'USERNAME_EMAIL_REQUIRED':
-        case 'LOGIN_FAILED': {
-          throw new ApplicationError(AuthService.error.LOGIN_FAILED);
-        }
-        default: {
-        }
-      }
-      if (_.get(e, 'response.data.error.message') === 'ACCOUNT_INACTIVATED') {
-        throw new ApplicationError(AuthService.error.ACCOUNT_INACTIVATED);
-      }
-      throw e;
+  storeAccessToken(accessToken: string | null) {
+    if (!accessToken) {
+      Cookies.remove('jwt');
+    } else {
+      Cookies.set('jwt', accessToken);
     }
+  }
+
+  async loginWithEmail(body: { email: string; password: string }) {
+    const { data } = await this.restConnector.post('/users/login', body);
+    return data;
+    // try {
+    //   const { data } = await this.restConnector.post('/users/login', body);
+    //   this.restConnector.setAccessToken(data.token);
+    //   return this.getLoginUser();
+    // } catch (e) {
+    //   switch (_.get(e, 'response.data.error.code')) {
+    //     case 'USERNAME_EMAIL_REQUIRED':
+    //     case 'LOGIN_FAILED': {
+    //       throw new ApplicationError(AuthService.error.LOGIN_FAILED);
+    //     }
+    //     default: {
+    //     }
+    //   }
+    //   if (_.get(e, 'response.data.error.message') === 'ACCOUNT_INACTIVATED') {
+    //     throw new ApplicationError(AuthService.error.ACCOUNT_INACTIVATED);
+    //   }
+    //   throw e;
+    // }
   }
 
   async create(body: { email: string; password: string }) {

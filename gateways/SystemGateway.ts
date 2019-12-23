@@ -1,3 +1,5 @@
+import { ConfigurationKey } from '../domain/models/Configuration';
+
 export class SystemGateway {
   /* tslint:disable:no-any */
   restConnector: any;
@@ -31,5 +33,14 @@ export class SystemGateway {
 
     // TODO: For mocking purpose.
     return true;
+  }
+
+  async updateSystemConfiguration(id: ConfigurationKey, data: any) {
+    const resp = await this.restConnector.put(`/configurations/${id}`, {
+      id,
+      data,
+    });
+
+    return resp.data;
   }
 }

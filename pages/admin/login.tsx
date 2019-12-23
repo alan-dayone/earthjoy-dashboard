@@ -74,12 +74,12 @@ class AdminLoginPage extends Component {
                               <button
                                 className="btn btn-primary px-4"
                                 type="submit"
+                                disabled={props.isSubmitting}
                               >
-                                {props.isSubmitting ? (
-                                  <div className="spinner-border spinner-border-sm" />
-                                ) : (
-                                  'Login'
+                                {props.isSubmitting && (
+                                  <div className="spinner-border spinner-border-sm mr-1" />
                                 )}
+                                Login
                               </button>
                             </div>
                             <div className="col-6 text-right">

@@ -17,8 +17,17 @@ export class AuthService extends BaseService {
   };
 
   async loginWithEmail(body: { email: string; password: string }) {
-    const user = await this.authGateway.loginWithEmail(body);
+    // Login user to get access token.
+    const { token } = await this.authGateway.loginWithEmail(body);
+
+    // Store access token on browser.
+    this.authGateway.storeAccessToken(token);
+
+    const user = await this.getLoginUser();
+
+    // Emit login event so other services can listen to.
     this.emit(AuthService.event.USER_LOGIN, { type: 'email', user });
+
     return user;
   }
 
