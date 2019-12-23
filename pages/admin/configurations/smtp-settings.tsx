@@ -12,14 +12,22 @@ class AdminSmtpSettingsPage extends Component {
     isTestingConnection: false,
   };
 
+  static async getInitialProps() {
+    const initialSmtpSettings = await systemService.getSmtpSettings();
+    return {
+      initialSmtpSettings,
+    };
+  }
+
   render() {
-    const initialValues: MailSmtpSettings = {
+    const initialValues: MailSmtpSettings = this.props.initialSmtpSettings || {
       smtpHost: '',
       smtpPort: '',
       username: '',
       password: '',
       senderEmail: '',
     };
+    const { isTestingConnection } = this.state;
 
     return (
       <div id="admin-smtp-settings-page">
@@ -44,6 +52,7 @@ class AdminSmtpSettingsPage extends Component {
                               className="form-control"
                               name="smtpHost"
                               onChange={props.handleChange}
+                              value={props.values.smtpHost}
                             />
                           </div>
                           <div className="form-group">
@@ -52,6 +61,7 @@ class AdminSmtpSettingsPage extends Component {
                               className="form-control"
                               name="smtpPort"
                               onChange={props.handleChange}
+                              value={props.values.smtpPort}
                             />
                           </div>
                           <div className="form-group">
@@ -60,6 +70,7 @@ class AdminSmtpSettingsPage extends Component {
                               className="form-control"
                               name="senderEmail"
                               onChange={props.handleChange}
+                              value={props.values.senderEmail}
                             />
                           </div>
                           <div className="form-group">
@@ -68,6 +79,7 @@ class AdminSmtpSettingsPage extends Component {
                               className="form-control"
                               name="username"
                               onChange={props.handleChange}
+                              value={props.values.username}
                             />
                           </div>
                           <div className="form-group">
@@ -76,13 +88,21 @@ class AdminSmtpSettingsPage extends Component {
                               className="form-control"
                               name="password"
                               onChange={props.handleChange}
+                              value={props.values.password}
                             />
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="card-footer">
-                      <button className="btn btn-sm btn-primary" type="submit">
+                      <button
+                        className="btn btn-sm btn-primary"
+                        type="submit"
+                        disabled={props.isSubmitting}
+                      >
+                        {props.isSubmitting && (
+                          <div className="spinner-border spinner-border-sm mr-1" />
+                        )}
                         Save
                       </button>
                       &nbsp;
@@ -92,8 +112,9 @@ class AdminSmtpSettingsPage extends Component {
                           e.preventDefault();
                           await this._handleTestSmtpConnection(props.values);
                         }}
+                        disabled={isTestingConnection}
                       >
-                        {this.state.isTestingConnection && (
+                        {isTestingConnection && (
                           <div className="spinner-border spinner-border-sm mr-1" />
                         )}
                         Test connection
@@ -133,6 +154,7 @@ class AdminSmtpSettingsPage extends Component {
     try {
       actions.setSubmitting(true);
       await systemService.saveSmtpSettings(values);
+      toastr.success('Saved');
     } catch (e) {
       toastr.error(e.message);
     } finally {

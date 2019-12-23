@@ -25,19 +25,19 @@ export function create({ baseUrl }: { baseUrl: string }): RestConnector {
   );
 
   /**
-   * On browser, restConnector (axios) doesn't need to care about access_token anymore as we hacked around to let server set
-   * access_token to browser on successful login.
+   * On browser, restConnector (axios) doesn't need to care about jwt anymore as we hacked around to let server set
+   * jwt to browser on successful login.
    * @param token
    */
   Object.assign(instance, {
     setAccessToken: (token: string) => {
       if (token) {
-        Cookies.set('access_token', token);
+        Cookies.set('jwt', token);
         instance.defaults.headers['Authorization'] = `Bearer ${token}`;
       }
     },
     removeAccessToken: () => {
-      Cookies.remove('access_token');
+      Cookies.remove('jwt');
       delete instance.defaults.headers.Authorization;
     },
   });

@@ -27,12 +27,12 @@ export const userOnly = Content => {
         ? await Content.getInitialProps(props)
         : {};
       if (context.isServer) {
-        if (!context.req.cookies.access_token) {
+        if (!context.req.cookies.jwt) {
           context.res.redirect('/admin/login');
           return initialProps;
         }
-        authService.setAccessToken(context.req.cookies.access_token);
-        token = context.req.cookies.access_token;
+        authService.setAccessToken(context.req.cookies.jwt);
+        token = context.req.cookies.jwt;
         const user = await context.store.dispatch(authRedux.getLoginUser());
         currentUser = user;
         if (!user) {
@@ -45,7 +45,7 @@ export const userOnly = Content => {
           user = await context.store.dispatch(authRedux.getLoginUser());
         }
         currentUser = user;
-        token = Cookies.get('access_token') || '';
+        token = Cookies.get('jwt') || '';
         if (!user) {
           Router.push('/admin/login');
         }

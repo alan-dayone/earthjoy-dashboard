@@ -43,4 +43,18 @@ export class SystemGateway {
 
     return resp.data;
   }
+
+  async getConfiguration(id: ConfigurationKey): Promise<any> {
+    try {
+      const resp = await this.restConnector.get(`/configurations/${id}`);
+      return resp.data;
+    } catch (e) {
+      // If data is not exist, return null rather than throwing error.
+      if (e.response.status === 404) {
+        return null;
+      }
+
+      throw e;
+    }
+  }
 }

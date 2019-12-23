@@ -31,10 +31,10 @@ export const guestOnly = (
         ? await Content.getInitialProps(props)
         : {};
       if (context.isServer) {
-        if (!context.req.cookies.access_token) {
+        if (!context.req.cookies.jwt) {
           return initialProps;
         }
-        authService.setAccessToken(context.req.cookies.access_token);
+        authService.setAccessToken(context.req.cookies.jwt);
         const user = await context.store.dispatch(authRedux.getLoginUser());
         if (user) {
           context.res.redirect('/');

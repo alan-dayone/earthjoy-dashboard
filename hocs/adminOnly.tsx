@@ -20,12 +20,9 @@ export const adminOnly = Content => {
   class AdminWrapper extends React.Component {
     static async getInitialProps(ctx: NextJSContext) {
       const { req, res, store, isServer } = ctx;
-      const composedProps = Content.getInitialProps
-        ? await Content.getInitialProps(ctx)
-        : {};
 
       if (isServer) {
-        authService.setAccessToken(req.signedCookies.access_token);
+        authService.setAccessToken(req.cookies.jwt);
         // const user = await store.dispatch(authActions.getLoginUser())
 
         // if (!user || !isAdmin(user)) {
@@ -38,6 +35,10 @@ export const adminOnly = Content => {
         //   Router.pushRoute('/admin/login')
         // }
       }
+
+      const composedProps = Content.getInitialProps
+        ? await Content.getInitialProps(ctx)
+        : {};
 
       return composedProps;
     }

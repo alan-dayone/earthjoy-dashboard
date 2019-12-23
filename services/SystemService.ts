@@ -41,4 +41,11 @@ export class SystemService extends BaseService {
       smtpSettings
     );
   }
+
+  async getSmtpSettings(): Promise<any> {
+    const smtpConfig = await this.systemGateway.getConfiguration(
+      ConfigurationKey.MAIL_SMTP_SETTINGS
+    );
+    return smtpConfig && smtpConfig.data;
+  }
 }
