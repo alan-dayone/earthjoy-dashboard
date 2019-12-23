@@ -1,6 +1,5 @@
 import React from 'react';
 import Head from 'next/head';
-import { Link } from '../routes';
 
 /* tslint:disable-next-line:variable-name */
 export const everyone = Content => {
@@ -30,9 +29,9 @@ export const everyone = Content => {
           <div className="navbar-nav-scroll">
             <ul className="navbar-nav bd-navbar-nav">
               <li className="nav-item">
-                <Link route="/admin/login">
-                  <a className="nav-link active">common:home</a>
-                </Link>
+                {/*<Link route="/admin/login">*/}
+                {/*  <a className="nav-link active">common:home</a>*/}
+                {/*</Link>*/}
               </li>
             </ul>
           </div>

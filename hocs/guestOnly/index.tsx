@@ -8,7 +8,7 @@ import { SingletonRouter } from 'next/router';
 import { selectors } from '../../redux/authRedux';
 import { actions as authRedux } from '../../redux/authRedux';
 import { authService } from '../../services';
-import { Router } from '../../routes';
+// import { Router } from '../../routes';
 import { AdminLayoutWrapper } from './AdminLayoutWrapper';
 
 interface PropTypes {
@@ -43,7 +43,7 @@ export const guestOnly = (
       } else {
         const user = selectors.getLoginUser(context.store.getState());
         if (user) {
-          Router.pushRoute('/');
+          // Router.pushRoute('/');
         }
       }
       return { ...initialProps };
@@ -51,7 +51,7 @@ export const guestOnly = (
 
     componentDidMount() {
       if (this.props.token) {
-        Router.replaceRoute('/');
+        // Router.replaceRoute('/');
       }
     }
 
