@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import globalRedux from './globalRedux';
 import uiStateRedux from './uiStateRedux';
-import { isAdmin } from '../models/user';
+import { isAdmin } from '../models/User';
 
 const actions = {
   // getLoginUser: ,

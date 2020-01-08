@@ -69,7 +69,7 @@ export class CreateFirstAdminForm extends Component {
               <div className="mb-4 input-group">
                 <div className="input-group-prepend">
                   <span className="input-group-text">
-                    <i className="fa fa-user" />
+                    <i className="cil-user" />
                   </span>
                 </div>
                 <input
@@ -89,7 +89,7 @@ export class CreateFirstAdminForm extends Component {
               <div className="mb-4 input-group">
                 <div className="input-group-prepend">
                   <span className="input-group-text">
-                    <i className="fa fa-envelope" />
+                    <i className="cil-envelope-closed" />
                   </span>
                 </div>
                 <input
@@ -109,7 +109,7 @@ export class CreateFirstAdminForm extends Component {
               <div className="mb-4 input-group">
                 <div className="input-group-prepend">
                   <span className="input-group-text">
-                    <i className="fa fa-lock" />
+                    <i className="cil-lock-locked" />
                   </span>
                 </div>
                 <input
@@ -129,7 +129,7 @@ export class CreateFirstAdminForm extends Component {
               <div className="mb-4 input-group">
                 <div className="input-group-prepend">
                   <span className="input-group-text">
-                    <i className="fa fa-lock" />
+                    <i className="cil-lock-locked" />
                   </span>
                 </div>
                 <input

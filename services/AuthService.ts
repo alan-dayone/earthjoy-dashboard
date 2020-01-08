@@ -1,5 +1,5 @@
 import { BaseService } from './BaseService';
-import { validateUser } from '../validators/userValidator';
+import { validateUser } from '../validators/UserValidator';
 
 export class AuthService extends BaseService {
   static error = {

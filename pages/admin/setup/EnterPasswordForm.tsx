@@ -46,7 +46,7 @@ export class EnterPasswordForm extends Component {
               <div className="mb-4 input-group">
                 <div className="input-group-prepend">
                   <span className="input-group-text">
-                    <i className="fa fa-lock" />
+                    <i className="cil-lock-locked" />
                   </span>
                 </div>
                 <input

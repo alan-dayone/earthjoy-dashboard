@@ -1,5 +1,6 @@
 /* tslint:disable:no-default-export */
 import React, { Component } from 'react';
+import Head from 'next/head';
 import { guestOnly } from '../../../hocs';
 import { EnterPasswordForm } from './EnterPasswordForm';
 import { CreateFirstAdminForm } from './CreateFirstAdminForm';
@@ -17,7 +18,10 @@ class AdminSetupPage extends Component {
 
   render() {
     return (
-      <div className="app flex-row align-items-center">
+      <div className="align-items-center c-app flex-row pace-done">
+        <Head>
+          <title>Admin - Setup</title>
+        </Head>
         <div className="container">
           <div className="justify-content-center row">
             <div className="col-md-6">
