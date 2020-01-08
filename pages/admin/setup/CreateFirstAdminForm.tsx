@@ -43,7 +43,7 @@ export class CreateFirstAdminForm extends Component {
             setSubmitting(true);
             try {
               const { password, dispatch, router } = this.props;
-              await systemService.createFirstAdmin(password, values);
+              await systemService.initSystem(password, values);
               await dispatch(
                 authActions.loginWithEmail({
                   email: values.email,
