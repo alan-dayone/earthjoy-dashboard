@@ -6,7 +6,6 @@ import App, { AppProps, NextAppContext } from 'next/app';
 import withRedux, { AppProps as NextReduxAppProps } from 'next-redux-wrapper';
 import { nprogress } from '../hocs';
 import { makeStore } from '../redux/store';
-import '../scss/bootstrap.scss';
 
 class ComposedApp extends App<AppProps & NextReduxAppProps> {
   static async getInitialProps({ Component, ctx }: NextAppContext) {
