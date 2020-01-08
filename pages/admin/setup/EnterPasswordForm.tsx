@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Formik } from 'formik';
+import toastr from 'toastr';
 import { systemService } from '../../../services';
 
 export class EnterPasswordForm extends Component {
@@ -30,15 +31,16 @@ export class EnterPasswordForm extends Component {
               );
 
               if (!passwordIsCorrect) {
-                alert('Invalid password');
+                toastr.error('Invalid password');
                 return;
               }
 
               this.props.onSuccess(values.password);
             } catch (e) {
-              alert(e.message);
+              toastr.error(e.message);
+            } finally {
+              setSubmitting(false);
             }
-            setSubmitting(false);
           }}
         >
           {({ values, handleChange, handleSubmit, isSubmitting, isValid }) => (
