@@ -21,32 +21,32 @@ export const guestOnly = (
 ) => {
   class GuestWrapper extends React.Component<PropTypes> {
     static async getInitialProps(context) {
-      const props = {
-        req: context.req,
-        res: context.res,
-        store: context.store,
-        isServer: context.isServer,
-      };
-      const initialProps = Content.getInitialProps
-        ? await Content.getInitialProps(props)
-        : {};
-      if (context.isServer) {
-        if (!context.req.cookies.jwt) {
-          return initialProps;
-        }
-        authService.setAccessToken(context.req.cookies.jwt);
-        const user = await context.store.dispatch(authRedux.getLoginUser());
-        if (user) {
-          context.res.redirect('/');
-          context.res.end();
-        }
-      } else {
-        const user = selectors.getLoginUser(context.store.getState());
-        if (user) {
-          // Router.pushRoute('/');
-        }
-      }
-      return { ...initialProps };
+      // const props = {
+      //   req: context.req,
+      //   res: context.res,
+      //   store: context.store,
+      //   isServer: context.isServer,
+      // };
+      // const initialProps = Content.getInitialProps
+      //   ? await Content.getInitialProps(props)
+      //   : {};
+      // if (context.isServer) {
+      //   if (!context.req.cookies.jwt) {
+      //     return initialProps;
+      //   }
+      //   authService.setAccessToken(context.req.cookies.jwt);
+      //   const user = await context.store.dispatch(authRedux.getLoginUser());
+      //   if (user) {
+      //     context.res.redirect('/');
+      //     context.res.end();
+      //   }
+      // } else {
+      //   const user = selectors.getLoginUser(context.store.getState());
+      //   if (user) {
+      //     // Router.pushRoute('/');
+      //   }
+      // }
+      // return { ...initialProps };
     }
 
     componentDidMount() {

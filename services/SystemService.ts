@@ -14,9 +14,9 @@ export class SystemService extends BaseService {
     this.systemGateway = options.systemGateway;
   }
 
-  // validateSystemInitializationPassword(password: string): boolean {
-  //   return this.systemGateway.validateSystemInitializationPassword(password);
-  // }
+  async validateSystemInitializationPassword(password: string): boolean {
+    return this.systemGateway.validateSystemInitializationPassword(password);
+  }
 
   initSystem = async (body: {
     password: string;

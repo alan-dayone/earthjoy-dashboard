@@ -25,14 +25,11 @@ export class SystemGateway {
   async validateSystemInitializationPassword(
     password: string
   ): Promise<boolean> {
-    // const {data} = await this.restConnector.post(
-    //   '/system/validate-initialization-password',
-    //   {password},
-    // );
-    // return data.isValid;
-
-    // TODO: For mocking purpose.
-    return true;
+    const { data } = await this.restConnector.post(
+      '/configurations/validate-system-initialization-password',
+      { password }
+    );
+    return data.isValid;
   }
 
   async updateSystemConfiguration(id: ConfigurationKey, data: any) {

@@ -1,6 +1,6 @@
 /* tslint:disable:no-default-export */
 import React, { Component } from 'react';
-import { index } from '../../../hocs';
+import { guestOnly } from '../../../hocs';
 import { EnterPasswordForm } from './EnterPasswordForm';
 import { CreateFirstAdminForm } from './CreateFirstAdminForm';
 
@@ -49,4 +49,4 @@ class AdminSetupPage extends Component {
   }
 }
 
-export default index(AdminSetupPage, { useAdminLayout: true });
+export default guestOnly(AdminSetupPage, { useAdminLayout: true });
