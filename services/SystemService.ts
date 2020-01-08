@@ -18,18 +18,15 @@ export class SystemService extends BaseService {
     return this.systemGateway.validateSystemInitializationPassword(password);
   }
 
-  initSystem = async (body: {
+  async initSystem(body: {
     password: string;
     admin: {
       email: string;
       password: string;
     };
-  }): Promise<{
-    success: boolean;
-  }> => {
-    const resp = await this.systemGateway.initSystem(body);
-    return resp;
-  };
+  }): Promise<void> {
+    await this.systemGateway.initSystem(body);
+  }
 
   async testSmtpConnection(smtpSettings: MailSmtpSettings): Promise<boolean> {
     return true;

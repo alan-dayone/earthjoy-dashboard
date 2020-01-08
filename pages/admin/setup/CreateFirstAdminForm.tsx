@@ -42,19 +42,33 @@ export class CreateFirstAdminForm extends Component {
           onSubmit={async (values, { setSubmitting }) => {
             setSubmitting(true);
             try {
-              const { password, dispatch, router } = this.props;
-              await systemService.initSystem(password, values);
+              const {
+                correctSystemInitPassword,
+                dispatch,
+                router,
+              } = this.props;
+              await systemService.initSystem({
+                password: correctSystemInitPassword,
+                admin: {
+                  email: values.email,
+                  password: values.password,
+                },
+              });
+
               await dispatch(
                 authActions.loginWithEmail({
                   email: values.email,
                   password: values.password,
                 })
               );
+
+              setSubmitting(false);
+
               router.replaceRoute('/admin');
             } catch (e) {
-              alert(e.message);
+              setSubmitting(false);
+              toastr.error(e.message);
             }
-            setSubmitting(false);
           }}
         >
           {({

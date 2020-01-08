@@ -30,6 +30,8 @@ export class EnterPasswordForm extends Component {
                 values.password
               );
 
+              setSubmitting(false);
+
               if (!passwordIsCorrect) {
                 toastr.error('Invalid password');
                 return;
@@ -37,9 +39,8 @@ export class EnterPasswordForm extends Component {
 
               this.props.onSuccess(values.password);
             } catch (e) {
-              toastr.error(e.message);
-            } finally {
               setSubmitting(false);
+              toastr.error(e.message);
             }
           }}
         >

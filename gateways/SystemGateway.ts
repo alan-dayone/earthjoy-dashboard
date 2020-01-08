@@ -8,19 +8,19 @@ export class SystemGateway {
     this.restConnector = restConnector;
   }
 
-  initSystem = async (body: {
+  async initSystem(body: {
     password: string;
     admin: {
       email: string;
       password: string;
     };
-  }) => {
-    const { data } = this.restConnector.post(
+  }): Promise<boolean> {
+    const { data } = await this.restConnector.post(
       `/configurations/initialize-system`,
       body
     );
-    return data;
-  };
+    return data.success;
+  }
 
   async validateSystemInitializationPassword(
     password: string
