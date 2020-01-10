@@ -1,13 +1,13 @@
 /* tslint:disable:no-default-export */
 import React, { Component } from 'react';
-import Router from 'next/router';
+// import Router from 'next/router';
 import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
 import { Formik, FormikActions } from 'formik';
 import { guestOnly } from '../../hocs';
-import { authService } from '../../services';
-import { string } from 'yup';
+// import { authService } from '../../services';
+// import { string } from 'yup';
 
 interface ForgotPasswordForm {
   email: string;
@@ -21,13 +21,13 @@ class AdminForgotPasswordPage extends Component {
         className="align-items-center c-app flex-row pace-done"
       >
         <Head>
-          <title>Admin - Forgot Password</title>
+          <title>Admin - Forgot password</title>
         </Head>
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-md-5">
               <div className="card-group">
-                <div className="card p-5">
+                <div className="card p-4">
                   <div className="card-body">
                     <Formik
                       initialValues={{
@@ -54,7 +54,9 @@ class AdminForgotPasswordPage extends Component {
                           <h1>Forgot password</h1>
                           <div>
                             <p className="text-muted">
-                              You can reset your password here.
+                              Don't worry! Enter your email below and we'll
+                              email you with instructions on how to reset your
+                              password.
                             </p>
                             <div className="form-group">
                               <div className="input-group mb-3">
