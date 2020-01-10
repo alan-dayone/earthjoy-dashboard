@@ -10,6 +10,8 @@ import { EmailFormat } from '../../../domain/models/Configuration';
 class AdminEmailAddressVerificationPage extends Component {
   render() {
     const initialValues: EmailFormat = {
+      senderName: '',
+      senderEmail: '',
       subject: '',
       message: '',
     };
@@ -31,6 +33,38 @@ class AdminEmailAddressVerificationPage extends Component {
                     <div className="card-body">
                       <div className="row">
                         <div className="col-12">
+                          <div className="form-group">
+                            <label>Sender name</label>
+                            <div className="input-group">
+                              <div className="input-group-prepend">
+                                <span className="input-group-text">
+                                  <i className="cil-user" />
+                                </span>
+                              </div>
+                              <input
+                                className="form-control"
+                                name="senderName"
+                                onChange={props.handleChange}
+                                value={props.values.senderName}
+                              />
+                            </div>
+                          </div>
+                          <div className="form-group">
+                            <label>Sender email</label>
+                            <div className="input-group">
+                              <div className="input-group-prepend">
+                                <span className="input-group-text">
+                                  <i className="cil-envelope-closed" />
+                                </span>
+                              </div>
+                              <input
+                                className="form-control"
+                                name="senderEmail"
+                                onChange={props.handleChange}
+                                value={props.values.senderEmail}
+                              />
+                            </div>
+                          </div>
                           <div className="form-group">
                             <label>Subject</label>
                             <div className="input-group">

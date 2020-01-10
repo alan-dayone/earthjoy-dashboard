@@ -13,6 +13,8 @@ export interface MailSmtpSettings {
 }
 
 export interface EmailFormat {
+  senderName: string;
+  senderEmail: string;
   subject: string;
   message: string;
 }
