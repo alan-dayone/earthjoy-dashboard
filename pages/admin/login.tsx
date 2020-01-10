@@ -1,6 +1,7 @@
 /* tslint:disable:no-default-export */
 import React, { Component } from 'react';
 import Router from 'next/router';
+import Link from 'next/link';
 import Head from 'next/head';
 import toastr from 'toastr';
 import { Formik, FormikActions } from 'formik';
@@ -83,12 +84,14 @@ class AdminLoginPage extends Component {
                               </button>
                             </div>
                             <div className="col-6 text-right">
-                              <button
-                                className="btn btn-link px-0"
-                                type="button"
-                              >
-                                Forgot password?
-                              </button>
+                              <Link href="/admin/forgot-password">
+                                <button
+                                  className="btn btn-link px-0"
+                                  type="button"
+                                >
+                                  Forgot password?
+                                </button>
+                              </Link>
                             </div>
                           </div>
                         </form>

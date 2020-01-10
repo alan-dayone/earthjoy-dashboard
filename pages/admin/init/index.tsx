@@ -23,14 +23,14 @@ class SystemInit extends Component {
   initSystem = async () => {
     const { password, admin } = this.state;
     try {
-      const resp = await systemService.initSystem({
+      await systemService.initSystem({
         password,
         admin,
       });
-      if (resp.success) {
-        await authService.loginWithEmail(admin);
-        Router.replace('/user');
-      }
+      // if (resp.success) {
+      await authService.loginWithEmail(admin);
+      Router.replace('/user');
+      // }
     } catch (e) {
       console.log(e);
     }
