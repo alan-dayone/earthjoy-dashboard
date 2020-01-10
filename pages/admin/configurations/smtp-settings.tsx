@@ -26,6 +26,7 @@ class AdminSmtpSettingsPage extends Component {
       username: '',
       password: '',
       senderEmail: '',
+      senderName: '',
     };
     const { isTestingConnection } = this.state;
 
@@ -48,48 +49,99 @@ class AdminSmtpSettingsPage extends Component {
                         <div className="col-12">
                           <div className="form-group">
                             <label>SMTP server host</label>
-                            <input
-                              className="form-control"
-                              name="smtpHost"
-                              onChange={props.handleChange}
-                              value={props.values.smtpHost}
-                            />
+                            <div className="input-group">
+                              <div className="input-group-prepend">
+                                <span className="input-group-text">
+                                  <i className="cil-cast" />
+                                </span>
+                              </div>
+                              <input
+                                className="form-control"
+                                name="smtpHost"
+                                onChange={props.handleChange}
+                                value={props.values.smtpHost}
+                              />
+                            </div>
                           </div>
                           <div className="form-group">
                             <label>SMTP server port</label>
-                            <input
-                              className="form-control"
-                              name="smtpPort"
-                              onChange={props.handleChange}
-                              value={props.values.smtpPort}
-                            />
+                            <div className="input-group">
+                              <div className="input-group-prepend">
+                                <span className="input-group-text">
+                                  <i className="cil-lan" />
+                                </span>
+                              </div>
+                              <input
+                                className="form-control"
+                                name="smtpPort"
+                                onChange={props.handleChange}
+                                value={props.values.smtpPort}
+                              />
+                            </div>
+                          </div>
+                          <div className="form-group">
+                            <label>Sender name</label>
+                            <div className="input-group">
+                              <div className="input-group-prepend">
+                                <span className="input-group-text">
+                                  <i className="cil-user" />
+                                </span>
+                              </div>
+                              <input
+                                className="form-control"
+                                name="senderName"
+                                onChange={props.handleChange}
+                                value={props.values.senderName}
+                              />
+                            </div>
                           </div>
                           <div className="form-group">
                             <label>Sender email</label>
-                            <input
-                              className="form-control"
-                              name="senderEmail"
-                              onChange={props.handleChange}
-                              value={props.values.senderEmail}
-                            />
+                            <div className="input-group">
+                              <div className="input-group-prepend">
+                                <span className="input-group-text">
+                                  <i className="cil-envelope-closed" />
+                                </span>
+                              </div>
+                              <input
+                                className="form-control"
+                                name="senderEmail"
+                                onChange={props.handleChange}
+                                value={props.values.senderEmail}
+                              />
+                            </div>
                           </div>
                           <div className="form-group">
                             <label>SMTP account username</label>
-                            <input
-                              className="form-control"
-                              name="username"
-                              onChange={props.handleChange}
-                              value={props.values.username}
-                            />
+                            <div className="input-group">
+                              <div className="input-group-prepend">
+                                <span className="input-group-text">
+                                  <i className="cil-user" />
+                                </span>
+                              </div>
+                              <input
+                                className="form-control"
+                                name="username"
+                                onChange={props.handleChange}
+                                value={props.values.username}
+                              />
+                            </div>
                           </div>
                           <div className="form-group">
                             <label>SMTP account password</label>
-                            <input
-                              className="form-control"
-                              name="password"
-                              onChange={props.handleChange}
-                              value={props.values.password}
-                            />
+                            <div className="input-group">
+                              <div className="input-group-prepend">
+                                <span className="input-group-text">
+                                  <i className="cil-lock-locked" />
+                                </span>
+                              </div>
+                              <input
+                                className="form-control"
+                                name="password"
+                                onChange={props.handleChange}
+                                value={props.values.password}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>

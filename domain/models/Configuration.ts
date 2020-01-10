@@ -6,7 +6,13 @@ export enum ConfigurationKey {
 export interface MailSmtpSettings {
   password: string;
   smtpHost: string;
+  senderName: string;
   senderEmail: string;
   username: string;
   smtpPort: string;
+}
+
+export interface EmailFormat {
+  subject: string;
+  message: string;
 }
