@@ -173,4 +173,8 @@ export class AuthGateway {
   setAccessToken(accessToken: string) {
     this.restConnector.setAccessToken(accessToken);
   }
+
+  async forgotPassword(email: string) {
+    return this.restConnector.post('/users/reset-password', { email });
+  }
 }

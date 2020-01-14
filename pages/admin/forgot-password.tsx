@@ -6,14 +6,22 @@ import toastr from 'toastr';
 import classnames from 'classnames';
 import { Formik, FormikActions } from 'formik';
 import { guestOnly } from '../../hocs';
-// import { authService } from '../../services';
+import { authService } from '../../services';
 // import { string } from 'yup';
 
 interface ForgotPasswordForm {
   email: string;
 }
 
-class AdminForgotPasswordPage extends Component {
+interface State {
+  isSendMail: boolean;
+}
+
+class AdminForgotPasswordPage extends Component<state> {
+  state: State = {
+    isSendMail: false,
+  };
+
   render() {
     return (
       <div
@@ -52,55 +60,58 @@ class AdminForgotPasswordPage extends Component {
                       {props => (
                         <form onSubmit={props.handleSubmit}>
                           <h1>Forgot password</h1>
-                          <div>
-                            <p className="text-muted">
-                              Don't worry! Enter your email below and we'll
-                              email you with instructions on how to reset your
-                              password.
-                            </p>
-                            <div className="form-group">
-                              <div className="input-group mb-3">
-                                <div className="input-group-prepend">
-                                  <span className="input-group-text">
-                                    <i className="cil-envelope-closed" />
-                                  </span>
-                                </div>
-                                <input
-                                  name="email"
-                                  type="text"
-                                  placeholder="Email"
-                                  onChange={props.handleChange}
-                                  value={props.values.email}
-                                  className={classnames('form-control', {
-                                    'is-invalid': props.errors.email,
-                                  })}
-                                />
-                                {props.errors.email && (
-                                  <div className="invalid-feedback">
-                                    {props.errors.email}
+                          {!this.state.isSendMail ? (
+                            <div>
+                              <p className="text-muted">
+                                Don't worry! Enter your email below and we'll
+                                email you with instructions on how to reset your
+                                password.
+                              </p>
+                              <div className="form-group">
+                                <div className="input-group mb-3">
+                                  <div className="input-group-prepend">
+                                    <span className="input-group-text">
+                                      <i className="cil-envelope-closed" />
+                                    </span>
                                   </div>
-                                )}
+                                  <input
+                                    name="email"
+                                    type="text"
+                                    placeholder="Email"
+                                    onChange={props.handleChange}
+                                    value={props.values.email}
+                                    className={classnames('form-control', {
+                                      'is-invalid': props.errors.email,
+                                    })}
+                                  />
+                                  {props.errors.email && (
+                                    <div className="invalid-feedback">
+                                      {props.errors.email}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="form-group">
+                                <button
+                                  className="btn btn-block btn-primary"
+                                  type="submit"
+                                  disabled={props.isSubmitting}
+                                >
+                                  {props.isSubmitting && (
+                                    <div className="spinner-border spinner-border-sm mr-1" />
+                                  )}
+                                  Request Password Reset
+                                </button>
                               </div>
                             </div>
-                            <div className="form-group">
-                              <button
-                                className="btn btn-block btn-primary"
-                                type="submit"
-                                disabled={props.isSubmitting}
-                              >
-                                {props.isSubmitting && (
-                                  <div className="spinner-border spinner-border-sm mr-1" />
-                                )}
-                                Request Password Reset
-                              </button>
+                          ) : (
+                            <div className="mt-3">
+                              Thank you.
+                              <br />
+                              Please check your mailbox and follow the link to
+                              reset your password.
                             </div>
-                          </div>
-                          <div className="text-center">
-                            Thank you.
-                            <br />
-                            Please check your mailbox and follow the link to
-                            reset your password.
-                          </div>
+                          )}
                         </form>
                       )}
                     </Formik>
@@ -120,9 +131,8 @@ class AdminForgotPasswordPage extends Component {
   ) => {
     actions.setSubmitting(true);
     try {
-      // await authService.loginWithEmail(values);
-      // Router.replace('/admin');
-      console.log({ values });
+      await authService.forgotPassword(values.email);
+      this.setState({ isSendMail: true });
     } catch (e) {
       toastr.error(e.message);
     } finally {
