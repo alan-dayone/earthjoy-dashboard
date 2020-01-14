@@ -177,4 +177,16 @@ export class AuthGateway {
   async forgotPassword(email: string) {
     return this.restConnector.post('/users/reset-password', { email });
   }
+
+  async changePassword(
+    body: { newPassword: string; newPasswordConfirm: string },
+    accessToken: string
+  ) {
+    const { newPassword, newPasswordConfirm } = body;
+    this.restConnector.setAccessToken(accessToken);
+    return this.restConnector.post(`/users/change-password?=${accessToken}`, {
+      newPassword,
+      newPasswordConfirm,
+    });
+  }
 }

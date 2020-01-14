@@ -1,6 +1,7 @@
 /* tslint:disable:no-default-export */
 import React, { Component } from 'react';
 import Router from 'next/router';
+import Error from 'next/error';
 import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
@@ -16,7 +17,21 @@ interface ResetPasswordForm {
 }
 
 class AdminResetPasswordPage extends Component {
+  static async getInitialProps(ctx) {
+    const token = ctx.query.token;
+
+    console.log({ token });
+
+    return {
+      token,
+    };
+  }
+
   render() {
+    if (!this.props.token) {
+      return <Error statusCode={400} />;
+    }
+
     return (
       <div
         id="admin-login-page"
@@ -145,9 +160,15 @@ class AdminResetPasswordPage extends Component {
   ) => {
     actions.setSubmitting(true);
     try {
-      // await authService.loginWithEmail(values);
-      // Router.replace('/admin');
-      console.log(values);
+      const accessToken = this.props.token;
+      const body = {
+        newPassword: values.newPassword,
+        newPasswordConfirm: values.confirmPassword,
+      };
+
+      await authService.changePassword(body, accessToken);
+      toastr.success('Success!');
+      Router.replace('/admin/login');
     } catch (e) {
       toastr.error(e.message);
     } finally {
