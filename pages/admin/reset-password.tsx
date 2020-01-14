@@ -3,13 +3,16 @@ import React, { Component } from 'react';
 import Router from 'next/router';
 import Head from 'next/head';
 import toastr from 'toastr';
+import classnames from 'classnames';
 import { Formik, FormikActions } from 'formik';
 import { guestOnly } from '../../hocs';
 import { authService } from '../../services';
+import { Tracing } from 'trace_events';
 
 interface ResetPasswordForm {
-  newPassword: string;
-  confirmPassword: string;
+  newPassword?: string;
+  confirmPassword?: string;
+  notMatch?: string;
 }
 
 class AdminResetPasswordPage extends Component {
@@ -20,13 +23,13 @@ class AdminResetPasswordPage extends Component {
         className="align-items-center c-app flex-row pace-done"
       >
         <Head>
-          <title>Admin - Login</title>
+          <title>Admin - Reset password</title>
         </Head>
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-md-5">
+            <div className="col-md-4">
               <div className="card-group">
-                <div className="card p-5">
+                <div className="p-4 card">
                   <div className="card-body">
                     <Formik
                       initialValues={{
@@ -34,11 +37,26 @@ class AdminResetPasswordPage extends Component {
                         confirmPassword: '',
                       }}
                       onSubmit={this._handleResetPassword}
+                      validate={values => {
+                        const errors: ResetPasswordForm = {};
+                        if (values.newPassword === '') {
+                          errors.newPassword = 'New password is required';
+                        } else if (values.confirmPassword === '') {
+                          errors.confirmPassword =
+                            'Confirm password is required';
+                        } else if (
+                          values.confirmPassword !== values.newPassword
+                        ) {
+                          errors.notMatch = 'The passwords do not match';
+                        }
+
+                        return errors;
+                      }}
                     >
                       {props => (
                         <form onSubmit={props.handleSubmit}>
                           <h1>Reset Password</h1>
-                          <p className="text-muted">Sign In to your account</p>
+                          {/* <p className="text-muted">Sign In to your account</p> */}
                           <div className="form-group">
                             <div className="input-group mb-3">
                               <div className="input-group-prepend">
@@ -48,12 +66,21 @@ class AdminResetPasswordPage extends Component {
                               </div>
                               <input
                                 name="newPassword"
-                                className="form-control"
                                 type="text"
                                 placeholder="New Password"
                                 onChange={props.handleChange}
                                 value={props.values.newPassword}
+                                className={classnames('form-control', {
+                                  'is-invalid':
+                                    props.errors.newPassword ||
+                                    props.errors.notMatch,
+                                })}
                               />
+                              {props.errors.newPassword && (
+                                <div className="invalid-feedback">
+                                  {props.errors.newPassword}
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div className="form-group">
@@ -65,12 +92,26 @@ class AdminResetPasswordPage extends Component {
                               </div>
                               <input
                                 name="confirmPassword"
-                                className="form-control"
                                 type="text"
                                 placeholder="Confirm Password"
                                 onChange={props.handleChange}
                                 value={props.values.confirmPassword}
+                                className={classnames('form-control', {
+                                  'is-invalid':
+                                    props.errors.confirmPassword ||
+                                    props.errors.notMatch,
+                                })}
                               />
+                              {props.errors.confirmPassword && (
+                                <div className="invalid-feedback">
+                                  {props.errors.confirmPassword}
+                                </div>
+                              )}
+                              {props.errors.notMatch && (
+                                <div className="invalid-feedback">
+                                  {props.errors.notMatch}
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div className="form-group">
@@ -104,8 +145,9 @@ class AdminResetPasswordPage extends Component {
   ) => {
     actions.setSubmitting(true);
     try {
-      await authService.loginWithEmail(values);
-      Router.replace('/admin');
+      // await authService.loginWithEmail(values);
+      // Router.replace('/admin');
+      console.log(values);
     } catch (e) {
       toastr.error(e.message);
     } finally {
