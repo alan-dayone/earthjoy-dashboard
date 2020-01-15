@@ -48,6 +48,7 @@ export class CreateFirstAdminForm extends Component {
                 dispatch,
                 router,
               } = this.props;
+
               await systemService.initSystem({
                 password: correctSystemInitPassword,
                 admin: {

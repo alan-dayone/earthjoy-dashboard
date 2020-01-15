@@ -7,7 +7,6 @@ import classnames from 'classnames';
 import { Formik, FormikActions } from 'formik';
 import { guestOnly } from '../../hocs';
 import { authService } from '../../services';
-// import { string } from 'yup';
 
 interface ForgotPasswordForm {
   email: string;

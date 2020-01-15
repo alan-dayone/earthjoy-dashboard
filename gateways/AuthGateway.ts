@@ -73,15 +73,19 @@ export class AuthGateway {
     }
   }
 
+  // async logout() {
+  //   try {
+  //     await this.restConnector.post('/users/logout', {});
+  //   } catch (e) {
+  //     console.warn(
+  //       'Failed to call logout api, but cookie in browser will be cleared so user is still logged out',
+  //       e
+  //     );
+  //   }
+  //   this.restConnector.removeAccessToken();
+  // }
+
   async logout() {
-    try {
-      await this.restConnector.post('/users/logout', {});
-    } catch (e) {
-      console.warn(
-        'Failed to call logout api, but cookie in browser will be cleared so user is still logged out',
-        e
-      );
-    }
     this.restConnector.removeAccessToken();
   }
 

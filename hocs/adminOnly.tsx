@@ -6,6 +6,7 @@ import {
   DropdownToggle,
   UncontrolledDropdown,
 } from 'reactstrap';
+import Router from 'next/router';
 import { NextJSContext } from 'next-redux-wrapper';
 import { authService } from '../services';
 // import { isAdmin } from '../models/user'
@@ -92,7 +93,7 @@ export const adminOnly = Content => {
                   </DropdownToggle>
                   <DropdownMenu right>
                     <DropdownItem>Profile</DropdownItem>
-                    <DropdownItem>Logout</DropdownItem>
+                    <DropdownItem onClick={this._logout}>Logout</DropdownItem>
                   </DropdownMenu>
                 </UncontrolledDropdown>
               </a>
@@ -153,6 +154,15 @@ export const adminOnly = Content => {
           />
         </div>
       );
+    };
+
+    _logout = async () => {
+      try {
+        await authService.logout();
+        Router.replace('/admin/login');
+      } catch (e) {
+        toastr.error(e.message);
+      }
     };
   }
 

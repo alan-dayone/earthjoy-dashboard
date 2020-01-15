@@ -8,7 +8,6 @@ import classnames from 'classnames';
 import { Formik, FormikActions } from 'formik';
 import { guestOnly } from '../../hocs';
 import { authService } from '../../services';
-import { Tracing } from 'trace_events';
 
 interface ResetPasswordForm {
   newPassword?: string;
