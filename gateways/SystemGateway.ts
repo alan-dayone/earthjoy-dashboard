@@ -1,10 +1,48 @@
 import { ConfigurationKey } from '../domain/models/Configuration';
+import { RestConnector } from '../connectors/RestConnector';
+
+export interface SystemStatusData {
+  status: string;
+}
+
+export interface MailSmtpSettings {
+  password: string;
+  smtpHost: string;
+  username: string;
+  smtpPort: string;
+  senderEmail: string;
+  senderName: string;
+}
+
+export interface ResetPasswordSettings {
+  emailTemplate: string;
+  subject: string;
+  senderEmail: string;
+  senderName: string;
+}
+
+export interface VerifyAccountSetting {
+  emailTemplate: string;
+  subject: string;
+  senderEmail: string;
+  senderName: string;
+}
+
+export type ConfigurationData =
+  | SystemStatusData
+  | MailSmtpSettings
+  | ResetPasswordSettings
+  | VerifyAccountSetting;
+
+export interface ConfigurationModel {
+  id: string;
+  data: ConfigurationData;
+}
 
 export class SystemGateway {
-  /* tslint:disable:no-any */
-  restConnector: any;
+  restConnector: RestConnector;
 
-  constructor({ restConnector }) {
+  constructor({ restConnector }: { restConnector: RestConnector }) {
     this.restConnector = restConnector;
   }
 
@@ -25,14 +63,19 @@ export class SystemGateway {
   async validateSystemInitializationPassword(
     password: string
   ): Promise<boolean> {
-    const { data } = await this.restConnector.post(
+    const {
+      data,
+    } = await this.restConnector.post(
       '/configurations/validate-system-initialization-password',
       { password }
     );
     return data.isValid;
   }
 
-  async updateSystemConfiguration(id: ConfigurationKey, data: any) {
+  async updateSystemConfiguration(
+    id: ConfigurationKey,
+    data: ConfigurationData
+  ) {
     const resp = await this.restConnector.put(`/configurations/${id}`, {
       id,
       data,
@@ -41,7 +84,9 @@ export class SystemGateway {
     return resp.data;
   }
 
-  async getConfiguration(id: ConfigurationKey): Promise<any> {
+  async getConfiguration(
+    id: ConfigurationKey
+  ): Promise<ConfigurationModel | null> {
     try {
       const resp = await this.restConnector.get(`/configurations/${id}`);
       return resp.data;

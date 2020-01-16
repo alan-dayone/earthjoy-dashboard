@@ -15,11 +15,18 @@
     "build:server": "tsc -p tsconfig-server.json && cp {package,package-lock}.json build",
     "build:client": "next build && cp -R .next build && cp -R static build/static",
     "build:bundle": "mkdir -p build-bundle && tar -cvzf build-bundle/bundle.tar.gz build",
-    "clean": "rm -rf .next build"
+    "clean": "gts clean && rm -rf .next build",
+    "check": "gts check",
+    "compile": "tsc -p .",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run check"
   },
   "dependencies": {
     "@coreui/coreui": "^3.0.0-beta.4",
     "@coreui/react": "^2.5.4",
+    "@types/ejs": "^3.0.0",
     "@zeit/next-sass": "^0.2.1-canary.4",
     "ag-grid-community": "^21.0.1",
     "ag-grid-react": "^21.0.1",
@@ -28,6 +35,7 @@
     "classnames": "^2.2.6",
     "cookie-parser": "^1.4.4",
     "dotenv": "^8.0.0",
+    "ejs": "^3.0.1",
     "express": "^4.17.1",
     "formik": "^1.5.8",
     "http-proxy-middleware": "^0.19.1",
@@ -52,6 +60,10 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+    "@babel/plugin-proposal-optional-chaining": "^7.8.3",
+    "@babel/preset-typescript": "^7.8.3",
     "@commitlint/cli": "^8.3.3",
     "@commitlint/config-conventional": "^8.0.0",
     "@types/classnames": "^2.2.9",
@@ -62,7 +74,7 @@
     "@types/js-cookie": "^2.2.4",
     "@types/lodash": "^4.14.135",
     "@types/next": "^9.0.0",
-    "@types/node": "^12.0.10",
+    "@types/node": "^10.0.3",
     "@types/react": "^16.8.22",
     "@types/react-dom": "^16.8.4",
     "@types/react-redux": "^7.1.0",
@@ -72,7 +84,8 @@
     "@types/validator": "^10.11.3",
     "@types/yup": "^0.26.22",
     "@types/zxcvbn": "^4.4.0",
-    "gts": "^1.0.0",
+    "eslint": "^6.8.0",
+    "gts": "^1.1.2",
     "husky": "^2.3.0",
     "nodemon": "^1.19.1",
     "snazzy": "^8.0.0",
@@ -80,8 +93,8 @@
     "stylelint-checkstyle-formatter": "^0.1.2",
     "stylelint-config-standard": "^18.3.0",
     "stylelint-scss": "^3.8.0",
-    "ts-node": "8.1.0",
-    "typescript": "^3.4.5"
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.4"
   },
   "husky": {
     "hooks": {

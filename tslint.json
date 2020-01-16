@@ -2,9 +2,17 @@
   "extends": "gts/tslint.json",
   "linterOptions": {
     "exclude": [
-      "**/*.js",
       "**/*.json"
     ]
   },
-  "rules": {"no-default-export": [false]}
+  "rules": {
+    "variable-name": [
+      true,
+      "check-format",
+      "ban-keywords",
+      "allow-leading-underscore",
+      "allow-trailing-underscore",
+      "allow-pascal-case"
+    ]
+  }
 }

@@ -1,4 +1,3 @@
-/* tslint:disable:variable-name */
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -8,32 +7,25 @@ import Router from 'next/router';
 import { selectors } from '../../redux/authRedux';
 import { actions as authRedux } from '../../redux/authRedux';
 import { authService } from '../../services';
-// import { Router } from '../../routes';
-import { AdminLayoutWrapper } from './AdminLayoutWrapper';
+import { adminLayoutWrapper } from './AdminLayoutWrapper';
+import { ExpressReduxNextContext } from '../types';
 
 export const guestOnly = (
   Content: NextComponentType,
   options?: { useAdminLayout: boolean }
-) => {
+): typeof React.Component => {
   class GuestWrapper extends React.Component {
-    static async getInitialProps(context) {
-      const props = {
-        req: context.req,
-        res: context.res,
-        store: context.store,
-        isServer: context.isServer,
-      };
-
+    static async getInitialProps(context: ExpressReduxNextContext) {
       if (context.isServer) {
-        const jwt = context.req.cookies.jwt;
+        const jwt = context.req?.cookies.jwt;
 
         if (jwt) {
           authService.setAccessToken(jwt);
-          const user = await context.store.dispatch(authRedux.getLoginUser());
+          const user = await context.store?.dispatch(authRedux.getLoginUser());
 
           if (user) {
-            context.res.redirect('/');
-            context.res.end();
+            context.res?.redirect('/');
+            context.res?.end();
             return;
           }
         }
@@ -58,11 +50,7 @@ export const guestOnly = (
     }
 
     _renderContentInsideAdminLayout = () => {
-      return (
-        <AdminLayoutWrapper>
-          <Content {...this.props} />
-        </AdminLayoutWrapper>
-      );
+      return adminLayoutWrapper({ children: <Content {...this.props} /> });
     };
   }
 

@@ -7,7 +7,8 @@
     "jsx": "preserve",
     "lib": [
       "dom",
-      "es2017"
+      "es2017",
+      "es2018"
     ],
     "module": "esnext",
     "moduleResolution": "node",
@@ -19,9 +20,11 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "esnext",
+    "target": "es2018",
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "rootDir": ".",
+    "outDir": "build"
   },
   "exclude": [
     "build"

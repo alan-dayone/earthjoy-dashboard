@@ -6,41 +6,23 @@ import {
   DropdownToggle,
   UncontrolledDropdown,
 } from 'reactstrap';
-import { NextJSContext } from 'next-redux-wrapper';
 import { authService } from '../services';
-// import { isAdmin } from '../models/user'
 import '../scss/admin/index.scss';
-// import {
-//   actions as authActions,
-//   selectors as authSelectors
-// } from '../redux/authRedux'
+import { ExpressReduxNextContext } from './types';
+import { NextComponentType } from 'next';
 
-/* tslint:disable-next-line:variable-name */
-export const adminOnly = Content => {
+export const adminOnly: (
+  content: NextComponentType
+) => typeof React.Component = Content => {
   class AdminWrapper extends React.Component {
-    static async getInitialProps(ctx: NextJSContext) {
-      const { req, res, store, isServer } = ctx;
+    static async getInitialProps(ctx: ExpressReduxNextContext) {
+      const { req, isServer } = ctx;
 
       if (isServer) {
-        authService.setAccessToken(req.cookies.jwt);
-        // const user = await store.dispatch(authActions.getLoginUser())
-
-        // if (!user || !isAdmin(user)) {
-        //   res.redirect('/admin/login')
-        //   res.end()
-        // }
-      } else {
-        // const user = authSelectors.getLoginUser(store.getState())
-        // if (!user || !isAdmin(user)) {
-        //   Router.pushRoute('/admin/login')
-        // }
+        authService.setAccessToken(req?.cookies.jwt);
       }
 
-      const composedProps = Content.getInitialProps
-        ? await Content.getInitialProps(ctx)
-        : {};
-
-      return composedProps;
+      return Content.getInitialProps ? Content.getInitialProps(ctx) : {};
     }
 
     render() {

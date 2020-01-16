@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Formik } from 'formik';
 import _ from 'lodash';
 import { TextInput, ContentContainer } from '../components';
 import { authService } from '../services';

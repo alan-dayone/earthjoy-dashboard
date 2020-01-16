@@ -9,7 +9,9 @@ export interface RestConnector extends AxiosInstance {
 }
 
 export function create({ baseUrl }: { baseUrl: string }): RestConnector {
-  const instance = axios.create({ baseURL: baseUrl });
+  const instance: RestConnector = axios.create({
+    baseURL: baseUrl,
+  }) as RestConnector;
 
   instance.interceptors.response.use(
     response => {

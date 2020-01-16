@@ -1,9 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
 
-/* tslint:disable-next-line:variable-name */
-export const everyone = Content => {
-  class Wrapper extends React.Component {
+export const everyone = (Content: React.ElementType) => {
+  return class Wrapper extends React.Component {
     render() {
       return (
         <div>
@@ -59,7 +58,5 @@ export const everyone = Content => {
         </footer>
       );
     };
-  }
-
-  return Wrapper;
+  };
 };

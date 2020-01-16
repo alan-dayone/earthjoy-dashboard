@@ -4,17 +4,20 @@ import {
   ConfigurationKey,
   MailSmtpSettings,
 } from '../domain/models/Configuration';
+import { ServiceContext } from './index';
 
 export class SystemService extends BaseService {
   /* tslint:disable:no-any */
   systemGateway: SystemGateway;
 
-  constructor(options) {
+  constructor(options: ServiceContext) {
     super(options);
     this.systemGateway = options.systemGateway;
   }
 
-  async validateSystemInitializationPassword(password: string): boolean {
+  async validateSystemInitializationPassword(
+    password: string
+  ): Promise<boolean> {
     return this.systemGateway.validateSystemInitializationPassword(password);
   }
 
@@ -26,10 +29,6 @@ export class SystemService extends BaseService {
     };
   }): Promise<void> {
     await this.systemGateway.initSystem(body);
-  }
-
-  async testSmtpConnection(smtpSettings: MailSmtpSettings): Promise<boolean> {
-    return true;
   }
 
   async saveSmtpSettings(smtpSettings: MailSmtpSettings): Promise<void> {
