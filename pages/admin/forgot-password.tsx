@@ -1,12 +1,12 @@
 /* tslint:disable:no-default-export */
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 // import Router from 'next/router';
 import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
-import { Formik, FormikActions } from 'formik';
-import { guestOnly } from '../../hocs';
-import { authService } from '../../services';
+import {Formik, FormikActions} from 'formik';
+import {guestOnly} from '../../hocs';
+import {authService} from '../../services';
 
 interface ForgotPasswordForm {
   email: string;
@@ -23,10 +23,7 @@ class AdminForgotPasswordPage extends Component<state> {
 
   render() {
     return (
-      <div
-        id="admin-forgot-password-page"
-        className="align-items-center c-app flex-row pace-done"
-      >
+      <div id="admin-forgot-password-page" className="align-items-center c-app flex-row pace-done">
         <Head>
           <title>Admin - Forgot password</title>
         </Head>
@@ -41,30 +38,27 @@ class AdminForgotPasswordPage extends Component<state> {
                         email: '',
                       }}
                       onSubmit={this._handleForgotPassword}
-                      validate={values => {
+                      validate={(values) => {
                         const errors = {};
                         const regEmail = new RegExp(
                           '^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@' +
-                            '[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$'
+                            '[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$',
                         );
 
                         if (!regEmail.test(values.email)) {
-                          errors.email =
-                            'Please enter the correct email format';
+                          errors.email = 'Please enter the correct email format';
                         }
 
                         return errors;
-                      }}
-                    >
-                      {props => (
+                      }}>
+                      {(props) => (
                         <form onSubmit={props.handleSubmit}>
                           <h1>Forgot password</h1>
                           {!this.state.isSendMail ? (
                             <div>
                               <p className="text-muted">
-                                Don't worry! Enter your email below and we'll
-                                email you with instructions on how to reset your
-                                password.
+                                Don't worry! Enter your email below and we'll email you with instructions on how to
+                                reset your password.
                               </p>
                               <div className="form-group">
                                 <div className="input-group mb-3">
@@ -83,22 +77,15 @@ class AdminForgotPasswordPage extends Component<state> {
                                       'is-invalid': props.errors.email,
                                     })}
                                   />
-                                  {props.errors.email && (
-                                    <div className="invalid-feedback">
-                                      {props.errors.email}
-                                    </div>
-                                  )}
+                                  {props.errors.email && <div className="invalid-feedback">{props.errors.email}</div>}
                                 </div>
                               </div>
                               <div className="form-group">
                                 <button
                                   className="btn btn-block btn-primary"
                                   type="submit"
-                                  disabled={props.isSubmitting}
-                                >
-                                  {props.isSubmitting && (
-                                    <div className="spinner-border spinner-border-sm mr-1" />
-                                  )}
+                                  disabled={props.isSubmitting}>
+                                  {props.isSubmitting && <div className="spinner-border spinner-border-sm mr-1" />}
                                   Request Password Reset
                                 </button>
                               </div>
@@ -107,8 +94,7 @@ class AdminForgotPasswordPage extends Component<state> {
                             <div className="mt-3">
                               Thank you.
                               <br />
-                              Please check your mailbox and follow the link to
-                              reset your password.
+                              Please check your mailbox and follow the link to reset your password.
                             </div>
                           )}
                         </form>
@@ -124,14 +110,11 @@ class AdminForgotPasswordPage extends Component<state> {
     );
   }
 
-  _handleForgotPassword = async (
-    values: ForgotPasswordForm,
-    actions: FormikActions<ForgotPasswordForm>
-  ) => {
+  _handleForgotPassword = async (values: ForgotPasswordForm, actions: FormikActions<ForgotPasswordForm>) => {
     actions.setSubmitting(true);
     try {
       await authService.forgotPassword(values.email);
-      this.setState({ isSendMail: true });
+      this.setState({isSendMail: true});
     } catch (e) {
       toastr.error(e.message);
     } finally {
@@ -140,4 +123,4 @@ class AdminForgotPasswordPage extends Component<state> {
   };
 }
 
-export default guestOnly(AdminForgotPasswordPage, { useAdminLayout: true });
+export default guestOnly(AdminForgotPasswordPage, {useAdminLayout: true});

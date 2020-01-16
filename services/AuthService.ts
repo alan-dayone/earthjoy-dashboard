@@ -74,14 +74,11 @@ export class AuthService extends BaseService {
   }
 
   async forgotPassword(email: string) {
-    validateUser({ email });
+    validateUser({email});
     return this.authGateway.forgotPassword(email);
   }
 
-  async changePassword(
-    body: { newPassword: string; newPasswordConfirm: string },
-    accessToken: string
-  ) {
+  async changePassword(body: {newPassword: string; newPasswordConfirm: string}, accessToken: string) {
     return this.authGateway.changePassword(body, accessToken);
   }
 }

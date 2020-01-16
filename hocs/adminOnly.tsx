@@ -1,13 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
-import {
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  UncontrolledDropdown,
-} from 'reactstrap';
-import { NextJSContext } from 'next-redux-wrapper';
-import { authService } from '../services';
+import {DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap';
+import {NextJSContext} from 'next-redux-wrapper';
+import {authService} from '../services';
 // import { isAdmin } from '../models/user'
 import '../scss/admin/index.scss';
 // import {
@@ -16,10 +11,10 @@ import '../scss/admin/index.scss';
 // } from '../redux/authRedux'
 
 /* tslint:disable-next-line:variable-name */
-export const adminOnly = Content => {
+export const adminOnly = (Content) => {
   class AdminWrapper extends React.Component {
     static async getInitialProps(ctx: NextJSContext) {
-      const { req, res, store, isServer } = ctx;
+      const {req, res, store, isServer} = ctx;
 
       if (isServer) {
         authService.setAccessToken(req.cookies.jwt);
@@ -36,9 +31,7 @@ export const adminOnly = Content => {
         // }
       }
 
-      const composedProps = Content.getInitialProps
-        ? await Content.getInitialProps(ctx)
-        : {};
+      const composedProps = Content.getInitialProps ? await Content.getInitialProps(ctx) : {};
 
       return composedProps;
     }
@@ -64,10 +57,7 @@ export const adminOnly = Content => {
     _renderNavbar = () => {
       return (
         <header className="c-header c-header-light c-header-fixed px-3">
-          <button
-            className="c-header-toggler c-class-toggler d-md-down-none"
-            type="button"
-          >
+          <button className="c-header-toggler c-class-toggler d-md-down-none" type="button">
             <span className="c-header-toggler-icon" />
           </button>
           <ul className="c-header-nav mfs-auto">
@@ -78,8 +68,7 @@ export const adminOnly = Content => {
                 href="#"
                 role="button"
                 aria-haspopup="true"
-                aria-expanded="false"
-              >
+                aria-expanded="false">
                 <UncontrolledDropdown>
                   <DropdownToggle nav>
                     <div className="c-avatar">
@@ -104,17 +93,11 @@ export const adminOnly = Content => {
 
     _renderSidebar = () => {
       return (
-        <div
-          className="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show"
-          id="sidebar"
-        >
+        <div className="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
           <div className="c-sidebar-brand">
             <h5>ADMIN PORTAL</h5>
           </div>
-          <ul
-            className="c-sidebar-nav ps ps--active-y"
-            data-drodpown-accordion="true"
-          >
+          <ul className="c-sidebar-nav ps ps--active-y" data-drodpown-accordion="true">
             <li className="c-sidebar-nav-item">
               <Link href="/admin">
                 <a className="c-sidebar-nav-link">
