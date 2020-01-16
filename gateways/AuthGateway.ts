@@ -6,14 +6,13 @@ import {ApplicationError} from '../errors/ApplicationError';
 import {RestConnector} from '../connectors/RestConnector';
 
 export class AuthGateway {
-  /* tslint:disable:no-any */
-  restConnector: RestConnector;
+  private restConnector: RestConnector;
 
   constructor(connector: {restConnector: RestConnector}) {
     this.restConnector = connector.restConnector;
   }
 
-  storeAccessToken(accessToken: string | null) {
+  public storeAccessToken(accessToken: string | null) {
     if (!accessToken) {
       Cookies.remove('jwt');
     } else {
@@ -21,30 +20,12 @@ export class AuthGateway {
     }
   }
 
-  async loginWithEmail(body: {email: string; password: string}) {
+  public async loginWithEmail(body: {email: string; password: string}) {
     const {data} = await this.restConnector.post('/users/login', body);
     return data;
-    // try {
-    //   const { data } = await this.restConnector.post('/users/login', body);
-    //   this.restConnector.setAccessToken(data.token);
-    //   return this.getLoginUser();
-    // } catch (e) {
-    //   switch (_.get(e, 'response.data.error.code')) {
-    //     case 'USERNAME_EMAIL_REQUIRED':
-    //     case 'LOGIN_FAILED': {
-    //       throw new ApplicationError(AuthService.error.LOGIN_FAILED);
-    //     }
-    //     default: {
-    //     }
-    //   }
-    //   if (_.get(e, 'response.data.error.message') === 'ACCOUNT_INACTIVATED') {
-    //     throw new ApplicationError(AuthService.error.ACCOUNT_INACTIVATED);
-    //   }
-    //   throw e;
-    // }
   }
 
-  async create(body: {email: string; password: string}) {
+  public async create(body: {email: string; password: string}) {
     try {
       await this.restConnector.post('/users', body);
       return this.loginWithEmail(body);
@@ -64,7 +45,7 @@ export class AuthGateway {
     }
   }
 
-  async getLoginUser() {
+  public async getLoginUser() {
     try {
       const resp = await this.restConnector.get('/users');
       return resp.data;
@@ -73,19 +54,7 @@ export class AuthGateway {
     }
   }
 
-  // async logout() {
-  //   try {
-  //     await this.restConnector.post('/users/logout', {});
-  //   } catch (e) {
-  //     console.warn(
-  //       'Failed to call logout api, but cookie in browser will be cleared so user is still logged out',
-  //       e
-  //     );
-  //   }
-  //   this.restConnector.removeAccessToken();
-  // }
-
-  async logout() {
+  public async logout() {
     try {
       await this.restConnector.post('/users/logout', {});
     } catch (e) {
@@ -94,7 +63,7 @@ export class AuthGateway {
     this.restConnector.removeAccessToken();
   }
 
-  async sendResetPasswordEmail(email: string) {
+  public async sendResetPasswordEmail(email: string) {
     try {
       await this.restConnector.post('/users/reset', {email});
     } catch (e) {
@@ -110,7 +79,7 @@ export class AuthGateway {
     }
   }
 
-  async updateAccountInfo(body: {name: string; email: string; preferredLanguage: string}) {
+  public async updateAccountInfo(body: {name: string; email: string; preferredLanguage: string}) {
     try {
       await this.restConnector.patch(`/users/me`, body);
     } catch (e) {
@@ -129,7 +98,7 @@ export class AuthGateway {
     }
   }
 
-  async updatePassword(body: {oldPassword: string; newPassword: string}) {
+  public async updatePassword(body: {oldPassword: string; newPassword: string}) {
     try {
       await this.restConnector.post('/users/change-password', body);
     } catch (e) {
@@ -144,7 +113,7 @@ export class AuthGateway {
     }
   }
 
-  async setNewPassword(body: {userId: string; newPassword: string}, accessToken: string) {
+  public async setNewPassword(body: {userId: string; newPassword: string}, accessToken: string) {
     const {userId, newPassword} = body;
     try {
       await this.restConnector.post(`/users/reset-password?access_token=${accessToken}`, {id: userId, newPassword});
@@ -160,19 +129,19 @@ export class AuthGateway {
     }
   }
 
-  async updateAvatar(avatar: string) {
+  public async updateAvatar(avatar: string) {
     return this.restConnector.patch(`/users/me`, {avatar}).then((resp) => resp.data);
   }
 
-  setAccessToken(accessToken: string) {
+  public setAccessToken(accessToken: string) {
     this.restConnector.setAccessToken(accessToken);
   }
 
-  async forgotPassword(email: string) {
+  public async forgotPassword(email: string) {
     return this.restConnector.post('/users/reset-password', {email});
   }
 
-  async changePassword(body: {newPassword: string; newPasswordConfirm: string}, accessToken: string) {
+  public async changePassword(body: {newPassword: string; newPasswordConfirm: string}, accessToken: string) {
     const {newPassword, newPasswordConfirm} = body;
     this.restConnector.setAccessToken(accessToken);
     return this.restConnector.post(`/users/change-password?=${accessToken}`, {

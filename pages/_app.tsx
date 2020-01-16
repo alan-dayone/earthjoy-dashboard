@@ -8,12 +8,12 @@ import {nprogress} from '../hocs';
 import {makeStore} from '../redux/store';
 
 class ComposedApp extends App<AppProps & NextReduxAppProps> {
-  static async getInitialProps({Component, ctx}: NextAppContext) {
+  public static async getInitialProps({Component, ctx}: NextAppContext) {
     const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
     return {pageProps};
   }
 
-  render() {
+  public render() {
     const {Component, pageProps, store} = this.props;
     return (
       <Provider store={store}>

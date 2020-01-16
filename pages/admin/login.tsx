@@ -14,7 +14,7 @@ export interface LoginForm {
 }
 
 class AdminLoginPage extends Component {
-  render() {
+  public render() {
     return (
       <div id="admin-login-page" className="align-items-center c-app flex-row pace-done">
         <Head>
@@ -94,7 +94,7 @@ class AdminLoginPage extends Component {
     );
   }
 
-  _handleLogin = async (values: LoginForm, actions: FormikActions<LoginForm>) => {
+  public _handleLogin = async (values: LoginForm, actions: FormikActions<LoginForm>) => {
     actions.setSubmitting(true);
     try {
       await authService.loginWithEmail(values);

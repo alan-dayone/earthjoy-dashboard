@@ -4,7 +4,7 @@ import Head from 'next/head';
 import {everyone} from '../hocs';
 
 class IndexPage extends Component {
-  render() {
+  public render() {
     return (
       <main className="app-masthead" role="main">
         <Head>

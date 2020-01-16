@@ -13,7 +13,7 @@ import '../scss/admin/index.scss';
 /* tslint:disable-next-line:variable-name */
 export const adminOnly = (Content) => {
   class AdminWrapper extends React.Component {
-    static async getInitialProps(ctx: NextJSContext) {
+    public static async getInitialProps(ctx: NextJSContext) {
       const {req, res, store, isServer} = ctx;
 
       if (isServer) {
@@ -36,7 +36,7 @@ export const adminOnly = (Content) => {
       return composedProps;
     }
 
-    render() {
+    public render() {
       return (
         <div className="c-app pace-done">
           {this._renderSidebar()}
@@ -54,7 +54,7 @@ export const adminOnly = (Content) => {
       );
     }
 
-    _renderNavbar = () => {
+    public _renderNavbar = () => {
       return (
         <header className="c-header c-header-light c-header-fixed px-3">
           <button className="c-header-toggler c-class-toggler d-md-down-none" type="button">
@@ -91,7 +91,7 @@ export const adminOnly = (Content) => {
       );
     };
 
-    _renderSidebar = () => {
+    public _renderSidebar = () => {
       return (
         <div className="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
           <div className="c-sidebar-brand">
@@ -138,7 +138,7 @@ export const adminOnly = (Content) => {
       );
     };
 
-    _logout = async () => {
+    public _logout = async () => {
       try {
         await authService.logout();
         Router.replace('/admin/login');

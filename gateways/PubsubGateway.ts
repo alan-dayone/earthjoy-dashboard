@@ -1,16 +1,22 @@
-export class PubsubGateway {
-  /* tslint:disable:no-any */
-  pubsubConnector: any;
+export interface PubsubConnector {
+  emit(eventName: string, data: any): any;
+  on(eventName: string, data: any): any;
+}
 
-  constructor({pubsubConnector}) {
+export type SubscribingHandler = (...args: any[]) => void;
+
+export class PubsubGateway {
+  protected pubsubConnector: any;
+
+  constructor({pubsubConnector}: {pubsubConnector: PubsubConnector}) {
     this.pubsubConnector = pubsubConnector;
   }
 
-  emit(eventName, data) {
+  public emit(eventName: string, data: any) {
     this.pubsubConnector.emit(eventName, data);
   }
 
-  subscribe(eventName, handler) {
+  public subscribe(eventName: string, handler: SubscribingHandler) {
     this.pubsubConnector.on(eventName, handler);
   }
 }

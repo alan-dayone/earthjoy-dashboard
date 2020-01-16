@@ -3,7 +3,7 @@ import Head from 'next/head';
 
 export const everyone = (Content: React.ElementType) => {
   return class Wrapper extends React.Component {
-    render() {
+    public render() {
       return (
         <div>
           <Head>
@@ -16,7 +16,7 @@ export const everyone = (Content: React.ElementType) => {
       );
     }
 
-    _renderNavBar = () => {
+    public _renderNavBar = () => {
       return (
         <header className="app-navbar navbar navbar-expand navbar-dark">
           <div className="navbar-nav-scroll">
@@ -32,7 +32,7 @@ export const everyone = (Content: React.ElementType) => {
       );
     };
 
-    _renderFooter = () => {
+    public _renderFooter = () => {
       return (
         <footer className="app-footer text-muted">
           <div className="container-fluid p-3 p-md-5">

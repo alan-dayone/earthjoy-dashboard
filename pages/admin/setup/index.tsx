@@ -11,12 +11,12 @@ const STEP = {
 };
 
 class AdminSetupPage extends Component {
-  state = {
+  public state = {
     step: STEP.ENTER_PASSWORD,
     correctSystemInitPassword: null,
   };
 
-  render() {
+  public render() {
     return (
       <div className="align-items-center c-app flex-row pace-done">
         <Head>

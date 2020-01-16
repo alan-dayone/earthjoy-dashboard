@@ -4,7 +4,7 @@ import {TextInput, ContentContainer} from '../components';
 import {authService} from '../services';
 
 class Login extends Component {
-  state = {
+  public state = {
     form: {
       email: '',
       password: '',
@@ -15,7 +15,7 @@ class Login extends Component {
     },
   };
 
-  onChange = (change: {value: string; error: string}, name: string) => {
+  public onChange = (change: {value: string; error: string}, name: string) => {
     const {value, error} = change;
     this.setState({
       form: {...this.state.form, [name]: value},
@@ -23,7 +23,7 @@ class Login extends Component {
     });
   };
 
-  onSubmit = () => {
+  public onSubmit = () => {
     const {form, error} = this.state;
     if (!_.values(error).some((err) => err)) {
       authService.loginWithEmail({
@@ -33,7 +33,7 @@ class Login extends Component {
     }
   };
 
-  render() {
+  public render() {
     const {form, error} = this.state;
 
     return (

@@ -8,7 +8,7 @@ import {adminOnly} from '../../../hocs';
 import {EmailFormat} from '../../../domain/models/Configuration';
 
 class AdminPasswordResetPage extends Component {
-  render() {
+  public render() {
     const initialValues: EmailFormat = {
       senderName: '',
       senderEmail: '',
@@ -126,7 +126,7 @@ class AdminPasswordResetPage extends Component {
   //     }
   //   };
 
-  _handleSave = async (values: EmailFormat, actions: FormikActions<EmailFormat>) => {
+  public _handleSave = async (values: EmailFormat, actions: FormikActions<EmailFormat>) => {
     actions.setSubmitting(true);
     try {
       // await systemService.saveSmtpSettings(values);

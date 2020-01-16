@@ -17,7 +17,7 @@ const formSchema = yup.object().shape({
 });
 
 export class CreateFirstAdminForm extends Component {
-  render() {
+  public render() {
     return (
       <div>
         <h1>Create first admin</h1>

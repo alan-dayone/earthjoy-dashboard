@@ -14,7 +14,7 @@ interface PropTypes {
 /* tslint:disable-next-line:variable-name */
 export const userOnly = (Content) => {
   class UserWrapper extends React.Component<PropTypes> {
-    static async getInitialProps(context) {
+    public static async getInitialProps(context) {
       const props = {
         req: context.req,
         res: context.res,
@@ -55,13 +55,13 @@ export const userOnly = (Content) => {
       };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
       if (!this.props.token) {
         Router.replace('/admin/login');
       }
     }
 
-    render() {
+    public render() {
       if (!this.props.token) {
         return null;
       }

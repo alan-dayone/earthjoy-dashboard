@@ -8,18 +8,18 @@ import {systemService} from '../../../services';
 import {MailSmtpSettings} from '../../../domain/models/Configuration';
 
 class AdminSmtpSettingsPage extends Component {
-  state = {
+  public state = {
     isTestingConnection: false,
   };
 
-  static async getInitialProps() {
+  public static async getInitialProps() {
     const initialSmtpSettings = await systemService.getSmtpSettings();
     return {
       initialSmtpSettings,
     };
   }
 
-  render() {
+  public render() {
     const initialValues: MailSmtpSettings = this.props.initialSmtpSettings || {
       smtpHost: '',
       smtpPort: '',
@@ -173,7 +173,7 @@ class AdminSmtpSettingsPage extends Component {
     );
   }
 
-  _handleTestSmtpConnection = async (values: MailSmtpSettings) => {
+  public _handleTestSmtpConnection = async (values: MailSmtpSettings) => {
     try {
       this.setState({isTestingConnection: true});
       const isValid = await systemService.testSmtpConnection(values);
@@ -190,7 +190,7 @@ class AdminSmtpSettingsPage extends Component {
     }
   };
 
-  _handleSave = async (values: MailSmtpSettings, actions: FormikActions<MailSmtpSettings>) => {
+  public _handleSave = async (values: MailSmtpSettings, actions: FormikActions<MailSmtpSettings>) => {
     try {
       actions.setSubmitting(true);
       await systemService.saveSmtpSettings(values);

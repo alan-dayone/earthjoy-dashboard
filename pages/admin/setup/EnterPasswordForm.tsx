@@ -4,7 +4,7 @@ import toastr from 'toastr';
 import {systemService} from '../../../services';
 
 export class EnterPasswordForm extends Component {
-  render() {
+  public render() {
     return (
       <div>
         <h1>System initialization</h1>

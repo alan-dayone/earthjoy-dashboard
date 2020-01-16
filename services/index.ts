@@ -17,7 +17,7 @@ const authGateway = new AuthGateway({restConnector});
 const pubsubGateway = new PubsubGateway({pubsubConnector});
 const systemGateway = new SystemGateway({restConnector});
 
-interface ServiceContext {
+export interface ServiceContext {
   authGateway: AuthGateway;
   pubsubGateway: PubsubGateway;
   systemGateway: SystemGateway;
@@ -27,8 +27,8 @@ const injectServiceContext: ServiceContext = {
   authGateway,
   pubsubGateway,
   systemGateway,
+
 };
 
-export {ServiceContext};
 export const authService = new AuthService(injectServiceContext);
 export const systemService = new SystemService(injectServiceContext);

@@ -4,9 +4,9 @@ import {PubsubGateway} from '../gateways/PubsubGateway';
 import {SystemGateway} from '../gateways/SystemGateway';
 
 export class BaseService {
-  pubsubGateway: PubsubGateway;
-  authGateway: AuthGateway;
-  systemGateway: SystemGateway;
+  protected pubsubGateway: PubsubGateway;
+  protected authGateway: AuthGateway;
+  protected systemGateway: SystemGateway;
 
   constructor(options: ServiceContext) {
     this.pubsubGateway = options.pubsubGateway;
@@ -14,11 +14,11 @@ export class BaseService {
     this.systemGateway = options.systemGateway;
   }
 
-  emit(eventType: string, data?: object) {
+  public emit(eventType: string, data?: object) {
     this.pubsubGateway.emit(eventType, data);
   }
 
-  subscribe(eventType: string, handler: object) {
+  public subscribe(eventType: string, handler: (...args: any[]) => void) {
     this.pubsubGateway.subscribe(eventType, handler);
   }
 }

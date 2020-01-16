@@ -12,7 +12,7 @@ import {ExpressReduxNextContext} from '../types';
 
 export const guestOnly = (Content: NextComponentType, options?: {useAdminLayout: boolean}): typeof React.Component => {
   class GuestWrapper extends React.Component {
-    static async getInitialProps(context: ExpressReduxNextContext) {
+    public static async getInitialProps(context: ExpressReduxNextContext) {
       if (context.isServer) {
         const jwt = context.req?.cookies.jwt;
 
@@ -38,7 +38,7 @@ export const guestOnly = (Content: NextComponentType, options?: {useAdminLayout:
       return Content.getInitialProps ? Content.getInitialProps(context) : {};
     }
 
-    render() {
+    public render() {
       if (options && options.useAdminLayout) {
         return this._renderContentInsideAdminLayout();
       }
@@ -46,7 +46,7 @@ export const guestOnly = (Content: NextComponentType, options?: {useAdminLayout:
       return <Content {...this.props} />;
     }
 
-    _renderContentInsideAdminLayout = () => {
+    private _renderContentInsideAdminLayout = () => {
       return adminLayoutWrapper({children: <Content {...this.props} />});
     };
   }
@@ -54,7 +54,7 @@ export const guestOnly = (Content: NextComponentType, options?: {useAdminLayout:
   return composedHoc(GuestWrapper);
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: State) => ({
   currentUser: selectors.getLoginUser(state),
 });
 const composedHoc = compose(connect(mapStateToProps));

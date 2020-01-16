@@ -36,13 +36,13 @@ export interface ConfigurationModel {
 }
 
 export class SystemGateway {
-  restConnector: RestConnector;
+  private restConnector: RestConnector;
 
   constructor({restConnector}: {restConnector: RestConnector}) {
     this.restConnector = restConnector;
   }
 
-  async initSystem(body: {
+  public async initSystem(body: {
     password: string;
     admin: {
       email: string;
@@ -53,12 +53,12 @@ export class SystemGateway {
     return data.success;
   }
 
-  async validateSystemInitializationPassword(password: string): Promise<boolean> {
+  public async validateSystemInitializationPassword(password: string): Promise<boolean> {
     const {data} = await this.restConnector.post('/configurations/validate-system-initialization-password', {password});
     return data.isValid;
   }
 
-  async updateSystemConfiguration(id: ConfigurationKey, data: ConfigurationData) {
+  public async updateSystemConfiguration(id: ConfigurationKey, data: ConfigurationData) {
     const resp = await this.restConnector.put(`/configurations/${id}`, {
       id,
       data,
@@ -67,7 +67,7 @@ export class SystemGateway {
     return resp.data;
   }
 
-  async getConfiguration(id: ConfigurationKey): Promise<ConfigurationModel | null> {
+  public async getConfiguration(id: ConfigurationKey): Promise<ConfigurationModel | null> {
     try {
       const resp = await this.restConnector.get(`/configurations/${id}`);
       return resp.data;

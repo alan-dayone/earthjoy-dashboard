@@ -27,7 +27,8 @@
  * const error = new ValidationError(['INVALID_FILE_SIZE', 'INVALID_FILE_TYPE'])
  */
 export class ValidationError extends Error {
-  static name = 'ValidationError';
+  public name = 'ValidationError';
+  public details: {} | [];
 
   constructor(details: {} | []) {
     super();

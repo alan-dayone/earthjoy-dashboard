@@ -17,11 +17,11 @@ interface State {
 }
 
 class AdminForgotPasswordPage extends Component<state> {
-  state: State = {
+  public state: State = {
     isSendMail: false,
   };
 
-  render() {
+  public render() {
     return (
       <div id="admin-forgot-password-page" className="align-items-center c-app flex-row pace-done">
         <Head>
@@ -110,7 +110,7 @@ class AdminForgotPasswordPage extends Component<state> {
     );
   }
 
-  _handleForgotPassword = async (values: ForgotPasswordForm, actions: FormikActions<ForgotPasswordForm>) => {
+  public _handleForgotPassword = async (values: ForgotPasswordForm, actions: FormikActions<ForgotPasswordForm>) => {
     actions.setSubmitting(true);
     try {
       await authService.forgotPassword(values.email);

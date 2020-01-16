@@ -16,7 +16,7 @@ interface ResetPasswordForm {
 }
 
 class AdminResetPasswordPage extends Component {
-  static async getInitialProps(ctx) {
+  public static async getInitialProps(ctx) {
     const token = ctx.query.token;
 
     console.log({token});
@@ -26,7 +26,7 @@ class AdminResetPasswordPage extends Component {
     };
   }
 
-  render() {
+  public render() {
     if (!this.props.token) {
       return <Error statusCode={400} />;
     }
@@ -128,7 +128,7 @@ class AdminResetPasswordPage extends Component {
     );
   }
 
-  _handleResetPassword = async (values: ResetPasswordForm, actions: FormikActions<ResetPasswordForm>) => {
+  public _handleResetPassword = async (values: ResetPasswordForm, actions: FormikActions<ResetPasswordForm>) => {
     actions.setSubmitting(true);
     try {
       const accessToken = this.props.token;
