@@ -8,7 +8,7 @@ import {Formik, FormikActions} from 'formik';
 import {guestOnly} from '../../hocs';
 import {authService} from '../../services';
 
-interface LoginForm {
+export interface LoginForm {
   email: string;
   password: string;
 }

@@ -1,21 +1,46 @@
 import React from 'react';
 import Link from 'next/link';
-import {DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap';
-import {authService} from '../services';
+import {
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  UncontrolledDropdown,
+} from 'reactstrap';
+import { NextJSContext } from 'next-redux-wrapper';
+import { authService } from '../services';
+// import { isAdmin } from '../models/user'
 import '../scss/admin/index.scss';
-import {ExpressReduxNextContext} from './types';
-import {NextComponentType} from 'next';
+// import {
+//   actions as authActions,
+//   selectors as authSelectors
+// } from '../redux/authRedux'
 
-export const adminOnly: (content: NextComponentType) => typeof React.Component = (Content) => {
+/* tslint:disable-next-line:variable-name */
+export const adminOnly = Content => {
   class AdminWrapper extends React.Component {
-    static async getInitialProps(ctx: ExpressReduxNextContext) {
-      const {req, isServer} = ctx;
+    static async getInitialProps(ctx: NextJSContext) {
+      const { req, res, store, isServer } = ctx;
 
       if (isServer) {
-        authService.setAccessToken(req?.cookies.jwt);
+        authService.setAccessToken(req.cookies.jwt);
+        // const user = await store.dispatch(authActions.getLoginUser())
+
+        // if (!user || !isAdmin(user)) {
+        //   res.redirect('/admin/login')
+        //   res.end()
+        // }
+      } else {
+        // const user = authSelectors.getLoginUser(store.getState())
+        // if (!user || !isAdmin(user)) {
+        //   Router.pushRoute('/admin/login')
+        // }
       }
 
-      return Content.getInitialProps ? Content.getInitialProps(ctx) : {};
+      const composedProps = Content.getInitialProps
+        ? await Content.getInitialProps(ctx)
+        : {};
+
+      return composedProps;
     }
 
     render() {
@@ -39,7 +64,10 @@ export const adminOnly: (content: NextComponentType) => typeof React.Component =
     _renderNavbar = () => {
       return (
         <header className="c-header c-header-light c-header-fixed px-3">
-          <button className="c-header-toggler c-class-toggler d-md-down-none" type="button">
+          <button
+            className="c-header-toggler c-class-toggler d-md-down-none"
+            type="button"
+          >
             <span className="c-header-toggler-icon" />
           </button>
           <ul className="c-header-nav mfs-auto">
@@ -50,7 +78,8 @@ export const adminOnly: (content: NextComponentType) => typeof React.Component =
                 href="#"
                 role="button"
                 aria-haspopup="true"
-                aria-expanded="false">
+                aria-expanded="false"
+              >
                 <UncontrolledDropdown>
                   <DropdownToggle nav>
                     <div className="c-avatar">
@@ -63,7 +92,7 @@ export const adminOnly: (content: NextComponentType) => typeof React.Component =
                   </DropdownToggle>
                   <DropdownMenu right>
                     <DropdownItem>Profile</DropdownItem>
-                    <DropdownItem>Logout</DropdownItem>
+                    <DropdownItem onClick={this._logout}>Logout</DropdownItem>
                   </DropdownMenu>
                 </UncontrolledDropdown>
               </a>
@@ -75,11 +104,17 @@ export const adminOnly: (content: NextComponentType) => typeof React.Component =
 
     _renderSidebar = () => {
       return (
-        <div className="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
+        <div
+          className="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show"
+          id="sidebar"
+        >
           <div className="c-sidebar-brand">
             <h5>ADMIN PORTAL</h5>
           </div>
-          <ul className="c-sidebar-nav ps ps--active-y" data-drodpown-accordion="true">
+          <ul
+            className="c-sidebar-nav ps ps--active-y"
+            data-drodpown-accordion="true"
+          >
             <li className="c-sidebar-nav-item">
               <Link href="/admin">
                 <a className="c-sidebar-nav-link">
@@ -118,6 +153,15 @@ export const adminOnly: (content: NextComponentType) => typeof React.Component =
           />
         </div>
       );
+    };
+
+    _logout = async () => {
+      try {
+        await authService.logout();
+        Router.replace('/admin/login');
+      } catch (e) {
+        toastr.error(e.message);
+      }
     };
   }
 

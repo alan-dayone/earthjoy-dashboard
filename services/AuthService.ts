@@ -72,4 +72,16 @@ export class AuthService extends BaseService {
   setAccessToken(accessToken: string) {
     this.authGateway.setAccessToken(accessToken);
   }
+
+  async forgotPassword(email: string) {
+    validateUser({ email });
+    return this.authGateway.forgotPassword(email);
+  }
+
+  async changePassword(
+    body: { newPassword: string; newPasswordConfirm: string },
+    accessToken: string
+  ) {
+    return this.authGateway.changePassword(body, accessToken);
+  }
 }

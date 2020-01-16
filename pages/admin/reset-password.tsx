@@ -1,13 +1,13 @@
 /* tslint:disable:no-default-export */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Router from 'next/router';
+import Error from 'next/error';
 import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
-import {Formik, FormikActions} from 'formik';
-import {guestOnly} from '../../hocs';
-import {authService} from '../../services';
-import {Tracing} from 'trace_events';
+import { Formik, FormikActions } from 'formik';
+import { guestOnly } from '../../hocs';
+import { authService } from '../../services';
 
 interface ResetPasswordForm {
   newPassword?: string;
@@ -16,9 +16,26 @@ interface ResetPasswordForm {
 }
 
 class AdminResetPasswordPage extends Component {
+  static async getInitialProps(ctx) {
+    const token = ctx.query.token;
+
+    console.log({ token });
+
+    return {
+      token,
+    };
+  }
+
   render() {
+    if (!this.props.token) {
+      return <Error statusCode={400} />;
+    }
+
     return (
-      <div id="admin-login-page" className="align-items-center c-app flex-row pace-done">
+      <div
+        id="admin-login-page"
+        className="align-items-center c-app flex-row pace-done"
+      >
         <Head>
           <title>Admin - Reset password</title>
         </Head>
@@ -34,19 +51,23 @@ class AdminResetPasswordPage extends Component {
                         confirmPassword: '',
                       }}
                       onSubmit={this._handleResetPassword}
-                      validate={(values) => {
+                      validate={values => {
                         const errors: ResetPasswordForm = {};
                         if (values.newPassword === '') {
                           errors.newPassword = 'New password is required';
                         } else if (values.confirmPassword === '') {
-                          errors.confirmPassword = 'Confirm password is required';
-                        } else if (values.confirmPassword !== values.newPassword) {
+                          errors.confirmPassword =
+                            'Confirm password is required';
+                        } else if (
+                          values.confirmPassword !== values.newPassword
+                        ) {
                           errors.notMatch = 'The passwords do not match';
                         }
 
                         return errors;
-                      }}>
-                      {(props) => (
+                      }}
+                    >
+                      {props => (
                         <form onSubmit={props.handleSubmit}>
                           <h1>Reset Password</h1>
                           {/* <p className="text-muted">Sign In to your account</p> */}
@@ -64,11 +85,15 @@ class AdminResetPasswordPage extends Component {
                                 onChange={props.handleChange}
                                 value={props.values.newPassword}
                                 className={classnames('form-control', {
-                                  'is-invalid': props.errors.newPassword || props.errors.notMatch,
+                                  'is-invalid':
+                                    props.errors.newPassword ||
+                                    props.errors.notMatch,
                                 })}
                               />
                               {props.errors.newPassword && (
-                                <div className="invalid-feedback">{props.errors.newPassword}</div>
+                                <div className="invalid-feedback">
+                                  {props.errors.newPassword}
+                                </div>
                               )}
                             </div>
                           </div>
@@ -86,18 +111,32 @@ class AdminResetPasswordPage extends Component {
                                 onChange={props.handleChange}
                                 value={props.values.confirmPassword}
                                 className={classnames('form-control', {
-                                  'is-invalid': props.errors.confirmPassword || props.errors.notMatch,
+                                  'is-invalid':
+                                    props.errors.confirmPassword ||
+                                    props.errors.notMatch,
                                 })}
                               />
                               {props.errors.confirmPassword && (
-                                <div className="invalid-feedback">{props.errors.confirmPassword}</div>
+                                <div className="invalid-feedback">
+                                  {props.errors.confirmPassword}
+                                </div>
                               )}
-                              {props.errors.notMatch && <div className="invalid-feedback">{props.errors.notMatch}</div>}
+                              {props.errors.notMatch && (
+                                <div className="invalid-feedback">
+                                  {props.errors.notMatch}
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div className="form-group">
-                            <button className="btn btn-block btn-primary" type="submit" disabled={props.isSubmitting}>
-                              {props.isSubmitting && <div className="spinner-border spinner-border-sm mr-1" />}
+                            <button
+                              className="btn btn-block btn-primary"
+                              type="submit"
+                              disabled={props.isSubmitting}
+                            >
+                              {props.isSubmitting && (
+                                <div className="spinner-border spinner-border-sm mr-1" />
+                              )}
                               Submit
                             </button>
                           </div>
@@ -114,12 +153,21 @@ class AdminResetPasswordPage extends Component {
     );
   }
 
-  _handleResetPassword = async (values: ResetPasswordForm, actions: FormikActions<LoginForm>) => {
+  _handleResetPassword = async (
+    values: ResetPasswordForm,
+    actions: FormikActions<ResetPasswordForm>
+  ) => {
     actions.setSubmitting(true);
     try {
-      // await authService.loginWithEmail(values);
-      // Router.replace('/admin');
-      console.log(values);
+      const accessToken = this.props.token;
+      const body = {
+        newPassword: values.newPassword,
+        newPasswordConfirm: values.confirmPassword,
+      };
+
+      await authService.changePassword(body, accessToken);
+      toastr.success('Success!');
+      Router.replace('/admin/login');
     } catch (e) {
       toastr.error(e.message);
     } finally {
@@ -128,4 +176,4 @@ class AdminResetPasswordPage extends Component {
   };
 }
 
-export default guestOnly(AdminResetPasswordPage, {useAdminLayout: true});
+export default guestOnly(AdminResetPasswordPage, { useAdminLayout: true });
