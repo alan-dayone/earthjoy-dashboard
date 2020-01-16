@@ -1,11 +1,11 @@
 /* tslint:disable:no-default-export */
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Head from 'next/head';
-import { Formik, FormikActions } from 'formik';
+import {Formik, FormikActions} from 'formik';
 import toastr from 'toastr';
-import { adminOnly } from '../../../hocs';
+import {adminOnly} from '../../../hocs';
 // import { systemService } from '../../../services';
-import { EmailFormat } from '../../../domain/models/Configuration';
+import {EmailFormat} from '../../../domain/models/Configuration';
 
 class AdminPasswordResetPage extends Component {
   render() {
@@ -24,7 +24,7 @@ class AdminPasswordResetPage extends Component {
         <div className="row">
           <div className="col-12">
             <Formik initialValues={initialValues} onSubmit={this._handleSave}>
-              {props => (
+              {(props) => (
                 <form onSubmit={props.handleSubmit}>
                   <div className="card">
                     <div className="card-header">
@@ -88,21 +88,14 @@ class AdminPasswordResetPage extends Component {
                               name="message"
                               placeholder="Content ..."
                               onChange={props.handleChange}
-                              value={props.values.message}
-                            ></textarea>
+                              value={props.values.message}></textarea>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="card-footer">
-                      <button
-                        className="btn btn-sm btn-primary"
-                        type="submit"
-                        disabled={props.isSubmitting}
-                      >
-                        {props.isSubmitting && (
-                          <div className="spinner-border spinner-border-sm mr-1" />
-                        )}
+                      <button className="btn btn-sm btn-primary" type="submit" disabled={props.isSubmitting}>
+                        {props.isSubmitting && <div className="spinner-border spinner-border-sm mr-1" />}
                         Save
                       </button>
                     </div>
@@ -133,14 +126,11 @@ class AdminPasswordResetPage extends Component {
   //     }
   //   };
 
-  _handleSave = async (
-    values: EmailFormat,
-    actions: FormikActions<EmailFormat>
-  ) => {
+  _handleSave = async (values: EmailFormat, actions: FormikActions<EmailFormat>) => {
     actions.setSubmitting(true);
     try {
       // await systemService.saveSmtpSettings(values);
-      console.log({ values });
+      console.log({values});
 
       toastr.success('Saved');
     } catch (e) {

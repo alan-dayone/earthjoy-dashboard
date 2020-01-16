@@ -1,11 +1,11 @@
 /* tslint:disable:no-default-export */
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Head from 'next/head';
-import { Formik, FormikActions } from 'formik';
+import {Formik, FormikActions} from 'formik';
 import toastr from 'toastr';
-import { adminOnly } from '../../../hocs';
-import { systemService } from '../../../services';
-import { MailSmtpSettings } from '../../../domain/models/Configuration';
+import {adminOnly} from '../../../hocs';
+import {systemService} from '../../../services';
+import {MailSmtpSettings} from '../../../domain/models/Configuration';
 
 class AdminSmtpSettingsPage extends Component {
   state = {
@@ -28,7 +28,7 @@ class AdminSmtpSettingsPage extends Component {
       senderEmail: '',
       senderName: '',
     };
-    const { isTestingConnection } = this.state;
+    const {isTestingConnection} = this.state;
 
     return (
       <div id="admin-smtp-settings-page">
@@ -38,7 +38,7 @@ class AdminSmtpSettingsPage extends Component {
         <div className="row">
           <div className="col-12">
             <Formik initialValues={initialValues} onSubmit={this._handleSave}>
-              {props => (
+              {(props) => (
                 <form onSubmit={props.handleSubmit}>
                   <div className="card">
                     <div className="card-header">
@@ -147,28 +147,19 @@ class AdminSmtpSettingsPage extends Component {
                       </div>
                     </div>
                     <div className="card-footer">
-                      <button
-                        className="btn btn-sm btn-primary"
-                        type="submit"
-                        disabled={props.isSubmitting}
-                      >
-                        {props.isSubmitting && (
-                          <div className="spinner-border spinner-border-sm mr-1" />
-                        )}
+                      <button className="btn btn-sm btn-primary" type="submit" disabled={props.isSubmitting}>
+                        {props.isSubmitting && <div className="spinner-border spinner-border-sm mr-1" />}
                         Save
                       </button>
                       &nbsp;
                       <button
                         className="btn btn-sm btn-info"
-                        onClick={async e => {
+                        onClick={async (e) => {
                           e.preventDefault();
                           await this._handleTestSmtpConnection(props.values);
                         }}
-                        disabled={isTestingConnection}
-                      >
-                        {isTestingConnection && (
-                          <div className="spinner-border spinner-border-sm mr-1" />
-                        )}
+                        disabled={isTestingConnection}>
+                        {isTestingConnection && <div className="spinner-border spinner-border-sm mr-1" />}
                         Test connection
                       </button>
                     </div>
@@ -184,7 +175,7 @@ class AdminSmtpSettingsPage extends Component {
 
   _handleTestSmtpConnection = async (values: MailSmtpSettings) => {
     try {
-      this.setState({ isTestingConnection: true });
+      this.setState({isTestingConnection: true});
       const isValid = await systemService.testSmtpConnection(values);
 
       if (isValid) {
@@ -195,14 +186,11 @@ class AdminSmtpSettingsPage extends Component {
     } catch (e) {
       toastr.error(e.message);
     } finally {
-      this.setState({ isTestingConnection: false });
+      this.setState({isTestingConnection: false});
     }
   };
 
-  _handleSave = async (
-    values: MailSmtpSettings,
-    actions: FormikActions<MailSmtpSettings>
-  ) => {
+  _handleSave = async (values: MailSmtpSettings, actions: FormikActions<MailSmtpSettings>) => {
     try {
       actions.setSubmitting(true);
       await systemService.saveSmtpSettings(values);

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { Formik } from 'formik';
+import React, {Component} from 'react';
+import {Formik} from 'formik';
 import toastr from 'toastr';
-import { systemService } from '../../../services';
+import {systemService} from '../../../services';
 
 export class EnterPasswordForm extends Component {
   render() {
@@ -9,12 +9,11 @@ export class EnterPasswordForm extends Component {
       <div>
         <h1>System initialization</h1>
         <p className="text-muted">
-          Use secret system initialization password to initialize the system and
-          create your first admin account.
+          Use secret system initialization password to initialize the system and create your first admin account.
         </p>
         <Formik
-          initialValues={{ password: '' }}
-          validate={values => {
+          initialValues={{password: ''}}
+          validate={(values) => {
             const errors = {};
 
             if (values.password === '') {
@@ -23,12 +22,10 @@ export class EnterPasswordForm extends Component {
 
             return errors;
           }}
-          onSubmit={async (values, { setSubmitting }) => {
+          onSubmit={async (values, {setSubmitting}) => {
             setSubmitting(true);
             try {
-              const passwordIsCorrect = await systemService.validateSystemInitializationPassword(
-                values.password
-              );
+              const passwordIsCorrect = await systemService.validateSystemInitializationPassword(values.password);
 
               setSubmitting(false);
 
@@ -42,9 +39,8 @@ export class EnterPasswordForm extends Component {
               setSubmitting(false);
               toastr.error(e.message);
             }
-          }}
-        >
-          {({ values, handleChange, handleSubmit, isSubmitting, isValid }) => (
+          }}>
+          {({values, handleChange, handleSubmit, isSubmitting, isValid}) => (
             <form onSubmit={handleSubmit}>
               <div className="mb-4 input-group">
                 <div className="input-group-prepend">
@@ -62,11 +58,7 @@ export class EnterPasswordForm extends Component {
                 />
               </div>
               <div>
-                <button
-                  type="submit"
-                  disabled={!isValid || isSubmitting}
-                  className="px-4 btn btn-primary"
-                >
+                <button type="submit" disabled={!isValid || isSubmitting} className="px-4 btn btn-primary">
                   Next
                 </button>
               </div>

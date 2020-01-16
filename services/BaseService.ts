@@ -1,7 +1,7 @@
-import { ServiceContext } from './';
-import { AuthGateway } from '../gateways/AuthGateway';
-import { PubsubGateway } from '../gateways/PubsubGateway';
-import { SystemGateway } from '../gateways/SystemGateway';
+import {ServiceContext} from './';
+import {AuthGateway} from '../gateways/AuthGateway';
+import {PubsubGateway} from '../gateways/PubsubGateway';
+import {SystemGateway} from '../gateways/SystemGateway';
 
 export class BaseService {
   pubsubGateway: PubsubGateway;

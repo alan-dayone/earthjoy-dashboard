@@ -1,5 +1,5 @@
-import { BaseService } from './BaseService';
-import { validateUser } from '../validators/UserValidator';
+import {BaseService} from './BaseService';
+import {validateUser} from '../validators/UserValidator';
 
 export class AuthService extends BaseService {
   static error = {
@@ -16,9 +16,9 @@ export class AuthService extends BaseService {
     USER_LOGOUT: 'USER_LOGOUT',
   };
 
-  async loginWithEmail(body: { email: string; password: string }) {
+  async loginWithEmail(body: {email: string; password: string}) {
     // Login user to get access token.
-    const { token } = await this.authGateway.loginWithEmail(body);
+    const {token} = await this.authGateway.loginWithEmail(body);
 
     // Store access token on browser.
     this.authGateway.storeAccessToken(token);
@@ -26,7 +26,7 @@ export class AuthService extends BaseService {
     const user = await this.getLoginUser();
 
     // Emit login event so other services can listen to.
-    this.emit(AuthService.event.USER_LOGIN, { type: 'email', user });
+    this.emit(AuthService.event.USER_LOGIN, {type: 'email', user});
 
     return user;
   }
@@ -35,15 +35,11 @@ export class AuthService extends BaseService {
     return this.authGateway.getLoginUser();
   }
 
-  async signupWithEmail(body: {
-    name: string;
-    email: string;
-    password: string;
-  }) {
+  async signupWithEmail(body: {name: string; email: string; password: string}) {
     validateUser(body);
 
     const user = await this.authGateway.create(body);
-    this.emit(AuthService.event.USER_SIGNUP, { type: body.email, user });
+    this.emit(AuthService.event.USER_SIGNUP, {type: body.email, user});
 
     return this.loginWithEmail(body);
   }
@@ -54,28 +50,21 @@ export class AuthService extends BaseService {
   }
 
   async sendResetPasswordEmail(email: string) {
-    validateUser({ email });
+    validateUser({email});
     return this.authGateway.sendResetPasswordEmail(email);
   }
 
-  async updateAccountInfo(body: {
-    name: string;
-    email: string;
-    preferredLanguage: string;
-  }) {
-    validateUser({ name: body.name, email: body.email });
+  async updateAccountInfo(body: {name: string; email: string; preferredLanguage: string}) {
+    validateUser({name: body.name, email: body.email});
     await this.authGateway.updateAccountInfo(body);
   }
 
-  async updatePassword(body: { oldPassword: string; newPassword: string }) {
+  async updatePassword(body: {oldPassword: string; newPassword: string}) {
     validateUser(body);
     await this.authGateway.updatePassword(body);
   }
 
-  async setNewPassword(
-    body: { userId: string; newPassword: string },
-    accessToken: string
-  ) {
+  async setNewPassword(body: {userId: string; newPassword: string}, accessToken: string) {
     validateUser(body);
     await this.authGateway.setNewPassword(body, accessToken);
   }

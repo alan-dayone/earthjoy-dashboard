@@ -1,10 +1,7 @@
-import { BaseService } from './BaseService';
-import { SystemGateway } from '../gateways/SystemGateway';
-import {
-  ConfigurationKey,
-  MailSmtpSettings,
-} from '../domain/models/Configuration';
-import { ServiceContext } from './index';
+import {BaseService} from './BaseService';
+import {SystemGateway} from '../gateways/SystemGateway';
+import {ConfigurationKey, MailSmtpSettings} from '../domain/models/Configuration';
+import {ServiceContext} from './index';
 
 export class SystemService extends BaseService {
   /* tslint:disable:no-any */
@@ -15,9 +12,7 @@ export class SystemService extends BaseService {
     this.systemGateway = options.systemGateway;
   }
 
-  async validateSystemInitializationPassword(
-    password: string
-  ): Promise<boolean> {
+  async validateSystemInitializationPassword(password: string): Promise<boolean> {
     return this.systemGateway.validateSystemInitializationPassword(password);
   }
 
@@ -32,16 +27,11 @@ export class SystemService extends BaseService {
   }
 
   async saveSmtpSettings(smtpSettings: MailSmtpSettings): Promise<void> {
-    await this.systemGateway.updateSystemConfiguration(
-      ConfigurationKey.MAIL_SMTP_SETTINGS,
-      smtpSettings
-    );
+    await this.systemGateway.updateSystemConfiguration(ConfigurationKey.MAIL_SMTP_SETTINGS, smtpSettings);
   }
 
   async getSmtpSettings(): Promise<any> {
-    const smtpConfig = await this.systemGateway.getConfiguration(
-      ConfigurationKey.MAIL_SMTP_SETTINGS
-    );
+    const smtpConfig = await this.systemGateway.getConfiguration(ConfigurationKey.MAIL_SMTP_SETTINGS);
     return smtpConfig && smtpConfig.data;
   }
 }

@@ -2,7 +2,7 @@ export class PubsubGateway {
   /* tslint:disable:no-any */
   pubsubConnector: any;
 
-  constructor({ pubsubConnector }) {
+  constructor({pubsubConnector}) {
     this.pubsubConnector = pubsubConnector;
   }
 

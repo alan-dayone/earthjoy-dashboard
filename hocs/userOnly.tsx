@@ -1,9 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
 import Cookies from 'js-cookie';
-import { actions as authRedux, selectors } from '../redux/authRedux';
-import { authService } from '../services/';
+import {actions as authRedux, selectors} from '../redux/authRedux';
+import {authService} from '../services/';
 import Router from 'next/router';
 
 interface PropTypes {
@@ -12,7 +12,7 @@ interface PropTypes {
 }
 
 /* tslint:disable-next-line:variable-name */
-export const userOnly = Content => {
+export const userOnly = (Content) => {
   class UserWrapper extends React.Component<PropTypes> {
     static async getInitialProps(context) {
       const props = {
@@ -23,9 +23,7 @@ export const userOnly = Content => {
       };
       let currentUser = {};
       let token = '';
-      const initialProps = Content.getInitialProps
-        ? await Content.getInitialProps(props)
-        : {};
+      const initialProps = Content.getInitialProps ? await Content.getInitialProps(props) : {};
       if (context.isServer) {
         if (!context.req.cookies.jwt) {
           context.res.redirect('/admin/login');
@@ -75,7 +73,7 @@ export const userOnly = Content => {
   return composedHoc(UserWrapper);
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   currentUser: selectors.getLoginUser(state),
 });
 const composedHoc = compose(connect(mapStateToProps));

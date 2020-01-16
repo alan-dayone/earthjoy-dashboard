@@ -1,9 +1,6 @@
-import {
-  errorCode as ValidationErrorCode,
-  ValidationError,
-} from '../errors/ValidationError';
-import { constraint } from '../models/User';
-import { validate } from './BaseValidator';
+import {errorCode as ValidationErrorCode, ValidationError} from '../errors/ValidationError';
+import {constraint} from '../models/User';
+import {validate} from './BaseValidator';
 
 const spec = {
   email: {
@@ -11,7 +8,7 @@ const spec = {
       message: `^${ValidationErrorCode.REQUIRED}`,
       allowEmpty: false,
     },
-    email: { message: `^${ValidationErrorCode.INVALID_EMAIL}` },
+    email: {message: `^${ValidationErrorCode.INVALID_EMAIL}`},
     length: {
       maximum: constraint.email.MAX_LENGTH,
       message: `^${ValidationErrorCode.INVALID_LENGTH}`,

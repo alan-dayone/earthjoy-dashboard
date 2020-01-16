@@ -1,11 +1,6 @@
-import {
-  createStore,
-  combineReducers,
-  applyMiddleware,
-  DeepPartial,
-} from 'redux';
+import {createStore, combineReducers, applyMiddleware, DeepPartial} from 'redux';
 import thunk from 'redux-thunk';
-import { reducer as globalReducer } from './globalRedux';
+import {reducer as globalReducer} from './globalRedux';
 import * as services from '../services';
 
 export interface TInitialState {
@@ -42,6 +37,6 @@ export const makeStore = (initialState: object) => {
       ...DEFAULT_INITIAL_STATE,
       ...initialState,
     },
-    applyMiddleware(thunk.withExtraArgument(services))
+    applyMiddleware(thunk.withExtraArgument(services)),
   );
 };

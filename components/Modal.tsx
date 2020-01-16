@@ -1,4 +1,4 @@
-import { Button } from '.';
+import {Button} from '.';
 
 interface ModalProps {
   onSubmit?: () => void;
@@ -33,29 +33,17 @@ const modal = (props: ModalProps) => {
   } = props;
   return (
     <div className="modal__container">
-      <div
-        className="modal__background"
-        onClick={() => handleClose && handleClose()}
-      />
+      <div className="modal__background" onClick={() => handleClose && handleClose()} />
       <div className={`${className} modal`}>
-        {isClosable && (
-          <i className="icon-cross icon__close" onClick={handleClose} />
-        )}
+        {isClosable && <i className="icon-cross icon__close" onClick={handleClose} />}
         {title && <div className="modal__header">{title}</div>}
         <div className="modal__content">
           {children}
           <div
             className={`btn__container justify-content-center
-              `}
-          >
+              `}>
             {isShowSubmit && (
-              <Button
-                type="primary"
-                size="normal"
-                onClick={onSubmit}
-                isDisabled={isDisabled}
-                className="text__white"
-              >
+              <Button type="primary" size="normal" onClick={onSubmit} isDisabled={isDisabled} className="text__white">
                 {submitLabel || 'Ok'}
               </Button>
             )}
@@ -64,8 +52,7 @@ const modal = (props: ModalProps) => {
                 size="normal"
                 type="transparent"
                 onClick={() => handleClose && handleClose()}
-                className="text__grey"
-              >
+                className="text__grey">
                 {cancelLabel || 'Cancel'}
               </Button>
             )}
@@ -76,4 +63,4 @@ const modal = (props: ModalProps) => {
   );
 };
 
-export { modal as Modal };
+export {modal as Modal};

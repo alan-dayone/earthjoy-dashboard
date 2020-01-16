@@ -1,9 +1,9 @@
 /* tslint:disable:no-default-export */
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Head from 'next/head';
-import { guestOnly } from '../../../hocs';
-import { EnterPasswordForm } from './EnterPasswordForm';
-import { CreateFirstAdminForm } from './CreateFirstAdminForm';
+import {guestOnly} from '../../../hocs';
+import {EnterPasswordForm} from './EnterPasswordForm';
+import {CreateFirstAdminForm} from './CreateFirstAdminForm';
 
 const STEP = {
   ENTER_PASSWORD: 'enter-password',
@@ -28,14 +28,10 @@ class AdminSetupPage extends Component {
               <div className="p-4 card">
                 <div className="card-body">
                   {this.state.step === STEP.CREATE_FIRST_ADMIN ? (
-                    <CreateFirstAdminForm
-                      correctSystemInitPassword={
-                        this.state.correctSystemInitPassword
-                      }
-                    />
+                    <CreateFirstAdminForm correctSystemInitPassword={this.state.correctSystemInitPassword} />
                   ) : (
                     <EnterPasswordForm
-                      onSuccess={correctPassword =>
+                      onSuccess={(correctPassword) =>
                         this.setState({
                           step: STEP.CREATE_FIRST_ADMIN,
                           correctSystemInitPassword: correctPassword,
@@ -53,4 +49,4 @@ class AdminSetupPage extends Component {
   }
 }
 
-export default guestOnly(AdminSetupPage, { useAdminLayout: true });
+export default guestOnly(AdminSetupPage, {useAdminLayout: true});

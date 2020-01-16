@@ -7,8 +7,8 @@
   },
   "scripts": {
     "dev": "nodemon --exec ts-node --project tsconfig-server.json server.ts",
-    "lint": "gts check",
-    "lint:fix": "gts fix",
+    "lint": "npm run prettier:check && gts check",
+    "lint:fix": "gts fix && npm run prettier:fix",
     "test": "echo \"Need to write test\"",
     "prebuild": "npm run lint && npm run test && npm run clean",
     "build": "npm run build:server && npm run build:client && npm run build:bundle",
@@ -21,7 +21,10 @@
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
-    "posttest": "npm run check"
+    "posttest": "npm run check",
+    "prettier:cli": "pretty-quick --staged",
+    "prettier:check": "npm run prettier:cli",
+    "prettier:fix": "npm run prettier:cli"
   },
   "dependencies": {
     "@coreui/coreui": "^3.0.0-beta.4",
@@ -85,6 +88,9 @@
     "@types/yup": "^0.26.22",
     "@types/zxcvbn": "^4.4.0",
     "eslint": "^6.8.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "prettier": "1.19.1",
+    "pretty-quick": "^2.0.1",
     "gts": "^1.1.2",
     "husky": "^2.3.0",
     "nodemon": "^1.19.1",
@@ -98,7 +104,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint",
+      "pre-commit": "npm run lint:fix",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   }

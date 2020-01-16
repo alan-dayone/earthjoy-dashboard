@@ -1,4 +1,4 @@
-export const isAdmin = user => {
+export const isAdmin = (user) => {
   return user.role === 'admin';
 };
 

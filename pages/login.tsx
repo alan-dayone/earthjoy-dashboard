@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import _ from 'lodash';
-import { TextInput, ContentContainer } from '../components';
-import { authService } from '../services';
+import {TextInput, ContentContainer} from '../components';
+import {authService} from '../services';
 
 class Login extends Component {
   state = {
@@ -15,17 +15,17 @@ class Login extends Component {
     },
   };
 
-  onChange = (change: { value: string; error: string }, name: string) => {
-    const { value, error } = change;
+  onChange = (change: {value: string; error: string}, name: string) => {
+    const {value, error} = change;
     this.setState({
-      form: { ...this.state.form, [name]: value },
-      error: { ...this.state.error, [name]: error },
+      form: {...this.state.form, [name]: value},
+      error: {...this.state.error, [name]: error},
     });
   };
 
   onSubmit = () => {
-    const { form, error } = this.state;
-    if (!_.values(error).some(err => err)) {
+    const {form, error} = this.state;
+    if (!_.values(error).some((err) => err)) {
       authService.loginWithEmail({
         email: form.email,
         password: form.password,
@@ -34,7 +34,7 @@ class Login extends Component {
   };
 
   render() {
-    const { form, error } = this.state;
+    const {form, error} = this.state;
 
     return (
       <ContentContainer>
@@ -45,7 +45,7 @@ class Login extends Component {
           label="Email"
           value={form.email}
           error={error.email}
-          onChange={change => this.onChange(change, 'email')}
+          onChange={(change) => this.onChange(change, 'email')}
         />
         <TextInput
           type="password"
@@ -54,7 +54,7 @@ class Login extends Component {
           label="Password"
           value={form.password}
           error={error.password}
-          onChange={change => this.onChange(change, 'password')}
+          onChange={(change) => this.onChange(change, 'password')}
         />
         <button onClick={this.onSubmit} className="d__flex">
           Submit

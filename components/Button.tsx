@@ -4,15 +4,7 @@ interface ButtonPropTypes {
   className?: string;
   children?: string;
   isRightIcon?: boolean;
-  type?:
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'grey'
-    | 'warning'
-    | 'danger'
-    | 'lightgrey'
-    | 'transparent';
+  type?: 'primary' | 'secondary' | 'success' | 'grey' | 'warning' | 'danger' | 'lightgrey' | 'transparent';
   size?: 'large' | 'normal' | 'medium' | 'small' | 'tiny';
   isDisabled?: boolean;
   onClick: () => void;
@@ -33,18 +25,11 @@ const button = ({
   <button
     onClick={onClick}
     disabled={isDisabled}
-    className={`${className} ellipsis btn btn__${size} ${
-      isDisabled ? `btn__disabled` : `btn__${type}`
-    }`}
-  >
-    {icon && !isRightIcon && (
-      <i className={`${icon} ${children ? 'm__r--3' : ''}`} />
-    )}
+    className={`${className} ellipsis btn btn__${size} ${isDisabled ? `btn__disabled` : `btn__${type}`}`}>
+    {icon && !isRightIcon && <i className={`${icon} ${children ? 'm__r--3' : ''}`} />}
     {children}
-    {icon && isRightIcon && (
-      <i className={`${icon} ${children ? 'm__l--3' : ''}`} />
-    )}
+    {icon && isRightIcon && <i className={`${icon} ${children ? 'm__l--3' : ''}`} />}
   </button>
 );
 
-export { button as Button };
+export {button as Button};

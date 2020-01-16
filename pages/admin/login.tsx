@@ -1,12 +1,12 @@
 /* tslint:disable:no-default-export */
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Router from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head';
 import toastr from 'toastr';
-import { Formik, FormikActions } from 'formik';
-import { guestOnly } from '../../hocs';
-import { authService } from '../../services';
+import {Formik, FormikActions} from 'formik';
+import {guestOnly} from '../../hocs';
+import {authService} from '../../services';
 
 interface LoginForm {
   email: string;
@@ -16,10 +16,7 @@ interface LoginForm {
 class AdminLoginPage extends Component {
   render() {
     return (
-      <div
-        id="admin-login-page"
-        className="align-items-center c-app flex-row pace-done"
-      >
+      <div id="admin-login-page" className="align-items-center c-app flex-row pace-done">
         <Head>
           <title>Admin - Login</title>
         </Head>
@@ -34,9 +31,8 @@ class AdminLoginPage extends Component {
                         email: '',
                         password: '',
                       }}
-                      onSubmit={this._handleLogin}
-                    >
-                      {props => (
+                      onSubmit={this._handleLogin}>
+                      {(props) => (
                         <form onSubmit={props.handleSubmit}>
                           <h1>Login</h1>
                           <p className="text-muted">Sign In to your account</p>
@@ -72,23 +68,14 @@ class AdminLoginPage extends Component {
                           </div>
                           <div className="row">
                             <div className="col-6">
-                              <button
-                                className="btn btn-primary px-4"
-                                type="submit"
-                                disabled={props.isSubmitting}
-                              >
-                                {props.isSubmitting && (
-                                  <div className="spinner-border spinner-border-sm mr-1" />
-                                )}
+                              <button className="btn btn-primary px-4" type="submit" disabled={props.isSubmitting}>
+                                {props.isSubmitting && <div className="spinner-border spinner-border-sm mr-1" />}
                                 Login
                               </button>
                             </div>
                             <div className="col-6 text-right">
                               <Link href="/admin/forgot-password">
-                                <button
-                                  className="btn btn-link px-0"
-                                  type="button"
-                                >
+                                <button className="btn btn-link px-0" type="button">
                                   Forgot password?
                                 </button>
                               </Link>
@@ -107,10 +94,7 @@ class AdminLoginPage extends Component {
     );
   }
 
-  _handleLogin = async (
-    values: LoginForm,
-    actions: FormikActions<LoginForm>
-  ) => {
+  _handleLogin = async (values: LoginForm, actions: FormikActions<LoginForm>) => {
     actions.setSubmitting(true);
     try {
       await authService.loginWithEmail(values);
@@ -123,4 +107,4 @@ class AdminLoginPage extends Component {
   };
 }
 
-export default guestOnly(AdminLoginPage, { useAdminLayout: true });
+export default guestOnly(AdminLoginPage, {useAdminLayout: true});

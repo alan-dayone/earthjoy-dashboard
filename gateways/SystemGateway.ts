@@ -1,5 +1,5 @@
-import { ConfigurationKey } from '../domain/models/Configuration';
-import { RestConnector } from '../connectors/RestConnector';
+import {ConfigurationKey} from '../domain/models/Configuration';
+import {RestConnector} from '../connectors/RestConnector';
 
 export interface SystemStatusData {
   status: string;
@@ -28,11 +28,7 @@ export interface VerifyAccountSetting {
   senderName: string;
 }
 
-export type ConfigurationData =
-  | SystemStatusData
-  | MailSmtpSettings
-  | ResetPasswordSettings
-  | VerifyAccountSetting;
+export type ConfigurationData = SystemStatusData | MailSmtpSettings | ResetPasswordSettings | VerifyAccountSetting;
 
 export interface ConfigurationModel {
   id: string;
@@ -42,7 +38,7 @@ export interface ConfigurationModel {
 export class SystemGateway {
   restConnector: RestConnector;
 
-  constructor({ restConnector }: { restConnector: RestConnector }) {
+  constructor({restConnector}: {restConnector: RestConnector}) {
     this.restConnector = restConnector;
   }
 
@@ -53,29 +49,16 @@ export class SystemGateway {
       password: string;
     };
   }): Promise<boolean> {
-    const { data } = await this.restConnector.post(
-      `/configurations/initialize-system`,
-      body
-    );
+    const {data} = await this.restConnector.post(`/configurations/initialize-system`, body);
     return data.success;
   }
 
-  async validateSystemInitializationPassword(
-    password: string
-  ): Promise<boolean> {
-    const {
-      data,
-    } = await this.restConnector.post(
-      '/configurations/validate-system-initialization-password',
-      { password }
-    );
+  async validateSystemInitializationPassword(password: string): Promise<boolean> {
+    const {data} = await this.restConnector.post('/configurations/validate-system-initialization-password', {password});
     return data.isValid;
   }
 
-  async updateSystemConfiguration(
-    id: ConfigurationKey,
-    data: ConfigurationData
-  ) {
+  async updateSystemConfiguration(id: ConfigurationKey, data: ConfigurationData) {
     const resp = await this.restConnector.put(`/configurations/${id}`, {
       id,
       data,
@@ -84,9 +67,7 @@ export class SystemGateway {
     return resp.data;
   }
 
-  async getConfiguration(
-    id: ConfigurationKey
-  ): Promise<ConfigurationModel | null> {
+  async getConfiguration(id: ConfigurationKey): Promise<ConfigurationModel | null> {
     try {
       const resp = await this.restConnector.get(`/configurations/${id}`);
       return resp.data;

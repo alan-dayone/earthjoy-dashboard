@@ -4,19 +4,11 @@ import zxcvbn from 'zxcvbn';
 
 interface NewTextInputPropTypes {
   value?: string;
-  onChange?: (change: { value: string; error: string }) => void;
+  onChange?: (change: {value: string; error: string}) => void;
   containerClassName?: string;
   inputClassName?: string;
   label?: string;
-  type:
-    | 'text'
-    | 'password'
-    | 'number'
-    | 'alpha'
-    | 'alphanumberic'
-    | 'postal'
-    | 'email'
-    | 'card';
+  type: 'text' | 'password' | 'number' | 'alpha' | 'alphanumberic' | 'postal' | 'email' | 'card';
   isDisabled?: boolean;
   error?: string;
   placeholder?: string;
@@ -25,9 +17,7 @@ interface NewTextInputPropTypes {
   autoComplete?: boolean;
   max?: number;
   min?: number;
-  onKeyDown?: (
-    e: KeyboardEvent<HTMLInputElement> | KeyboardEvent<HTMLTextAreaElement>
-  ) => void;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement> | KeyboardEvent<HTMLTextAreaElement>) => void;
 }
 
 const getInput = (props: NewTextInputPropTypes) => {
@@ -78,21 +68,13 @@ const textInput = (props: NewTextInputPropTypes) => {
           disabled={isDisabled}
           value={value}
           onKeyDown={onKeyDown}
-          className={`form-control ${
-            error ? 'border-danger' : ''
-          } input text__medium text__black ${inputClassName}`}
-          onChange={e =>
-            onChange && onChange({ value: e.target.value, error: '' })
-          }
+          className={`form-control ${error ? 'border-danger' : ''} input text__medium text__black ${inputClassName}`}
+          onChange={(e) => onChange && onChange({value: e.target.value, error: ''})}
         />
       ) : (
         getInput(props)
       )}
-      {error && (
-        <label className="text__danger d__absolute text__tiny m__l--1">
-          {error}
-        </label>
-      )}
+      {error && <label className="text__danger d__absolute text__tiny m__l--1">{error}</label>}
     </div>
   );
 };
@@ -104,7 +86,7 @@ const PasswordInput = (props: NewTextInputPropTypes) => {
       disabled={props.isDisabled}
       value={props.value}
       type="password"
-      onChange={e =>
+      onChange={(e) =>
         props.onChange &&
         props.onChange({
           value: e.target.value,
@@ -119,8 +101,9 @@ const PasswordInput = (props: NewTextInputPropTypes) => {
       autoComplete={(props.autoComplete || false).toString()}
       onKeyDown={props.onKeyDown}
       placeholder={props.placeholder}
-      className={`form-control input text__medium text__black ${props.inputClassName ||
-        'input__large'} ${props.error ? 'border__danger--1' : ''}`}
+      className={`form-control input text__medium text__black ${props.inputClassName || 'input__large'} ${
+        props.error ? 'border__danger--1' : ''
+      }`}
     />
   );
 };
@@ -132,7 +115,7 @@ const AlphaInput = (props: NewTextInputPropTypes) => {
       disabled={props.isDisabled}
       value={props.value}
       type="text"
-      onChange={e =>
+      onChange={(e) =>
         props.onChange &&
         props.onChange({
           value: e.target.value,
@@ -147,8 +130,9 @@ const AlphaInput = (props: NewTextInputPropTypes) => {
       autoComplete={(props.autoComplete || false).toString()}
       onKeyDown={props.onKeyDown}
       placeholder={props.placeholder}
-      className={`form-control input text__medium text__black ${props.inputClassName ||
-        'input__large'} ${props.error ? 'border__danger--1' : ''}`}
+      className={`form-control input text__medium text__black ${props.inputClassName || 'input__large'} ${
+        props.error ? 'border__danger--1' : ''
+      }`}
     />
   );
 };
@@ -160,21 +144,19 @@ const AlphaNumbericInput = (props: NewTextInputPropTypes) => {
       disabled={props.isDisabled}
       value={props.value}
       type="text"
-      onChange={e =>
+      onChange={(e) =>
         props.onChange &&
         props.onChange({
           value: e.target.value,
-          error:
-            !e.target.value && props.isRequired
-              ? 'This field is required!'
-              : '',
+          error: !e.target.value && props.isRequired ? 'This field is required!' : '',
         })
       }
       onKeyDown={props.onKeyDown}
       autoComplete={(props.autoComplete || false).toString()}
       placeholder={props.placeholder}
-      className={`form-control input text__medium text__black ${props.inputClassName ||
-        'input__large'} ${props.error ? 'border__danger--1' : ''}`}
+      className={`form-control input text__medium text__black ${props.inputClassName || 'input__large'} ${
+        props.error ? 'border__danger--1' : ''
+      }`}
     />
   );
 };
@@ -187,7 +169,7 @@ const NumberInput = (props: NewTextInputPropTypes) => {
       value={props.value}
       type="number"
       max={props.max}
-      onChange={e =>
+      onChange={(e) =>
         props.onChange &&
         props.onChange({
           value: e.target.value,
@@ -205,8 +187,9 @@ const NumberInput = (props: NewTextInputPropTypes) => {
       onKeyDown={props.onKeyDown}
       autoComplete={(props.autoComplete || false).toString()}
       placeholder={props.placeholder}
-      className={`form-control input text__medium text__black ${props.inputClassName ||
-        'input__large'} ${props.error ? 'border__danger--1' : ''}`}
+      className={`form-control input text__medium text__black ${props.inputClassName || 'input__large'} ${
+        props.error ? 'border__danger--1' : ''
+      }`}
     />
   );
 };
@@ -219,7 +202,7 @@ const ZipInput = (props: NewTextInputPropTypes) => {
       value={props.value}
       type="text"
       max={props.max}
-      onChange={e =>
+      onChange={(e) =>
         props.onChange &&
         props.onChange({
           value: e.target.value,
@@ -234,8 +217,9 @@ const ZipInput = (props: NewTextInputPropTypes) => {
       onKeyDown={props.onKeyDown}
       autoComplete={(props.autoComplete || false).toString()}
       placeholder={props.placeholder}
-      className={`form-control input text__medium text__black ${props.inputClassName ||
-        'input__large'} ${props.error ? 'border__danger--1' : ''}`}
+      className={`form-control input text__medium text__black ${props.inputClassName || 'input__large'} ${
+        props.error ? 'border__danger--1' : ''
+      }`}
     />
   );
 };
@@ -248,7 +232,7 @@ const EmailInput = (props: NewTextInputPropTypes) => {
       value={props.value}
       type="text"
       max={props.max}
-      onChange={e =>
+      onChange={(e) =>
         props.onChange &&
         props.onChange({
           value: e.target.value,
@@ -263,10 +247,11 @@ const EmailInput = (props: NewTextInputPropTypes) => {
       onKeyDown={props.onKeyDown}
       autoComplete={(props.autoComplete || false).toString()}
       placeholder={props.placeholder}
-      className={`form-control input text__medium text__black ${props.inputClassName ||
-        'input__large'} ${props.error ? 'border__danger--1' : ''}`}
+      className={`form-control input text__medium text__black ${props.inputClassName || 'input__large'} ${
+        props.error ? 'border__danger--1' : ''
+      }`}
     />
   );
 };
 
-export { textInput as TextInput };
+export {textInput as TextInput};

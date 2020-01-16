@@ -20,7 +20,7 @@ server.use(cookieParser(process.env.COOKIE_SECRET));
 // );
 
 async function startServer() {
-  const nextApp = next({ dev: process.env.NODE_ENV !== 'production' });
+  const nextApp = next({dev: process.env.NODE_ENV !== 'production'});
   const nextHandler = nextApp.getRequestHandler();
   await nextApp.prepare();
   server.all('*', (req, res) => nextHandler(req, res));

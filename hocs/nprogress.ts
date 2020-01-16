@@ -26,5 +26,5 @@ export const nprogress = (_delayMs = delayMs, configOptions) => {
   // configure NProgress if configuration object is passed
   if (configOptions) NProgress.configure(configOptions);
   // receive page and return it as is
-  return page => page;
+  return (page) => page;
 };

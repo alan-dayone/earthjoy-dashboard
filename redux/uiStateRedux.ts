@@ -9,16 +9,16 @@ actionCreators.toggleAdminSideBar = () => (dispatch, getState) => {
 
   localStorage.setItem('showAdminSideBar', showAdminSideBar);
 
-  dispatch(actionCreators.updateUiStateSuccess({ showAdminSideBar }));
+  dispatch(actionCreators.updateUiStateSuccess({showAdminSideBar}));
 };
 
 actionCreators.fetchAdminSideBarStatus = () => (dispatch, getState) => {
   const storedValue = localStorage.getItem('showAdminSideBar');
   const show = !storedValue || storedValue === 'true';
-  dispatch(actionCreators.updateUiStateSuccess({ showAdminSideBar: show }));
+  dispatch(actionCreators.updateUiStateSuccess({showAdminSideBar: show}));
 };
 
-actionCreators.updateUiStateSuccess = data => (dispatch, getState) => {
+actionCreators.updateUiStateSuccess = (data) => (dispatch, getState) => {
   const newUiState = {
     id: 'uiState',
     data: {
@@ -32,6 +32,5 @@ actionCreators.updateUiStateSuccess = data => (dispatch, getState) => {
 export default actionCreators;
 
 export const selector = {
-  showAdminSideBar: state =>
-    _.get(state, 'global.uiState.data.showAdminSideBar', true),
+  showAdminSideBar: (state) => _.get(state, 'global.uiState.data.showAdminSideBar', true),
 };

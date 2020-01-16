@@ -1,29 +1,29 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { ApplicationError } from '../errors/ApplicationError';
-import { AxiosInstance } from 'axios';
+import {ApplicationError} from '../errors/ApplicationError';
+import {AxiosInstance} from 'axios';
 
 export interface RestConnector extends AxiosInstance {
   setAccessToken(token: string): void;
   removeAccessToken(): void;
 }
 
-export function create({ baseUrl }: { baseUrl: string }): RestConnector {
+export function create({baseUrl}: {baseUrl: string}): RestConnector {
   const instance: RestConnector = axios.create({
     baseURL: baseUrl,
   }) as RestConnector;
 
   instance.interceptors.response.use(
-    response => {
+    (response) => {
       return response;
     },
-    err => {
+    (err) => {
       if (err.message === 'Network Error') {
         err.code = ApplicationError.name;
         err.message = 'errNetwork';
       }
       return Promise.reject(err);
-    }
+    },
   );
 
   /**
