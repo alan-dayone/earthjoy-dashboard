@@ -1,6 +1,6 @@
 import NProgress from 'nprogress';
 import Router from 'next/router';
-import {NextPage} from "next";
+import {NextPage} from 'next';
 
 let delayMs = 300;
 let timer: NodeJS.Timeout | number | null = null;

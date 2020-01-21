@@ -4,10 +4,10 @@ import {DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from '
 import {authService} from '../services';
 // import { isAdmin } from '../models/user'
 import '../scss/admin/index.scss';
-import {NextComponentType} from "next";
-import {ExpressReduxNextContext} from "./types";
-import {withRouter} from "next/router";
-import {WithRouterProps} from "next/dist/client/with-router";
+import {NextComponentType} from 'next';
+import {ExpressReduxNextContext} from './types';
+import {withRouter} from 'next/router';
+import {WithRouterProps} from 'next/dist/client/with-router';
 
 /* tslint:disable-next-line:variable-name */
 export const adminOnly = (Content: NextComponentType): NextComponentType => {

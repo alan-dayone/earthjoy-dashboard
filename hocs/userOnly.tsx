@@ -5,18 +5,17 @@ import Cookies from 'js-cookie';
 import {actions as authRedux, selectors} from '../redux/authRedux';
 import {authService} from '../services/';
 import {withRouter} from 'next/router';
-import {NextComponentType} from "next";
-import {ExpressReduxNextContext} from "./types";
-import {CommonThunkDispatch, RootState} from "../redux/types";
-import {WithRouterProps} from "next/dist/client/with-router";
+import {NextComponentType} from 'next';
+import {ExpressReduxNextContext} from './types';
+import {CommonThunkDispatch, RootState} from '../redux/types';
+import {WithRouterProps} from 'next/dist/client/with-router';
 //
 // interface PropTypes {
 //   token: string;
 // }
 
 /* tslint:disable-next-line:variable-name */
-export const userOnly = (Content: NextComponentType):
-    ConnectedComponent<any, NextComponentType> => {
+export const userOnly = (Content: NextComponentType): ConnectedComponent<any, NextComponentType> => {
   class UserWrapper extends React.Component<any> {
     public static async getInitialProps(context: ExpressReduxNextContext & WithRouterProps) {
       const props = context;
