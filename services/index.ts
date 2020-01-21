@@ -27,7 +27,6 @@ const injectServiceContext: ServiceContext = {
   authGateway,
   pubsubGateway,
   systemGateway,
-
 };
 
 export const authService = new AuthService(injectServiceContext);

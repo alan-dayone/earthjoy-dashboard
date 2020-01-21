@@ -38,11 +38,11 @@ const spec = {
   },
 };
 
-export function validateUser(userData) {
+export function validateUser(userData: any) {
   validate(userData, spec);
 }
 
-export function validateAvatarUpload(file) {
+export function validateAvatarUpload(file: any) {
   const errorCodes = [];
 
   if (!constraint.avatar.ALLOWED_FILE_TYPES.includes(file.type)) {

@@ -2,88 +2,90 @@ import _ from 'lodash';
 import globalRedux from './globalRedux';
 import uiStateRedux from './uiStateRedux';
 import {isAdmin} from '../models/User';
+import {AuthReduxActions, AuthReduxSelectors} from "./types";
 
-const actions = {
-  // getLoginUser: ,
-  // loginWithEmail,
-  // signupWithEmail(body: {name: string, email: string, password: string}): unknown,
-  // logout(): unknown,
-  // updateAccountInfo(body: {email: string, name: string, preferredLanguage: string}): unknown,
-  // updateAvatar(file: File): unknown,
-  // updatePassword(oldPassword: string, newPassword: string): unknown,
-  // fetchLoginUserSuccess(user: unknown): unknown,
-  // updateLoginUserSuccess(data: unknown): unknown,
+const actions: AuthReduxActions = {} as AuthReduxActions;
+
+actions.fetchLoginUserSuccess = (user) => (dispatch) => {
+    dispatch(globalRedux.fetchSuccess([{id: 'loginUser', data: user}]));
+}
+
+actions.getLoginUser = () => async (
+    dispatch,
+    _getState,
+    {authService}) => {
+    const user = await authService.getLoginUser();
+    dispatch(actions.fetchLoginUserSuccess(user));
+    return user;
 };
 
-actions.getLoginUser = () => async (dispatch, getState, {authService}) => {
-  const user = await authService.getLoginUser();
-  dispatch(actions.fetchLoginUserSuccess(user));
-  return user;
-};
+actions.loginWithEmail = ({email, password}) =>
+    async (dispatch, _getState, {authService}) => {
+        const user = await authService.loginWithEmail({email, password});
+        dispatch(actions.fetchLoginUserSuccess(user));
 
-actions.loginWithEmail = ({email, password}) => async (dispatch, getState, {authService}) => {
-  const user = await authService.loginWithEmail({email, password});
-  dispatch(actions.fetchLoginUserSuccess(user));
+        if (isAdmin(user)) {
+            dispatch(uiStateRedux.fetchAdminSideBarStatus());
+        }
+        return user;
+    };
 
-  if (isAdmin(user)) {
-    dispatch(uiStateRedux.fetchAdminSideBarStatus());
-  }
+actions.signupWithEmail = ({name, email, password}) =>
+    async (dispatch, _getState, {authService}) => {
+        const user = await authService.signupWithEmail({name, email, password});
+        dispatch(actions.fetchLoginUserSuccess(user));
 
-  return user;
-};
+        if (isAdmin(user)) {
+            dispatch(uiStateRedux.fetchAdminSideBarStatus());
+        }
 
-actions.signupWithEmail = ({name, email, password}) => async (dispatch, getState, {authService}) => {
-  const user = await authService.signupWithEmail({name, email, password});
-  dispatch(actions.fetchLoginUserSuccess(user));
+        return user;
+    };
 
-  if (isAdmin(user)) {
-    dispatch(uiStateRedux.fetchAdminSideBarStatus());
-  }
+actions.logout = () =>
+    async (dispatch, _getState, {authService}) => {
+        await authService.logout();
+        dispatch(actions.fetchLoginUserSuccess(null));
+    };
 
-  return user;
-};
+actions.updateAccountInfo = ({name, email, preferredLanguage}) =>
+    async (dispatch, _getState, {authService}) => {
+        await authService.updateAccountInfo({name, email, preferredLanguage});
+        dispatch(
+            actions.updateLoginUserSuccess({
+                name,
+                email,
+                preferredLanguage,
+            }),
+        );
+    };
+//
+// actions.updateAvatar = (file) =>
+//     async (dispatch, _getState, {authService}) => {
+//     const user = await authService.uploadAvatar(file);
+//     dispatch(
+//         actions.updateLoginUserSuccess({
+//             avatar: user.avatar,
+//         }),
+//     );
+// };
 
-actions.logout = () => async (dispatch, getState, {authService}) => {
-  await authService.logout();
-  dispatch(actions.fetchLoginUserSuccess(null));
-};
+actions.updatePassword = (oldPassword, newPassword) =>
+    async (_dispatch, _getState, {authService}) => {
+        await authService.updatePassword({oldPassword, newPassword});
+    };
 
-actions.updateAccountInfo = ({name, email, preferredLanguage}) => async (dispatch, getState, {authService}) => {
-  await authService.updateAccountInfo({name, email, preferredLanguage});
-  dispatch(
-    actions.updateLoginUserSuccess({
-      name,
-      email,
-      preferredLanguage,
-    }),
-  );
-};
+actions.updateLoginUserSuccess = (data) =>
+    (dispatch, getState) => {
+        const newUserInfo = {
+            ...getState().global?.loginUser,
+            ...data,
+        };
+        dispatch(actions.fetchLoginUserSuccess(newUserInfo));
+    };
 
-actions.updateAvatar = (file) => async (dispatch, getState, {authService}) => {
-  const user = await authService.uploadAvatar(file);
-  dispatch(
-    actions.updateLoginUserSuccess({
-      avatar: user.avatar,
-    }),
-  );
-};
-
-actions.updatePassword = (oldPassword: string, newPassword: string) => async (dispatch, getState, {authService}) => {
-  await authService.updatePassword({oldPassword, newPassword});
-};
-
-actions.fetchLoginUserSuccess = (user) => globalRedux.fetchSuccess({id: 'loginUser', data: user});
-
-actions.updateLoginUserSuccess = (data) => (dispatch, getState) => {
-  const newUserInfo = {
-    ...getState().global.loginUser,
-    ...data,
-  };
-  dispatch(actions.fetchLoginUserSuccess(newUserInfo));
-};
-
-const selectors = {
-  getLoginUser: (state) => _.get(state, 'global.loginUser.data'),
-};
+const selectors: AuthReduxSelectors = {
+    getLoginUser: (state) => _.get(state, 'global.loginUser.data'),
+} as AuthReduxSelectors;
 
 export {actions, selectors};

@@ -1,39 +1,25 @@
 import React from 'react';
 import Link from 'next/link';
 import {DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap';
-import {NextJSContext} from 'next-redux-wrapper';
 import {authService} from '../services';
 // import { isAdmin } from '../models/user'
 import '../scss/admin/index.scss';
-// import {
-//   actions as authActions,
-//   selectors as authSelectors
-// } from '../redux/authRedux'
+import {NextComponentType} from "next";
+import {ExpressReduxNextContext} from "./types";
+import {withRouter} from "next/router";
+import {WithRouterProps} from "next/dist/client/with-router";
 
 /* tslint:disable-next-line:variable-name */
-export const adminOnly = (Content) => {
-  class AdminWrapper extends React.Component {
-    public static async getInitialProps(ctx: NextJSContext) {
-      const {req, res, store, isServer} = ctx;
-
+export const adminOnly = (Content: NextComponentType): NextComponentType => {
+  class AdminWrapper extends React.Component<WithRouterProps> {
+    public static async getInitialProps(ctx: ExpressReduxNextContext) {
+      const {req, isServer} = ctx;
       if (isServer) {
-        authService.setAccessToken(req.cookies.jwt);
-        // const user = await store.dispatch(authActions.getLoginUser())
-
-        // if (!user || !isAdmin(user)) {
-        //   res.redirect('/admin/login')
-        //   res.end()
-        // }
+        authService.setAccessToken(req?.cookies?.jwt);
       } else {
-        // const user = authSelectors.getLoginUser(store.getState())
-        // if (!user || !isAdmin(user)) {
-        //   Router.pushRoute('/admin/login')
-        // }
+        // do nothing
       }
-
-      const composedProps = Content.getInitialProps ? await Content.getInitialProps(ctx) : {};
-
-      return composedProps;
+      return Content.getInitialProps ? Content.getInitialProps(ctx) : {};
     }
 
     public render() {
@@ -139,14 +125,15 @@ export const adminOnly = (Content) => {
     };
 
     public _logout = async () => {
+      const {router} = this.props;
       try {
         await authService.logout();
-        Router.replace('/admin/login');
+        await router.replace('/admin/login');
       } catch (e) {
         toastr.error(e.message);
       }
     };
   }
 
-  return AdminWrapper;
+  return withRouter(AdminWrapper);
 };

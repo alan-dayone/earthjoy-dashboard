@@ -5,11 +5,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "jsx": "preserve",
-    "lib": [
-      "dom",
-      "es2017",
-      "es2018"
-    ],
+    "lib": ["dom", "es2017", "es2018"],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
@@ -26,12 +22,6 @@
     "rootDir": ".",
     "outDir": "build"
   },
-  "exclude": [
-    "build"
-  ],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+  "exclude": ["build"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

@@ -17,7 +17,7 @@ interface NewTextInputPropTypes {
   autoComplete?: boolean;
   max?: number;
   min?: number;
-  onKeyDown?: (e: KeyboardEvent<HTMLInputElement> | KeyboardEvent<HTMLTextAreaElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement> | React.KeyboardEvent<HTMLTextAreaElement>) => void;
 }
 
 const getInput = (props: NewTextInputPropTypes) => {

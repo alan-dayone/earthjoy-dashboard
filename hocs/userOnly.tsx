@@ -1,51 +1,52 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {compose} from 'redux';
+import {connect, ConnectedComponent} from 'react-redux';
+import {AnyAction, compose} from 'redux';
 import Cookies from 'js-cookie';
 import {actions as authRedux, selectors} from '../redux/authRedux';
 import {authService} from '../services/';
-import Router from 'next/router';
-
-interface PropTypes {
-  token: string;
-  router: unknown;
-}
+import {withRouter} from 'next/router';
+import {NextComponentType} from "next";
+import {ExpressReduxNextContext} from "./types";
+import {CommonThunkDispatch, RootState} from "../redux/types";
+import {WithRouterProps} from "next/dist/client/with-router";
+//
+// interface PropTypes {
+//   token: string;
+// }
 
 /* tslint:disable-next-line:variable-name */
-export const userOnly = (Content) => {
-  class UserWrapper extends React.Component<PropTypes> {
-    public static async getInitialProps(context) {
-      const props = {
-        req: context.req,
-        res: context.res,
-        store: context.store,
-        isServer: context.isServer,
-      };
+export const userOnly = (Content: NextComponentType):
+    ConnectedComponent<any, NextComponentType> => {
+  class UserWrapper extends React.Component<any> {
+    public static async getInitialProps(context: ExpressReduxNextContext & WithRouterProps) {
+      const props = context;
       let currentUser = {};
       let token = '';
       const initialProps = Content.getInitialProps ? await Content.getInitialProps(props) : {};
+      const dispatch = context.store?.dispatch as CommonThunkDispatch<AnyAction>;
       if (context.isServer) {
-        if (!context.req.cookies.jwt) {
-          context.res.redirect('/admin/login');
+        if (!context.req?.cookies.jwt) {
+          context.res?.redirect('/admin/login');
           return initialProps;
         }
         authService.setAccessToken(context.req.cookies.jwt);
         token = context.req.cookies.jwt;
-        const user = await context.store.dispatch(authRedux.getLoginUser());
+        const user = await dispatch(authRedux.getLoginUser());
         currentUser = user;
         if (!user) {
-          context.res.redirect('/admin/login');
-          context.res.end();
+          context.res?.redirect('/admin/login');
+          context.res?.end();
         }
       } else {
-        let user = selectors.getLoginUser(context.store.getState());
+        let user = selectors.getLoginUser(context.store?.getState());
         if (!user) {
-          user = await context.store.dispatch(authRedux.getLoginUser());
+          user = await dispatch(authRedux.getLoginUser());
         }
         currentUser = user;
         token = Cookies.get('jwt') || '';
         if (!user) {
-          Router.push('/admin/login');
+          const {router} = context;
+          router.push('/admin/login');
         }
       }
       return {
@@ -57,7 +58,8 @@ export const userOnly = (Content) => {
 
     public componentDidMount() {
       if (!this.props.token) {
-        Router.replace('/admin/login');
+        const {router} = this.props;
+        router.replace('/admin/login');
       }
     }
 
@@ -70,10 +72,10 @@ export const userOnly = (Content) => {
     }
   }
 
-  return composedHoc(UserWrapper);
+  return composedHoc(withRouter(UserWrapper));
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: RootState) => ({
   currentUser: selectors.getLoginUser(state),
 });
 const composedHoc = compose(connect(mapStateToProps));

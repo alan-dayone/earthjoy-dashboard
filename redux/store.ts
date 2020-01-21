@@ -1,21 +1,10 @@
-import {createStore, combineReducers, applyMiddleware, DeepPartial} from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 import {reducer as globalReducer} from './globalRedux';
 import * as services from '../services';
+import {InitialRootState, RootState} from "./types";
 
-export interface TInitialState {
-  global: {
-    loginUser: {
-      id: string;
-      data: object | null;
-    };
-    uiState: {
-      id: string;
-      data: object | null;
-    };
-  };
-}
-const DEFAULT_INITIAL_STATE: DeepPartial<TInitialState> = {
+const DEFAULT_INITIAL_STATE: RootState = {
   global: {
     loginUser: {
       id: 'loginUser',
@@ -23,12 +12,14 @@ const DEFAULT_INITIAL_STATE: DeepPartial<TInitialState> = {
     },
     uiState: {
       id: 'uiState',
-      data: {},
+      data: {
+        showAdminSideBar: false
+      },
     },
   },
 };
 
-export const makeStore = (initialState: object) => {
+export const makeStore = (initialState: InitialRootState) => {
   return createStore(
     combineReducers({
       global: globalReducer,
