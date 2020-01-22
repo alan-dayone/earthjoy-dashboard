@@ -5,6 +5,10 @@ import classnames from 'classnames';
 import toastr from 'toastr';
 import {systemService} from '../../../services';
 import {actions as authActions} from '../../../redux/authRedux';
+import {CommonThunkDispatch} from '../../../redux/types';
+import {AnyAction} from 'redux';
+import {WithRouterProps} from 'next/dist/client/with-router';
+import {withRouter} from 'next/router';
 
 const formSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
@@ -16,7 +20,11 @@ const formSchema = yup.object().shape({
   confirmPassword: yup.string().required('Confirm password is required'),
 });
 
-export class CreateFirstAdminForm extends Component {
+interface Props {
+  correctSystemInitPassword: string;
+  dispatch?: CommonThunkDispatch<AnyAction>;
+}
+class InnerCreateFirstAdminForm extends Component<Props & WithRouterProps> {
   public render() {
     return (
       <div>
@@ -30,7 +38,9 @@ export class CreateFirstAdminForm extends Component {
             confirmPassword: '',
           }}
           validate={(values) => {
-            const errors = {};
+            const errors = {
+              confirmPassword: '',
+            };
             if (values.password !== values.confirmPassword) {
               errors.confirmPassword = 'Password and confirm password must match';
             }
@@ -49,16 +59,18 @@ export class CreateFirstAdminForm extends Component {
                 },
               });
 
-              await dispatch(
-                authActions.loginWithEmail({
-                  email: values.email,
-                  password: values.password,
-                }),
-              );
+              if (dispatch) {
+                await dispatch(
+                  authActions.loginWithEmail({
+                    email: values.email,
+                    password: values.password,
+                  }),
+                );
+              }
 
               setSubmitting(false);
 
-              router.replaceRoute('/admin');
+              router.replace('/admin');
             } catch (e) {
               setSubmitting(false);
               toastr.error(e.message);
@@ -150,3 +162,4 @@ export class CreateFirstAdminForm extends Component {
     );
   }
 }
+export default withRouter(InnerCreateFirstAdminForm);

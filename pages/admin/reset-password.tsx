@@ -1,6 +1,6 @@
 /* tslint:disable:no-default-export */
 import React, {Component} from 'react';
-import Router from 'next/router';
+import {withRouter} from 'next/router';
 import Error from 'next/error';
 import Head from 'next/head';
 import toastr from 'toastr';
@@ -8,15 +8,25 @@ import classnames from 'classnames';
 import {Formik, FormikActions} from 'formik';
 import {guestOnly} from '../../hocs';
 import {authService} from '../../services';
+import {ExpressReduxNextContext} from '../../hocs/types';
+import {WithRouterProps} from 'next/dist/client/with-router';
+import {compose} from 'redux';
 
 interface ResetPasswordForm {
-  newPassword?: string;
-  confirmPassword?: string;
+  newPassword: string;
+  confirmPassword: string;
   notMatch?: string;
 }
 
-class AdminResetPasswordPage extends Component {
-  public static async getInitialProps(ctx) {
+interface ResetPasswordValidatorMessage {
+  notMatch?: string;
+}
+interface Props {
+  token: string;
+}
+
+class AdminResetPasswordPage extends Component<Props & WithRouterProps> {
+  public static async getInitialProps(ctx: ExpressReduxNextContext) {
     const token = ctx.query.token;
 
     console.log({token});
@@ -49,7 +59,10 @@ class AdminResetPasswordPage extends Component {
                       }}
                       onSubmit={this._handleResetPassword}
                       validate={(values) => {
-                        const errors: ResetPasswordForm = {};
+                        const errors: ResetPasswordForm & ResetPasswordValidatorMessage = {
+                          newPassword: '',
+                          confirmPassword: '',
+                        };
                         if (values.newPassword === '') {
                           errors.newPassword = 'New password is required';
                         } else if (values.confirmPassword === '') {
@@ -139,7 +152,9 @@ class AdminResetPasswordPage extends Component {
 
       await authService.changePassword(body, accessToken);
       toastr.success('Success!');
-      Router.replace('/admin/login');
+
+      const {router} = this.props;
+      await router.replace('/admin/login');
     } catch (e) {
       toastr.error(e.message);
     } finally {
@@ -148,4 +163,4 @@ class AdminResetPasswordPage extends Component {
   };
 }
 
-export default guestOnly(AdminResetPasswordPage, {useAdminLayout: true});
+export default compose(withRouter, guestOnly)(AdminResetPasswordPage, {useAdminLayout: true});

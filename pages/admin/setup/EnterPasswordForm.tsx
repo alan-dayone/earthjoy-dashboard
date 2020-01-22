@@ -3,7 +3,10 @@ import {Formik} from 'formik';
 import toastr from 'toastr';
 import {systemService} from '../../../services';
 
-export class EnterPasswordForm extends Component {
+interface Props {
+  onSuccess: (...payload: any[]) => any;
+}
+export default class EnterPasswordForm extends Component<Props> {
   public render() {
     return (
       <div>
@@ -14,7 +17,9 @@ export class EnterPasswordForm extends Component {
         <Formik
           initialValues={{password: ''}}
           validate={(values) => {
-            const errors = {};
+            const errors = {
+              password: '',
+            };
 
             if (values.password === '') {
               errors.password = 'Required';

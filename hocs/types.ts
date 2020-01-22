@@ -5,6 +5,6 @@ import {Store} from 'redux';
 export interface ExpressReduxNextContext extends NextPageContext {
   req?: express.Request;
   res?: express.Response;
-  store?: Store;
+  store: Store;
   isServer?: boolean;
 }

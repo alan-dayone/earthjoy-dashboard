@@ -14,6 +14,7 @@
     ],
     "member-access": true,
     "no-any": false,
-    "interface-over-type-literal": false
+    "interface-over-type-literal": false,
+    "no-default-export": false
   }
 }

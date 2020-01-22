@@ -43,7 +43,12 @@ const modal = (props: ModalProps) => {
             className={`btn__container justify-content-center
               `}>
             {isShowSubmit && (
-              <Button type="primary" size="normal" onClick={onSubmit} isDisabled={isDisabled} className="text__white">
+              <Button
+                type="primary"
+                size="normal"
+                onClick={onSubmit || (() => {})}
+                isDisabled={isDisabled}
+                className="text__white">
                 {submitLabel || 'Ok'}
               </Button>
             )}

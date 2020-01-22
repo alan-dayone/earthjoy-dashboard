@@ -1,5 +1,5 @@
 import {BaseService} from './BaseService';
-import {ConfigurationModel, SystemGateway} from '../gateways/SystemGateway';
+import {ConfigurationData, SystemGateway} from '../gateways/SystemGateway';
 import {ConfigurationKey, MailSmtpSettings} from '../domain/models/Configuration';
 import {ServiceContext} from './index';
 
@@ -25,12 +25,16 @@ export class SystemService extends BaseService {
     await this.systemGateway.initSystem(body);
   }
 
+  public async testSmtpConnection(values: any) {
+    return values;
+  }
+
   public async saveSmtpSettings(smtpSettings: MailSmtpSettings): Promise<void> {
     await this.systemGateway.updateSystemConfiguration(ConfigurationKey.MAIL_SMTP_SETTINGS, smtpSettings);
   }
 
-  public async getSmtpSettings(): Promise<ConfigurationModel | null> {
+  public async getSmtpSettings(): Promise<ConfigurationData | null> {
     const smtpConfig = await this.systemGateway.getConfiguration(ConfigurationKey.MAIL_SMTP_SETTINGS);
-    return smtpConfig?.data;
+    return smtpConfig?.data || null;
   }
 }

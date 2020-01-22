@@ -2,13 +2,15 @@
 import React from 'react';
 import {compose} from 'redux';
 import {Provider} from 'react-redux';
-import App, {AppProps, NextAppContext} from 'next/app';
+import App from 'next/app';
 import withRedux, {AppProps as NextReduxAppProps} from 'next-redux-wrapper';
 import {nprogress} from '../hocs';
 import {makeStore} from '../redux/store';
+import {AppContext} from 'next/dist/pages/_app';
 
-class ComposedApp extends App<AppProps & NextReduxAppProps> {
-  public static async getInitialProps({Component, ctx}: NextAppContext) {
+class ComposedApp extends App<NextReduxAppProps> {
+  public static async getInitialProps(context: AppContext) {
+    const {Component, ctx} = context;
     const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
     return {pageProps};
   }

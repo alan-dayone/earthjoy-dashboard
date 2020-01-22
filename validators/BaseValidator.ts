@@ -2,7 +2,7 @@ import _ from 'lodash';
 import validateJs from 'validate.js';
 import {ValidationError} from '../errors/ValidationError';
 
-export function validate(data, baseSpec) {
+export function validate(data: any, baseSpec: any) {
   const validationSpec = _.pick(baseSpec, Object.keys(data));
   const error = validateJs(data, validationSpec, {format: 'grouped'});
   if (error) {

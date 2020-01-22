@@ -1,5 +1,5 @@
 /* tslint:disable:no-default-export */
-import React, {Component} from 'react';
+import React from 'react';
 // import Router from 'next/router';
 import Head from 'next/head';
 import toastr from 'toastr';
@@ -16,7 +16,7 @@ interface State {
   isSendMail: boolean;
 }
 
-class AdminForgotPasswordPage extends Component<state> {
+class AdminForgotPasswordPage extends React.Component<any, State> {
   public state: State = {
     isSendMail: false,
   };
@@ -39,7 +39,7 @@ class AdminForgotPasswordPage extends Component<state> {
                       }}
                       onSubmit={this._handleForgotPassword}
                       validate={(values) => {
-                        const errors = {};
+                        const errors = {email: ''};
                         const regEmail = new RegExp(
                           '^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@' +
                             '[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$',

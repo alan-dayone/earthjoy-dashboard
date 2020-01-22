@@ -10,7 +10,7 @@
     "lint": "npm run prettier:check && gts check",
     "lint:fix": "gts fix && npm run prettier:fix",
     "test": "echo \"Need to write test\"",
-    "prebuild": "npm run lint && npm run test && npm run clean",
+    "prebuild": "npm run lint:fix && npm run test && npm run clean",
     "build": "npm run build:server && npm run build:client && npm run build:bundle",
     "build:server": "tsc -p tsconfig-server.json && cp {package,package-lock}.json build",
     "build:client": "next build && cp -R .next build && cp -R static build/static",

@@ -6,8 +6,9 @@ import toastr from 'toastr';
 import {adminOnly} from '../../../hocs';
 import {systemService} from '../../../services';
 import {MailSmtpSettings} from '../../../domain/models/Configuration';
+import {NextComponentType, NextPageContext} from 'next';
 
-class AdminSmtpSettingsPage extends Component {
+class AdminSmtpSettingsPage extends Component<{initialSmtpSettings: MailSmtpSettings}> {
   public state = {
     isTestingConnection: false,
   };
@@ -203,4 +204,4 @@ class AdminSmtpSettingsPage extends Component {
   };
 }
 
-export default adminOnly(AdminSmtpSettingsPage);
+export default adminOnly(AdminSmtpSettingsPage as NextComponentType<NextPageContext, any, any>);
