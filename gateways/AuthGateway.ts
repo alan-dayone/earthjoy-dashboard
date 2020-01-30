@@ -21,13 +21,13 @@ export class AuthGateway {
   }
 
   public async loginWithEmail(body: {email: string; password: string}) {
-    const {data} = await this.restConnector.post('/users/login', body);
+    const {data} = await this.restConnector.post('/accounts/login', body);
     return data;
   }
 
   public async create(body: {email: string; password: string}) {
     try {
-      await this.restConnector.post('/users', body);
+      await this.restConnector.post('/accounts', body);
       return this.loginWithEmail(body);
     } catch (e) {
       switch (_.get(e, 'response.data.error.code')) {
@@ -47,7 +47,7 @@ export class AuthGateway {
 
   public async getLoginUser() {
     try {
-      const resp = await this.restConnector.get('/users');
+      const resp = await this.restConnector.get('/accounts');
       return resp.data;
     } catch (e) {
       return null;
@@ -56,7 +56,7 @@ export class AuthGateway {
 
   public async logout() {
     try {
-      await this.restConnector.post('/users/logout', {});
+      await this.restConnector.post('/accounts/logout', {});
     } catch (e) {
       console.warn('Failed to call logout api, but cookie in browser will be cleared so user is still logged out', e);
     }
@@ -65,7 +65,7 @@ export class AuthGateway {
 
   public async sendResetPasswordEmail(email: string) {
     try {
-      await this.restConnector.post('/users/reset', {email});
+      await this.restConnector.post('/accounts/reset', {email});
     } catch (e) {
       const errResp = _.get(e, 'response.data.error', e);
       switch (errResp.code) {
@@ -81,7 +81,7 @@ export class AuthGateway {
 
   public async updateAccountInfo(body: {name: string; email: string; preferredLanguage: string}) {
     try {
-      await this.restConnector.patch(`/users/me`, body);
+      await this.restConnector.patch(`/accounts/me`, body);
     } catch (e) {
       const errResp = _.get(e, 'response.data.error', e);
       switch (errResp.name) {
@@ -100,7 +100,7 @@ export class AuthGateway {
 
   public async updatePassword(body: {oldPassword: string; newPassword: string}) {
     try {
-      await this.restConnector.post('/users/change-password', body);
+      await this.restConnector.post('/accounts/change-password', body);
     } catch (e) {
       console.log(e.response);
       const err = _.get(e, 'response.data.error', e);
@@ -116,7 +116,7 @@ export class AuthGateway {
   public async setNewPassword(body: {userId: string; newPassword: string}, accessToken: string) {
     const {userId, newPassword} = body;
     try {
-      await this.restConnector.post(`/users/reset-password?access_token=${accessToken}`, {id: userId, newPassword});
+      await this.restConnector.post(`/accounts/reset-password?access_token=${accessToken}`, {id: userId, newPassword});
     } catch (e) {
       const err = _.get(e, 'response.data.error', e);
 
@@ -130,7 +130,7 @@ export class AuthGateway {
   }
 
   public async updateAvatar(avatar: string) {
-    return this.restConnector.patch(`/users/me`, {avatar}).then((resp) => resp.data);
+    return this.restConnector.patch(`/accounts/me`, {avatar}).then((resp) => resp.data);
   }
 
   public setAccessToken(accessToken: string) {
@@ -138,13 +138,13 @@ export class AuthGateway {
   }
 
   public async forgotPassword(email: string) {
-    return this.restConnector.post('/users/reset-password', {email});
+    return this.restConnector.post('/accounts/reset-password', {email});
   }
 
   public async changePassword(body: {newPassword: string; newPasswordConfirm: string}, accessToken: string) {
     const {newPassword, newPasswordConfirm} = body;
     this.restConnector.setAccessToken(accessToken);
-    return this.restConnector.post(`/users/change-password?=${accessToken}`, {
+    return this.restConnector.post(`/accounts/change-password?=${accessToken}`, {
       newPassword,
       newPasswordConfirm,
     });
