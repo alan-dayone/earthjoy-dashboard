@@ -11,6 +11,7 @@ export default class AppDocument extends Document {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" type="image/png" href="/static/icons/favicon.png" />
           <link href="https://unpkg.com/nprogress@0.2.0/nprogress.css" rel="stylesheet" type="text/css" />
+          <link rel="stylesheet" href="https://unpkg.com/@coreui/icons@1.0.0/css/all.min.css"></link>
         </Head>
         <body>
           <Main />
