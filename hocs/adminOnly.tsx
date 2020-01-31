@@ -1,21 +1,30 @@
 import React from 'react';
+import {AnyAction} from 'redux';
 import Link from 'next/link';
 import {DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap';
-import {authService} from '../services';
-// import { isAdmin } from '../models/user'
-import '../scss/admin/index.scss';
 import {NextComponentType} from 'next';
-import {ExpressReduxNextContext} from './types';
 import {withRouter} from 'next/router';
 import {WithRouterProps} from 'next/dist/client/with-router';
+import {ExpressReduxNextContext} from './types';
+import {authService} from '../services';
+// import { isAdmin } from '../models/user'
+import {CommonThunkDispatch} from '../redux/types';
+import {actions as authRedux} from '../redux/authRedux';
+import '../scss/admin/index.scss';
 
 /* tslint:disable-next-line:variable-name */
 export const adminOnly = (Content: NextComponentType): NextComponentType => {
   class AdminWrapper extends React.Component<WithRouterProps> {
     public static async getInitialProps(ctx: ExpressReduxNextContext) {
-      const {req, isServer} = ctx;
+      const {req, res, isServer} = ctx;
+      const dispatch = ctx.store?.dispatch as CommonThunkDispatch<AnyAction>;
       if (isServer) {
         authService.setAccessToken(req?.cookies?.jwt);
+        const user = await dispatch(authRedux.getLoginUser());
+        if (!user) {
+          res?.redirect('/admin/login');
+          res?.end();
+        }
       } else {
         // do nothing
       }
