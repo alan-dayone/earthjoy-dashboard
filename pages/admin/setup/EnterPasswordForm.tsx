@@ -6,6 +6,11 @@ import {systemService} from '../../../services';
 interface Props {
   onSuccess: (...payload: any[]) => any;
 }
+
+interface ValidationError {
+  password?: string
+}
+
 export default class EnterPasswordForm extends Component<Props> {
   public render() {
     return (
@@ -16,10 +21,8 @@ export default class EnterPasswordForm extends Component<Props> {
         </p>
         <Formik
           initialValues={{password: ''}}
-          validate={(values) => {
-            const errors = {
-              password: '',
-            };
+          validate={(values): ValidationError => {
+            const errors = {} as ValidationError;
 
             if (values.password === '') {
               errors.password = 'Required';

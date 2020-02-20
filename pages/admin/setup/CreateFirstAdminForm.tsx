@@ -37,15 +37,15 @@ class InnerCreateFirstAdminForm extends Component<Props & WithRouterProps> {
             password: '',
             confirmPassword: '',
           }}
-          validate={(values) => {
-            const errors = {
-              confirmPassword: '',
-            };
-            if (values.password !== values.confirmPassword) {
-              errors.confirmPassword = 'Password and confirm password must match';
-            }
-            return errors;
-          }}
+          // validate={(values) => {
+          //   const errors = {
+          //     confirmPassword: '',
+          //   };
+          //   if (values.password !== values.confirmPassword) {
+          //     errors.confirmPassword = 'Password and confirm password must match';
+          //   }
+          //   return errors;
+          // }}
           validationSchema={formSchema}
           onSubmit={async (values, {setSubmitting}) => {
             setSubmitting(true);

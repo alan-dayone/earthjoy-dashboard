@@ -101,6 +101,14 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
                 </a>
               </Link>
             </li>
+            <li className="c-sidebar-nav-item">
+              <Link href="/admin/account-management">
+                <a className="c-sidebar-nav-link">
+                  <i className="c-sidebar-nav-icon cil-speedometer" />
+                  Accounts
+                </a>
+              </Link>
+            </li>
             <li className="c-sidebar-nav-title">EMAIL</li>
             <li className="c-sidebar-nav-item">
               <Link href="/admin/configurations/smtp-settings">

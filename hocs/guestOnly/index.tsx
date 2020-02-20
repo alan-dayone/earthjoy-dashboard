@@ -28,7 +28,7 @@ export const guestOnly = (
           if (user) {
             context.res?.redirect('/');
             context.res?.end();
-            return;
+            return {};
           }
         }
       } else {
@@ -36,7 +36,7 @@ export const guestOnly = (
 
         if (user) {
           Router.replace('/');
-          return;
+          return {};
         }
       }
 
