@@ -1,9 +1,11 @@
 /* tslint:disable:no-default-export */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Head from 'next/head';
-import {adminOnly} from '../../hocs';
+import classNames from 'classnames';
+import {usePagination, useTable} from 'react-table';
 import {NextComponentType, NextPageContext} from 'next';
-import {useSortBy, useTable} from 'react-table'
+import {adminOnly} from '../../hocs';
+import {accountService} from "../../services";
 
 const columns = [
   {
@@ -35,34 +37,39 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    id: 'id abcafsdaf',
-    firstName: 'first name',
-    lastName: 'last name',
-    email: 'haotang.io@gmail.com',
-    emailVerified: 'true',
-    status: 'single',
-  },
-];
-
-// TODO: Declare props for FC
 function AccountManagementPage() {
+  const [data, setData] = useState([]);
+
   const {
     getTableProps,
     getTableBodyProps,
     headers,
-    rows,
+    page,
     prepareRow,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    state: {pageIndex}
   } = useTable(
     {
       columns,
       data,
+      initialState: {pageIndex: 0, pageSize: 10},
     },
-    useSortBy
+    usePagination,
   );
 
-  const firstPageRows = rows.slice(0, 20);
+  const tableBodyProps = {...getTableBodyProps()};
+
+  // Call api to fetch data
+  useEffect(() => {(async () => {
+    const accounts = await accountService.findAccountsForAdmin(pageIndex);
+    setData(accounts);
+  })()}, [pageIndex]);
 
   return (
     <div id="admin-account-management-page">
@@ -79,28 +86,80 @@ function AccountManagementPage() {
               <table className="table table-responsive-sm" {...getTableProps()}>
                 <thead>
                 <tr>
-                  {headers.map(header => (
+                  {headers.map((header) => (
                     <th>{header.render('Header')}</th>
                   ))}
                 </tr>
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                {firstPageRows.map(
-                  (row, i) => {
+                  {page.map((row, i) => {
                     prepareRow(row);
                     return (
                       <tr {...row.getRowProps()}>
-                        {row.cells.map(cell => {
-                          return (
-                            <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                          )
+                        {row.cells.map((cell) => {
+                          return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
                         })}
                       </tr>
-                    )
-                  }
-                )}
+                    );
+                  })}
                 </tbody>
               </table>
+              <div className="row">
+                <div className="col-6">
+                  <span>
+                    Page{' '}
+                    <strong>
+                    {pageIndex + 1} of {pageOptions.length}
+                  </strong>
+                  </span>
+                  {' '}|{' '}
+                  <span>
+                    Go to page:{' '}
+                    <input
+                      type="number"
+                      className="form-control d-inline-block"
+                      defaultValue={pageIndex + 1}
+                      onChange={e => {
+                        const page = e.target.value ? Number(e.target.value) - 1 : 0
+                        gotoPage(page)
+                      }}
+                      style={{width: '100px'}}
+                    />
+                  </span>
+                </div>
+                <div className="col-6">
+                  <ul className="pagination justify-content-end">
+                    <li
+                      className={classNames('page-item', {disabled: !canPreviousPage})}
+                      onClick={() => gotoPage(0)}
+                    >
+                      <a className="page-link" href="#">
+                        {'<<'}
+                      </a>
+                    </li>
+                    <li
+                      className={classNames('page-item', {disabled: !canPreviousPage})}
+                      onClick={() => previousPage()}
+                    >
+                      <a className="page-link" href="#">{'<'}</a>
+                    </li>
+                    <li
+                      className={classNames('page-item', {disabled: !canNextPage})}
+                      onClick={() => nextPage()}
+                    >
+                      <a className="page-link" href="#">
+                        {'>'}
+                      </a>
+                    </li>
+                    <li
+                      className={classNames('page-item', {disabled: !canNextPage})}
+                      onClick={() => gotoPage(pageCount - 1)}
+                    >
+                      <a className="page-link" href="#">{'>>'}</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>

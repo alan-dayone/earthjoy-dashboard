@@ -8,7 +8,7 @@ interface Props {
 }
 
 interface ValidationError {
-  password?: string
+  password?: string;
 }
 
 export default class EnterPasswordForm extends Component<Props> {
