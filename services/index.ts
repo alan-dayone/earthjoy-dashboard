@@ -6,8 +6,8 @@ import {PubsubGateway} from '../gateways/PubsubGateway';
 import {SystemGateway} from '../gateways/SystemGateway';
 import {create as createRestConnector} from '../connectors/RestConnector';
 import {create as createPubsubConnector} from '../connectors/PubsubConnector';
-import {AccountGateway} from "../gateways/AccountGateway";
-import {AccountService} from "./AccountService";
+import {AccountGateway} from '../gateways/AccountGateway';
+import {AccountService} from './AccountService';
 
 const {publicRuntimeConfig} = getConfig();
 

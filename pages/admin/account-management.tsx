@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import {usePagination, useTable} from 'react-table';
 import {NextComponentType, NextPageContext} from 'next';
 import {adminOnly} from '../../hocs';
-import {accountService} from "../../services";
+import {accountService} from '../../services';
 
 const columns = [
   {
@@ -53,7 +53,7 @@ function AccountManagementPage() {
     gotoPage,
     nextPage,
     previousPage,
-    state: {pageIndex}
+    state: {pageIndex},
   } = useTable(
     {
       columns,
@@ -66,10 +66,12 @@ function AccountManagementPage() {
   const tableBodyProps = {...getTableBodyProps()};
 
   // Call api to fetch data
-  useEffect(() => {(async () => {
-    const accounts = await accountService.findAccountsForAdmin(pageIndex);
-    setData(accounts);
-  })()}, [pageIndex]);
+  useEffect(() => {
+    (async () => {
+      const accounts = await accountService.findAccountsForAdmin(pageIndex);
+      setData(accounts);
+    })();
+  }, [pageIndex]);
 
   return (
     <div id="admin-account-management-page">
@@ -85,11 +87,11 @@ function AccountManagementPage() {
             <div className="card-body">
               <table className="table table-responsive-sm" {...getTableProps()}>
                 <thead>
-                <tr>
-                  {headers.map((header) => (
-                    <th>{header.render('Header')}</th>
-                  ))}
-                </tr>
+                  <tr>
+                    {headers.map((header) => (
+                      <th>{header.render('Header')}</th>
+                    ))}
+                  </tr>
                 </thead>
                 <tbody {...getTableBodyProps()}>
                   {page.map((row, i) => {
@@ -109,19 +111,19 @@ function AccountManagementPage() {
                   <span>
                     Page{' '}
                     <strong>
-                    {pageIndex + 1} of {pageOptions.length}
-                  </strong>
-                  </span>
-                  {' '}|{' '}
+                      {pageIndex + 1} of {pageOptions.length}
+                    </strong>
+                  </span>{' '}
+                  |{' '}
                   <span>
                     Go to page:{' '}
                     <input
                       type="number"
                       className="form-control d-inline-block"
                       defaultValue={pageIndex + 1}
-                      onChange={e => {
-                        const page = e.target.value ? Number(e.target.value) - 1 : 0
-                        gotoPage(page)
+                      onChange={(e) => {
+                        const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                        gotoPage(page);
                       }}
                       style={{width: '100px'}}
                     />
@@ -129,33 +131,29 @@ function AccountManagementPage() {
                 </div>
                 <div className="col-6">
                   <ul className="pagination justify-content-end">
-                    <li
-                      className={classNames('page-item', {disabled: !canPreviousPage})}
-                      onClick={() => gotoPage(0)}
-                    >
+                    <li className={classNames('page-item', {disabled: !canPreviousPage})} onClick={() => gotoPage(0)}>
                       <a className="page-link" href="#">
                         {'<<'}
                       </a>
                     </li>
                     <li
                       className={classNames('page-item', {disabled: !canPreviousPage})}
-                      onClick={() => previousPage()}
-                    >
-                      <a className="page-link" href="#">{'<'}</a>
+                      onClick={() => previousPage()}>
+                      <a className="page-link" href="#">
+                        {'<'}
+                      </a>
                     </li>
-                    <li
-                      className={classNames('page-item', {disabled: !canNextPage})}
-                      onClick={() => nextPage()}
-                    >
+                    <li className={classNames('page-item', {disabled: !canNextPage})} onClick={() => nextPage()}>
                       <a className="page-link" href="#">
                         {'>'}
                       </a>
                     </li>
                     <li
                       className={classNames('page-item', {disabled: !canNextPage})}
-                      onClick={() => gotoPage(pageCount - 1)}
-                    >
-                      <a className="page-link" href="#">{'>>'}</a>
+                      onClick={() => gotoPage(pageCount - 1)}>
+                      <a className="page-link" href="#">
+                        {'>>'}
+                      </a>
                     </li>
                   </ul>
                 </div>
