@@ -1,12 +1,10 @@
-import {BaseService} from './BaseService';
 import {ServiceContext} from './index';
 import {AccountGateway} from '../gateways/AccountGateway';
 
-export class AccountService extends BaseService {
+export class AccountService {
   protected accountGateway: AccountGateway;
 
   constructor(options: ServiceContext) {
-    super(options);
     this.accountGateway = options.accountGateway;
   }
 

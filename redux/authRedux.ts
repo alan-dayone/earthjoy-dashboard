@@ -23,6 +23,7 @@ actions.loginWithEmail = ({email, password}) => async (dispatch, _getState, {aut
   if (isAdmin(user)) {
     dispatch(uiStateRedux.fetchAdminSideBarStatus());
   }
+
   return user;
 };
 

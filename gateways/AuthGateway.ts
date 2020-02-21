@@ -46,12 +46,12 @@ export class AuthGateway {
   }
 
   public async getLoginUser() {
-    try {
-      const resp = await this.restConnector.get('/accounts');
-      return resp.data;
-    } catch (e) {
+    if (!this.restConnector.jwt) {
       return null;
     }
+
+    const resp = await this.restConnector.get('/accounts/me');
+    return resp.data;
   }
 
   public async logout() {
@@ -127,10 +127,6 @@ export class AuthGateway {
           throw err;
       }
     }
-  }
-
-  public async updateAvatar(avatar: string) {
-    return this.restConnector.patch(`/accounts/me`, {avatar}).then((resp) => resp.data);
   }
 
   public setAccessToken(accessToken: string) {

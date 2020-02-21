@@ -18,18 +18,13 @@ export const guestOnly = (
   class GuestWrapper extends React.Component<any, any> {
     public static async getInitialProps(context: ExpressReduxNextContext) {
       if (context.isServer) {
-        const jwt = context.req?.cookies.jwt;
+        const dispatch = context.store?.dispatch as CommonThunkDispatch<AnyAction>;
+        const user = await dispatch(authRedux.getLoginUser());
 
-        if (jwt) {
-          authService.setAccessToken(jwt);
-          const dispatch = context.store?.dispatch as CommonThunkDispatch<AnyAction>;
-          const user = await dispatch(authRedux.getLoginUser());
-
-          if (user) {
-            context.res?.redirect('/');
-            context.res?.end();
-            return {};
-          }
+        if (user) {
+          context.res?.redirect('/');
+          context.res?.end();
+          return {};
         }
       } else {
         const user = selectors.getLoginUser(context.store?.getState());

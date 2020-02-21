@@ -1,13 +1,11 @@
-import {BaseService} from './BaseService';
 import {ConfigurationData, SystemGateway} from '../gateways/SystemGateway';
 import {ConfigurationKey, MailSmtpSettings} from '../domain/models/Configuration';
 import {ServiceContext} from './index';
 
-export class SystemService extends BaseService {
-  protected systemGateway: SystemGateway;
+export class SystemService {
+  private systemGateway: SystemGateway;
 
   constructor(options: ServiceContext) {
-    super(options);
     this.systemGateway = options.systemGateway;
   }
 

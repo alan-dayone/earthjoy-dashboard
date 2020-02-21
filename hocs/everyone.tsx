@@ -21,11 +21,7 @@ export const everyone = (Content: React.ElementType) => {
         <header className="app-navbar navbar navbar-expand navbar-dark">
           <div className="navbar-nav-scroll">
             <ul className="navbar-nav bd-navbar-nav">
-              <li className="nav-item">
-                {/*<Link route="/admin/login">*/}
-                {/*  <a className="nav-link active">common:home</a>*/}
-                {/*</Link>*/}
-              </li>
+              <li className="nav-item"></li>
             </ul>
           </div>
         </header>

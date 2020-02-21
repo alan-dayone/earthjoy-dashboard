@@ -1,5 +1,10 @@
+enum Role {
+  ROOT_ADMIN = 'root_admin',
+  USER = 'user',
+}
+
 export const isAdmin = (user: any) => {
-  return user.role === 'admin';
+  return user.role === Role.ROOT_ADMIN;
 };
 
 export const constraint = {

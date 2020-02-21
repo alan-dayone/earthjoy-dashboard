@@ -1,7 +1,8 @@
-import {BaseService} from './BaseService';
 import {validateUser} from '../validators/UserValidator';
+import {AuthGateway} from '../gateways/AuthGateway';
+import {ServiceContext} from './index';
 
-export class AuthService extends BaseService {
+export class AuthService {
   public static error = {
     LOGIN_FAILED: 'LOGIN_FAILED',
     EMAIL_NOT_FOUND: 'EMAIL_NOT_FOUND',
@@ -16,19 +17,16 @@ export class AuthService extends BaseService {
     USER_LOGOUT: 'USER_LOGOUT',
   };
 
+  private authGateway: AuthGateway;
+
+  constructor(options: ServiceContext) {
+    this.authGateway = options.authGateway;
+  }
+
   public async loginWithEmail(body: {email: string; password: string}) {
-    // Login user to get access token.
     const {token} = await this.authGateway.loginWithEmail(body);
-
-    // Store access token on browser.
     this.authGateway.storeAccessToken(token);
-
-    const user = await this.getLoginUser();
-
-    // Emit login event so other services can listen to.
-    this.emit(AuthService.event.USER_LOGIN, {type: 'email', user});
-
-    return user;
+    return this.getLoginUser();
   }
 
   public async getLoginUser() {
@@ -37,16 +35,11 @@ export class AuthService extends BaseService {
 
   public async signupWithEmail(body: {name: string; email: string; password: string}) {
     validateUser(body);
-
-    const user = await this.authGateway.create(body);
-    this.emit(AuthService.event.USER_SIGNUP, {type: body.email, user});
-
-    return this.loginWithEmail(body);
+    return this.authGateway.create(body);
   }
 
   public async logout() {
     await this.authGateway.logout();
-    this.emit(AuthService.event.USER_LOGOUT);
   }
 
   public async sendResetPasswordEmail(email: string) {

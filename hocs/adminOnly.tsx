@@ -7,9 +7,9 @@ import {withRouter} from 'next/router';
 import {WithRouterProps} from 'next/dist/client/with-router';
 import {ExpressReduxNextContext} from './types';
 import {authService} from '../services';
-// import { isAdmin } from '../models/user'
 import {CommonThunkDispatch} from '../redux/types';
 import {actions as authRedux} from '../redux/authRedux';
+import {isAdmin} from '../models/User';
 import '../scss/admin/index.scss';
 
 /* tslint:disable-next-line:variable-name */
@@ -18,16 +18,20 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
     public static async getInitialProps(ctx: ExpressReduxNextContext) {
       const {req, res, isServer} = ctx;
       const dispatch = ctx.store?.dispatch as CommonThunkDispatch<AnyAction>;
+
       if (isServer) {
         authService.setAccessToken(req?.cookies?.jwt);
         const user = await dispatch(authRedux.getLoginUser());
+
         if (!user) {
-          res?.redirect('/admin/login');
-          res?.end();
+          res.redirect('/admin/login');
+          res.end();
+        } else if (!isAdmin(user)) {
+          res.redirect('/');
+          res.end();
         }
-      } else {
-        // do nothing
       }
+
       return Content.getInitialProps ? Content.getInitialProps(ctx) : {};
     }
 

@@ -88,8 +88,8 @@ function AccountManagementPage() {
               <table className="table table-responsive-sm" {...getTableProps()}>
                 <thead>
                   <tr>
-                    {headers.map((header) => (
-                      <th>{header.render('Header')}</th>
+                    {headers.map((header, index) => (
+                      <th key={`th ${index}`}>{header.render('Header')}</th>
                     ))}
                   </tr>
                 </thead>

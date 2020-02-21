@@ -1,48 +1,55 @@
-import axios from 'axios';
+import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
 import Cookies from 'js-cookie';
-import {ApplicationError} from '../errors/ApplicationError';
-import {AxiosInstance} from 'axios';
 
-export interface RestConnector extends AxiosInstance {
-  setAccessToken(token: string): void;
-  removeAccessToken(): void;
-}
+export class RestConnector {
+  public jwt: string;
+  private axios: AxiosInstance;
 
-export function create({baseUrl}: {baseUrl: string}): RestConnector {
-  const instance: RestConnector = axios.create({
-    baseURL: baseUrl,
-  }) as RestConnector;
+  constructor(baseUrl) {
+    this.axios = axios.create({baseURL: baseUrl});
+  }
 
-  instance.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (err) => {
-      if (err.message === 'Network Error') {
-        err.code = ApplicationError.name;
-        err.message = 'errNetwork';
-      }
-      return Promise.reject(err);
-    },
-  );
+  public get(url: string, config?: AxiosRequestConfig) {
+    return this.axios.get(url, config);
+  }
 
-  /**
-   * On browser, restConnector (axios) doesn't need to care about jwt anymore as we hacked around to let server set
-   * jwt to browser on successful login.
-   * @param token
-   */
-  Object.assign(instance, {
-    setAccessToken: (token: string) => {
-      if (token) {
-        Cookies.set('jwt', token);
-        instance.defaults.headers['Authorization'] = `Bearer ${token}`;
-      }
-    },
-    removeAccessToken: () => {
-      Cookies.remove('jwt');
-      delete instance.defaults.headers.Authorization;
-    },
-  });
+  public post(url: string, data?: any, config?: AxiosRequestConfig) {
+    return this.axios.post(url, data, config);
+  }
 
-  return instance;
+  public patch(url: string, data?: any, config?: AxiosRequestConfig) {
+    return this.axios.patch(url, data, config);
+  }
+
+  public put(url: string, data?: any, config?: AxiosRequestConfig) {
+    return this.axios.put(url, data, config);
+  }
+
+  public delete(url: string, config?: AxiosRequestConfig) {
+    return this.axios.delete(url, config);
+  }
+
+  public head(url: string, config?: AxiosRequestConfig) {
+    return this.axios.head(url, config);
+  }
+
+  public options(url: string, config?: AxiosRequestConfig) {
+    return this.axios.options(url, config);
+  }
+
+  public setAccessToken(token?: string) {
+    if (token) {
+      this.jwt = token;
+      Cookies.set('jwt', token);
+      this.axios.defaults.headers['Authorization'] = `Bearer ${token}`;
+    } else {
+      this.removeAccessToken();
+      delete this.axios.defaults.headers['Authorization'];
+    }
+  }
+
+  public removeAccessToken() {
+    this.jwt = null;
+    Cookies.remove('jwt');
+  }
 }
