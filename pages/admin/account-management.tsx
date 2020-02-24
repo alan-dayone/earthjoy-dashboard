@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import Head from 'next/head';
 import classNames from 'classnames';
-import {usePagination, useTable} from 'react-table';
+import {useFilters, usePagination, useTable} from 'react-table';
 import {NextComponentType, NextPageContext} from 'next';
 import {adminOnly} from '../../hocs';
 import {accountService} from '../../services';
@@ -27,6 +27,8 @@ const columns = [
   {
     Header: 'Email verified',
     accessor: 'emailVerified',
+    filter: 'equals',
+    Filter: SelectStatusFilter,
   },
   {
     Header: 'Status',
@@ -37,8 +39,62 @@ const columns = [
   },
 ];
 
+const defaultColumn = {
+  Filter: DefaultColumnFilter,
+};
+
+function SelectStatusFilter({column: {filterValue, setFilter}}) {
+  const options = ['Active', 'Inactive'];
+
+  return (
+    <select
+      className="form-control form-control-sm"
+      value={filterValue}
+      onChange={e => {
+        setFilter(e.target.value || undefined)
+      }}
+    >
+      <option value="">All</option>
+      {options.map((option, i) => (
+        <option key={i} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  )
+}
+
+function DefaultColumnFilter({column: { filterValue, setFilter }}) {
+  return (
+    <input
+      className="form-control form-control-sm"
+      value={filterValue || ''}
+      onChange={e => {
+        setFilter(e.target.value || undefined)
+      }}
+      placeholder={`Search...`}
+    />
+  )
+}
+
 function AccountManagementPage() {
   const [data, setData] = useState([]);
+
+  const filterTypes = React.useMemo(
+    () => ({
+      text: (rows, id, filterValue) => {
+        return rows.filter(row => {
+          const rowValue = row.values[id]
+          return rowValue !== undefined
+            ? String(rowValue)
+              .toLowerCase()
+              .startsWith(String(filterValue).toLowerCase())
+            : true
+        })
+      },
+    }),
+    []
+  );
 
   const {
     getTableProps,
@@ -58,14 +114,18 @@ function AccountManagementPage() {
     {
       columns,
       data,
+      filterTypes,
       initialState: {pageIndex: 0, pageSize: 10},
+      defaultColumn,
     },
+    useFilters,
     usePagination,
   );
 
-  const tableBodyProps = {...getTableBodyProps()};
+  // const filters = headers.map(header => header.filterValue);
+  // console.log(filters);
+  console.log(pageIndex, headers);
 
-  // Call api to fetch data
   useEffect(() => {
     (async () => {
       const accounts = await accountService.findAccountsForAdmin(pageIndex);
@@ -89,7 +149,16 @@ function AccountManagementPage() {
                 <thead>
                   <tr>
                     {headers.map((header, index) => (
-                      <th key={`th ${index}`}>{header.render('Header')}</th>
+                      <th key={`th-${index}`}>
+                        {header.render('Header')}
+                      </th>
+                    ))}
+                  </tr>
+                  <tr>
+                    {headers.map((header, index) => (
+                      <th key={`th-filter-${index}`}>
+                        {header.canFilter ? header.render('Filter') : null}
+                      </th>
                     ))}
                   </tr>
                 </thead>

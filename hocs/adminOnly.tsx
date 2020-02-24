@@ -61,10 +61,9 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
           </button>
           <ul className="c-header-nav mfs-auto">
             <li className="c-header-nav-item dropdown">
-              <a
+              <div
                 className="c-header-nav-link"
                 data-toggle="dropdown"
-                href="#"
                 role="button"
                 aria-haspopup="true"
                 aria-expanded="false">
@@ -83,7 +82,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
                     <DropdownItem onClick={this._logout}>Logout</DropdownItem>
                   </DropdownMenu>
                 </UncontrolledDropdown>
-              </a>
+              </div>
             </li>
           </ul>
         </header>

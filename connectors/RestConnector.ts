@@ -44,12 +44,12 @@ export class RestConnector {
       this.axios.defaults.headers['Authorization'] = `Bearer ${token}`;
     } else {
       this.removeAccessToken();
-      delete this.axios.defaults.headers['Authorization'];
     }
   }
 
   public removeAccessToken() {
     this.jwt = null;
     Cookies.remove('jwt');
+    delete this.axios.defaults.headers['Authorization'];
   }
 }

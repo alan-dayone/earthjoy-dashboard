@@ -50,8 +50,12 @@ export class AuthGateway {
       return null;
     }
 
-    const resp = await this.restConnector.get('/accounts/me');
-    return resp.data;
+    try {
+      const resp = await this.restConnector.get('/accounts/me');
+      return resp.data;
+    } catch (e) {
+      return null;
+    }
   }
 
   public async logout() {
