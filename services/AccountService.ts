@@ -8,7 +8,7 @@ export class AccountService {
     this.accountGateway = options.accountGateway;
   }
 
-  public async findAccountsForAdmin(page: number, pageSize = 10) {
-    return this.accountGateway.find(page, pageSize);
+  public async findAccountsForAdmin({pageIndex, pageSize, filters}) {
+    return this.accountGateway.find({pageIndex, pageSize, filters});
   }
 }

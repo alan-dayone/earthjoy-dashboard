@@ -1,13 +1,14 @@
 /* tslint:disable:no-default-export */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import Head from 'next/head';
 import classNames from 'classnames';
-import {useFilters, usePagination, useTable} from 'react-table';
+import _ from 'lodash';
+import {useFilters, usePagination, useSortBy, useTable} from 'react-table';
 import {NextComponentType, NextPageContext} from 'next';
 import {adminOnly} from '../../hocs';
 import {accountService} from '../../services';
 
-const columns = [
+const tableColumns = [
   {
     Header: 'ID',
     accessor: 'id',
@@ -36,6 +37,7 @@ const columns = [
   },
   {
     Header: 'Actions',
+    canFilter: false,
   },
 ];
 
@@ -50,10 +52,9 @@ function SelectStatusFilter({column: {filterValue, setFilter}}) {
     <select
       className="form-control form-control-sm"
       value={filterValue}
-      onChange={e => {
-        setFilter(e.target.value || undefined)
-      }}
-    >
+      onChange={(e) => {
+        setFilter(e.target.value || undefined);
+      }}>
       <option value="">All</option>
       {options.map((option, i) => (
         <option key={i} value={option}>
@@ -61,40 +62,24 @@ function SelectStatusFilter({column: {filterValue, setFilter}}) {
         </option>
       ))}
     </select>
-  )
+  );
 }
 
-function DefaultColumnFilter({column: { filterValue, setFilter }}) {
+function DefaultColumnFilter({column: {filterValue, setFilter}}) {
   return (
     <input
       className="form-control form-control-sm"
       value={filterValue || ''}
-      onChange={e => {
-        setFilter(e.target.value || undefined)
+      onChange={(e) => {
+        setFilter(e.target.value || undefined);
       }}
       placeholder={`Search...`}
     />
-  )
+  );
 }
 
 function AccountManagementPage() {
   const [data, setData] = useState([]);
-
-  const filterTypes = React.useMemo(
-    () => ({
-      text: (rows, id, filterValue) => {
-        return rows.filter(row => {
-          const rowValue = row.values[id]
-          return rowValue !== undefined
-            ? String(rowValue)
-              .toLowerCase()
-              .startsWith(String(filterValue).toLowerCase())
-            : true
-        })
-      },
-    }),
-    []
-  );
 
   const {
     getTableProps,
@@ -109,29 +94,37 @@ function AccountManagementPage() {
     gotoPage,
     nextPage,
     previousPage,
-    state: {pageIndex},
+    state: {pageIndex, filters, pageSize},
   } = useTable(
     {
-      columns,
+      columns: tableColumns,
       data,
-      filterTypes,
-      initialState: {pageIndex: 0, pageSize: 10},
+      manualFilters: true,
+      initialState: {
+        pageIndex: 0,
+        pageSize: 10,
+        filters: [],
+      },
       defaultColumn,
     },
     useFilters,
     usePagination,
   );
 
-  // const filters = headers.map(header => header.filterValue);
-  // console.log(filters);
-  console.log(pageIndex, headers);
-
   useEffect(() => {
     (async () => {
-      const accounts = await accountService.findAccountsForAdmin(pageIndex);
+      const filterObj = filters.reduce((ac, column) => {
+        ac[column.id] = column.value;
+        return ac;
+      }, {});
+      const accounts = await accountService.findAccountsForAdmin({
+        pageIndex,
+        pageSize,
+        filters: filterObj,
+      });
       setData(accounts);
     })();
-  }, [pageIndex]);
+  }, [pageIndex, filters]);
 
   return (
     <div id="admin-account-management-page">
@@ -149,16 +142,12 @@ function AccountManagementPage() {
                 <thead>
                   <tr>
                     {headers.map((header, index) => (
-                      <th key={`th-${index}`}>
-                        {header.render('Header')}
-                      </th>
+                      <th key={`th-${index}`}>{header.render('Header')}</th>
                     ))}
                   </tr>
                   <tr>
                     {headers.map((header, index) => (
-                      <th key={`th-filter-${index}`}>
-                        {header.canFilter ? header.render('Filter') : null}
-                      </th>
+                      <th key={`th-filter-${index}`}>{header.canFilter ? header.render('Filter') : null}</th>
                     ))}
                   </tr>
                 </thead>
