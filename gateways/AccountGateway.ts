@@ -8,7 +8,13 @@ export class AccountGateway {
   }
 
   public async find({pageIndex, pageSize, filters}) {
-    const {data} = await this.restConnector.get('/accounts');
+    const filter = {
+      offset: pageIndex * pageSize,
+      limit: pageSize,
+      skip: pageIndex * pageSize,
+      where: filters,
+    };
+    const {data} = await this.restConnector.get(`/accounts?filter=${JSON.stringify(filter)}`);
     return data;
   }
 }

@@ -1,9 +1,8 @@
 /* tslint:disable:no-default-export */
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Head from 'next/head';
 import classNames from 'classnames';
-import _ from 'lodash';
-import {useFilters, usePagination, useSortBy, useTable} from 'react-table';
+import {useAsyncDebounce, useFilters, usePagination, useTable} from 'react-table';
 import {NextComponentType, NextPageContext} from 'next';
 import {adminOnly} from '../../hocs';
 import {accountService} from '../../services';
@@ -79,8 +78,51 @@ function DefaultColumnFilter({column: {filterValue, setFilter}}) {
 }
 
 function AccountManagementPage() {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
   const [data, setData] = useState([]);
 
+  const fetchData = useCallback(async ({pageIndex, pageSize, filters}) => {
+    const filterObj = filters.reduce((ac, column) => {
+      if (column.value) {
+        ac[column.id] = column.value;
+      }
+      return ac;
+    }, {});
+    const accounts = await accountService.findAccountsForAdmin({
+      pageIndex,
+      pageSize,
+      filters: filterObj,
+    });
+    setData(accounts);
+  }, []);
+
+  const debouncedFetchData = useAsyncDebounce(fetchData, 1000);
+
+  return (
+    <div id="admin-account-management-page">
+      <Head>
+        <title>Admin - Account management</title>
+      </Head>
+      <div className="row">
+        <div className="col-12">
+          <div className="card">
+            <div className="card-header">
+              <strong>Account management</strong>
+            </div>
+            <div className="card-body">
+              <Table data={data} fetchData={debouncedFetchData} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Table({data, fetchData}) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -112,115 +154,86 @@ function AccountManagementPage() {
   );
 
   useEffect(() => {
-    (async () => {
-      const filterObj = filters.reduce((ac, column) => {
-        ac[column.id] = column.value;
-        return ac;
-      }, {});
-      const accounts = await accountService.findAccountsForAdmin({
-        pageIndex,
-        pageSize,
-        filters: filterObj,
-      });
-      setData(accounts);
-    })();
-  }, [pageIndex, filters]);
+    fetchData({pageIndex, pageSize, filters});
+  }, [fetchData, pageIndex, pageSize, filters]);
 
   return (
-    <div id="admin-account-management-page">
-      <Head>
-        <title>Admin - Account management</title>
-      </Head>
+    <>
+      <table className="table table-responsive-sm" {...getTableProps()}>
+        <thead>
+          <tr>
+            {headers.map((header, index) => (
+              <th key={`th-${index}`}>{header.render('Header')}</th>
+            ))}
+          </tr>
+          <tr>
+            {headers.map((header, index) => (
+              <th key={`th-filter-${index}`}>{header.canFilter ? header.render('Filter') : null}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {page.map((row, i) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
       <div className="row">
-        <div className="col-12">
-          <div className="card">
-            <div className="card-header">
-              <strong>Account management</strong>
-            </div>
-            <div className="card-body">
-              <table className="table table-responsive-sm" {...getTableProps()}>
-                <thead>
-                  <tr>
-                    {headers.map((header, index) => (
-                      <th key={`th-${index}`}>{header.render('Header')}</th>
-                    ))}
-                  </tr>
-                  <tr>
-                    {headers.map((header, index) => (
-                      <th key={`th-filter-${index}`}>{header.canFilter ? header.render('Filter') : null}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                  {page.map((row, i) => {
-                    prepareRow(row);
-                    return (
-                      <tr {...row.getRowProps()}>
-                        {row.cells.map((cell) => {
-                          return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
-                        })}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-              <div className="row">
-                <div className="col-6">
-                  <span>
-                    Page{' '}
-                    <strong>
-                      {pageIndex + 1} of {pageOptions.length}
-                    </strong>
-                  </span>{' '}
-                  |{' '}
-                  <span>
-                    Go to page:{' '}
-                    <input
-                      type="number"
-                      className="form-control d-inline-block"
-                      defaultValue={pageIndex + 1}
-                      onChange={(e) => {
-                        const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                        gotoPage(page);
-                      }}
-                      style={{width: '100px'}}
-                    />
-                  </span>
-                </div>
-                <div className="col-6">
-                  <ul className="pagination justify-content-end">
-                    <li className={classNames('page-item', {disabled: !canPreviousPage})} onClick={() => gotoPage(0)}>
-                      <a className="page-link" href="#">
-                        {'<<'}
-                      </a>
-                    </li>
-                    <li
-                      className={classNames('page-item', {disabled: !canPreviousPage})}
-                      onClick={() => previousPage()}>
-                      <a className="page-link" href="#">
-                        {'<'}
-                      </a>
-                    </li>
-                    <li className={classNames('page-item', {disabled: !canNextPage})} onClick={() => nextPage()}>
-                      <a className="page-link" href="#">
-                        {'>'}
-                      </a>
-                    </li>
-                    <li
-                      className={classNames('page-item', {disabled: !canNextPage})}
-                      onClick={() => gotoPage(pageCount - 1)}>
-                      <a className="page-link" href="#">
-                        {'>>'}
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="col-6">
+          <span>
+            Page{' '}
+            <strong>
+              {pageIndex + 1} of {pageOptions.length}
+            </strong>
+          </span>{' '}
+          |{' '}
+          <span>
+            Go to page:{' '}
+            <input
+              type="number"
+              className="form-control d-inline-block"
+              defaultValue={pageIndex + 1}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                gotoPage(page);
+              }}
+              style={{width: '100px'}}
+            />
+          </span>
+        </div>
+        <div className="col-6">
+          <ul className="pagination justify-content-end">
+            <li className={classNames('page-item', {disabled: !canPreviousPage})} onClick={() => gotoPage(0)}>
+              <a className="page-link" href="#">
+                {'<<'}
+              </a>
+            </li>
+            <li className={classNames('page-item', {disabled: !canPreviousPage})} onClick={() => previousPage()}>
+              <a className="page-link" href="#">
+                {'<'}
+              </a>
+            </li>
+            <li className={classNames('page-item', {disabled: !canNextPage})} onClick={() => nextPage()}>
+              <a className="page-link" href="#">
+                {'>'}
+              </a>
+            </li>
+            <li className={classNames('page-item', {disabled: !canNextPage})} onClick={() => gotoPage(pageCount - 1)}>
+              <a className="page-link" href="#">
+                {'>>'}
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
