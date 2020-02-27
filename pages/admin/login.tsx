@@ -100,9 +100,8 @@ class AdminLoginPage extends Component {
       await authService.loginWithEmail(values);
       Router.replace('/admin');
     } catch (e) {
-      toastr.error(e.message);
-    } finally {
       actions.setSubmitting(false);
+      toastr.error(e.message);
     }
   };
 }

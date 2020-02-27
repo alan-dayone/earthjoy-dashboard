@@ -4,12 +4,17 @@ import Head from 'next/head';
 import classNames from 'classnames';
 import {useAsyncDebounce, useFilters, usePagination, useTable} from 'react-table';
 import {NextComponentType, NextPageContext} from 'next';
+import Link from 'next/link';
 import {adminOnly} from '../../hocs';
 import {accountService} from '../../services';
 import {AccountStatus} from '../../models/User';
 import {AccountEmailVerificationText, AccountStatusText} from '../../view-models/User';
 import {AccountEmailVerificationLabel} from '../../components/admin/AccountEmailVerificationLabel';
 import {AccountStatusLabel} from '../../components/admin/AccountStatusLabel';
+
+function inactivateUser(cell) {
+  console.log(cell);
+}
 
 const tableColumns = [
   {
@@ -50,12 +55,18 @@ const tableColumns = [
     Header: 'Actions',
     canFilter: false,
     width: '15%',
+    Cell: ({row}) => (
+      <>
+        <Link href={`/admin/accounts/${row.values.id}/edit`}>
+          <a className="btn btn-sm btn-info">Edit</a>
+        </Link>{' '}
+        <button className="btn btn-sm btn-danger" onClick={() => inactivateUser(row.values.id)}>
+          Inactivate
+        </button>
+      </>
+    ),
   },
 ];
-
-const defaultColumn = {
-  Filter: DefaultColumnFilter,
-};
 
 function SelectStatusFilter({column: {filterValue, setFilter}}) {
   const options = [AccountStatus.ACTIVE, AccountStatus.INACTIVE];
@@ -105,14 +116,17 @@ function DefaultColumnFilter({column: {filterValue, setFilter}}) {
   );
 }
 
-function AccountManagementPage() {
+function AdminAccountsPage() {
   if (typeof window === 'undefined') {
     return null;
   }
 
   const [data, setData] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
 
   const fetchData = useCallback(async ({pageIndex, pageSize, filters}) => {
+    setLoadingData(true);
+
     const filterObj = filters.reduce((ac, column) => {
       if (column.value) {
         if (column.id === 'emailVerified' && column.value !== '') {
@@ -128,13 +142,15 @@ function AccountManagementPage() {
       pageSize,
       filters: filterObj,
     });
+
     setData(accounts);
+    setLoadingData(false);
   }, []);
 
   const debouncedFetchData = useAsyncDebounce(fetchData, 500);
 
   return (
-    <div id="admin-account-management-page">
+    <div id="admin-accounts-page">
       <Head>
         <title>Admin - Account management</title>
       </Head>
@@ -145,7 +161,7 @@ function AccountManagementPage() {
               <strong>Account management</strong>
             </div>
             <div className="card-body">
-              <Table data={data} fetchData={debouncedFetchData} />
+              <Table data={data} fetchData={debouncedFetchData} loadingData={loadingData} />
             </div>
           </div>
         </div>
@@ -154,7 +170,7 @@ function AccountManagementPage() {
   );
 }
 
-function Table({data, fetchData}) {
+function Table({data, fetchData, loadingData}) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -179,7 +195,9 @@ function Table({data, fetchData}) {
         pageSize: 10,
         filters: [],
       },
-      defaultColumn,
+      defaultColumn: {
+        Filter: DefaultColumnFilter,
+      },
     },
     useFilters,
     usePagination,
@@ -207,16 +225,24 @@ function Table({data, fetchData}) {
           </tr>
         </thead>
         <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
-                })}
-              </tr>
-            );
-          })}
+          {loadingData ? (
+            <tr>
+              <td colSpan={tableColumns.length} className="text-center">
+                <div className="spinner-grow" />
+              </td>
+            </tr>
+          ) : (
+            page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
+                  })}
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
       <div className="row">
@@ -271,4 +297,4 @@ function Table({data, fetchData}) {
   );
 }
 
-export default adminOnly(AccountManagementPage as NextComponentType<NextPageContext, any, any>);
+export default adminOnly(AdminAccountsPage as NextComponentType<NextPageContext, any, any>);

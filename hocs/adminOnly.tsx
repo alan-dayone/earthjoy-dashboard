@@ -105,7 +105,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
               </Link>
             </li>
             <li className="c-sidebar-nav-item">
-              <Link href="/admin/account-management">
+              <Link href="/admin/accounts">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-speedometer" />
                   Accounts
