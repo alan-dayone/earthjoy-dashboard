@@ -6,37 +6,50 @@ import {useAsyncDebounce, useFilters, usePagination, useTable} from 'react-table
 import {NextComponentType, NextPageContext} from 'next';
 import {adminOnly} from '../../hocs';
 import {accountService} from '../../services';
+import {AccountStatus} from '../../models/User';
+import {AccountEmailVerificationText, AccountStatusText} from '../../view-models/User';
+import {AccountEmailVerificationLabel} from '../../components/admin/AccountEmailVerificationLabel';
+import {AccountStatusLabel} from '../../components/admin/AccountStatusLabel';
 
 const tableColumns = [
   {
     Header: 'ID',
     accessor: 'id',
+    width: '10%',
   },
   {
     Header: 'First name',
     accessor: 'firstName',
+    width: '15%',
   },
   {
     Header: 'Last name',
     accessor: 'lastName',
+    width: '15%',
   },
   {
     Header: 'Email',
     accessor: 'email',
+    width: '15%',
   },
   {
-    Header: 'Email verified',
+    Header: 'Email verification',
     accessor: 'emailVerified',
-    filter: 'equals',
-    Filter: SelectStatusFilter,
+    Filter: SelectEmailVerificationFilter,
+    width: '15%',
+    Cell: ({cell: {value}}) => <AccountEmailVerificationLabel emailVerified={value} />,
   },
   {
     Header: 'Status',
     accessor: 'status',
+    Filter: SelectStatusFilter,
+    width: '15%',
+    Cell: ({cell: {value}}) => <AccountStatusLabel status={value} />,
   },
   {
     Header: 'Actions',
     canFilter: false,
+    width: '15%',
   },
 ];
 
@@ -45,21 +58,36 @@ const defaultColumn = {
 };
 
 function SelectStatusFilter({column: {filterValue, setFilter}}) {
-  const options = ['Active', 'Inactive'];
+  const options = [AccountStatus.ACTIVE, AccountStatus.INACTIVE];
 
   return (
     <select
       className="form-control form-control-sm"
       value={filterValue}
       onChange={(e) => {
-        setFilter(e.target.value || undefined);
+        setFilter(e.target.value || '');
       }}>
       <option value="">All</option>
       {options.map((option, i) => (
         <option key={i} value={option}>
-          {option}
+          {AccountStatusText[option]}
         </option>
       ))}
+    </select>
+  );
+}
+
+function SelectEmailVerificationFilter({column: {filterValue, setFilter}}) {
+  return (
+    <select
+      className="form-control form-control-sm"
+      value={filterValue}
+      onChange={(e) => {
+        setFilter(e.target.value || '');
+      }}>
+      <option value="">All</option>
+      <option value="true">{AccountEmailVerificationText.VERIFIED}</option>
+      <option value="false">{AccountEmailVerificationText.NOT_VERIFIED}</option>
     </select>
   );
 }
@@ -70,9 +98,9 @@ function DefaultColumnFilter({column: {filterValue, setFilter}}) {
       className="form-control form-control-sm"
       value={filterValue || ''}
       onChange={(e) => {
-        setFilter(e.target.value || undefined);
+        setFilter(e.target.value || '');
       }}
-      placeholder={`Search...`}
+      placeholder="Search..."
     />
   );
 }
@@ -87,7 +115,11 @@ function AccountManagementPage() {
   const fetchData = useCallback(async ({pageIndex, pageSize, filters}) => {
     const filterObj = filters.reduce((ac, column) => {
       if (column.value) {
-        ac[column.id] = column.value;
+        if (column.id === 'emailVerified' && column.value !== '') {
+          ac[column.id] = column.value === 'true';
+        } else {
+          ac[column.id] = column.value;
+        }
       }
       return ac;
     }, {});
@@ -99,7 +131,7 @@ function AccountManagementPage() {
     setData(accounts);
   }, []);
 
-  const debouncedFetchData = useAsyncDebounce(fetchData, 1000);
+  const debouncedFetchData = useAsyncDebounce(fetchData, 500);
 
   return (
     <div id="admin-account-management-page">
@@ -159,11 +191,13 @@ function Table({data, fetchData}) {
 
   return (
     <>
-      <table className="table table-responsive-sm" {...getTableProps()}>
+      <table className="table table-responsive-sm admin-table" {...getTableProps()}>
         <thead>
           <tr>
             {headers.map((header, index) => (
-              <th key={`th-${index}`}>{header.render('Header')}</th>
+              <th key={`th-${index}`} style={{width: header.width}}>
+                {header.render('Header')}
+              </th>
             ))}
           </tr>
           <tr>
@@ -173,7 +207,7 @@ function Table({data, fetchData}) {
           </tr>
         </thead>
         <tbody {...getTableBodyProps()}>
-          {page.map((row, i) => {
+          {page.map((row) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>

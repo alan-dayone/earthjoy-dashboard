@@ -1,6 +1,11 @@
-enum Role {
+export enum Role {
   ROOT_ADMIN = 'root_admin',
   USER = 'user',
+}
+
+export enum AccountStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
 }
 
 export const isAdmin = (user: any) => {
@@ -18,10 +23,6 @@ export const constraint = {
   password: {
     MIN_LENGTH: 6,
     MAX_LENGTH: 50,
-  },
-  avatar: {
-    ALLOWED_FILE_TYPES: ['image/jpeg', 'image/png'],
-    MAX_FILE_SIZE: 2 * 1024 * 1024, // 2MB
   },
 };
 

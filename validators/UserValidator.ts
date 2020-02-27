@@ -41,19 +41,3 @@ const spec = {
 export function validateUser(userData: any) {
   validate(userData, spec);
 }
-
-export function validateAvatarUpload(file: any) {
-  const errorCodes = [];
-
-  if (!constraint.avatar.ALLOWED_FILE_TYPES.includes(file.type)) {
-    errorCodes.push(ValidationErrorCode.INVALID_FILE_TYPE);
-  }
-
-  if (file.size > constraint.avatar.MAX_FILE_SIZE) {
-    errorCodes.push(ValidationErrorCode.INVALID_FILE_SIZE);
-  }
-
-  if (errorCodes.length) {
-    throw new ValidationError(errorCodes);
-  }
-}
