@@ -8,6 +8,15 @@ export enum AccountStatus {
   INACTIVE = 'inactive',
 }
 
+export interface Account {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password?: string;
+  status: AccountStatus;
+  emailVerified: boolean;
+}
+
 export const isAdmin = (user: any) => {
   return user.role === Role.ROOT_ADMIN;
 };

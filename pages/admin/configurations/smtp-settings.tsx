@@ -3,10 +3,10 @@ import React, {Component} from 'react';
 import Head from 'next/head';
 import {Formik, FormikActions} from 'formik';
 import toastr from 'toastr';
+import {NextComponentType, NextPageContext} from 'next';
 import {adminOnly} from '../../../hocs';
 import {systemService} from '../../../services';
-import {MailSmtpSettings} from '../../../domain/models/Configuration';
-import {NextComponentType, NextPageContext} from 'next';
+import {MailSmtpSettings} from '../../../models/Configuration';
 
 class AdminSmtpSettingsPage extends Component<{initialSmtpSettings: MailSmtpSettings}> {
   public state = {

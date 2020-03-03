@@ -5,12 +5,12 @@ import classNames from 'classnames';
 import {useAsyncDebounce, useFilters, usePagination, useTable} from 'react-table';
 import {NextComponentType, NextPageContext} from 'next';
 import Link from 'next/link';
-import {adminOnly} from '../../hocs';
-import {accountService} from '../../services';
-import {AccountStatus} from '../../models/User';
-import {AccountEmailVerificationText, AccountStatusText} from '../../view-models/User';
-import {AccountEmailVerificationLabel} from '../../components/admin/AccountEmailVerificationLabel';
-import {AccountStatusLabel} from '../../components/admin/AccountStatusLabel';
+import {adminOnly} from '../../../hocs';
+import {accountService} from '../../../services';
+import {AccountStatus} from '../../../models/User';
+import {AccountEmailVerificationText, AccountStatusText} from '../../../view-models/User';
+import {AccountEmailVerificationLabel} from '../../../components/admin/AccountEmailVerificationLabel';
+import {AccountStatusLabel} from '../../../components/admin/AccountStatusLabel';
 
 function inactivateUser(cell) {
   console.log(cell);
@@ -159,6 +159,11 @@ function AdminAccountsPage() {
           <div className="card">
             <div className="card-header">
               <strong>Account management</strong>
+              <div className="card-header-actions">
+                <Link href="/admin/accounts/create">
+                  <a className="btn btn-sm btn-primary">Create</a>
+                </Link>
+              </div>
             </div>
             <div className="card-body">
               <Table data={data} fetchData={debouncedFetchData} loadingData={loadingData} />

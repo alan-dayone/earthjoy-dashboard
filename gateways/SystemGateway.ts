@@ -1,4 +1,4 @@
-import {ConfigurationKey} from '../domain/models/Configuration';
+import {ConfigurationKey} from '../models/Configuration';
 import {RestConnector} from '../connectors/RestConnector';
 
 export interface SystemStatusData {

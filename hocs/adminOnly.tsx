@@ -92,9 +92,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
     public _renderSidebar = () => {
       return (
         <div className="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
-          <div className="c-sidebar-brand">
-            <h5>ADMIN PORTAL</h5>
-          </div>
+          <div className="c-sidebar-brand">ADMIN PORTAL</div>
           <ul className="c-sidebar-nav ps ps--active-y" data-drodpown-accordion="true">
             <li className="c-sidebar-nav-item">
               <Link href="/admin">

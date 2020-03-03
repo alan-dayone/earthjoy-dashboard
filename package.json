@@ -2,8 +2,8 @@
   "name": "int-nextjs-ts",
   "version": "1.0.0",
   "engines": {
-    "node": "12.x",
-    "npm": "6.x"
+    "node": "12.16.1",
+    "npm": "6.13.4"
   },
   "scripts": {
     "dev": "nodemon --exec ts-node --project tsconfig-server.json server.ts",

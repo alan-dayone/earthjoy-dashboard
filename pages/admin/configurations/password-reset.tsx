@@ -5,7 +5,7 @@ import {Formik, FormikActions} from 'formik';
 import toastr from 'toastr';
 import {adminOnly} from '../../../hocs';
 // import { systemService } from '../../../services';
-import {EmailFormat} from '../../../domain/models/Configuration';
+import {EmailFormat} from '../../../models/Configuration';
 
 class AdminPasswordResetPage extends Component {
   public render() {

@@ -1,5 +1,5 @@
 import {ConfigurationData, SystemGateway} from '../gateways/SystemGateway';
-import {ConfigurationKey, MailSmtpSettings} from '../domain/models/Configuration';
+import {ConfigurationKey, MailSmtpSettings} from '../models/Configuration';
 import {ServiceContext} from './index';
 
 export class SystemService {
