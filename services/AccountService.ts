@@ -16,4 +16,12 @@ export class AccountService {
   public async createAccount(account: Account) {
     return this.accountGateway.create(account);
   }
+
+  public async updateAccount(id: string, account: Account) {
+    return this.accountGateway.update(id, account);
+  }
+
+  public async findOneForAdmin(id: string) {
+    return this.accountGateway.findOne(id);
+  }
 }

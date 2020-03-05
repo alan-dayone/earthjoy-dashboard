@@ -23,4 +23,15 @@ export class AccountGateway {
     const {data} = await this.restConnector.get(`/accounts?filter=${JSON.stringify(filter)}`);
     return data;
   }
+
+  public async update(id: string, account: Account) {
+    await console.log(id);
+    const {data} = await this.restConnector.put(`accounts/${id}`, account);
+    return data;
+  }
+
+  public async findOne(id: string) {
+    const {data} = await this.restConnector.get(`/accounts/${id}`);
+    return data;
+  }
 }

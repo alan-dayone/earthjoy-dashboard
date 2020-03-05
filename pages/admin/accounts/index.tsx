@@ -142,8 +142,8 @@ function AdminAccountsPage() {
 
     setData(accounts);
     setLoadingData(false);
-
-    Router.push(`/admin/accounts?${qs.stringify(filterObj)}`);
+    const queryString = qs.stringify(filterObj);
+    if (queryString !== '') Router.push(`/admin/accounts?${queryString}`);
   }, []);
 
   const debouncedFetchData = useAsyncDebounce(fetchData, 500);
