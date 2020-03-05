@@ -5,16 +5,15 @@ import classNames from 'classnames';
 import {useAsyncDebounce, useFilters, usePagination, useTable} from 'react-table';
 import {NextComponentType, NextPageContext} from 'next';
 import Link from 'next/link';
+import Router from 'next/router';
+import {useRouter} from 'next/router';
+import qs from 'qs';
 import {adminOnly} from '../../../hocs';
 import {accountService} from '../../../services';
 import {AccountStatus} from '../../../models/User';
 import {AccountEmailVerificationText, AccountStatusText} from '../../../view-models/User';
 import {AccountEmailVerificationLabel} from '../../../components/admin/AccountEmailVerificationLabel';
 import {AccountStatusLabel} from '../../../components/admin/AccountStatusLabel';
-
-function inactivateUser(cell) {
-  console.log(cell);
-}
 
 const tableColumns = [
   {
@@ -113,13 +112,14 @@ function DefaultColumnFilter({column: {filterValue, setFilter}}) {
   );
 }
 
-function AdminAccountsPage({router}) {
+function AdminAccountsPage() {
   if (typeof window === 'undefined') {
     return null;
   }
 
   const [data, setData] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
+  const router = useRouter();
 
   const fetchData = useCallback(async ({pageIndex, pageSize, filters}) => {
     setLoadingData(true);
@@ -139,11 +139,11 @@ function AdminAccountsPage({router}) {
       pageSize,
       filters: filterObj,
     });
-    console.log(filterObj);
 
-    router.replace(`${router.route}?`);
     setData(accounts);
     setLoadingData(false);
+
+    Router.push(`/admin/accounts?${qs.stringify(filterObj)}`);
   }, []);
 
   const debouncedFetchData = useAsyncDebounce(fetchData, 500);
@@ -165,7 +165,12 @@ function AdminAccountsPage({router}) {
               </div>
             </div>
             <div className="card-body">
-              <Table data={data} fetchData={debouncedFetchData} loadingData={loadingData} />
+              <Table
+                data={data}
+                defaultFilter={router.query}
+                fetchData={debouncedFetchData}
+                loadingData={loadingData}
+              />
             </div>
           </div>
         </div>
@@ -174,7 +179,7 @@ function AdminAccountsPage({router}) {
   );
 }
 
-function Table({data, fetchData, loadingData}) {
+function Table({data, fetchData, loadingData, defaultFilter}) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -197,7 +202,10 @@ function Table({data, fetchData, loadingData}) {
       initialState: {
         pageIndex: 0,
         pageSize: 10,
-        filters: [],
+        filters: Object.keys(defaultFilter).map((key) => ({
+          id: key,
+          value: defaultFilter[key],
+        })),
       },
       defaultColumn: {
         Filter: DefaultColumnFilter,

@@ -9,7 +9,7 @@ import {Formik, FormikActions, ErrorMessage, Field} from 'formik';
 import {AccountStatus, Account} from '../../../models/User';
 import {AccountEmailVerificationText, AccountStatusText} from '../../../view-models/User';
 import {accountService} from '../../../services';
-import {createUserSchema} from '../../../view-models/UserValidation';
+import {userFormValidationSchema} from '../../../view-models/UserValidation';
 
 const initialValues: Account = {
   email: '',
@@ -51,7 +51,7 @@ function AdminAccountInfomationPage() {
       <Head>
         <title>Admin - Account infomation</title>
       </Head>
-      <Formik initialValues={initialValues} onSubmit={_handleSave} validationSchema={createUserSchema}>
+      <Formik initialValues={initialValues} onSubmit={_handleSave} validationSchema={userFormValidationSchema}>
         {(props) => (
           <form onSubmit={props.handleSubmit}>
             <div className="card">

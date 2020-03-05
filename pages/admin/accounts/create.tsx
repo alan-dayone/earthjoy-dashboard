@@ -6,11 +6,10 @@ import loGet from 'lodash/get';
 import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../hocs';
-import {Formik, FormikActions, ErrorMessage, Field} from 'formik';
-import {AccountStatus, Account} from '../../../models/User';
-import {AccountEmailVerificationText, AccountStatusText} from '../../../view-models/User';
+import {Formik} from 'formik';
+import {Account, AccountStatus} from '../../../models/User';
+import {AccountEmailVerificationText, AccountStatusText, userFormValidationSchema} from '../../../view-models/User';
 import {accountService} from '../../../services';
-import {createUserSchema} from '../../../view-models/UserValidation';
 
 const initialValues: Account = {
   email: '',
@@ -26,7 +25,7 @@ export function getServerErrorMessage(error) {
   if (errorEnum === 'EMAIL_EXISTED') {
     return 'Email already existed';
   }
-  return 'Unkown error';
+  return 'Unknown error';
 }
 
 function AdminAccountCreationPage() {
@@ -47,7 +46,7 @@ function AdminAccountCreationPage() {
       <Head>
         <title>Admin - Create account</title>
       </Head>
-      <Formik initialValues={initialValues} onSubmit={_handleSave} validationSchema={createUserSchema}>
+      <Formik initialValues={initialValues} onSubmit={_handleSave} validationSchema={userFormValidationSchema}>
         {({errors, handleChange, handleSubmit, values, isSubmitting}) => (
           <form onSubmit={handleSubmit}>
             <div className="card">

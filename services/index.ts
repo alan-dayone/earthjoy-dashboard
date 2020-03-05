@@ -8,7 +8,6 @@ import {AccountService} from './AccountService';
 import {RestConnector} from '../connectors/RestConnector';
 
 const {publicRuntimeConfig} = getConfig();
-console.log(publicRuntimeConfig);
 
 const API_BASE_URL = `${publicRuntimeConfig.BASE_URL}/api`;
 const restConnector = new RestConnector(API_BASE_URL);

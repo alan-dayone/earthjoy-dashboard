@@ -1,4 +1,3 @@
-import {validateUser} from '../validators/UserValidator';
 import {AuthGateway} from '../gateways/AuthGateway';
 import {ServiceContext} from './index';
 
@@ -34,7 +33,6 @@ export class AuthService {
   }
 
   public async signupWithEmail(body: {name: string; email: string; password: string}) {
-    validateUser(body);
     return this.authGateway.create(body);
   }
 
@@ -43,22 +41,18 @@ export class AuthService {
   }
 
   public async sendResetPasswordEmail(email: string) {
-    validateUser({email});
     return this.authGateway.sendResetPasswordEmail(email);
   }
 
   public async updateAccountInfo(body: {name: string; email: string; preferredLanguage: string}) {
-    validateUser({name: body.name, email: body.email});
     await this.authGateway.updateAccountInfo(body);
   }
 
   public async updatePassword(body: {oldPassword: string; newPassword: string}) {
-    validateUser(body);
     await this.authGateway.updatePassword(body);
   }
 
   public async setNewPassword(body: {userId: string; newPassword: string}, accessToken: string) {
-    validateUser(body);
     await this.authGateway.setNewPassword(body, accessToken);
   }
 
@@ -67,7 +61,6 @@ export class AuthService {
   }
 
   public async forgotPassword(email: string) {
-    validateUser({email});
     return this.authGateway.forgotPassword(email);
   }
 
