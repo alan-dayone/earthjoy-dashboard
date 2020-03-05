@@ -33,27 +33,14 @@ function AdminAccountCreationPage() {
     }
   }
 
-  function isFieldValid(formProps: {errors: object}, fieldName: string) {
-    if (formProps.errors[fieldName]) return false;
-    else return true;
-  }
-
-  const getErrorFieldStyle = (formProps: {errors: object}, fieldName: string) => {
-    const fieldValid = isFieldValid(formProps, fieldName);
-    if (!fieldValid) return 'border-danger rounded-sm';
-    else return '';
-  };
-
-  const renderErrorMessage = (message) => <p className="text-danger">{message}</p>;
-
   return (
     <div id="admin-create-account-page" className="shadow">
       <Head>
         <title>Admin - Create account</title>
       </Head>
       <Formik initialValues={initialValues} onSubmit={_handleSave} validationSchema={createUserSchema}>
-        {(props) => (
-          <form onSubmit={props.handleSubmit}>
+        {({errors, handleChange, handleSubmit, values, isSubmitting}) => (
+          <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
                 <strong>Create account</strong>
@@ -63,42 +50,42 @@ function AdminAccountCreationPage() {
                   <div className="col-12">
                     <div className="form-group">
                       <label>Email</label>
-                      <div className={classNames('input-group', getErrorFieldStyle(props, 'email'))}>
+                      <div className="input-group">
                         <div className="input-group-prepend">
                           <span className="input-group-text">
                             <i className="cil-envelope-closed" />
                           </span>
                         </div>
                         <input
-                          className="form-control"
+                          className={classNames('form-control', {'is-invalid': errors.email})}
                           name="email"
-                          onChange={props.handleChange}
-                          value={props.values.email}
+                          onChange={handleChange}
+                          value={values.email}
                         />
+                        {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                       </div>
-                      <ErrorMessage name="email" render={renderErrorMessage} />
                     </div>
                     <div className="form-group">
                       <label>Password</label>
-                      <div className={classNames('input-group', getErrorFieldStyle(props, 'password'))}>
+                      <div className="input-group">
                         <div className="input-group-prepend">
                           <span className="input-group-text">
                             <i className="cil-lock-locked" />
                           </span>
                         </div>
                         <input
-                          className="form-control"
+                          className={classNames('form-control', {'is-invalid': errors.password})}
                           name="password"
                           type="password"
-                          onChange={props.handleChange}
-                          value={props.values.password}
+                          onChange={handleChange}
+                          value={values.password}
                         />
+                        {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                       </div>
-                      <ErrorMessage name="password" render={renderErrorMessage} />
                     </div>
                     <div className="form-group">
                       <label>First name</label>
-                      <div className={classNames('input-group', getErrorFieldStyle(props, 'firstName'))}>
+                      <div className="input-group">
                         <div className="input-group-prepend">
                           <span className="input-group-text">
                             <i className="cil-user" />
@@ -106,16 +93,16 @@ function AdminAccountCreationPage() {
                         </div>
                         <input
                           name="firstName"
-                          className="form-control"
-                          onChange={props.handleChange}
-                          value={props.values.firstName}
+                          className={classNames('form-control', {'is-invalid': errors.firstName})}
+                          onChange={handleChange}
+                          value={values.firstName}
                         />
+                        {errors.firstName && <div className="invalid-feedback">{errors.firstName}</div>}
                       </div>
-                      <ErrorMessage name="firstName" render={renderErrorMessage} />
                     </div>
                     <div className="form-group">
                       <label>Last name</label>
-                      <div className={classNames('input-group', getErrorFieldStyle(props, 'lastName'))}>
+                      <div className="input-group">
                         <div className="input-group-prepend">
                           <span className="input-group-text">
                             <i className="cil-user" />
@@ -123,12 +110,12 @@ function AdminAccountCreationPage() {
                         </div>
                         <input
                           name="lastName"
-                          className="form-control"
-                          onChange={props.handleChange}
-                          value={props.values.lastName}
+                          className={classNames('form-control', {'is-invalid': errors.lastName})}
+                          onChange={handleChange}
+                          value={values.lastName}
                         />
+                        {errors.lastName && <div className="invalid-feedback">{errors.lastName}</div>}
                       </div>
-                      <ErrorMessage name="lastName" render={renderErrorMessage} />
                     </div>
                     <div className="form-group">
                       <label>Account status</label>
@@ -148,9 +135,9 @@ function AdminAccountCreationPage() {
                 </div>
               </div>
               <div className="card-footer">
-                <button className="btn btn-sm btn-success" type="submit" disabled={props.isSubmitting}>
-                  {props.isSubmitting && <div className="spinner-border spinner-border-sm mr-1" role="status" />}
-                  {props.isSubmitting ? 'Creating...' : 'Create'}
+                <button className="btn btn-sm btn-success" type="submit" disabled={isSubmitting}>
+                  {isSubmitting && <div className="spinner-border spinner-border-sm mr-1" role="status" />}
+                  {isSubmitting ? 'Creating...' : 'Create'}
                 </button>
               </div>
             </div>

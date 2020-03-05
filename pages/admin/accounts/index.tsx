@@ -57,15 +57,9 @@ const tableColumns = [
     width: '15%',
     Cell: ({row}) => (
       <>
-        <Link href={`/admin/accounts/${row.values.id}`}>
-          <a className="btn btn-sm btn-primary">More</a>
-        </Link>{' '}
         <Link href={`/admin/accounts/${row.values.id}/edit`}>
           <a className="btn btn-sm btn-info">Edit</a>
-        </Link>{' '}
-        <button className="btn btn-sm btn-danger" onClick={() => inactivateUser(row.values.id)}>
-          Deactivate
-        </button>
+        </Link>
       </>
     ),
   },
