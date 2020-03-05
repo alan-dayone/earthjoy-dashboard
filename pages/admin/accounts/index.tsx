@@ -113,7 +113,7 @@ function DefaultColumnFilter({column: {filterValue, setFilter}}) {
   );
 }
 
-function AdminAccountsPage() {
+function AdminAccountsPage({router}) {
   if (typeof window === 'undefined') {
     return null;
   }
@@ -139,7 +139,9 @@ function AdminAccountsPage() {
       pageSize,
       filters: filterObj,
     });
+    console.log(filterObj);
 
+    router.replace(`${router.route}?`);
     setData(accounts);
     setLoadingData(false);
   }, []);

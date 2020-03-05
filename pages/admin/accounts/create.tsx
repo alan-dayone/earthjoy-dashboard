@@ -2,6 +2,7 @@
 import React from 'react';
 import Head from 'next/head';
 import {NextComponentType, NextPageContext} from 'next';
+import loGet from 'lodash/get';
 import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../hocs';
@@ -20,14 +21,22 @@ const initialValues: Account = {
   emailVerified: true,
 };
 
+export function getServerErrorMessage(error) {
+  const errorEnum = loGet(error, 'response.data.error.message');
+  if (errorEnum === 'EMAIL_EXISTED') {
+    return 'Email already existed';
+  }
+  return 'Unkown error';
+}
+
 function AdminAccountCreationPage() {
   async function _handleSave(values: Account, actions) {
     try {
       actions.setSubmitting(true);
       await accountService.createAccount(values);
-      toastr.success(`Account ${values.email} created`);
+      toastr.success('Success');
     } catch (e) {
-      toastr.error(e.message);
+      toastr.error(getServerErrorMessage(e));
     } finally {
       actions.setSubmitting(false);
     }
