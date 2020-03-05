@@ -10,8 +10,8 @@ export class AccountGateway {
 
   public async create(account: Account) {
     console.log(account);
-    // const {data} = await this.restConnector.post('/accounts', account);
-    // return data;
+    const {data} = await this.restConnector.post('/accounts', account);
+    return data;
   }
 
   public async find({pageIndex, pageSize, filters}) {

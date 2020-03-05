@@ -32,6 +32,7 @@ export const constraint = {
   password: {
     MIN_LENGTH: 6,
     MAX_LENGTH: 50,
+    PATTERN: /[a-zA-Z]/,
   },
 };
 

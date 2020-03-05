@@ -1,11 +1,12 @@
 import express from 'express';
 import next from 'next';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
+const dotenv = require('dotenv').config();
 import cookieParser from 'cookie-parser';
 import proxy from 'http-proxy-middleware';
 // import routes from './routes';
 
-dotenv.config();
+// dotenv.config();
 
 const port = process.env.PORT;
 

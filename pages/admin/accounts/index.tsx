@@ -20,7 +20,7 @@ const tableColumns = [
   {
     Header: 'ID',
     accessor: 'id',
-    width: '10%',
+    width: '15%',
   },
   {
     Header: 'First name',
@@ -41,14 +41,14 @@ const tableColumns = [
     Header: 'Email verification',
     accessor: 'emailVerified',
     Filter: SelectEmailVerificationFilter,
-    width: '15%',
+    width: '10%',
     Cell: ({cell: {value}}) => <AccountEmailVerificationLabel emailVerified={value} />,
   },
   {
     Header: 'Status',
     accessor: 'status',
     Filter: SelectStatusFilter,
-    width: '15%',
+    width: '10%',
     Cell: ({cell: {value}}) => <AccountStatusLabel status={value} />,
   },
   {
@@ -57,11 +57,14 @@ const tableColumns = [
     width: '15%',
     Cell: ({row}) => (
       <>
+        <Link href={`/admin/accounts/${row.values.id}`}>
+          <a className="btn btn-sm btn-primary">More</a>
+        </Link>{' '}
         <Link href={`/admin/accounts/${row.values.id}/edit`}>
           <a className="btn btn-sm btn-info">Edit</a>
         </Link>{' '}
         <button className="btn btn-sm btn-danger" onClick={() => inactivateUser(row.values.id)}>
-          Inactivate
+          Deactivate
         </button>
       </>
     ),
@@ -161,7 +164,7 @@ function AdminAccountsPage() {
               <strong>Account management</strong>
               <div className="card-header-actions">
                 <Link href="/admin/accounts/create">
-                  <a className="btn btn-sm btn-primary">Create</a>
+                  <a className="btn btn-sm btn-success">Create</a>
                 </Link>
               </div>
             </div>
@@ -214,7 +217,7 @@ function Table({data, fetchData, loadingData}) {
 
   return (
     <>
-      <table className="table table-responsive-sm admin-table" {...getTableProps()}>
+      <table className="table table-responsive-sm" {...getTableProps()}>
         <thead>
           <tr>
             {headers.map((header, index) => (

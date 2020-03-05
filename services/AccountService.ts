@@ -1,6 +1,6 @@
 import {ServiceContext} from './index';
 import {AccountGateway} from '../gateways/AccountGateway';
-import {Account} from '../models/User';
+import {Account, constraint} from '../models/User';
 
 export class AccountService {
   protected accountGateway: AccountGateway;
