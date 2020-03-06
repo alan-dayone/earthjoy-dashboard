@@ -26,7 +26,7 @@ export class AccountGateway {
 
   public async update(id: string, account: Account) {
     await console.log(id);
-    const {data} = await this.restConnector.put(`accounts/${id}`, account);
+    const {data} = await this.restConnector.patch(`accounts/${id}`, account);
     return data;
   }
 

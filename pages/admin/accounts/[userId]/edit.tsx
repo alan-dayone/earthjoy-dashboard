@@ -3,12 +3,17 @@ import React, {useState, useEffect} from 'react';
 import Head from 'next/head';
 import {NextComponentType, NextPageContext} from 'next';
 import loGet from 'lodash/get';
+import loIsEqual from 'lodash/isEqual';
 import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../../hocs';
 import {Formik} from 'formik';
-import {Account, AccountStatus} from '../../../../models/User';
-import {AccountEmailVerificationText, AccountStatusText, userFormValidationSchema} from '../../../../view-models/User';
+import {Account, AccountStatus, toFormikDataObject, toAccountObject} from '../../../../models/User';
+import {
+  AccountEmailVerificationText,
+  AccountStatusText,
+  userUpdateInfomationFormValidationSchema,
+} from '../../../../view-models/User';
 import {accountService} from '../../../../services';
 
 export function getServerErrorMessage(error) {
@@ -19,26 +24,46 @@ export function getServerErrorMessage(error) {
   return 'Unknown error';
 }
 
+function getWarningMessage({code}) {
+  if (code === 'NOTHING_CHANGE') {
+    return 'The new user infomation is the same';
+  }
+  return 'Warning';
+}
+
+class UserWarning {
+  public static NOTHING_CHANGE = 'NOTHING_CHANGE';
+  public code: string;
+  constructor(code: string) {
+    this.code = code;
+  }
+}
+
 function AdminAccountEditingPage({router, originalAccount}) {
-  async function _handleSave(values: Account, actions) {
+  const _handleSave = async (values: Account, actions) => {
     try {
       actions.setSubmitting(true);
+      if (loIsEqual(values, originalAccount)) throw new UserWarning(UserWarning.NOTHING_CHANGE);
       const userId = await loGet(router, ['query', 'userId']);
-      await accountService.updateAccount(userId, values);
+      await accountService.updateAccount(userId, toAccountObject(values));
       toastr.success('Success');
     } catch (e) {
-      toastr.error(getServerErrorMessage(e));
+      if (loGet(e, 'e.response.data.error', false)) toastr.error(getServerErrorMessage(e));
+      else if (e instanceof UserWarning) toastr.warning(getWarningMessage(e));
     } finally {
       actions.setSubmitting(false);
     }
-  }
+  };
 
   return (
     <div id="admin-edit-account-page" className="shadow">
       <Head>
         <title>Admin - Edit account</title>
       </Head>
-      <Formik initialValues={originalAccount} onSubmit={_handleSave} validationSchema={userFormValidationSchema}>
+      <Formik
+        initialValues={originalAccount}
+        onSubmit={_handleSave}
+        validationSchema={userUpdateInfomationFormValidationSchema}>
         {({errors, handleChange, handleSubmit, values, isSubmitting}) => (
           <form onSubmit={handleSubmit}>
             <div className="card">
@@ -132,7 +157,7 @@ function AdminAccountEditingPage({router, originalAccount}) {
 
 AdminAccountEditingPage.getInitialProps = async ({query}) => {
   return {
-    originalAccount: await accountService.findOneForAdmin(query.userId),
+    originalAccount: await toFormikDataObject(await accountService.findOneForAdmin(query.userId)),
   };
 };
 

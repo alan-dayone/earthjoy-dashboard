@@ -1,3 +1,5 @@
+import loForIn from 'lodash/forIn';
+
 export enum Role {
   ROOT_ADMIN = 'root_admin',
   USER = 'user',
@@ -15,6 +17,27 @@ export interface Account {
   password?: string;
   status: AccountStatus;
   emailVerified: boolean;
+}
+
+/**
+ * @description Convert (shallowly) TS data object to suit Formik data object
+ * @param data
+ * @returns Formik data object
+ */
+export function toFormikDataObject(data) {
+  const newData = {...data};
+  loForIn(data, (value, key) => {
+    if (typeof value === 'boolean') newData[key] = value ? 'true' : 'false';
+  });
+  return newData;
+}
+
+export function toAccountObject(data) {
+  const newData: Account = {
+    ...data,
+  };
+  newData.emailVerified = data.emailVerified === 'true';
+  return newData;
 }
 
 export const isAdmin = (user: any) => {
