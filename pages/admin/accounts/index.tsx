@@ -56,7 +56,7 @@ const tableColumns = [
     width: '15%',
     Cell: ({row}) => (
       <>
-        <Link href={`/admin/accounts/${row.values.id}/edit`}>
+        <Link href="/admin/accounts/[userId]/edit" as={`/admin/accounts/${row.values.id}/edit`}>
           <a className="btn btn-sm btn-info">Edit</a>
         </Link>
       </>
