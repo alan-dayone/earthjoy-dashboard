@@ -40,8 +40,10 @@ class UserWarning {
 }
 
 function AdminAccountEditingPage({router, originalAccount}) {
-  const _handleSave = async (values: Account, actions) => {
+  const _handleSave = async (values, actions) => {
     try {
+      console.log(originalAccount, values);
+
       actions.setSubmitting(true);
       if (loIsEqual(values, originalAccount)) throw new UserWarning(UserWarning.NOTHING_CHANGE);
       const userId = await loGet(router, ['query', 'userId']);
@@ -126,14 +128,18 @@ function AdminAccountEditingPage({router, originalAccount}) {
                     </div>
                     <div className="form-group">
                       <label>Account status</label>
-                      <select name="status" className="form-control">
+                      <select name="status" className="form-control" value={values.status} onChange={handleChange}>
                         <option value={AccountStatus.ACTIVE}>{AccountStatusText[AccountStatus.ACTIVE]}</option>
                         <option value={AccountStatus.INACTIVE}>{AccountStatusText[AccountStatus.INACTIVE]}</option>
                       </select>
                     </div>
                     <div className="form-group">
                       <label>Email verification</label>
-                      <select name="emailVerified" className="form-control">
+                      <select
+                        name="emailVerified"
+                        className="form-control"
+                        value={values.emailVerified}
+                        onChange={handleChange}>
                         <option value="true">{AccountEmailVerificationText.VERIFIED}</option>
                         <option value="false">{AccountEmailVerificationText.NOT_VERIFIED}</option>
                       </select>

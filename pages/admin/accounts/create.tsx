@@ -31,6 +31,8 @@ export function getServerErrorMessage(error) {
 function AdminAccountCreationPage() {
   async function _handleSave(values: Account, actions) {
     try {
+      console.log(values);
+
       actions.setSubmitting(true);
       await accountService.createAccount(values);
       toastr.success('Success');
@@ -47,7 +49,7 @@ function AdminAccountCreationPage() {
         <title>Admin - Create account</title>
       </Head>
       <Formik initialValues={initialValues} onSubmit={_handleSave} validationSchema={userFormValidationSchema}>
-        {({errors, handleChange, handleSubmit, values, isSubmitting}) => (
+        {({errors, handleChange, handleSubmit, values, isSubmitting, setFieldValue}) => (
           <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
@@ -127,14 +129,21 @@ function AdminAccountCreationPage() {
                     </div>
                     <div className="form-group">
                       <label>Account status</label>
-                      <select name="status" className="form-control">
+                      <select name="status" className="form-control" value={values.status} onChange={handleChange}>
                         <option value={AccountStatus.ACTIVE}>{AccountStatusText[AccountStatus.ACTIVE]}</option>
                         <option value={AccountStatus.INACTIVE}>{AccountStatusText[AccountStatus.INACTIVE]}</option>
                       </select>
                     </div>
                     <div className="form-group">
                       <label>Email verification</label>
-                      <select name="emailVerified" className="form-control">
+                      <select
+                        name="emailVerified"
+                        className="form-control"
+                        value={String(values.emailVerified)}
+                        onChange={(e) => {
+                          if (e.target.value === 'true') setFieldValue('emailVerified', true);
+                          else setFieldValue('emailVerified', false);
+                        }}>
                         <option value="true">{AccountEmailVerificationText.VERIFIED}</option>
                         <option value="false">{AccountEmailVerificationText.NOT_VERIFIED}</option>
                       </select>

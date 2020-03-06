@@ -118,12 +118,13 @@ function AdminAccountsPage() {
   }
 
   const [data, setData] = useState([]);
+  const [pageCount, setPageCount] = useState();
   const [loadingData, setLoadingData] = useState(true);
   const router = useRouter();
+  const {index = 0, size = 5, ...query} = router.query;
 
   const fetchData = useCallback(async ({pageIndex, pageSize, filters}) => {
     setLoadingData(true);
-
     const filterObj = filters.reduce((ac, column) => {
       if (column.value) {
         if (column.id === 'emailVerified' && column.value !== '') {
@@ -135,14 +136,14 @@ function AdminAccountsPage() {
       return ac;
     }, {});
     const accounts = await accountService.findAccountsForAdmin({
-      pageIndex,
-      pageSize,
+      pageIndex: Number(index),
+      pageSize: Number(size),
       filters: filterObj,
     });
-
-    setData(accounts);
+    setData(accounts.data);
+    setPageCount(accounts.pageCount);
     setLoadingData(false);
-    const queryString = qs.stringify(filterObj);
+    const queryString = qs.stringify({...filterObj, index, size});
     if (queryString !== '') Router.push(`/admin/accounts?${queryString}`);
   }, []);
 
@@ -167,9 +168,14 @@ function AdminAccountsPage() {
             <div className="card-body">
               <Table
                 data={data}
-                defaultFilter={router.query}
+                defaultFilter={query}
                 fetchData={debouncedFetchData}
                 loadingData={loadingData}
+                manualPageCount={pageCount}
+                initialState={{
+                  pageIndex: Number(index),
+                  pageSize: Number(size),
+                }}
               />
             </div>
           </div>
@@ -179,7 +185,14 @@ function AdminAccountsPage() {
   );
 }
 
-function Table({data, fetchData, loadingData, defaultFilter}) {
+function Table({
+  data,
+  fetchData,
+  loadingData,
+  defaultFilter,
+  manualPageCount,
+  initialState = {pageIndex: 0, pageSize: 10},
+}) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -200,16 +213,17 @@ function Table({data, fetchData, loadingData, defaultFilter}) {
       data,
       manualFilters: true,
       initialState: {
-        pageIndex: 0,
-        pageSize: 10,
         filters: Object.keys(defaultFilter).map((key) => ({
           id: key,
           value: defaultFilter[key],
         })),
+        ...initialState,
       },
       defaultColumn: {
         Filter: DefaultColumnFilter,
       },
+      manualPagination: true,
+      pageCount: manualPageCount,
     },
     useFilters,
     usePagination,

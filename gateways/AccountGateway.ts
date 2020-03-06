@@ -20,12 +20,18 @@ export class AccountGateway {
       skip: pageIndex * pageSize,
       where: filters,
     };
-    const {data} = await this.restConnector.get(`/accounts?filter=${JSON.stringify(filter)}`);
-    return data;
+    const [resData, resCount] = await Promise.all([
+      this.restConnector.get(`/accounts?filter=${JSON.stringify(filter)}`),
+      this.restConnector.get('/accounts/count'),
+    ]);
+    const AccountCount = resCount.data.count;
+    return {
+      data: resData.data,
+      pageCount: AccountCount / pageSize + (AccountCount % pageSize > 0 ? 1 : 0),
+    };
   }
 
   public async update(id: string, account: Account) {
-    await console.log(id);
     const {data} = await this.restConnector.patch(`accounts/${id}`, account);
     return data;
   }
