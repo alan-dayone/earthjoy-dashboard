@@ -2,7 +2,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import Head from 'next/head';
 import classNames from 'classnames';
-import {useAsyncDebounce, useFilters, usePagination, useTable} from 'react-table';
+import {useAsyncDebounce, useFilters, usePagination, useTable, useSortBy} from 'react-table';
 import {NextComponentType, NextPageContext} from 'next';
 import Link from 'next/link';
 import Router from 'next/router';
@@ -52,6 +52,7 @@ const tableColumns = [
   },
   {
     Header: 'Actions',
+    sortType: null,
     canFilter: false,
     width: '15%',
     Cell: ({row}) => (
@@ -118,12 +119,12 @@ function AdminAccountsPage() {
   }
 
   const [data, setData] = useState([]);
-  const [pageCount, setPageCount] = useState();
+  const [pageCount, setPageCount] = useState(1);
   const [loadingData, setLoadingData] = useState(true);
   const router = useRouter();
   const {index = 0, size = 5, ...query} = router.query;
 
-  const fetchData = useCallback(async ({pageIndex, pageSize, filters}) => {
+  const fetchData = useCallback(async ({pageIndex, pageSize, filters, sortBy}) => {
     setLoadingData(true);
     const filterObj = filters.reduce((ac, column) => {
       if (column.value) {
@@ -136,14 +137,15 @@ function AdminAccountsPage() {
       return ac;
     }, {});
     const accounts = await accountService.findAccountsForAdmin({
-      pageIndex: Number(index),
-      pageSize: Number(size),
+      pageIndex: Number(pageIndex),
+      pageSize: Number(pageSize),
       filters: filterObj,
+      orders: sortBy,
     });
     setData(accounts.data);
     setPageCount(accounts.pageCount);
     setLoadingData(false);
-    const queryString = qs.stringify({...filterObj, index, size});
+    const queryString = qs.stringify({...filterObj, index: pageIndex, size: pageSize});
     if (queryString !== '') Router.push(`/admin/accounts?${queryString}`);
   }, []);
 
@@ -206,7 +208,7 @@ function Table({
     gotoPage,
     nextPage,
     previousPage,
-    state: {pageIndex, filters, pageSize},
+    state: {pageIndex, filters, pageSize, sortBy},
   } = useTable(
     {
       columns: tableColumns,
@@ -223,15 +225,17 @@ function Table({
         Filter: DefaultColumnFilter,
       },
       manualPagination: true,
+      manualSortBy: true,
       pageCount: manualPageCount,
     },
     useFilters,
+    useSortBy,
     usePagination,
   );
 
   useEffect(() => {
-    fetchData({pageIndex, pageSize, filters});
-  }, [fetchData, pageIndex, pageSize, filters]);
+    fetchData({pageIndex, pageSize, filters, sortBy});
+  }, [fetchData, pageIndex, pageSize, filters, sortBy]);
 
   return (
     <>
@@ -239,8 +243,20 @@ function Table({
         <thead>
           <tr>
             {headers.map((header, index) => (
-              <th key={`th-${index}`} style={{width: header.width}}>
+              <th
+                key={`th-${index}`}
+                style={{width: header.width}}
+                {...header.getHeaderProps(header.getSortByToggleProps())}>
                 {header.render('Header')}
+                <span className="float-right">
+                  {header.isSorted ? (
+                    header.isSortedDesc ? (
+                      <i className="cil-sort-descending"></i>
+                    ) : (
+                      <i className="cil-sort-ascending"></i>
+                    )
+                  ) : null}
+                </span>
               </th>
             ))}
           </tr>

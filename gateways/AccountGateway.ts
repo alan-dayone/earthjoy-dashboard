@@ -13,21 +13,25 @@ export class AccountGateway {
     return data;
   }
 
-  public async find({pageIndex, pageSize, filters}) {
+  public async find({pageIndex, pageSize, filters, orders}) {
     const filter = {
       offset: pageIndex * pageSize,
       limit: pageSize,
       skip: pageIndex * pageSize,
       where: filters,
+      order: orders,
     };
+    console.log(JSON.stringify(filter.where));
+
     const [resData, resCount] = await Promise.all([
       this.restConnector.get(`/accounts?filter=${JSON.stringify(filter)}`),
-      this.restConnector.get('/accounts/count'),
+      this.restConnector.get(`/accounts/count`),
     ]);
     const AccountCount = resCount.data.count;
+    const pageCount = AccountCount / pageSize + (AccountCount % pageSize > 0 ? 1 : 0);
     return {
       data: resData.data,
-      pageCount: AccountCount / pageSize + (AccountCount % pageSize > 0 ? 1 : 0),
+      pageCount,
     };
   }
 

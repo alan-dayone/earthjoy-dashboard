@@ -8,7 +8,7 @@ import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../../hocs';
 import {Formik} from 'formik';
-import {Account, AccountStatus, toFormikDataObject, toAccountObject} from '../../../../models/User';
+import {Account, AccountStatus} from '../../../../models/User';
 import {
   AccountEmailVerificationText,
   AccountStatusText,
@@ -42,12 +42,10 @@ class UserWarning {
 function AdminAccountEditingPage({router, originalAccount}) {
   const _handleSave = async (values, actions) => {
     try {
-      console.log(originalAccount, values);
-
       actions.setSubmitting(true);
       if (loIsEqual(values, originalAccount)) throw new UserWarning(UserWarning.NOTHING_CHANGE);
       const userId = await loGet(router, ['query', 'userId']);
-      await accountService.updateAccount(userId, toAccountObject(values));
+      await accountService.updateAccount(userId, values);
       toastr.success('Success');
     } catch (e) {
       if (loGet(e, 'e.response.data.error', false)) toastr.error(getServerErrorMessage(e));
@@ -66,7 +64,7 @@ function AdminAccountEditingPage({router, originalAccount}) {
         initialValues={originalAccount}
         onSubmit={_handleSave}
         validationSchema={userUpdateInfomationFormValidationSchema}>
-        {({errors, handleChange, handleSubmit, values, isSubmitting}) => (
+        {({errors, handleChange, handleSubmit, values, isSubmitting, setFieldValue}) => (
           <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
@@ -138,8 +136,11 @@ function AdminAccountEditingPage({router, originalAccount}) {
                       <select
                         name="emailVerified"
                         className="form-control"
-                        value={values.emailVerified}
-                        onChange={handleChange}>
+                        value={values.emailVerified ? 'true' : 'false'}
+                        onChange={(e) => {
+                          if (e.target.value === 'true') setFieldValue('emailVerified', true);
+                          else setFieldValue('emailVerified', false);
+                        }}>
                         <option value="true">{AccountEmailVerificationText.VERIFIED}</option>
                         <option value="false">{AccountEmailVerificationText.NOT_VERIFIED}</option>
                       </select>
@@ -163,7 +164,7 @@ function AdminAccountEditingPage({router, originalAccount}) {
 
 AdminAccountEditingPage.getInitialProps = async ({query}) => {
   return {
-    originalAccount: await toFormikDataObject(await accountService.findOneForAdmin(query.userId)),
+    originalAccount: await accountService.findOneForAdmin(query.userId),
   };
 };
 

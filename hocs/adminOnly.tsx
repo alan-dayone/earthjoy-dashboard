@@ -77,7 +77,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
                       />
                     </div>
                   </DropdownToggle>
-                  <DropdownMenu right>
+                  <DropdownMenu>
                     <DropdownItem>Profile</DropdownItem>
                     <DropdownItem onClick={this._logout}>Logout</DropdownItem>
                   </DropdownMenu>

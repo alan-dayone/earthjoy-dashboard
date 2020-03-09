@@ -9,8 +9,11 @@ export class AccountService {
     this.accountGateway = options.accountGateway;
   }
 
-  public async findAccountsForAdmin({pageIndex, pageSize, filters}) {
-    return this.accountGateway.find({pageIndex, pageSize, filters});
+  public async findAccountsForAdmin({pageIndex, pageSize, filters, orders}) {
+    const orderArray = await orders.map((value) => {
+      return `${value.id} ${value.desc ? 'desc' : 'asc'}`;
+    });
+    return this.accountGateway.find({pageIndex, pageSize, filters, orders: orderArray});
   }
 
   public async createAccount(account: Account) {
