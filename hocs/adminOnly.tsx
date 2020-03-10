@@ -5,6 +5,8 @@ import {DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from '
 import {NextComponentType} from 'next';
 import {withRouter} from 'next/router';
 import {WithRouterProps} from 'next/dist/client/with-router';
+import classNames from 'classnames';
+import JsCookie from 'js-cookie';
 import {ExpressReduxNextContext} from './types';
 import {authService} from '../services';
 import {CommonThunkDispatch} from '../redux/types';
@@ -12,9 +14,14 @@ import {actions as authRedux} from '../redux/authRedux';
 import {isAdmin} from '../models/User';
 import '../scss/admin/index.scss';
 
+interface AdminWrapperState {
+  showSidebar: boolean;
+  sidebarUnfoldable: boolean;
+}
+
 /* tslint:disable-next-line:variable-name */
 export const adminOnly = (Content: NextComponentType): NextComponentType => {
-  class AdminWrapper extends React.Component<WithRouterProps> {
+  class AdminWrapper extends React.Component<WithRouterProps, AdminWrapperState> {
     public static async getInitialProps(ctx: ExpressReduxNextContext) {
       const {req, res, isServer} = ctx;
       const dispatch = ctx.store?.dispatch as CommonThunkDispatch<AnyAction>;
@@ -35,6 +42,14 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
       return Content.getInitialProps ? Content.getInitialProps(ctx) : {};
     }
 
+    constructor(props) {
+      super(props);
+      this.state = {
+        showSidebar: true,
+        sidebarUnfoldable: false,
+      };
+    }
+
     public render() {
       return (
         <div className="c-app pace-done">
@@ -53,10 +68,25 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
       );
     }
 
+    private handleSidebar = (feild: string) => {
+      this.setState({...this.state, [feild]: !this.state[feild]});
+    };
+
+    public componentDidMount = async () => {
+      const oldState = JsCookie.get('AdminWrapperState');
+      this.setState(JSON.parse(oldState));
+    };
+
+    public componentWillUnmount = () => {
+      JsCookie.set('AdminWrapperState', this.state);
+    };
+
     public _renderNavbar = () => {
       return (
         <header className="c-header c-header-light c-header-fixed px-3">
-          <button className="c-header-toggler c-class-toggler d-md-down-none" type="button">
+          <button
+            className="c-header-toggler c-class-toggler d-md-down-none sidebar-toggler"
+            onClick={() => this.handleSidebar('showSidebar')}>
             <span className="c-header-toggler-icon" />
           </button>
           <ul className="c-header-nav mfs-auto">
@@ -91,7 +121,12 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
 
     public _renderSidebar = () => {
       return (
-        <div className="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
+        <div
+          className={classNames('c-sidebar c-sidebar-dark c-sidebar-fixed', {
+            'c-sidebar-show': this.state.showSidebar,
+            'c-sidebar-unfoldable': this.state.sidebarUnfoldable,
+          })}
+          id="sidebar">
           <div className="c-sidebar-brand">ADMIN PORTAL</div>
           <ul className="c-sidebar-nav ps ps--active-y" data-drodpown-accordion="true">
             <li className="c-sidebar-nav-item">
@@ -134,9 +169,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
           </ul>
           <button
             className="c-sidebar-minimizer c-class-toggler"
-            type="button"
-            data-target="_parent"
-            data-class="c-sidebar-unfoldable"
+            onClick={() => this.handleSidebar('sidebarUnfoldable')}
           />
         </div>
       );

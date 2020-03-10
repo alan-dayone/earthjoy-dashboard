@@ -266,7 +266,7 @@ function Table({
             ))}
           </tr>
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody className="mh-50" {...getTableBodyProps()}>
           {loadingData ? (
             <tr>
               <td colSpan={tableColumns.length} className="text-center">
@@ -313,24 +313,16 @@ function Table({
         <div className="col-6">
           <ul className="pagination justify-content-end">
             <li className={classNames('page-item', {disabled: !canPreviousPage})} onClick={() => gotoPage(0)}>
-              <a className="page-link" href="#">
-                {'<<'}
-              </a>
+              <a className="page-link u-cursor-pointer">{'<<'}</a>
             </li>
             <li className={classNames('page-item', {disabled: !canPreviousPage})} onClick={() => previousPage()}>
-              <a className="page-link" href="#">
-                {'<'}
-              </a>
+              <a className="page-link u-cursor-pointer">{'<'}</a>
             </li>
             <li className={classNames('page-item', {disabled: !canNextPage})} onClick={() => nextPage()}>
-              <a className="page-link" href="#">
-                {'>'}
-              </a>
+              <a className="page-link u-cursor-pointer">{'>'}</a>
             </li>
             <li className={classNames('page-item', {disabled: !canNextPage})} onClick={() => gotoPage(pageCount - 1)}>
-              <a className="page-link" href="#">
-                {'>>'}
-              </a>
+              <a className="page-link u-cursor-pointer">{'>>'}</a>
             </li>
           </ul>
         </div>

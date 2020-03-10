@@ -1,5 +1,4 @@
 const withSass = require('@zeit/next-sass');
-
 const config = withSass();
 
 config.publicRuntimeConfig = {

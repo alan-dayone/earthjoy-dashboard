@@ -13,7 +13,14 @@ export class AccountService {
     const orderArray = await orders.map((value) => {
       return `${value.id} ${value.desc ? 'desc' : 'asc'}`;
     });
-    return this.accountGateway.find({pageIndex, pageSize, filters, orders: orderArray});
+    const [data, pageCount] = await Promise.all([
+      this.accountGateway.find({pageIndex, pageSize, filters, orders: orderArray}),
+      this.accountGateway.count({where: filters.where}),
+    ]);
+    return {
+      data,
+      pageCount,
+    };
   }
 
   public async createAccount(account: Account) {

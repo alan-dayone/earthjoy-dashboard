@@ -21,18 +21,13 @@ export class AccountGateway {
       where: filters,
       order: orders,
     };
-    console.log(JSON.stringify(filter.where));
+    const {data} = await this.restConnector.get(`/accounts?filter=${JSON.stringify(filter)}`);
+    return data;
+  }
 
-    const [resData, resCount] = await Promise.all([
-      this.restConnector.get(`/accounts?filter=${JSON.stringify(filter)}`),
-      this.restConnector.get(`/accounts/count`),
-    ]);
-    const AccountCount = resCount.data.count;
-    const pageCount = AccountCount / pageSize + (AccountCount % pageSize > 0 ? 1 : 0);
-    return {
-      data: resData.data,
-      pageCount,
-    };
+  public async count({where = {}}) {
+    const {data} = await this.restConnector.get(`/accounts/count?where=${JSON.stringify(where)}`);
+    return data.count;
   }
 
   public async update(id: string, account: Account) {
