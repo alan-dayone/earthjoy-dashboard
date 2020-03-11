@@ -7,7 +7,8 @@ import {NextComponentType, NextPageContext} from 'next';
 import {adminOnly} from '../../../hocs';
 import {systemService} from '../../../services';
 import {MailSmtpSettings} from '../../../models/Configuration';
-
+import {MailSmtpSettingsValidationSchema} from '../../../view-models/SmtpConfig';
+import classNames from 'classnames';
 class AdminSmtpSettingsPage extends Component<{initialSmtpSettings: MailSmtpSettings}> {
   public state = {
     isTestingConnection: false,
@@ -38,9 +39,12 @@ class AdminSmtpSettingsPage extends Component<{initialSmtpSettings: MailSmtpSett
         </Head>
         <div className="row">
           <div className="col-12">
-            <Formik initialValues={initialValues} onSubmit={this._handleSave}>
-              {(props) => (
-                <form onSubmit={props.handleSubmit}>
+            <Formik
+              initialValues={initialValues}
+              onSubmit={this._handleSave}
+              validationSchema={MailSmtpSettingsValidationSchema}>
+              {({values, handleChange, isSubmitting, handleSubmit, errors}) => (
+                <form onSubmit={handleSubmit}>
                   <div className="card">
                     <div className="card-header">
                       <strong>SMTP settings</strong>
@@ -57,11 +61,12 @@ class AdminSmtpSettingsPage extends Component<{initialSmtpSettings: MailSmtpSett
                                 </span>
                               </div>
                               <input
-                                className="form-control"
+                                className={classNames('form-control', {'is-invalid': errors.smtpHost})}
                                 name="smtpHost"
-                                onChange={props.handleChange}
-                                value={props.values.smtpHost}
+                                onChange={handleChange}
+                                value={values.smtpHost}
                               />
+                              {errors.smtpHost && <div className="invalid-feedback">{errors.smtpHost}</div>}
                             </div>
                           </div>
                           <div className="form-group">
@@ -73,10 +78,10 @@ class AdminSmtpSettingsPage extends Component<{initialSmtpSettings: MailSmtpSett
                                 </span>
                               </div>
                               <input
-                                className="form-control"
+                                className={classNames('form-control', {'is-invalid': errors.smtpPort})}
                                 name="smtpPort"
-                                onChange={props.handleChange}
-                                value={props.values.smtpPort}
+                                onChange={handleChange}
+                                value={values.smtpPort}
                               />
                             </div>
                           </div>
@@ -89,11 +94,12 @@ class AdminSmtpSettingsPage extends Component<{initialSmtpSettings: MailSmtpSett
                                 </span>
                               </div>
                               <input
-                                className="form-control"
+                                className={classNames('form-control', {'is-invalid': errors.senderName})}
                                 name="senderName"
-                                onChange={props.handleChange}
-                                value={props.values.senderName}
+                                onChange={handleChange}
+                                value={values.senderName}
                               />
+                              {errors.senderName && <div className="invalid-feedback">{errors.senderName}</div>}
                             </div>
                           </div>
                           <div className="form-group">
@@ -105,11 +111,12 @@ class AdminSmtpSettingsPage extends Component<{initialSmtpSettings: MailSmtpSett
                                 </span>
                               </div>
                               <input
-                                className="form-control"
+                                className={classNames('form-control', {'is-invalid': errors.senderEmail})}
                                 name="senderEmail"
-                                onChange={props.handleChange}
-                                value={props.values.senderEmail}
+                                onChange={handleChange}
+                                value={values.senderEmail}
                               />
+                              {errors.senderEmail && <div className="invalid-feedback">{errors.senderEmail}</div>}
                             </div>
                           </div>
                           <div className="form-group">
@@ -121,11 +128,12 @@ class AdminSmtpSettingsPage extends Component<{initialSmtpSettings: MailSmtpSett
                                 </span>
                               </div>
                               <input
-                                className="form-control"
+                                className={classNames('form-control', {'is-invalid': errors.username})}
                                 name="username"
-                                onChange={props.handleChange}
-                                value={props.values.username}
+                                onChange={handleChange}
+                                value={values.username}
                               />
+                              {errors.username && <div className="invalid-feedback">{errors.username}</div>}
                             </div>
                           </div>
                           <div className="form-group">
@@ -137,27 +145,28 @@ class AdminSmtpSettingsPage extends Component<{initialSmtpSettings: MailSmtpSett
                                 </span>
                               </div>
                               <input
-                                className="form-control"
+                                className={classNames('form-control', {'is-invalid': errors.password})}
                                 name="password"
-                                onChange={props.handleChange}
-                                value={props.values.password}
+                                onChange={handleChange}
+                                value={values.password}
                               />
+                              {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="card-footer">
-                      <button className="btn btn-sm btn-primary" type="submit" disabled={props.isSubmitting}>
-                        {props.isSubmitting && <div className="spinner-border spinner-border-sm mr-1" />}
-                        Save
+                      <button className="btn btn-sm btn-primary" type="submit" disabled={isSubmitting}>
+                        {isSubmitting && <div className="spinner-border spinner-border-sm mr-1" role="status" />}
+                        {isSubmitting ? 'Saving...' : 'Save'}
                       </button>
                       &nbsp;
                       <button
                         className="btn btn-sm btn-info"
                         onClick={async (e) => {
                           e.preventDefault();
-                          await this._handleTestSmtpConnection(props.values);
+                          await this._handleTestSmtpConnection(values);
                         }}
                         disabled={isTestingConnection}>
                         {isTestingConnection && <div className="spinner-border spinner-border-sm mr-1" />}
