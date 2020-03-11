@@ -225,6 +225,7 @@ function Table({
         Filter: DefaultColumnFilter,
       },
       manualPagination: true,
+      autoResetPage: true,
       manualSortBy: true,
       pageCount: manualPageCount,
     },
@@ -236,6 +237,11 @@ function Table({
   useEffect(() => {
     fetchData({pageIndex, pageSize, filters, sortBy});
   }, [fetchData, pageIndex, pageSize, filters, sortBy]);
+
+  useEffect(() => {
+    if (pageIndex > manualPageCount - 1) gotoPage(0);
+    return () => {};
+  }, [manualPageCount]);
 
   return (
     <>
@@ -302,6 +308,8 @@ function Table({
               type="number"
               className="form-control d-inline-block"
               defaultValue={pageIndex + 1}
+              min={1}
+              max={manualPageCount}
               onChange={(e) => {
                 const page = e.target.value ? Number(e.target.value) - 1 : 0;
                 gotoPage(page);

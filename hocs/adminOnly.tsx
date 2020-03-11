@@ -72,14 +72,14 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
       this.setState({...this.state, [feild]: !this.state[feild]});
     };
 
-    public componentDidMount = async () => {
+    public componentDidMount() {
       const oldState = JsCookie.get('AdminWrapperState');
-      this.setState(JSON.parse(oldState));
-    };
+      if (oldState) this.setState(JSON.parse(oldState));
+    }
 
-    public componentWillUnmount = () => {
+    public componentWillUnmount() {
       JsCookie.set('AdminWrapperState', this.state);
-    };
+    }
 
     public _renderNavbar = () => {
       return (
@@ -127,7 +127,14 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
             'c-sidebar-unfoldable': this.state.sidebarUnfoldable,
           })}
           id="sidebar">
-          <div className="c-sidebar-brand">ADMIN PORTAL</div>
+          <div className="c-sidebar-brand flex-column" style={{height: '56px'}}>
+            <img className="h-100 c-sidebar-brand-full" src="/static/img/admin_logo_bw_full.svg" alt="ADMIN PORTAL" />
+            <img
+              className="h-100 c-sidebar-brand-minimized"
+              src="/static/img/admin_logo_bw_minimized.svg"
+              alt="ADMIN"
+            />
+          </div>
           <ul className="c-sidebar-nav ps ps--active-y" data-drodpown-accordion="true">
             <li className="c-sidebar-nav-item">
               <Link href="/admin">

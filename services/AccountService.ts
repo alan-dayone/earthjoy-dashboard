@@ -15,11 +15,11 @@ export class AccountService {
     });
     const [data, pageCount] = await Promise.all([
       this.accountGateway.find({pageIndex, pageSize, filters, orders: orderArray}),
-      this.accountGateway.count({where: filters.where}),
+      this.accountGateway.count({where: filters}),
     ]);
     return {
       data,
-      pageCount,
+      pageCount: Math.ceil(pageCount / pageSize),
     };
   }
 

@@ -4,7 +4,7 @@ import {SystemService} from './SystemService';
 import {AuthGateway} from '../gateways/AuthGateway';
 import {SystemGateway} from '../gateways/SystemGateway';
 import {AccountGateway} from '../gateways/AccountGateway';
-import {AccountService} from './AccountService';
+import {AccountService} from './AdminAccountService';
 import {RestConnector} from '../connectors/RestConnector';
 
 const {publicRuntimeConfig} = getConfig();
