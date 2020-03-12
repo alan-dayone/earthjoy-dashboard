@@ -4,11 +4,26 @@ import Head from 'next/head';
 import {Formik, FormikActions} from 'formik';
 import toastr from 'toastr';
 import {NextComponentType, NextPageContext} from 'next';
+import classNames from 'classnames';
+import loIsEqual from 'lodash/isEqual';
 import {adminOnly} from '../../../hocs';
 import {systemService} from '../../../services';
 import {MailSmtpSettings} from '../../../models/Configuration';
 import {MailSmtpSettingsValidationSchema} from '../../../view-models/SmtpConfig';
-import classNames from 'classnames';
+import {ToastrWarning} from '../../../view-models/Toastr';
+
+class SmtpSettingToastrWarning extends ToastrWarning {
+  public getWarningMessage(): string {
+    if (this.code === 'NOTHING_CHANGE') {
+      return 'The new SMTP settings are the same';
+    }
+    return 'Warning';
+  }
+  public alert() {
+    toastr.warning(this.getWarningMessage());
+  }
+}
+
 class AdminSmtpSettingsPage extends Component<{initialSmtpSettings: MailSmtpSettings}> {
   public state = {
     isTestingConnection: false,
@@ -83,6 +98,7 @@ class AdminSmtpSettingsPage extends Component<{initialSmtpSettings: MailSmtpSett
                                 onChange={handleChange}
                                 value={values.smtpPort}
                               />
+                              {errors.smtpPort && <div className="invalid-feedback">{errors.smtpPort}</div>}
                             </div>
                           </div>
                           <div className="form-group">
@@ -203,10 +219,16 @@ class AdminSmtpSettingsPage extends Component<{initialSmtpSettings: MailSmtpSett
   public _handleSave = async (values: MailSmtpSettings, actions: FormikActions<MailSmtpSettings>) => {
     try {
       actions.setSubmitting(true);
+      if (loIsEqual(values, this.props.initialSmtpSettings)) {
+        throw new SmtpSettingToastrWarning(SmtpSettingToastrWarning.NOTHING_CHANGE);
+      }
       await systemService.saveSmtpSettings(values);
       toastr.success('Saved');
     } catch (e) {
-      toastr.error(e.message);
+      if (e instanceof SmtpSettingToastrWarning) e.alert();
+      else {
+        toastr.error(e.message);
+      }
     } finally {
       actions.setSubmitting(false);
     }

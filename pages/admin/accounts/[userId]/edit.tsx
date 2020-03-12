@@ -1,5 +1,5 @@
 /* tslint:disable:no-default-export */
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import Head from 'next/head';
 import {NextComponentType, NextPageContext} from 'next';
 import loGet from 'lodash/get';
@@ -8,13 +8,14 @@ import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../../hocs';
 import {Formik} from 'formik';
-import {Account, AccountStatus} from '../../../../models/User';
+import {AccountStatus} from '../../../../models/User';
 import {
   AccountEmailVerificationText,
   AccountStatusText,
   userUpdateInfomationFormValidationSchema,
 } from '../../../../view-models/User';
 import {accountService} from '../../../../services';
+import {ToastrWarning} from '../../../../view-models/Toastr';
 
 export function getServerErrorMessage(error) {
   const errorEnum = loGet(error, 'response.data.error.message');
@@ -24,18 +25,15 @@ export function getServerErrorMessage(error) {
   return 'Unknown error';
 }
 
-function getWarningMessage({code}) {
-  if (code === 'NOTHING_CHANGE') {
-    return 'The new user infomation is the same';
+class UserToastrWarning extends ToastrWarning {
+  public getWarningMessage(): string {
+    if (this.code === 'NOTHING_CHANGE') {
+      return 'The new user infomation is the same';
+    }
+    return 'Warning';
   }
-  return 'Warning';
-}
-
-class UserWarning {
-  public static NOTHING_CHANGE = 'NOTHING_CHANGE';
-  public code: string;
-  constructor(code: string) {
-    this.code = code;
+  public alert() {
+    toastr.warning(this.getWarningMessage());
   }
 }
 
@@ -43,13 +41,13 @@ function AdminAccountEditingPage({router, originalAccount}) {
   const _handleSave = async (values, actions) => {
     try {
       actions.setSubmitting(true);
-      if (loIsEqual(values, originalAccount)) throw new UserWarning(UserWarning.NOTHING_CHANGE);
+      if (loIsEqual(values, originalAccount)) throw new UserToastrWarning(UserToastrWarning.NOTHING_CHANGE);
       const userId = await loGet(router, ['query', 'userId']);
       await accountService.updateAccount(userId, values);
       toastr.success('Success');
     } catch (e) {
-      if (loGet(e, 'e.response.data.error', false)) toastr.error(getServerErrorMessage(e));
-      else if (e instanceof UserWarning) toastr.warning(getWarningMessage(e));
+      if (e instanceof UserToastrWarning) e.alert();
+      else if (loGet(e, 'e.response.data.error', false)) toastr.error(getServerErrorMessage(e));
     } finally {
       actions.setSubmitting(false);
     }

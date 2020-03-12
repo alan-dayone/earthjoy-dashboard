@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import {MailSmtpSettings} from '../models/Configuration';
 import {constraint} from '../models/Configuration';
 
 export const MailSmtpSettingsValidationSchema = Yup.object().shape({

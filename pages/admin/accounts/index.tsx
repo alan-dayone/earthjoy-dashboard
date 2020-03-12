@@ -120,6 +120,7 @@ function AdminAccountsPage() {
 
   const [data, setData] = useState([]);
   const [pageCount, setPageCount] = useState(1);
+  const [totalRecord, setTotalRecord] = useState('...');
   const [loadingData, setLoadingData] = useState(true);
   const router = useRouter();
   const {index = 0, size = 5, ...query} = router.query;
@@ -143,7 +144,8 @@ function AdminAccountsPage() {
       orders: sortBy,
     });
     setData(accounts.data);
-    setPageCount(accounts.pageCount);
+    setPageCount(Math.ceil(accounts.count / pageSize));
+    setTotalRecord(accounts.count);
     setLoadingData(false);
     const queryString = qs.stringify({...filterObj, index: pageIndex, size: pageSize});
     if (queryString !== '') Router.push(`/admin/accounts?${queryString}`);
@@ -178,6 +180,7 @@ function AdminAccountsPage() {
                   pageIndex: Number(index),
                   pageSize: Number(size),
                 }}
+                totalRecord={totalRecord}
               />
             </div>
           </div>
@@ -194,6 +197,7 @@ function Table({
   defaultFilter,
   manualPageCount,
   initialState = {pageIndex: 0, pageSize: 10},
+  totalRecord,
 }) {
   const {
     getTableProps,
@@ -303,10 +307,10 @@ function Table({
           </span>{' '}
           |{' '}
           <span>
-            Go to page:{' '}
+            Go to page:
             <input
               type="number"
-              className="form-control d-inline-block"
+              className="form-control d-inline-block ml-1"
               defaultValue={pageIndex + 1}
               min={1}
               max={manualPageCount}
@@ -317,6 +321,7 @@ function Table({
               style={{width: '100px'}}
             />
           </span>
+          <span className="ml-2">Total records: {totalRecord}</span>
         </div>
         <div className="col-6">
           <ul className="pagination justify-content-end">

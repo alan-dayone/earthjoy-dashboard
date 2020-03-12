@@ -3,10 +3,11 @@ import React, {Component} from 'react';
 import Head from 'next/head';
 import {Formik, FormikActions} from 'formik';
 import toastr from 'toastr';
+import classNames from 'classnames';
 import {adminOnly} from '../../../hocs';
 // import { systemService } from '../../../services';
 import {EmailFormat} from '../../../models/Configuration';
-
+import {MailSmtpSettingsValidationSchema} from '../../../view-models/EmailVerification';
 class AdminEmailAddressVerificationPage extends Component {
   public render() {
     const initialValues: EmailFormat = {
@@ -23,9 +24,12 @@ class AdminEmailAddressVerificationPage extends Component {
         </Head>
         <div className="row">
           <div className="col-12">
-            <Formik initialValues={initialValues} onSubmit={this._handleSave}>
-              {(props) => (
-                <form onSubmit={props.handleSubmit}>
+            <Formik
+              initialValues={initialValues}
+              onSubmit={this._handleSave}
+              validationSchema={MailSmtpSettingsValidationSchema}>
+              {({handleChange, handleSubmit, values, errors, isSubmitting}) => (
+                <form onSubmit={handleSubmit}>
                   <div className="card">
                     <div className="card-header">
                       <strong>Email address verification</strong>
@@ -42,11 +46,12 @@ class AdminEmailAddressVerificationPage extends Component {
                                 </span>
                               </div>
                               <input
-                                className="form-control"
+                                className={classNames('form-control', {'is-invalid': errors.senderName})}
                                 name="senderName"
-                                onChange={props.handleChange}
-                                value={props.values.senderName}
+                                onChange={handleChange}
+                                value={values.senderName}
                               />
+                              {errors.senderName && <div className="invalid-feedback">{errors.senderName}</div>}
                             </div>
                           </div>
                           <div className="form-group">
@@ -58,11 +63,12 @@ class AdminEmailAddressVerificationPage extends Component {
                                 </span>
                               </div>
                               <input
-                                className="form-control"
+                                className={classNames('form-control', {'is-invalid': errors.senderEmail})}
                                 name="senderEmail"
-                                onChange={props.handleChange}
-                                value={props.values.senderEmail}
+                                onChange={handleChange}
+                                value={values.senderEmail}
                               />
+                              {errors.senderEmail && <div className="invalid-feedback">{errors.senderEmail}</div>}
                             </div>
                           </div>
                           <div className="form-group">
@@ -74,29 +80,30 @@ class AdminEmailAddressVerificationPage extends Component {
                                 </span>
                               </div>
                               <input
-                                className="form-control"
+                                className={classNames('form-control', {'is-invalid': errors.subject})}
                                 name="subject"
-                                onChange={props.handleChange}
-                                value={props.values.subject}
+                                onChange={handleChange}
+                                value={values.subject}
                               />
+                              {errors.subject && <div className="invalid-feedback">{errors.subject}</div>}
                             </div>
                           </div>
                           <div className="form-group">
                             <label>Message</label>
                             <textarea
-                              className="form-control"
+                              className={classNames('form-control')}
                               name="message"
                               placeholder="Content ..."
-                              onChange={props.handleChange}
-                              value={props.values.message}></textarea>
+                              onChange={handleChange}
+                              value={values.message}></textarea>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="card-footer">
-                      <button className="btn btn-sm btn-primary" type="submit" disabled={props.isSubmitting}>
-                        {props.isSubmitting && <div className="spinner-border spinner-border-sm mr-1" />}
-                        Save
+                      <button className="btn btn-sm btn-primary" type="submit" disabled={isSubmitting}>
+                        {isSubmitting && <div className="spinner-border spinner-border-sm mr-1" role="status" />}
+                        {isSubmitting ? 'Saving...' : 'Save'}
                       </button>
                     </div>
                   </div>

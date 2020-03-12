@@ -13,13 +13,13 @@ export class AccountService {
     const orderArray = await orders.map((value) => {
       return `${value.id} ${value.desc ? 'desc' : 'asc'}`;
     });
-    const [data, pageCount] = await Promise.all([
+    const [data, count] = await Promise.all([
       this.accountGateway.find({pageIndex, pageSize, filters, orders: orderArray}),
       this.accountGateway.count({where: filters}),
     ]);
     return {
       data,
-      pageCount: Math.ceil(pageCount / pageSize),
+      count,
     };
   }
 
