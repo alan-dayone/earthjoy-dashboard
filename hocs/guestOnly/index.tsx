@@ -8,7 +8,7 @@ import {selectors} from '../../redux/authRedux';
 import {getLoginUser} from '../../nredux/slices/loginUserSlice';
 import {authService} from '../../services';
 import {adminLayoutWrapper} from './AdminLayoutWrapper';
-import {ExpressReduxNextContext} from '../types';
+import {CustomNextPageContext} from '../types';
 import {CommonThunkDispatch, RootState} from '../../redux/types';
 
 export const guestOnly = (

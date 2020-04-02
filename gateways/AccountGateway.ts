@@ -1,11 +1,11 @@
-import {RestConnector} from '../connectors/RestConnector';
 import {Account} from '../models/User';
+import {AxiosInstance} from 'axios';
 
 export class AccountGateway {
-  private restConnector: RestConnector;
+  private restConnector: AxiosInstance;
 
-  constructor(connector: {restConnector: RestConnector}) {
-    this.restConnector = connector.restConnector;
+  constructor(options: {restConnector: AxiosInstance}) {
+    this.restConnector = options.restConnector;
   }
 
   public async create(account: Account) {

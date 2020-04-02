@@ -4,6 +4,7 @@ import {AppThunk} from '../store';
 import {LoginCredentials, LoginUser} from '../../models/User';
 import {RootState} from './index';
 
+// Reducers
 const {reducer, actions} = createSlice({
   name: 'loginUser',
   initialState: null,
@@ -12,20 +13,24 @@ const {reducer, actions} = createSlice({
   },
 });
 
+// Actions
 export const {setLoginUser} = actions;
 
-export const getLoginUser = () => async (dispatch) => {
+export const getLoginUser = (): AppThunk<Promise<LoginUser>> => async (dispatch: Dispatch): Promise<LoginUser> => {
   const user = await authService.getLoginUser();
   dispatch(actions.setLoginUser(user));
   return user;
 };
 
-export const login = (loginForm: LoginCredentials): AppThunk => async (dispatch: Dispatch) => {
+export const loginWithEmail = (loginForm: LoginCredentials): AppThunk<Promise<LoginUser>> => async (
+  dispatch: Dispatch,
+): Promise<LoginUser> => {
   const user = await authService.loginWithEmail(loginForm);
   dispatch(setLoginUser(user));
   return user;
 };
 
+// Selectors
 export const selectors = {
   selectLoginUser: (state: RootState): LoginUser | null => state.loginUser,
 };

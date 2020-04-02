@@ -1,9 +1,9 @@
+import {Request, Response} from 'express';
 import {NextPageContext} from 'next';
-import {Store} from 'redux';
+import {AppStore} from '../nredux/store';
 
-export interface ExpressReduxNextContext extends NextPageContext {
-  req?: express.Request;
-  res?: express.Response;
-  store: Store;
-  isServer?: boolean;
+export interface CustomNextPageContext extends NextPageContext {
+  req?: Request;
+  res?: Response;
+  store: AppStore;
 }

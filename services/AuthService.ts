@@ -24,7 +24,7 @@ export class AuthService {
 
   public async loginWithEmail(body: {email: string; password: string}) {
     const {token} = await this.authGateway.loginWithEmail(body);
-    this.authGateway.storeAccessToken(token);
+    this.authGateway.setAccessToken(token);
     return this.getLoginUser();
   }
 

@@ -5,15 +5,23 @@ import Link from 'next/link';
 import Head from 'next/head';
 import toastr from 'toastr';
 import {Formik, FormikActions} from 'formik';
+import {compose} from 'redux';
 import {guestOnly} from '../../hocs';
 import {authService} from '../../services';
+import {loginWithEmail} from '../../nredux/slices/loginUserSlice';
+import {connect} from 'react-redux';
+import {AppDispatch} from '../../nredux/store';
 
 export interface LoginForm {
   email: string;
   password: string;
 }
 
-class AdminLoginPage extends Component {
+interface PageProps {
+  dispatch: AppDispatch;
+}
+
+class AdminLoginPage extends Component<PageProps> {
   public render() {
     return (
       <div id="admin-login-page" className="align-items-center c-app flex-row pace-done">
@@ -97,8 +105,11 @@ class AdminLoginPage extends Component {
   public _handleLogin = async (values: LoginForm, actions: FormikActions<LoginForm>) => {
     actions.setSubmitting(true);
     try {
-      await authService.loginWithEmail(values);
-      Router.replace('/admin');
+      const user = await this.props.dispatch(loginWithEmail(values));
+
+      if (user) {
+        Router.replace('/admin');
+      }
     } catch (e) {
       actions.setSubmitting(false);
       toastr.error(e.message);
@@ -106,4 +117,4 @@ class AdminLoginPage extends Component {
   };
 }
 
-export default guestOnly(AdminLoginPage, {useAdminLayout: true});
+export default guestOnly(connect()(AdminLoginPage), {useAdminLayout: true});

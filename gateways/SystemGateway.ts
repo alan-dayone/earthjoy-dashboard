@@ -1,5 +1,5 @@
+import {AxiosInstance} from 'axios';
 import {ConfigurationKey} from '../models/Configuration';
-import {RestConnector} from '../connectors/RestConnector';
 
 export interface SystemStatusData {
   status: string;
@@ -36,10 +36,10 @@ export interface ConfigurationModel {
 }
 
 export class SystemGateway {
-  private restConnector: RestConnector;
+  private restConnector: AxiosInstance;
 
-  constructor({restConnector}: {restConnector: RestConnector}) {
-    this.restConnector = restConnector;
+  constructor(options: {restConnector: AxiosInstance}) {
+    this.restConnector = options.restConnector;
   }
 
   public async initSystem(body: {

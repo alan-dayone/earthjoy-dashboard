@@ -1,23 +1,17 @@
 import _ from 'lodash';
 import Cookies from 'js-cookie';
+import {AxiosInstance} from 'axios';
 import {errorCode, ValidationError} from '../errors/ValidationError';
 import {AuthService} from '../services/AuthService';
 import {ApplicationError} from '../errors/ApplicationError';
-import {RestConnector} from '../connectors/RestConnector';
 
 export class AuthGateway {
-  private restConnector: RestConnector;
+  private restConnector: AxiosInstance;
+  private jwt: string | null;
 
-  constructor(connector: {restConnector: RestConnector}) {
-    this.restConnector = connector.restConnector;
-  }
-
-  public storeAccessToken(accessToken: string | null) {
-    if (!accessToken) {
-      Cookies.remove('jwt');
-    } else {
-      Cookies.set('jwt', accessToken);
-    }
+  constructor(options: {restConnector: AxiosInstance}) {
+    this.jwt = null;
+    this.restConnector = options.restConnector;
   }
 
   public async loginWithEmail(body: {email: string; password: string}) {
@@ -46,7 +40,7 @@ export class AuthGateway {
   }
 
   public async getLoginUser() {
-    if (!this.restConnector.jwt) {
+    if (!this.jwt) {
       return null;
     }
 
@@ -64,7 +58,7 @@ export class AuthGateway {
     } catch (e) {
       console.warn('Failed to call logout api, but cookie in browser will be cleared so user is still logged out', e);
     }
-    this.restConnector.removeAccessToken();
+    this.setAccessToken(null);
   }
 
   public async sendResetPasswordEmail(email: string) {
@@ -133,8 +127,16 @@ export class AuthGateway {
     }
   }
 
-  public setAccessToken(accessToken: string) {
-    this.restConnector.setAccessToken(accessToken);
+  public setAccessToken(token: string) {
+    if (token) {
+      this.jwt = token;
+      Cookies.set('jwt', token);
+      this.restConnector.defaults.headers['Authorization'] = `Bearer ${token}`;
+    } else {
+      this.jwt = null;
+      Cookies.remove('jwt');
+      delete this.restConnector.defaults.headers['Authorization'];
+    }
   }
 
   public async forgotPassword(email: string) {
@@ -143,7 +145,7 @@ export class AuthGateway {
 
   public async changePassword(body: {newPassword: string; newPasswordConfirm: string}, accessToken: string) {
     const {newPassword, newPasswordConfirm} = body;
-    this.restConnector.setAccessToken(accessToken);
+    this.setAccessToken(accessToken);
     return this.restConnector.post(`/accounts/change-password?=${accessToken}`, {
       newPassword,
       newPasswordConfirm,

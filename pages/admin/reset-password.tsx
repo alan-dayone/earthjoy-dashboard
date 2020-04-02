@@ -6,11 +6,11 @@ import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
 import {Formik, FormikActions} from 'formik';
+import {compose} from 'redux';
 import {guestOnly} from '../../hocs';
 import {authService} from '../../services';
-import {ExpressReduxNextContext} from '../../hocs/types';
+import {CustomNextPageContext} from '../../hocs/types';
 import {WithRouterProps} from 'next/dist/client/with-router';
-import {compose} from 'redux';
 
 interface ResetPasswordForm {
   newPassword: string;
@@ -26,7 +26,7 @@ interface Props {
 }
 
 class AdminResetPasswordPage extends Component<Props & WithRouterProps> {
-  public static async getInitialProps(ctx: ExpressReduxNextContext) {
+  public static async getInitialProps(ctx: CustomNextPageContext) {
     const token = ctx.query.token;
 
     console.log({token});

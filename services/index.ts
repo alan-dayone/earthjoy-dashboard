@@ -1,16 +1,16 @@
 import getConfig from 'next/config';
+import axios, {AxiosInstance} from 'axios';
 import {AuthService} from './AuthService';
 import {SystemService} from './SystemService';
 import {AuthGateway} from '../gateways/AuthGateway';
 import {SystemGateway} from '../gateways/SystemGateway';
 import {AccountGateway} from '../gateways/AccountGateway';
 import {AccountService} from './AccountService';
-import {RestConnector} from '../connectors/RestConnector';
 
 const {publicRuntimeConfig} = getConfig();
 
 const API_BASE_URL = `${publicRuntimeConfig.BASE_URL}/api`;
-const restConnector = new RestConnector(API_BASE_URL);
+const restConnector = axios.create({baseURL: API_BASE_URL});
 
 const authGateway = new AuthGateway({restConnector});
 const accountGateway = new AccountGateway({restConnector});
