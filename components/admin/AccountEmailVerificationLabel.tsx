@@ -1,15 +1,17 @@
-import React from 'react';
+import {FC} from 'react';
 import classNames from 'classnames';
 import {AccountEmailVerificationText} from '../../view-models/User';
 
-export function AccountEmailVerificationLabel({emailVerified}) {
-  return (
-    <span
-      className={classNames('badge', {
-        'badge-success': emailVerified,
-        'badge-secondary': !emailVerified,
-      })}>
-      {emailVerified ? AccountEmailVerificationText.VERIFIED : AccountEmailVerificationText.NOT_VERIFIED}
-    </span>
-  );
+interface Props {
+  emailVerified: boolean;
 }
+
+export const AccountEmailVerificationLabel: FC<Props> = ({emailVerified}) => (
+  <span
+    className={classNames('badge', {
+      'badge-success': emailVerified,
+      'badge-secondary': !emailVerified,
+    })}>
+    {emailVerified ? AccountEmailVerificationText.VERIFIED : AccountEmailVerificationText.NOT_VERIFIED}
+  </span>
+);

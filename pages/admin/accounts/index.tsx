@@ -10,7 +10,7 @@ import {useRouter} from 'next/router';
 import qs from 'qs';
 import {adminOnly} from '../../../hocs';
 import {accountService} from '../../../services';
-import {AccountStatus} from '../../../models/User';
+import {AccountStatus} from '../../../models/Account';
 import {AccountEmailVerificationText, AccountStatusText} from '../../../view-models/User';
 import {AccountEmailVerificationLabel} from '../../../components/admin/AccountEmailVerificationLabel';
 import {AccountStatusLabel} from '../../../components/admin/AccountStatusLabel';

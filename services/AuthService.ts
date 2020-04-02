@@ -1,5 +1,6 @@
 import {AuthGateway} from '../gateways/AuthGateway';
 import {ServiceContext} from './index';
+import {LoginUser} from "../models/Account";
 
 export class AuthService {
   public static error = {
@@ -22,49 +23,45 @@ export class AuthService {
     this.authGateway = options.authGateway;
   }
 
-  public async loginWithEmail(body: {email: string; password: string}) {
+  public async loginWithEmail(body: {email: string; password: string}): Promise<LoginUser> {
     const {token} = await this.authGateway.loginWithEmail(body);
     this.authGateway.setAccessToken(token);
     return this.getLoginUser();
   }
 
-  public async getLoginUser() {
+  public async getLoginUser(): Promise<LoginUser> {
     return this.authGateway.getLoginUser();
   }
 
-  public async signupWithEmail(body: {name: string; email: string; password: string}) {
-    return this.authGateway.create(body);
-  }
-
-  public async logout() {
+  public async logout(): Promise<void> {
     await this.authGateway.logout();
   }
 
-  public async sendResetPasswordEmail(email: string) {
+  public async sendResetPasswordEmail(email: string): Promise<void> {
     return this.authGateway.sendResetPasswordEmail(email);
   }
 
-  public async updateAccountInfo(body: {name: string; email: string; preferredLanguage: string}) {
+  public async updateAccountInfo(body: {name: string; email: string; preferredLanguage: string}): Promise<void> {
     await this.authGateway.updateAccountInfo(body);
   }
 
-  public async updatePassword(body: {oldPassword: string; newPassword: string}) {
+  public async updatePassword(body: {oldPassword: string; newPassword: string}): Promise<void> {
     await this.authGateway.updatePassword(body);
   }
 
-  public async setNewPassword(body: {userId: string; newPassword: string}, accessToken: string) {
+  public async setNewPassword(body: {userId: string; newPassword: string}, accessToken: string): Promise<void> {
     await this.authGateway.setNewPassword(body, accessToken);
   }
 
-  public setAccessToken(accessToken: string) {
+  public setAccessToken(accessToken: string): void {
     this.authGateway.setAccessToken(accessToken);
   }
 
-  public async forgotPassword(email: string) {
+  public async forgotPassword(email: string): Promise<void> {
     return this.authGateway.forgotPassword(email);
   }
 
-  public async changePassword(body: {newPassword: string; newPasswordConfirm: string}, accessToken: string) {
+  public async changePassword(body: {newPassword: string; newPasswordConfirm: string}, accessToken: string): Promise<void> {
     return this.authGateway.changePassword(body, accessToken);
   }
 }

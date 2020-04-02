@@ -7,7 +7,7 @@ import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../hocs';
 import {Formik} from 'formik';
-import {Account, AccountStatus} from '../../../models/User';
+import {Account, AccountStatus} from '../../../models/Account';
 import {AccountEmailVerificationText, AccountStatusText, userFormValidationSchema} from '../../../view-models/User';
 import {accountService} from '../../../services';
 

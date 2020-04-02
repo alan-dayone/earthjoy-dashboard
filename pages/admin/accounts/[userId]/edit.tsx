@@ -8,7 +8,7 @@ import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../../hocs';
 import {Formik} from 'formik';
-import {AccountStatus} from '../../../../models/User';
+import {AccountStatus} from '../../../../models/Account';
 import {
   AccountEmailVerificationText,
   AccountStatusText,

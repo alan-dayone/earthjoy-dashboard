@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import {AccountStatus} from '../models/User';
-import {constraint as AccountConstraint} from '../models/User';
+import {AccountStatus} from '../models/Account';
+import {constraint as AccountConstraint} from '../models/Account';
 
 export const AccountStatusText = {
   [AccountStatus.ACTIVE]: 'Active',

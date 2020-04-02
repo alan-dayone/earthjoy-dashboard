@@ -4,11 +4,10 @@ import * as yup from 'yup';
 import classnames from 'classnames';
 import toastr from 'toastr';
 import {systemService} from '../../../services';
-import {actions as authActions} from '../../../redux/authRedux';
-import {CommonThunkDispatch} from '../../../redux/types';
-import {AnyAction} from 'redux';
 import {WithRouterProps} from 'next/dist/client/with-router';
 import {withRouter} from 'next/router';
+import {AppDispatch} from "../../../redux/store";
+import {loginWithEmail} from "../../../redux/slices/loginUserSlice";
 
 const formSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
@@ -20,12 +19,13 @@ const formSchema = yup.object().shape({
   confirmPassword: yup.string().required('Confirm password is required'),
 });
 
-interface Props {
+interface PageProps {
+  dispatch: AppDispatch;
   correctSystemInitPassword: string;
-  dispatch?: CommonThunkDispatch<AnyAction>;
 }
-class InnerCreateFirstAdminForm extends Component<Props & WithRouterProps> {
-  public render() {
+
+class InnerCreateFirstAdminForm extends Component<PageProps & WithRouterProps> {
+  public render(): JSX.Element {
     return (
       <div>
         <h1>Create first admin</h1>
@@ -47,7 +47,7 @@ class InnerCreateFirstAdminForm extends Component<Props & WithRouterProps> {
           //   return errors;
           // }}
           validationSchema={formSchema}
-          onSubmit={async (values, {setSubmitting}) => {
+          onSubmit={async (values, {setSubmitting}): Promise<void> => {
             setSubmitting(true);
             try {
               const {correctSystemInitPassword, dispatch, router} = this.props;
@@ -61,7 +61,7 @@ class InnerCreateFirstAdminForm extends Component<Props & WithRouterProps> {
 
               if (dispatch) {
                 await dispatch(
-                  authActions.loginWithEmail({
+                  loginWithEmail({
                     email: values.email,
                     password: values.password,
                   }),
@@ -76,7 +76,7 @@ class InnerCreateFirstAdminForm extends Component<Props & WithRouterProps> {
               toastr.error(e.message);
             }
           }}>
-          {({values, errors, handleChange, handleSubmit, isSubmitting, isValid}) => (
+          {({values, errors, handleChange, handleSubmit, isSubmitting, isValid}): JSX.Element => (
             <form onSubmit={handleSubmit}>
               <div className="mb-4 input-group">
                 <div className="input-group-prepend">

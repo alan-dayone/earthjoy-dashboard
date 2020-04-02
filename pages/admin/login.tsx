@@ -6,9 +6,9 @@ import Head from 'next/head';
 import toastr from 'toastr';
 import {Formik, FormikActions} from 'formik';
 import {guestOnly} from '../../hocs';
-import {loginWithEmail} from '../../nredux/slices/loginUserSlice';
+import {loginWithEmail} from '../../redux/slices/loginUserSlice';
 import {connect} from 'react-redux';
-import {AppDispatch} from '../../nredux/store';
+import {AppDispatch} from '../../redux/store';
 
 export interface LoginForm {
   email: string;

@@ -7,9 +7,9 @@ import App from 'next/app';
 import withRedux, {ReduxWrapperAppProps} from 'next-redux-wrapper';
 import {AppContext} from 'next/dist/pages/_app';
 import {nprogress} from '../hocs';
-import {makeStore} from '../nredux/store';
+import {makeStore} from '../redux/store';
 import {authService} from '../services';
-import {RootState} from '../nredux/slices';
+import {RootState} from '../redux/slices';
 
 class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
   public static async getInitialProps(context: AppContext) {

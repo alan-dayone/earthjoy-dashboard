@@ -8,9 +8,9 @@ import JsCookie from 'js-cookie';
 import {connect} from 'react-redux';
 import {CustomNextPageContext} from './types';
 import {authService} from '../services';
-import {isAdmin, LoginUser} from '../models/User';
-import {getLoginUser, selectors} from '../nredux/slices/loginUserSlice';
-import {RootState} from '../nredux/slices';
+import {isAdmin, LoginUser} from '../models/Account';
+import {getLoginUser, selectors} from '../redux/slices/loginUserSlice';
+import {RootState} from '../redux/slices';
 import '../scss/admin/index.scss';
 
 interface AdminWrapperState {

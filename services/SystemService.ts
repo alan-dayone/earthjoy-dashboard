@@ -23,7 +23,7 @@ export class SystemService {
     await this.systemGateway.initSystem(body);
   }
 
-  public async testSmtpConnection(values: any) {
+  public async testSmtpConnection(values): Promise<boolean> {
     return values;
   }
 

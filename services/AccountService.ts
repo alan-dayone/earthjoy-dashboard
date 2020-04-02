@@ -1,6 +1,6 @@
 import {ServiceContext} from './index';
 import {AccountGateway} from '../gateways/AccountGateway';
-import {Account, constraint} from '../models/User';
+import {Account} from '../models/Account';
 
 export class AccountService {
   protected accountGateway: AccountGateway;
@@ -9,7 +9,7 @@ export class AccountService {
     this.accountGateway = options.accountGateway;
   }
 
-  public async findAccountsForAdmin({pageIndex, pageSize, filters, orders}) {
+  public async findAccountsForAdmin({pageIndex, pageSize, filters, orders}): Promise<{data: Array<Account>; count: number}> {
     const orderArray = await orders.map((value) => {
       return `${value.id} ${value.desc ? 'desc' : 'asc'}`;
     });
@@ -23,15 +23,15 @@ export class AccountService {
     };
   }
 
-  public async createAccount(account: Account) {
+  public async createAccount(account: Account): Promise<Account> {
     return this.accountGateway.create(account);
   }
 
-  public async updateAccount(id: string, account: Account) {
+  public async updateAccount(id: string, account: Account): Promise<void> {
     return this.accountGateway.update(id, account);
   }
 
-  public async findOneForAdmin(id: string) {
+  public async findOneForAdmin(id: string): Promise<Account | null> {
     return this.accountGateway.findOne(id);
   }
 }

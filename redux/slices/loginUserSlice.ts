@@ -1,7 +1,7 @@
 import {createSlice, Dispatch} from '@reduxjs/toolkit';
 import {authService} from '../../services';
 import {AppThunk} from '../store';
-import {LoginCredentials, LoginUser} from '../../models/User';
+import {LoginCredentials, LoginUser} from '../../models/Account';
 import {RootState} from './index';
 
 // Reducers
@@ -9,7 +9,7 @@ const {reducer, actions} = createSlice({
   name: 'loginUser',
   initialState: null,
   reducers: {
-    setLoginUser: (state, action) => action.payload,
+    setLoginUser: (state, action): LoginUser | null => action.payload,
   },
 });
 

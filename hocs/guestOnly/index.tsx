@@ -4,22 +4,19 @@ import {AnyAction, compose} from 'redux';
 import {NextComponentType, NextPageContext} from 'next';
 import Router from 'next/router';
 
-import {selectors} from '../../redux/authRedux';
-import {getLoginUser} from '../../nredux/slices/loginUserSlice';
+import {getLoginUser, selectors} from '../../redux/slices/loginUserSlice';
 import {authService} from '../../services';
 import {adminLayoutWrapper} from './AdminLayoutWrapper';
-import {CustomNextPageContext} from '../types';
-import {CommonThunkDispatch, RootState} from '../../redux/types';
 
 export const guestOnly = (
   Content: NextComponentType,
   options?: {useAdminLayout: boolean},
-): ConnectedComponent<NextComponentType, any> => {
-  class GuestWrapper extends React.Component<any, any> {
+): NextComponentType => {
+  return class GuestWrapper extends React.Component<any, any> {
     public static async getInitialProps(context: NextPageContext) {
       if (context.isServer) {
-        const dispatch = context.store?.dispatch as CommonThunkDispatch<AnyAction>;
-        const user = await dispatch(getLoginUser());
+        // const dispatch = context.store?.dispatch;
+        // const user = await dispatch(getLoginUser());
 
         //   if (user) {
         //     context.res?.redirect('/');
@@ -50,12 +47,4 @@ export const guestOnly = (
       return adminLayoutWrapper({children: <Content {...this.props} />});
     };
   }
-
-  return composedHoc(GuestWrapper);
 };
-
-const mapStateToProps = (state: RootState) => ({
-  currentUser: selectors.getLoginUser(state),
-});
-
-const composedHoc = compose(connect(mapStateToProps));

@@ -26,17 +26,15 @@ interface Props {
 }
 
 class AdminResetPasswordPage extends Component<Props & WithRouterProps> {
-  public static async getInitialProps(ctx: CustomNextPageContext) {
-    const token = ctx.query.token;
-
-    console.log({token});
+  public static getInitialProps(ctx: CustomNextPageContext): {token: string} {
+    const token = ctx.query.token as string;
 
     return {
       token,
     };
   }
 
-  public render() {
+  public render(): JSX.Element {
     if (!this.props.token) {
       return <Error statusCode={400} />;
     }
@@ -58,7 +56,7 @@ class AdminResetPasswordPage extends Component<Props & WithRouterProps> {
                         confirmPassword: '',
                       }}
                       onSubmit={this._handleResetPassword}
-                      validate={(values) => {
+                      validate={(values): object => {
                         const errors: ResetPasswordForm & ResetPasswordValidatorMessage = {
                           newPassword: '',
                           confirmPassword: '',
@@ -73,7 +71,7 @@ class AdminResetPasswordPage extends Component<Props & WithRouterProps> {
 
                         return errors;
                       }}>
-                      {(props) => (
+                      {(props): JSX.Element => (
                         <form onSubmit={props.handleSubmit}>
                           <h1>Reset Password</h1>
                           {/* <p className="text-muted">Sign In to your account</p> */}
@@ -141,7 +139,7 @@ class AdminResetPasswordPage extends Component<Props & WithRouterProps> {
     );
   }
 
-  public _handleResetPassword = async (values: ResetPasswordForm, actions: FormikActions<ResetPasswordForm>) => {
+  public _handleResetPassword = async (values: ResetPasswordForm, actions: FormikActions<ResetPasswordForm>): Promise<void> => {
     actions.setSubmitting(true);
     try {
       const accessToken = this.props.token;

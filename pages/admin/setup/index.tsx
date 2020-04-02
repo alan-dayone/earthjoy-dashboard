@@ -16,7 +16,7 @@ class AdminSetupPage extends Component {
     correctSystemInitPassword: null,
   };
 
-  public render() {
+  public render(): JSX.Element {
     return (
       <div className="align-items-center c-app flex-row pace-done">
         <Head>
@@ -31,7 +31,7 @@ class AdminSetupPage extends Component {
                     <CreateFirstAdminForm correctSystemInitPassword={this.state.correctSystemInitPassword || ''} />
                   ) : (
                     <EnterPasswordForm
-                      onSuccess={(correctPassword) =>
+                      onSuccess={(correctPassword): void =>
                         this.setState({
                           step: STEP.CREATE_FIRST_ADMIN,
                           correctSystemInitPassword: correctPassword,

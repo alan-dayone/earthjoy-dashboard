@@ -111,7 +111,7 @@ export class AuthGateway {
     }
   }
 
-  public async setNewPassword(body: {userId: string; newPassword: string}, accessToken: string) {
+  public async setNewPassword(body: {userId: string; newPassword: string}, accessToken: string): Promise<void> {
     const {userId, newPassword} = body;
     try {
       await this.restConnector.post(`/accounts/reset-password?access_token=${accessToken}`, {id: userId, newPassword});
@@ -139,14 +139,14 @@ export class AuthGateway {
     }
   }
 
-  public async forgotPassword(email: string) {
+  public async forgotPassword(email: string): Promise<void> {
     return this.restConnector.post('/accounts/reset-password', {email});
   }
 
-  public async changePassword(body: {newPassword: string; newPasswordConfirm: string}, accessToken: string) {
+  public async changePassword(body: {newPassword: string; newPasswordConfirm: string}, accessToken: string): Promise<void> {
     const {newPassword, newPasswordConfirm} = body;
     this.setAccessToken(accessToken);
-    return this.restConnector.post(`/accounts/change-password?=${accessToken}`, {
+    await this.restConnector.post(`/accounts/change-password?=${accessToken}`, {
       newPassword,
       newPasswordConfirm,
     });

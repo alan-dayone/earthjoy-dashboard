@@ -4,7 +4,7 @@ import toastr from 'toastr';
 import {systemService} from '../../../services';
 
 interface Props {
-  onSuccess: (...payload: any[]) => any;
+  onSuccess: (password: string) => void;
 }
 
 interface ValidationError {
@@ -12,7 +12,7 @@ interface ValidationError {
 }
 
 export default class EnterPasswordForm extends Component<Props> {
-  public render() {
+  public render(): JSX.Element {
     return (
       <div>
         <h1>System initialization</h1>
@@ -30,7 +30,7 @@ export default class EnterPasswordForm extends Component<Props> {
 
             return errors;
           }}
-          onSubmit={async (values, {setSubmitting}) => {
+          onSubmit={async (values, {setSubmitting}): Promise<void> => {
             setSubmitting(true);
             try {
               const passwordIsCorrect = await systemService.validateSystemInitializationPassword(values.password);
@@ -48,7 +48,7 @@ export default class EnterPasswordForm extends Component<Props> {
               toastr.error(e.message);
             }
           }}>
-          {({values, handleChange, handleSubmit, isSubmitting, isValid}) => (
+          {({values, handleChange, handleSubmit, isSubmitting, isValid}): JSX.Element => (
             <form onSubmit={handleSubmit}>
               <div className="mb-4 input-group">
                 <div className="input-group-prepend">

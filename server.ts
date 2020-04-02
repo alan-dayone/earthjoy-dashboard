@@ -18,7 +18,7 @@ server.use(
   }),
 );
 
-async function startServer() {
+async function startServer(): Promise<void> {
   const nextApp = next({dev: process.env.NODE_ENV !== 'production'});
   const nextHandler = nextApp.getRequestHandler();
   await nextApp.prepare();

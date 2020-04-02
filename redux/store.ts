@@ -1,33 +1,16 @@
-import {createStore, combineReducers, applyMiddleware} from 'redux';
-import thunk from 'redux-thunk';
-import {reducer as globalReducer} from './globalRedux';
-import * as services from '../services';
-import {InitialRootState, RootState} from './types';
+import {Action, configureStore, Dispatch, EnhancedStore, ThunkAction} from '@reduxjs/toolkit';
+import {ThunkMiddlewareFor} from '@reduxjs/toolkit/src/getDefaultMiddleware';
+import {MakeStore} from 'next-redux-wrapper';
+import {DispatchForMiddlewares} from '@reduxjs/toolkit/src/tsHelpers';
+import rootReducer, {RootState} from './slices';
 
-const DEFAULT_INITIAL_STATE: RootState = {
-  global: {
-    loginUser: {
-      id: 'loginUser',
-      data: null,
-    },
-    uiState: {
-      id: 'uiState',
-      data: {
-        showAdminSideBar: false,
-      },
-    },
-  },
-};
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<string>>;
+export type AppDispatch = DispatchForMiddlewares<[ThunkMiddlewareFor<RootState>]> & Dispatch<Action<string>>;
+export type AppStore = EnhancedStore<RootState, Action<string>, [ThunkMiddlewareFor<RootState>]>;
 
-export const makeStore = (initialState: InitialRootState) => {
-  return createStore(
-    combineReducers({
-      global: globalReducer,
-    }),
-    {
-      ...DEFAULT_INITIAL_STATE,
-      ...initialState,
-    },
-    applyMiddleware(thunk.withExtraArgument(services)),
-  );
+export const makeStore: MakeStore = (initialState: RootState): AppStore => {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState: initialState,
+  });
 };
