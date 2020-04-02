@@ -1,5 +1,5 @@
 import getConfig from 'next/config';
-import axios, {AxiosInstance} from 'axios';
+import axios from 'axios';
 import {AuthService} from './AuthService';
 import {SystemService} from './SystemService';
 import {AuthGateway} from '../gateways/AuthGateway';

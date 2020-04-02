@@ -2,13 +2,15 @@ import React from 'react';
 import Link from 'next/link';
 import {DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap';
 import {NextComponentType} from 'next';
-import {NextRouter, withRouter} from 'next/router';
+import Router from 'next/router';
 import classNames from 'classnames';
 import JsCookie from 'js-cookie';
+import {connect} from 'react-redux';
 import {CustomNextPageContext} from './types';
 import {authService} from '../services';
-import {isAdmin} from '../models/User';
-import {getLoginUser} from '../nredux/slices/loginUserSlice';
+import {isAdmin, LoginUser} from '../models/User';
+import {getLoginUser, selectors} from '../nredux/slices/loginUserSlice';
+import {RootState} from '../nredux/slices';
 import '../scss/admin/index.scss';
 
 interface AdminWrapperState {
@@ -17,7 +19,7 @@ interface AdminWrapperState {
 }
 
 interface AdminWrapperProps {
-  router: NextRouter;
+  loginUser: LoginUser;
 }
 
 /* tslint:disable-next-line:variable-name */
@@ -99,14 +101,8 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
                 aria-haspopup="true"
                 aria-expanded="false">
                 <UncontrolledDropdown>
-                  <DropdownToggle nav>
-                    <div className="c-avatar">
-                      <img
-                        className="c-avatar-img"
-                        src="https://coreui.io/demo/3.0-beta.0/assets/img/avatars/6.jpg"
-                        alt="user@email.com"
-                      />
-                    </div>
+                  <DropdownToggle caret nav tag="a" className="u-cursor-pointer">
+                    {this.props.loginUser.email}
                   </DropdownToggle>
                   <DropdownMenu>
                     <DropdownItem>Profile</DropdownItem>
@@ -186,12 +182,14 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
     public _logout = async () => {
       try {
         await authService.logout();
-        await this.props.router.replace('/admin/login');
+        Router.replace('/admin/login');
       } catch (e) {
         toastr.error(e.message);
       }
     };
   }
 
-  return withRouter(AdminWrapper);
+  return connect((state: RootState) => ({
+    loginUser: selectors.selectLoginUser(state),
+  }))(AdminWrapper);
 };
