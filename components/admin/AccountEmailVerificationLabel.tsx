@@ -12,6 +12,8 @@ export const AccountEmailVerificationLabel: FC<Props> = ({emailVerified}) => (
       'badge-success': emailVerified,
       'badge-secondary': !emailVerified,
     })}>
-    {emailVerified ? AccountEmailVerificationText.VERIFIED : AccountEmailVerificationText.NOT_VERIFIED}
+    {emailVerified
+      ? AccountEmailVerificationText.VERIFIED
+      : AccountEmailVerificationText.NOT_VERIFIED}
   </span>
 );

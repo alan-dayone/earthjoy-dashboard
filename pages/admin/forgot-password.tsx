@@ -23,7 +23,9 @@ class AdminForgotPasswordPage extends React.Component<any, State> {
 
   public render() {
     return (
-      <div id="admin-forgot-password-page" className="align-items-center c-app flex-row pace-done">
+      <div
+        id="admin-forgot-password-page"
+        className="align-items-center c-app flex-row pace-done">
         <Head>
           <title>Admin - Forgot password</title>
         </Head>
@@ -38,7 +40,7 @@ class AdminForgotPasswordPage extends React.Component<any, State> {
                         email: '',
                       }}
                       onSubmit={this._handleForgotPassword}
-                      validate={(values) => {
+                      validate={values => {
                         const errors = {email: ''};
                         const regEmail = new RegExp(
                           '^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@' +
@@ -46,19 +48,21 @@ class AdminForgotPasswordPage extends React.Component<any, State> {
                         );
 
                         if (!regEmail.test(values.email)) {
-                          errors.email = 'Please enter the correct email format';
+                          errors.email =
+                            'Please enter the correct email format';
                         }
 
                         return errors;
                       }}>
-                      {(props) => (
+                      {props => (
                         <form onSubmit={props.handleSubmit}>
                           <h1>Forgot password</h1>
                           {!this.state.isSendMail ? (
                             <div>
                               <p className="text-muted">
-                                Don't worry! Enter your email below and we'll email you with instructions on how to
-                                reset your password.
+                                Don't worry! Enter your email below and we'll
+                                email you with instructions on how to reset your
+                                password.
                               </p>
                               <div className="form-group">
                                 <div className="input-group mb-3">
@@ -77,7 +81,11 @@ class AdminForgotPasswordPage extends React.Component<any, State> {
                                       'is-invalid': props.errors.email,
                                     })}
                                   />
-                                  {props.errors.email && <div className="invalid-feedback">{props.errors.email}</div>}
+                                  {props.errors.email && (
+                                    <div className="invalid-feedback">
+                                      {props.errors.email}
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                               <div className="form-group">
@@ -85,7 +93,9 @@ class AdminForgotPasswordPage extends React.Component<any, State> {
                                   className="btn btn-block btn-primary"
                                   type="submit"
                                   disabled={props.isSubmitting}>
-                                  {props.isSubmitting && <div className="spinner-border spinner-border-sm mr-1" />}
+                                  {props.isSubmitting && (
+                                    <div className="spinner-border spinner-border-sm mr-1" />
+                                  )}
                                   Request Password Reset
                                 </button>
                               </div>
@@ -94,7 +104,8 @@ class AdminForgotPasswordPage extends React.Component<any, State> {
                             <div className="mt-3">
                               Thank you.
                               <br />
-                              Please check your mailbox and follow the link to reset your password.
+                              Please check your mailbox and follow the link to
+                              reset your password.
                             </div>
                           )}
                         </form>
@@ -110,7 +121,10 @@ class AdminForgotPasswordPage extends React.Component<any, State> {
     );
   }
 
-  public _handleForgotPassword = async (values: ForgotPasswordForm, actions: FormikActions<ForgotPasswordForm>) => {
+  public _handleForgotPassword = async (
+    values: ForgotPasswordForm,
+    actions: FormikActions<ForgotPasswordForm>,
+  ) => {
     actions.setSubmitting(true);
     try {
       await authService.forgotPassword(values.email);

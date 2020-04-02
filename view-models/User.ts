@@ -38,7 +38,10 @@ export const userFormValidationSchema = Yup.object().shape({
       AccountConstraint.password.MAX_LENGTH,
       `Password must contain ${AccountConstraint.password.MIN_LENGTH} - ${AccountConstraint.password.MAX_LENGTH} characters.`,
     ),
-  confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match.'),
+  confirmPassword: Yup.string().oneOf(
+    [Yup.ref('password'), null],
+    'Passwords must match.',
+  ),
 });
 
 export const userUpdateInfomationFormValidationSchema = Yup.object().shape({

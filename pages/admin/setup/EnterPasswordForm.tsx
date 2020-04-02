@@ -17,7 +17,8 @@ export default class EnterPasswordForm extends Component<Props> {
       <div>
         <h1>System initialization</h1>
         <p className="text-muted">
-          Use secret system initialization password to initialize the system and create your first admin account.
+          Use secret system initialization password to initialize the system and
+          create your first admin account.
         </p>
         <Formik
           initialValues={{password: ''}}
@@ -33,7 +34,9 @@ export default class EnterPasswordForm extends Component<Props> {
           onSubmit={async (values, {setSubmitting}): Promise<void> => {
             setSubmitting(true);
             try {
-              const passwordIsCorrect = await systemService.validateSystemInitializationPassword(values.password);
+              const passwordIsCorrect = await systemService.validateSystemInitializationPassword(
+                values.password,
+              );
 
               setSubmitting(false);
 
@@ -48,7 +51,13 @@ export default class EnterPasswordForm extends Component<Props> {
               toastr.error(e.message);
             }
           }}>
-          {({values, handleChange, handleSubmit, isSubmitting, isValid}): JSX.Element => (
+          {({
+            values,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            isValid,
+          }): JSX.Element => (
             <form onSubmit={handleSubmit}>
               <div className="mb-4 input-group">
                 <div className="input-group-prepend">
@@ -66,7 +75,10 @@ export default class EnterPasswordForm extends Component<Props> {
                 />
               </div>
               <div>
-                <button type="submit" disabled={!isValid || isSubmitting} className="px-4 btn btn-primary">
+                <button
+                  type="submit"
+                  disabled={!isValid || isSubmitting}
+                  className="px-4 btn btn-primary">
                   Next
                 </button>
               </div>

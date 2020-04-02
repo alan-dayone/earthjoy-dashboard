@@ -21,12 +21,16 @@ export class AccountGateway {
       where: filters,
       order: orders,
     };
-    const {data} = await this.restConnector.get(`/accounts?filter=${JSON.stringify(filter)}`);
+    const {data} = await this.restConnector.get(
+      `/accounts?filter=${JSON.stringify(filter)}`,
+    );
     return data;
   }
 
   public async count({where = {}}) {
-    const {data} = await this.restConnector.get(`/accounts/count?where=${JSON.stringify(where)}`);
+    const {data} = await this.restConnector.get(
+      `/accounts/count?where=${JSON.stringify(where)}`,
+    );
     return data.count;
   }
 

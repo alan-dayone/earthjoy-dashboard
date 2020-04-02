@@ -22,7 +22,10 @@ Router.router?.events.on('onRouteChangeError', () => {
   clearTimeout(timer as number);
 });
 
-export const nprogress = (_delayMs = delayMs, configOptions: {showSpinner: boolean}) => {
+export const nprogress = (
+  _delayMs = delayMs,
+  configOptions: {showSpinner: boolean},
+) => {
   delayMs = _delayMs;
   // configure NProgress if configuration object is passed
   if (configOptions) NProgress.configure(configOptions);

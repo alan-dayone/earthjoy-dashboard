@@ -8,7 +8,11 @@ import classNames from 'classnames';
 import {adminOnly} from '../../../hocs';
 import {Formik} from 'formik';
 import {Account, AccountStatus} from '../../../models/Account';
-import {AccountEmailVerificationText, AccountStatusText, userFormValidationSchema} from '../../../view-models/User';
+import {
+  AccountEmailVerificationText,
+  AccountStatusText,
+  userFormValidationSchema,
+} from '../../../view-models/User';
 import {accountService} from '../../../services';
 
 const initialValues: Account = {
@@ -48,8 +52,18 @@ function AdminAccountCreationPage() {
       <Head>
         <title>Admin - Create account</title>
       </Head>
-      <Formik initialValues={initialValues} onSubmit={_handleSave} validationSchema={userFormValidationSchema}>
-        {({errors, handleChange, handleSubmit, values, isSubmitting, setFieldValue}) => (
+      <Formik
+        initialValues={initialValues}
+        onSubmit={_handleSave}
+        validationSchema={userFormValidationSchema}>
+        {({
+          errors,
+          handleChange,
+          handleSubmit,
+          values,
+          isSubmitting,
+          setFieldValue,
+        }) => (
           <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
@@ -67,12 +81,16 @@ function AdminAccountCreationPage() {
                           </span>
                         </div>
                         <input
-                          className={classNames('form-control', {'is-invalid': errors.email})}
+                          className={classNames('form-control', {
+                            'is-invalid': errors.email,
+                          })}
                           name="email"
                           onChange={handleChange}
                           value={values.email}
                         />
-                        {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                        {errors.email && (
+                          <div className="invalid-feedback">{errors.email}</div>
+                        )}
                       </div>
                     </div>
                     <div className="form-group">
@@ -84,13 +102,19 @@ function AdminAccountCreationPage() {
                           </span>
                         </div>
                         <input
-                          className={classNames('form-control', {'is-invalid': errors.password})}
+                          className={classNames('form-control', {
+                            'is-invalid': errors.password,
+                          })}
                           name="password"
                           type="password"
                           onChange={handleChange}
                           value={values.password}
                         />
-                        {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+                        {errors.password && (
+                          <div className="invalid-feedback">
+                            {errors.password}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="form-group">
@@ -103,11 +127,17 @@ function AdminAccountCreationPage() {
                         </div>
                         <input
                           name="firstName"
-                          className={classNames('form-control', {'is-invalid': errors.firstName})}
+                          className={classNames('form-control', {
+                            'is-invalid': errors.firstName,
+                          })}
                           onChange={handleChange}
                           value={values.firstName}
                         />
-                        {errors.firstName && <div className="invalid-feedback">{errors.firstName}</div>}
+                        {errors.firstName && (
+                          <div className="invalid-feedback">
+                            {errors.firstName}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="form-group">
@@ -120,18 +150,32 @@ function AdminAccountCreationPage() {
                         </div>
                         <input
                           name="lastName"
-                          className={classNames('form-control', {'is-invalid': errors.lastName})}
+                          className={classNames('form-control', {
+                            'is-invalid': errors.lastName,
+                          })}
                           onChange={handleChange}
                           value={values.lastName}
                         />
-                        {errors.lastName && <div className="invalid-feedback">{errors.lastName}</div>}
+                        {errors.lastName && (
+                          <div className="invalid-feedback">
+                            {errors.lastName}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="form-group">
                       <label>Account status</label>
-                      <select name="status" className="form-control" value={values.status} onChange={handleChange}>
-                        <option value={AccountStatus.ACTIVE}>{AccountStatusText[AccountStatus.ACTIVE]}</option>
-                        <option value={AccountStatus.INACTIVE}>{AccountStatusText[AccountStatus.INACTIVE]}</option>
+                      <select
+                        name="status"
+                        className="form-control"
+                        value={values.status}
+                        onChange={handleChange}>
+                        <option value={AccountStatus.ACTIVE}>
+                          {AccountStatusText[AccountStatus.ACTIVE]}
+                        </option>
+                        <option value={AccountStatus.INACTIVE}>
+                          {AccountStatusText[AccountStatus.INACTIVE]}
+                        </option>
                       </select>
                     </div>
                     <div className="form-group">
@@ -140,20 +184,33 @@ function AdminAccountCreationPage() {
                         name="emailVerified"
                         className="form-control"
                         value={String(values.emailVerified)}
-                        onChange={(e) => {
-                          if (e.target.value === 'true') setFieldValue('emailVerified', true);
+                        onChange={e => {
+                          if (e.target.value === 'true')
+                            setFieldValue('emailVerified', true);
                           else setFieldValue('emailVerified', false);
                         }}>
-                        <option value="true">{AccountEmailVerificationText.VERIFIED}</option>
-                        <option value="false">{AccountEmailVerificationText.NOT_VERIFIED}</option>
+                        <option value="true">
+                          {AccountEmailVerificationText.VERIFIED}
+                        </option>
+                        <option value="false">
+                          {AccountEmailVerificationText.NOT_VERIFIED}
+                        </option>
                       </select>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="card-footer">
-                <button className="btn btn-sm btn-success" type="submit" disabled={isSubmitting}>
-                  {isSubmitting && <div className="spinner-border spinner-border-sm mr-1" role="status" />}
+                <button
+                  className="btn btn-sm btn-success"
+                  type="submit"
+                  disabled={isSubmitting}>
+                  {isSubmitting && (
+                    <div
+                      className="spinner-border spinner-border-sm mr-1"
+                      role="status"
+                    />
+                  )}
                   {isSubmitting ? 'Creating...' : 'Create'}
                 </button>
               </div>
@@ -165,4 +222,6 @@ function AdminAccountCreationPage() {
   );
 }
 
-export default adminOnly(AdminAccountCreationPage as NextComponentType<NextPageContext, any, any>);
+export default adminOnly(
+  AdminAccountCreationPage as NextComponentType<NextPageContext, any, any>,
+);

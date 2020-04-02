@@ -17,7 +17,6 @@ export const guestOnly = (
       if (context.isServer) {
         // const dispatch = context.store?.dispatch;
         // const user = await dispatch(getLoginUser());
-
         //   if (user) {
         //     context.res?.redirect('/');
         //     context.res?.end();
@@ -46,5 +45,5 @@ export const guestOnly = (
     private _renderContentInsideAdminLayout = () => {
       return adminLayoutWrapper({children: <Content {...this.props} />});
     };
-  }
+  };
 };

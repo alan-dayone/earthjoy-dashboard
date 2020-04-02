@@ -46,12 +46,18 @@ class AdminEmailAddressVerificationPage extends Component {
                                 </span>
                               </div>
                               <input
-                                className={classNames('form-control', {'is-invalid': errors.senderName})}
+                                className={classNames('form-control', {
+                                  'is-invalid': errors.senderName,
+                                })}
                                 name="senderName"
                                 onChange={handleChange}
                                 value={values.senderName}
                               />
-                              {errors.senderName && <div className="invalid-feedback">{errors.senderName}</div>}
+                              {errors.senderName && (
+                                <div className="invalid-feedback">
+                                  {errors.senderName}
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div className="form-group">
@@ -63,12 +69,18 @@ class AdminEmailAddressVerificationPage extends Component {
                                 </span>
                               </div>
                               <input
-                                className={classNames('form-control', {'is-invalid': errors.senderEmail})}
+                                className={classNames('form-control', {
+                                  'is-invalid': errors.senderEmail,
+                                })}
                                 name="senderEmail"
                                 onChange={handleChange}
                                 value={values.senderEmail}
                               />
-                              {errors.senderEmail && <div className="invalid-feedback">{errors.senderEmail}</div>}
+                              {errors.senderEmail && (
+                                <div className="invalid-feedback">
+                                  {errors.senderEmail}
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div className="form-group">
@@ -80,12 +92,18 @@ class AdminEmailAddressVerificationPage extends Component {
                                 </span>
                               </div>
                               <input
-                                className={classNames('form-control', {'is-invalid': errors.subject})}
+                                className={classNames('form-control', {
+                                  'is-invalid': errors.subject,
+                                })}
                                 name="subject"
                                 onChange={handleChange}
                                 value={values.subject}
                               />
-                              {errors.subject && <div className="invalid-feedback">{errors.subject}</div>}
+                              {errors.subject && (
+                                <div className="invalid-feedback">
+                                  {errors.subject}
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div className="form-group">
@@ -101,8 +119,16 @@ class AdminEmailAddressVerificationPage extends Component {
                       </div>
                     </div>
                     <div className="card-footer">
-                      <button className="btn btn-sm btn-primary" type="submit" disabled={isSubmitting}>
-                        {isSubmitting && <div className="spinner-border spinner-border-sm mr-1" role="status" />}
+                      <button
+                        className="btn btn-sm btn-primary"
+                        type="submit"
+                        disabled={isSubmitting}>
+                        {isSubmitting && (
+                          <div
+                            className="spinner-border spinner-border-sm mr-1"
+                            role="status"
+                          />
+                        )}
                         {isSubmitting ? 'Saving...' : 'Save'}
                       </button>
                     </div>
@@ -133,7 +159,10 @@ class AdminEmailAddressVerificationPage extends Component {
   //     }
   //   };
 
-  public _handleSave = async (values: EmailFormat, actions: FormikActions<EmailFormat>) => {
+  public _handleSave = async (
+    values: EmailFormat,
+    actions: FormikActions<EmailFormat>,
+  ) => {
     actions.setSubmitting(true);
     try {
       // await systemService.saveSmtpSettings(values);

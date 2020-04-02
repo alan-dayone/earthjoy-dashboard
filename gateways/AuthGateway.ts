@@ -56,7 +56,10 @@ export class AuthGateway {
     try {
       await this.restConnector.post('/accounts/logout', {});
     } catch (e) {
-      console.warn('Failed to call logout api, but cookie in browser will be cleared so user is still logged out', e);
+      console.warn(
+        'Failed to call logout api, but cookie in browser will be cleared so user is still logged out',
+        e,
+      );
     }
     this.setAccessToken(null);
   }
@@ -77,7 +80,11 @@ export class AuthGateway {
     }
   }
 
-  public async updateAccountInfo(body: {name: string; email: string; preferredLanguage: string}) {
+  public async updateAccountInfo(body: {
+    name: string;
+    email: string;
+    preferredLanguage: string;
+  }) {
     try {
       await this.restConnector.patch(`/accounts/me`, body);
     } catch (e) {
@@ -96,14 +103,20 @@ export class AuthGateway {
     }
   }
 
-  public async updatePassword(body: {oldPassword: string; newPassword: string}) {
+  public async updatePassword(body: {
+    oldPassword: string;
+    newPassword: string;
+  }) {
     try {
       await this.restConnector.post('/accounts/change-password', body);
     } catch (e) {
       console.log(e.response);
       const err = _.get(e, 'response.data.error', e);
 
-      if (err.code === 'INVALID_PASSWORD' || err.message === 'oldPassword is a required argument') {
+      if (
+        err.code === 'INVALID_PASSWORD' ||
+        err.message === 'oldPassword is a required argument'
+      ) {
         throw new ApplicationError(AuthService.error.INVALID_CURRENT_PASSWORD);
       }
 
@@ -111,10 +124,16 @@ export class AuthGateway {
     }
   }
 
-  public async setNewPassword(body: {userId: string; newPassword: string}, accessToken: string): Promise<void> {
+  public async setNewPassword(
+    body: {userId: string; newPassword: string},
+    accessToken: string,
+  ): Promise<void> {
     const {userId, newPassword} = body;
     try {
-      await this.restConnector.post(`/accounts/reset-password?access_token=${accessToken}`, {id: userId, newPassword});
+      await this.restConnector.post(
+        `/accounts/reset-password?access_token=${accessToken}`,
+        {id: userId, newPassword},
+      );
     } catch (e) {
       const err = _.get(e, 'response.data.error', e);
 
@@ -143,7 +162,10 @@ export class AuthGateway {
     return this.restConnector.post('/accounts/reset-password', {email});
   }
 
-  public async changePassword(body: {newPassword: string; newPasswordConfirm: string}, accessToken: string): Promise<void> {
+  public async changePassword(
+    body: {newPassword: string; newPasswordConfirm: string},
+    accessToken: string,
+  ): Promise<void> {
     const {newPassword, newPasswordConfirm} = body;
     this.setAccessToken(accessToken);
     await this.restConnector.post(`/accounts/change-password?=${accessToken}`, {

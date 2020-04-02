@@ -41,13 +41,15 @@ function AdminAccountEditingPage({router, originalAccount}) {
   const _handleSave = async (values, actions) => {
     try {
       actions.setSubmitting(true);
-      if (loIsEqual(values, originalAccount)) throw new UserToastrWarning(UserToastrWarning.NOTHING_CHANGE);
+      if (loIsEqual(values, originalAccount))
+        throw new UserToastrWarning(UserToastrWarning.NOTHING_CHANGE);
       const userId = await loGet(router, ['query', 'userId']);
       await accountService.updateAccount(userId, values);
       toastr.success('Success');
     } catch (e) {
       if (e instanceof UserToastrWarning) e.alert();
-      else if (loGet(e, 'e.response.data.error', false)) toastr.error(getServerErrorMessage(e));
+      else if (loGet(e, 'e.response.data.error', false))
+        toastr.error(getServerErrorMessage(e));
     } finally {
       actions.setSubmitting(false);
     }
@@ -62,7 +64,14 @@ function AdminAccountEditingPage({router, originalAccount}) {
         initialValues={originalAccount}
         onSubmit={_handleSave}
         validationSchema={userUpdateInfomationFormValidationSchema}>
-        {({errors, handleChange, handleSubmit, values, isSubmitting, setFieldValue}) => (
+        {({
+          errors,
+          handleChange,
+          handleSubmit,
+          values,
+          isSubmitting,
+          setFieldValue,
+        }) => (
           <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
@@ -80,12 +89,16 @@ function AdminAccountEditingPage({router, originalAccount}) {
                           </span>
                         </div>
                         <input
-                          className={classNames('form-control', {'is-invalid': errors.email})}
+                          className={classNames('form-control', {
+                            'is-invalid': errors.email,
+                          })}
                           name="email"
                           onChange={handleChange}
                           value={values.email}
                         />
-                        {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                        {errors.email && (
+                          <div className="invalid-feedback">{errors.email}</div>
+                        )}
                       </div>
                     </div>
                     <div className="form-group">
@@ -98,11 +111,17 @@ function AdminAccountEditingPage({router, originalAccount}) {
                         </div>
                         <input
                           name="firstName"
-                          className={classNames('form-control', {'is-invalid': errors.firstName})}
+                          className={classNames('form-control', {
+                            'is-invalid': errors.firstName,
+                          })}
                           onChange={handleChange}
                           value={values.firstName}
                         />
-                        {errors.firstName && <div className="invalid-feedback">{errors.firstName}</div>}
+                        {errors.firstName && (
+                          <div className="invalid-feedback">
+                            {errors.firstName}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="form-group">
@@ -115,18 +134,32 @@ function AdminAccountEditingPage({router, originalAccount}) {
                         </div>
                         <input
                           name="lastName"
-                          className={classNames('form-control', {'is-invalid': errors.lastName})}
+                          className={classNames('form-control', {
+                            'is-invalid': errors.lastName,
+                          })}
                           onChange={handleChange}
                           value={values.lastName}
                         />
-                        {errors.lastName && <div className="invalid-feedback">{errors.lastName}</div>}
+                        {errors.lastName && (
+                          <div className="invalid-feedback">
+                            {errors.lastName}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="form-group">
                       <label>Account status</label>
-                      <select name="status" className="form-control" value={values.status} onChange={handleChange}>
-                        <option value={AccountStatus.ACTIVE}>{AccountStatusText[AccountStatus.ACTIVE]}</option>
-                        <option value={AccountStatus.INACTIVE}>{AccountStatusText[AccountStatus.INACTIVE]}</option>
+                      <select
+                        name="status"
+                        className="form-control"
+                        value={values.status}
+                        onChange={handleChange}>
+                        <option value={AccountStatus.ACTIVE}>
+                          {AccountStatusText[AccountStatus.ACTIVE]}
+                        </option>
+                        <option value={AccountStatus.INACTIVE}>
+                          {AccountStatusText[AccountStatus.INACTIVE]}
+                        </option>
                       </select>
                     </div>
                     <div className="form-group">
@@ -135,20 +168,33 @@ function AdminAccountEditingPage({router, originalAccount}) {
                         name="emailVerified"
                         className="form-control"
                         value={values.emailVerified ? 'true' : 'false'}
-                        onChange={(e) => {
-                          if (e.target.value === 'true') setFieldValue('emailVerified', true);
+                        onChange={e => {
+                          if (e.target.value === 'true')
+                            setFieldValue('emailVerified', true);
                           else setFieldValue('emailVerified', false);
                         }}>
-                        <option value="true">{AccountEmailVerificationText.VERIFIED}</option>
-                        <option value="false">{AccountEmailVerificationText.NOT_VERIFIED}</option>
+                        <option value="true">
+                          {AccountEmailVerificationText.VERIFIED}
+                        </option>
+                        <option value="false">
+                          {AccountEmailVerificationText.NOT_VERIFIED}
+                        </option>
                       </select>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="card-footer">
-                <button className="btn btn-sm btn-primary" type="submit" disabled={isSubmitting}>
-                  {isSubmitting && <div className="spinner-border spinner-border-sm mr-1" role="status" />}
+                <button
+                  className="btn btn-sm btn-primary"
+                  type="submit"
+                  disabled={isSubmitting}>
+                  {isSubmitting && (
+                    <div
+                      className="spinner-border spinner-border-sm mr-1"
+                      role="status"
+                    />
+                  )}
                   {isSubmitting ? 'Saving...' : 'Save'}
                 </button>
               </div>
@@ -166,4 +212,6 @@ AdminAccountEditingPage.getInitialProps = async ({query}) => {
   };
 };
 
-export default adminOnly(AdminAccountEditingPage as NextComponentType<NextPageContext, any, any>);
+export default adminOnly(
+  AdminAccountEditingPage as NextComponentType<NextPageContext, any, any>,
+);

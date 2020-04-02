@@ -20,7 +20,9 @@ class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
       authService.setAccessToken(cookies.jwt);
     }
 
-    const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
+    const pageProps = Component.getInitialProps
+      ? await Component.getInitialProps(ctx)
+      : {};
     return {pageProps};
   }
 
@@ -34,4 +36,7 @@ class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
   }
 }
 
-export default compose(nprogress(300, {showSpinner: true}), withRedux(makeStore))(ComposedApp);
+export default compose(
+  nprogress(300, {showSpinner: true}),
+  withRedux(makeStore),
+)(ComposedApp);

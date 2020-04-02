@@ -6,8 +6,8 @@ import toastr from 'toastr';
 import {systemService} from '../../../services';
 import {WithRouterProps} from 'next/dist/client/with-router';
 import {withRouter} from 'next/router';
-import {AppDispatch} from "../../../redux/store";
-import {loginWithEmail} from "../../../redux/slices/loginUserSlice";
+import {AppDispatch} from '../../../redux/store';
+import {loginWithEmail} from '../../../redux/slices/loginUserSlice';
 
 const formSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
@@ -29,7 +29,9 @@ class InnerCreateFirstAdminForm extends Component<PageProps & WithRouterProps> {
     return (
       <div>
         <h1>Create first admin</h1>
-        <p className="text-muted">You can use this account to create other accounts.</p>
+        <p className="text-muted">
+          You can use this account to create other accounts.
+        </p>
         <Formik
           initialValues={{
             name: '',
@@ -76,7 +78,14 @@ class InnerCreateFirstAdminForm extends Component<PageProps & WithRouterProps> {
               toastr.error(e.message);
             }
           }}>
-          {({values, errors, handleChange, handleSubmit, isSubmitting, isValid}): JSX.Element => (
+          {({
+            values,
+            errors,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            isValid,
+          }): JSX.Element => (
             <form onSubmit={handleSubmit}>
               <div className="mb-4 input-group">
                 <div className="input-group-prepend">
@@ -94,7 +103,9 @@ class InnerCreateFirstAdminForm extends Component<PageProps & WithRouterProps> {
                     'is-invalid': errors.name,
                   })}
                 />
-                {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+                {errors.name && (
+                  <div className="invalid-feedback">{errors.name}</div>
+                )}
               </div>
               <div className="mb-4 input-group">
                 <div className="input-group-prepend">
@@ -112,7 +123,9 @@ class InnerCreateFirstAdminForm extends Component<PageProps & WithRouterProps> {
                     'is-invalid': errors.email,
                   })}
                 />
-                {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                {errors.email && (
+                  <div className="invalid-feedback">{errors.email}</div>
+                )}
               </div>
               <div className="mb-4 input-group">
                 <div className="input-group-prepend">
@@ -130,7 +143,9 @@ class InnerCreateFirstAdminForm extends Component<PageProps & WithRouterProps> {
                     'is-invalid': errors.password,
                   })}
                 />
-                {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+                {errors.password && (
+                  <div className="invalid-feedback">{errors.password}</div>
+                )}
               </div>
               <div className="mb-4 input-group">
                 <div className="input-group-prepend">
@@ -148,10 +163,17 @@ class InnerCreateFirstAdminForm extends Component<PageProps & WithRouterProps> {
                     'is-invalid': errors.confirmPassword,
                   })}
                 />
-                {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
+                {errors.confirmPassword && (
+                  <div className="invalid-feedback">
+                    {errors.confirmPassword}
+                  </div>
+                )}
               </div>
               <div>
-                <button type="submit" disabled={!isValid || isSubmitting} className="px-4 btn btn-primary">
+                <button
+                  type="submit"
+                  disabled={!isValid || isSubmitting}
+                  className="px-4 btn btn-primary">
                   Submit
                 </button>
               </div>

@@ -1,6 +1,6 @@
 import {AuthGateway} from '../gateways/AuthGateway';
 import {ServiceContext} from './index';
-import {LoginUser} from "../models/Account";
+import {LoginUser} from '../models/Account';
 
 export class AuthService {
   public static error = {
@@ -23,7 +23,10 @@ export class AuthService {
     this.authGateway = options.authGateway;
   }
 
-  public async loginWithEmail(body: {email: string; password: string}): Promise<LoginUser> {
+  public async loginWithEmail(body: {
+    email: string;
+    password: string;
+  }): Promise<LoginUser> {
     const {token} = await this.authGateway.loginWithEmail(body);
     this.authGateway.setAccessToken(token);
     return this.getLoginUser();
@@ -41,15 +44,25 @@ export class AuthService {
     return this.authGateway.sendResetPasswordEmail(email);
   }
 
-  public async updateAccountInfo(body: {name: string; email: string; preferredLanguage: string}): Promise<void> {
+  public async updateAccountInfo(body: {
+    name: string;
+    email: string;
+    preferredLanguage: string;
+  }): Promise<void> {
     await this.authGateway.updateAccountInfo(body);
   }
 
-  public async updatePassword(body: {oldPassword: string; newPassword: string}): Promise<void> {
+  public async updatePassword(body: {
+    oldPassword: string;
+    newPassword: string;
+  }): Promise<void> {
     await this.authGateway.updatePassword(body);
   }
 
-  public async setNewPassword(body: {userId: string; newPassword: string}, accessToken: string): Promise<void> {
+  public async setNewPassword(
+    body: {userId: string; newPassword: string},
+    accessToken: string,
+  ): Promise<void> {
     await this.authGateway.setNewPassword(body, accessToken);
   }
 
@@ -61,7 +74,10 @@ export class AuthService {
     return this.authGateway.forgotPassword(email);
   }
 
-  public async changePassword(body: {newPassword: string; newPasswordConfirm: string}, accessToken: string): Promise<void> {
+  public async changePassword(
+    body: {newPassword: string; newPasswordConfirm: string},
+    accessToken: string,
+  ): Promise<void> {
     return this.authGateway.changePassword(body, accessToken);
   }
 }

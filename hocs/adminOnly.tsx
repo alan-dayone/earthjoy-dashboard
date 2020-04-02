@@ -1,6 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
-import {DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap';
+import {
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  UncontrolledDropdown,
+} from 'reactstrap';
 import {NextComponentType} from 'next';
 import Router from 'next/router';
 import classNames from 'classnames';
@@ -24,7 +29,10 @@ interface AdminWrapperProps {
 
 /* tslint:disable-next-line:variable-name */
 export const adminOnly = (Content: NextComponentType): NextComponentType => {
-  class AdminWrapper extends React.Component<AdminWrapperProps, AdminWrapperState> {
+  class AdminWrapper extends React.Component<
+    AdminWrapperProps,
+    AdminWrapperState
+  > {
     public static async getInitialProps(ctx: CustomNextPageContext) {
       const {req, res, store} = ctx;
       const isServer = !!req;
@@ -101,7 +109,11 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
                 aria-haspopup="true"
                 aria-expanded="false">
                 <UncontrolledDropdown>
-                  <DropdownToggle caret nav tag="a" className="u-cursor-pointer">
+                  <DropdownToggle
+                    caret
+                    nav
+                    tag="a"
+                    className="u-cursor-pointer">
                     {this.props.loginUser.email}
                   </DropdownToggle>
                   <DropdownMenu>
@@ -125,14 +137,20 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
           })}
           id="sidebar">
           <div className="c-sidebar-brand flex-column" style={{height: '56px'}}>
-            <img className="h-100 c-sidebar-brand-full" src="/static/img/admin_logo_bw_full.svg" alt="ADMIN PORTAL" />
+            <img
+              className="h-100 c-sidebar-brand-full"
+              src="/static/img/admin_logo_bw_full.svg"
+              alt="ADMIN PORTAL"
+            />
             <img
               className="h-100 c-sidebar-brand-minimized"
               src="/static/img/admin_logo_bw_minimized.svg"
               alt="ADMIN"
             />
           </div>
-          <ul className="c-sidebar-nav ps ps--active-y" data-drodpown-accordion="true">
+          <ul
+            className="c-sidebar-nav ps ps--active-y"
+            data-drodpown-accordion="true">
             <li className="c-sidebar-nav-item">
               <Link href="/admin">
                 <a className="c-sidebar-nav-link">

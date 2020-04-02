@@ -28,7 +28,11 @@ export interface VerifyAccountSetting {
   senderName: string;
 }
 
-export type ConfigurationData = SystemStatusData | MailSmtpSettings | ResetPasswordSettings | VerifyAccountSetting;
+export type ConfigurationData =
+  | SystemStatusData
+  | MailSmtpSettings
+  | ResetPasswordSettings
+  | VerifyAccountSetting;
 
 export interface ConfigurationModel {
   id: string;
@@ -49,16 +53,29 @@ export class SystemGateway {
       password: string;
     };
   }): Promise<boolean> {
-    const {data} = await this.restConnector.post(`/configurations/initialize-system`, body);
+    const {data} = await this.restConnector.post(
+      `/configurations/initialize-system`,
+      body,
+    );
     return data.success;
   }
 
-  public async validateSystemInitializationPassword(password: string): Promise<boolean> {
-    const {data} = await this.restConnector.post('/configurations/validate-system-initialization-password', {password});
+  public async validateSystemInitializationPassword(
+    password: string,
+  ): Promise<boolean> {
+    const {
+      data,
+    } = await this.restConnector.post(
+      '/configurations/validate-system-initialization-password',
+      {password},
+    );
     return data.isValid;
   }
 
-  public async updateSystemConfiguration(id: ConfigurationKey, data: ConfigurationData) {
+  public async updateSystemConfiguration(
+    id: ConfigurationKey,
+    data: ConfigurationData,
+  ) {
     const resp = await this.restConnector.put(`/configurations/${id}`, {
       id,
       data,
@@ -67,7 +84,9 @@ export class SystemGateway {
     return resp.data;
   }
 
-  public async getConfiguration(id: ConfigurationKey): Promise<ConfigurationModel | null> {
+  public async getConfiguration(
+    id: ConfigurationKey,
+  ): Promise<ConfigurationModel | null> {
     try {
       const resp = await this.restConnector.get(`/configurations/${id}`);
       return resp.data;

@@ -34,7 +34,9 @@ export const everyone = (Content: React.ElementType) => {
           <div className="container-fluid p-3 p-md-5">
             <ul className="bd-footer-links">
               <li>
-                <a href="https://gitlab.com/dayone-teams/int-boilerplates/int-loopnext">GitLab</a>
+                <a href="https://gitlab.com/dayone-teams/int-boilerplates/int-loopnext">
+                  GitLab
+                </a>
               </li>
               <li>
                 <a href="https://www.dayoneteams.com" target="_blank">
