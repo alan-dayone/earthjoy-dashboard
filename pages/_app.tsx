@@ -4,13 +4,14 @@ import {compose} from 'redux';
 import {Provider} from 'react-redux';
 import * as cookie from 'cookie';
 import App from 'next/app';
-import withRedux, {AppProps as NextReduxAppProps} from 'next-redux-wrapper';
+import withRedux, {ReduxWrapperAppProps} from 'next-redux-wrapper';
 import {AppContext} from 'next/dist/pages/_app';
 import {nprogress} from '../hocs';
-import {makeStore} from '../redux/store';
+import {makeStore} from '../nredux/store';
 import {authService} from '../services';
+import {RootState} from '../nredux/slices';
 
-class ComposedApp extends App<NextReduxAppProps> {
+class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
   public static async getInitialProps(context: AppContext) {
     const {Component, ctx} = context;
 

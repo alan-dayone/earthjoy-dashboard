@@ -1,4 +1,11 @@
-import loForIn from 'lodash/forIn';
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface LoginUser {
+  email: string;
+}
 
 export enum Role {
   ROOT_ADMIN = 'root_admin',

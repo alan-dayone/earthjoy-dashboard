@@ -1,4 +1,3 @@
-import express from 'express';
 import {NextPageContext} from 'next';
 import {Store} from 'redux';
 

@@ -1,11 +1,11 @@
 import React from 'react';
 import {connect, ConnectedComponent} from 'react-redux';
 import {AnyAction, compose} from 'redux';
-import {NextComponentType} from 'next';
+import {NextComponentType, NextPageContext} from 'next';
 import Router from 'next/router';
 
 import {selectors} from '../../redux/authRedux';
-import {actions as authRedux} from '../../redux/authRedux';
+import {getLoginUser} from '../../nredux/slices/loginUserSlice';
 import {authService} from '../../services';
 import {adminLayoutWrapper} from './AdminLayoutWrapper';
 import {ExpressReduxNextContext} from '../types';
@@ -16,23 +16,23 @@ export const guestOnly = (
   options?: {useAdminLayout: boolean},
 ): ConnectedComponent<NextComponentType, any> => {
   class GuestWrapper extends React.Component<any, any> {
-    public static async getInitialProps(context: ExpressReduxNextContext) {
+    public static async getInitialProps(context: NextPageContext) {
       if (context.isServer) {
         const dispatch = context.store?.dispatch as CommonThunkDispatch<AnyAction>;
-        const user = await dispatch(authRedux.getLoginUser());
+        const user = await dispatch(getLoginUser());
 
-        if (user) {
-          context.res?.redirect('/');
-          context.res?.end();
-          return {};
-        }
-      } else {
-        const user = selectors.getLoginUser(context.store?.getState());
-
-        if (user) {
-          Router.replace('/');
-          return {};
-        }
+        //   if (user) {
+        //     context.res?.redirect('/');
+        //     context.res?.end();
+        //     return {};
+        //   }
+        // } else {
+        //   const user = selectors.getLoginUser(context.store?.getState());
+        //
+        //   if (user) {
+        //     Router.replace('/');
+        //     return {};
+        //   }
       }
 
       return Content.getInitialProps ? Content.getInitialProps(context) : {};

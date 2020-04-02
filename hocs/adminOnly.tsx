@@ -2,17 +2,17 @@ import React from 'react';
 import {AnyAction} from 'redux';
 import Link from 'next/link';
 import {DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap';
-import {NextComponentType} from 'next';
+import {NextComponentType, NextPageContext} from 'next';
 import {withRouter} from 'next/router';
 import {WithRouterProps} from 'next/dist/client/with-router';
 import classNames from 'classnames';
 import JsCookie from 'js-cookie';
 import {ExpressReduxNextContext} from './types';
 import {authService} from '../services';
-import {CommonThunkDispatch} from '../redux/types';
-import {actions as authRedux} from '../redux/authRedux';
+// import {CommonThunkDispatch} from '../redux/types';
 import {isAdmin} from '../models/User';
 import '../scss/admin/index.scss';
+import {getLoginUser} from '../nredux/slices/loginUserSlice';
 
 interface AdminWrapperState {
   showSidebar: boolean;
@@ -22,22 +22,22 @@ interface AdminWrapperState {
 /* tslint:disable-next-line:variable-name */
 export const adminOnly = (Content: NextComponentType): NextComponentType => {
   class AdminWrapper extends React.Component<WithRouterProps, AdminWrapperState> {
-    public static async getInitialProps(ctx: ExpressReduxNextContext) {
+    public static async getInitialProps(ctx: NextPageContext) {
       const {req, res, isServer} = ctx;
-      const dispatch = ctx.store?.dispatch as CommonThunkDispatch<AnyAction>;
+      const dispatch = ctx.store?.dispatch;
 
-      if (isServer) {
-        authService.setAccessToken(req?.cookies?.jwt);
-        const user = await dispatch(authRedux.getLoginUser());
-
-        if (!user) {
-          res.redirect('/admin/login');
-          res.end();
-        } else if (!isAdmin(user)) {
-          res.redirect('/');
-          res.end();
-        }
-      }
+      // if (isServer) {
+      //   authService.setAccessToken(req?.cookies?.jwt);
+      //   const user = await dispatch(getLoginUser());
+      //
+      //   if (!user) {
+      //     res.redirect('/admin/login');
+      //     res.end();
+      //   } else if (!isAdmin(user)) {
+      //     res.redirect('/');
+      //     res.end();
+      //   }
+      // }
 
       return Content.getInitialProps ? Content.getInitialProps(ctx) : {};
     }
