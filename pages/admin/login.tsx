@@ -4,10 +4,11 @@ import Router from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head';
 import toastr from 'toastr';
+import {connect} from 'react-redux';
 import {Formik, FormikActions} from 'formik';
+import {AxiosError} from 'axios';
 import {guestOnly} from '../../hocs';
 import {loginWithEmail} from '../../redux/slices/loginUserSlice';
-import {connect} from 'react-redux';
 import {AppDispatch} from '../../redux/store';
 
 export interface LoginForm {
@@ -20,7 +21,7 @@ interface PageProps {
 }
 
 class AdminLoginPage extends Component<PageProps> {
-  public render() {
+  public render(): JSX.Element {
     return (
       <div
         id="admin-login-page"
@@ -40,7 +41,7 @@ class AdminLoginPage extends Component<PageProps> {
                         password: '',
                       }}
                       onSubmit={this._handleLogin}>
-                      {props => (
+                      {(props): JSX.Element => (
                         <form onSubmit={props.handleSubmit}>
                           <h1>Login</h1>
                           <p className="text-muted">Sign In to your account</p>
@@ -109,10 +110,10 @@ class AdminLoginPage extends Component<PageProps> {
     );
   }
 
-  public _handleLogin = async (
+  private _handleLogin = async (
     values: LoginForm,
     actions: FormikActions<LoginForm>,
-  ) => {
+  ): Promise<void> => {
     actions.setSubmitting(true);
     try {
       const user = await this.props.dispatch(loginWithEmail(values));
@@ -122,8 +123,19 @@ class AdminLoginPage extends Component<PageProps> {
       }
     } catch (e) {
       actions.setSubmitting(false);
-      toastr.error(e.message);
+      toastr.error(this._getErrorMessage(e));
     }
+  };
+
+  private _getErrorMessage = (error: AxiosError): string => {
+    if (
+      error.response?.data?.error?.code === 'VALIDATION_FAILED' ||
+      error.response?.data?.error?.message === 'invalid_credentials_email'
+    ) {
+      return 'Incorrect email or password';
+    }
+
+    return error.message;
   };
 }
 

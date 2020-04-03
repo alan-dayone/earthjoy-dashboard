@@ -11,12 +11,6 @@ export class AuthService {
     ACCOUNT_INACTIVATED: 'ACCOUNT_INACTIVATED',
   };
 
-  public static event = {
-    USER_LOGIN: 'USER_LOGIN',
-    USER_SIGNUP: 'USER_SIGNUP',
-    USER_LOGOUT: 'USER_LOGOUT',
-  };
-
   private authGateway: AuthGateway;
 
   constructor(options: ServiceContext) {
@@ -36,8 +30,8 @@ export class AuthService {
     return this.authGateway.getLoginUser();
   }
 
-  public async logout(): Promise<void> {
-    await this.authGateway.logout();
+  public logout(): void {
+    this.authGateway.logout();
   }
 
   public async sendResetPasswordEmail(email: string): Promise<void> {

@@ -14,8 +14,6 @@ const {reducer, actions} = createSlice({
 });
 
 // Actions
-export const {setLoginUser} = actions;
-
 export const getLoginUser = (): AppThunk<Promise<LoginUser>> => async (
   dispatch: Dispatch,
 ): Promise<LoginUser> => {
@@ -30,8 +28,13 @@ export const loginWithEmail = (
   dispatch: Dispatch,
 ): Promise<LoginUser> => {
   const user = await authService.loginWithEmail(loginForm);
-  dispatch(setLoginUser(user));
+  dispatch(actions.setLoginUser(user));
   return user;
+};
+
+export const logout = (): AppThunk => (dispatch: Dispatch): void => {
+  authService.logout();
+  dispatch(actions.setLoginUser(null));
 };
 
 // Selectors

@@ -20,23 +20,8 @@ export class AuthGateway {
   }
 
   public async create(body: {email: string; password: string}) {
-    try {
-      await this.restConnector.post('/accounts', body);
-      return this.loginWithEmail(body);
-    } catch (e) {
-      switch (_.get(e, 'response.data.error.code')) {
-        case 'USERNAME_EMAIL_REQUIRED':
-        case 'LOGIN_FAILED': {
-          throw new ApplicationError(AuthService.error.LOGIN_FAILED);
-        }
-        default: {
-        }
-      }
-      if (_.get(e, 'response.data.error.message') === 'ACCOUNT_INACTIVATED') {
-        throw new ApplicationError(AuthService.error.ACCOUNT_INACTIVATED);
-      }
-      throw e;
-    }
+    await this.restConnector.post('/accounts', body);
+    return this.loginWithEmail(body);
   }
 
   public async getLoginUser() {
@@ -52,15 +37,7 @@ export class AuthGateway {
     }
   }
 
-  public async logout() {
-    try {
-      await this.restConnector.post('/accounts/logout', {});
-    } catch (e) {
-      console.warn(
-        'Failed to call logout api, but cookie in browser will be cleared so user is still logged out',
-        e,
-      );
-    }
+  public logout() {
     this.setAccessToken(null);
   }
 
@@ -146,7 +123,7 @@ export class AuthGateway {
     }
   }
 
-  public setAccessToken(token: string) {
+  public setAccessToken(token: string | null) {
     if (token) {
       this.jwt = token;
       Cookies.set('jwt', token);

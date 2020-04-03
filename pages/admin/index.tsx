@@ -5,7 +5,7 @@ import {adminOnly} from '../../hocs';
 import '../../scss/admin/index.scss';
 
 class AdminDashboardPage extends Component {
-  public render() {
+  public render(): JSX.Element {
     return (
       <div id="admin-dashboard-page">
         <Head>

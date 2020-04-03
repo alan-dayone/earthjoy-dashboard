@@ -14,8 +14,9 @@ import {connect} from 'react-redux';
 import {CustomNextPageContext} from './types';
 import {authService} from '../services';
 import {isAdmin, LoginUser} from '../models/Account';
-import {getLoginUser, selectors} from '../redux/slices/loginUserSlice';
+import {getLoginUser, logout, selectors} from '../redux/slices/loginUserSlice';
 import {RootState} from '../redux/slices';
+import {AppDispatch} from '../redux/store';
 import '../scss/admin/index.scss';
 
 interface AdminWrapperState {
@@ -25,6 +26,7 @@ interface AdminWrapperState {
 
 interface AdminWrapperProps {
   loginUser: LoginUser;
+  dispatch: AppDispatch;
 }
 
 /* tslint:disable-next-line:variable-name */
@@ -44,9 +46,20 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
         if (!user) {
           res.redirect('/admin/login');
           res.end();
+          return;
         } else if (!isAdmin(user)) {
           res.redirect('/');
           res.end();
+          return;
+        }
+      } else {
+        const user = selectors.selectLoginUser(store.getState());
+        if (!user) {
+          Router.replace('/admin/login');
+          return;
+        } else if (!isAdmin(user)) {
+          Router.replace('/');
+          return;
         }
       }
 
@@ -85,7 +98,10 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
 
     public componentDidMount() {
       const oldState = JsCookie.get('AdminWrapperState');
-      if (oldState) this.setState(JSON.parse(oldState));
+
+      if (oldState) {
+        this.setState(JSON.parse(oldState));
+      }
     }
 
     public componentWillUnmount() {
@@ -93,6 +109,8 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
     }
 
     public _renderNavbar = () => {
+      const {loginUser} = this.props;
+
       return (
         <header className="c-header c-header-light c-header-fixed px-3">
           <button
@@ -102,26 +120,28 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
           </button>
           <ul className="c-header-nav mfs-auto">
             <li className="c-header-nav-item dropdown">
-              <div
-                className="c-header-nav-link"
-                data-toggle="dropdown"
-                role="button"
-                aria-haspopup="true"
-                aria-expanded="false">
-                <UncontrolledDropdown>
-                  <DropdownToggle
-                    caret
-                    nav
-                    tag="a"
-                    className="u-cursor-pointer">
-                    {this.props.loginUser.email}
-                  </DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem>Profile</DropdownItem>
-                    <DropdownItem onClick={this._logout}>Logout</DropdownItem>
-                  </DropdownMenu>
-                </UncontrolledDropdown>
-              </div>
+              {loginUser && (
+                <div
+                  className="c-header-nav-link"
+                  data-toggle="dropdown"
+                  role="button"
+                  aria-haspopup="true"
+                  aria-expanded="false">
+                  <UncontrolledDropdown>
+                    <DropdownToggle
+                      caret
+                      nav
+                      tag="a"
+                      className="u-cursor-pointer">
+                      {loginUser.email}
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      <DropdownItem>Profile</DropdownItem>
+                      <DropdownItem onClick={this._logout}>Logout</DropdownItem>
+                    </DropdownMenu>
+                  </UncontrolledDropdown>
+                </div>
+              )}
             </li>
           </ul>
         </header>
@@ -199,7 +219,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
 
     public _logout = async () => {
       try {
-        await authService.logout();
+        this.props.dispatch(logout());
         Router.replace('/admin/login');
       } catch (e) {
         toastr.error(e.message);
