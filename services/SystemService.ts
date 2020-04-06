@@ -1,5 +1,10 @@
 import {ConfigurationData, SystemGateway} from '../gateways/SystemGateway';
-import {ConfigurationKey, MailSmtpSettings} from '../models/Configuration';
+import {
+  ConfigurationKey,
+  MailSmtpSettings,
+  ResetPasswordSettings,
+  VerifyAccountSettings,
+} from '../models/Configuration';
 import {ServiceContext} from './index';
 
 export class SystemService {
@@ -33,6 +38,24 @@ export class SystemService {
     await this.systemGateway.updateSystemConfiguration(
       ConfigurationKey.MAIL_SMTP_SETTINGS,
       smtpSettings,
+    );
+  }
+
+  public async saveAccountVerificationSettings(
+    verifyAccountSettings: VerifyAccountSettings,
+  ): Promise<void> {
+    await this.systemGateway.updateSystemConfiguration(
+      ConfigurationKey.VERIFY_ACCOUNT_SETTINGS,
+      verifyAccountSettings,
+    );
+  }
+
+  public async saveResetPasswordSettings(
+    resetPasswordSettings: ResetPasswordSettings,
+  ): Promise<void> {
+    await this.systemGateway.updateSystemConfiguration(
+      ConfigurationKey.RESET_PASSWORD_SETTINGS,
+      resetPasswordSettings,
     );
   }
 

@@ -1,154 +1,104 @@
 /* tslint:disable:no-default-export */
-import React, {Component} from 'react';
-import {withRouter} from 'next/router';
-import Error from 'next/error';
+import React from 'react';
 import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
+import * as Yup from 'yup';
 import {Formik, FormikActions} from 'formik';
-import {compose} from 'redux';
 import {guestOnly} from '../../hocs';
 import {authService} from '../../services';
-import {CustomNextPageContext} from '../../hocs/types';
-import {WithRouterProps} from 'next/dist/client/with-router';
+import {constraint} from '../../models/Account';
 
-interface ResetPasswordForm {
-  newPassword: string;
-  confirmPassword: string;
-  notMatch?: string;
+interface ForgotPasswordForm {
+  email: string;
 }
 
-interface ResetPasswordValidatorMessage {
-  notMatch?: string;
-}
-interface Props {
-  token: string;
+interface State {
+  isSubmitted: boolean;
 }
 
-class AdminResetPasswordPage extends Component<Props & WithRouterProps> {
-  public static getInitialProps(ctx: CustomNextPageContext): {token: string} {
-    const token = ctx.query.token as string;
+class AdminResetPasswordPage extends React.Component<any, State> {
+  public state: State = {
+    isSubmitted: false,
+  };
 
-    return {
-      token,
-    };
-  }
-
-  public render(): JSX.Element {
-    if (!this.props.token) {
-      return <Error statusCode={400} />;
-    }
-
+  public render() {
     return (
       <div
-        id="admin-login-page"
+        id="admin-reset-password-page"
         className="align-items-center c-app flex-row pace-done">
         <Head>
-          <title>Admin - Reset password</title>
+          <title>Admin - Forgot password</title>
         </Head>
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-md-4">
+            <div className="col-md-5">
               <div className="card-group">
-                <div className="p-4 card">
+                <div className="card p-4">
                   <div className="card-body">
                     <Formik
-                      initialValues={{
-                        newPassword: '',
-                        confirmPassword: '',
-                      }}
-                      onSubmit={this._handleResetPassword}
-                      validate={(values): object => {
-                        const errors: ResetPasswordForm &
-                          ResetPasswordValidatorMessage = {
-                          newPassword: '',
-                          confirmPassword: '',
-                        };
-                        if (values.newPassword === '') {
-                          errors.newPassword = 'New password is required';
-                        } else if (values.confirmPassword === '') {
-                          errors.confirmPassword =
-                            'Confirm password is required';
-                        } else if (
-                          values.confirmPassword !== values.newPassword
-                        ) {
-                          errors.notMatch = 'The passwords do not match';
-                        }
-
-                        return errors;
-                      }}>
-                      {(props): JSX.Element => (
+                      initialValues={{email: ''}}
+                      onSubmit={this._handleForgotPassword}
+                      validationSchema={Yup.object().shape({
+                        email: Yup.string()
+                          .email('Please provide a valid email')
+                          .required('Please provide a valid email')
+                          .max(
+                            constraint.email.MAX_LENGTH,
+                            'Email is too long',
+                          ),
+                      })}>
+                      {props => (
                         <form onSubmit={props.handleSubmit}>
-                          <h1>Reset Password</h1>
-                          {/* <p className="text-muted">Sign In to your account</p> */}
-                          <div className="form-group">
-                            <div className="input-group mb-3">
-                              <div className="input-group-prepend">
-                                <span className="input-group-text">
-                                  <i className="cil-lock-locked" />
-                                </span>
+                          <h1>Forgot password</h1>
+                          {!this.state.isSubmitted ? (
+                            <div>
+                              <p className="text-muted">
+                                Please enter your email address. We will send
+                                you an email to reset your password.
+                              </p>
+                              <div className="form-group">
+                                <div className="input-group mb-3">
+                                  <div className="input-group-prepend">
+                                    <span className="input-group-text">
+                                      <i className="cil-envelope-closed" />
+                                    </span>
+                                  </div>
+                                  <input
+                                    name="email"
+                                    type="text"
+                                    placeholder="Email"
+                                    onChange={props.handleChange}
+                                    value={props.values.email}
+                                    className={classnames('form-control', {
+                                      'is-invalid': props.errors.email,
+                                    })}
+                                  />
+                                  {props.errors.email && (
+                                    <div className="invalid-feedback">
+                                      {props.errors.email}
+                                    </div>
+                                  )}
+                                </div>
                               </div>
-                              <input
-                                name="newPassword"
-                                type="text"
-                                placeholder="New Password"
-                                onChange={props.handleChange}
-                                value={props.values.newPassword}
-                                className={classnames('form-control', {
-                                  'is-invalid':
-                                    props.errors.newPassword ||
-                                    props.errors.notMatch,
-                                })}
-                              />
-                              {props.errors.newPassword && (
-                                <div className="invalid-feedback">
-                                  {props.errors.newPassword}
-                                </div>
-                              )}
+                              <button
+                                className="btn btn-block btn-primary"
+                                type="submit"
+                                disabled={props.isSubmitting}>
+                                {props.isSubmitting && (
+                                  <div className="spinner-border spinner-border-sm mr-1" />
+                                )}
+                                Submit
+                              </button>
                             </div>
-                          </div>
-                          <div className="form-group">
-                            <div className="input-group mb-3">
-                              <div className="input-group-prepend">
-                                <span className="input-group-text">
-                                  <i className="cil-lock-locked" />
-                                </span>
+                          ) : (
+                            <div className="mt-3">
+                              <div className="alert alert-success">
+                                We've just sent you an email to reset your
+                                password.
                               </div>
-                              <input
-                                name="confirmPassword"
-                                type="text"
-                                placeholder="Confirm Password"
-                                onChange={props.handleChange}
-                                value={props.values.confirmPassword}
-                                className={classnames('form-control', {
-                                  'is-invalid':
-                                    props.errors.confirmPassword ||
-                                    props.errors.notMatch,
-                                })}
-                              />
-                              {props.errors.confirmPassword && (
-                                <div className="invalid-feedback">
-                                  {props.errors.confirmPassword}
-                                </div>
-                              )}
-                              {props.errors.notMatch && (
-                                <div className="invalid-feedback">
-                                  {props.errors.notMatch}
-                                </div>
-                              )}
                             </div>
-                          </div>
-                          <div className="form-group">
-                            <button
-                              className="btn btn-block btn-primary"
-                              type="submit"
-                              disabled={props.isSubmitting}>
-                              {props.isSubmitting && (
-                                <div className="spinner-border spinner-border-sm mr-1" />
-                              )}
-                              Submit
-                            </button>
-                          </div>
+                          )}
                         </form>
                       )}
                     </Formik>
@@ -162,31 +112,21 @@ class AdminResetPasswordPage extends Component<Props & WithRouterProps> {
     );
   }
 
-  public _handleResetPassword = async (
-    values: ResetPasswordForm,
-    actions: FormikActions<ResetPasswordForm>,
-  ): Promise<void> => {
+  public _handleForgotPassword = async (
+    values: ForgotPasswordForm,
+    actions: FormikActions<ForgotPasswordForm>,
+  ) => {
     actions.setSubmitting(true);
     try {
-      const accessToken = this.props.token;
-      const body = {
-        newPassword: values.newPassword,
-        newPasswordConfirm: values.confirmPassword,
-      };
-
-      await authService.changePassword(body, accessToken);
-      toastr.success('Success!');
-
-      const {router} = this.props;
-      await router.replace('/admin/login');
+      await authService.sendResetPasswordEmail(values.email);
+      this.setState({isSubmitted: true});
+      toastr.success('Success');
+      actions.setSubmitting(false);
     } catch (e) {
       toastr.error(e.message);
-    } finally {
       actions.setSubmitting(false);
     }
   };
 }
 
-export default compose(withRouter, guestOnly)(AdminResetPasswordPage, {
-  useAdminLayout: true,
-});
+export default guestOnly(AdminResetPasswordPage, {useAdminLayout: true});

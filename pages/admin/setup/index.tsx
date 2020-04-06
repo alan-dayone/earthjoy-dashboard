@@ -16,6 +16,8 @@ class AdminSetupPage extends Component {
     correctSystemInitPassword: null,
   };
 
+  // TODO: show 404 if system initialized already
+
   public render(): JSX.Element {
     return (
       <div className="align-items-center c-app flex-row pace-done">

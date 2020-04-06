@@ -35,14 +35,12 @@ export function getServerErrorMessage(error) {
 function AdminAccountCreationPage() {
   async function _handleSave(values: Account, actions) {
     try {
-      console.log(values);
-
       actions.setSubmitting(true);
       await accountService.createAccount(values);
       toastr.success('Success');
+      actions.setSubmitting(false);
     } catch (e) {
       toastr.error(getServerErrorMessage(e));
-    } finally {
       actions.setSubmitting(false);
     }
   }

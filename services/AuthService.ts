@@ -53,25 +53,15 @@ export class AuthService {
     await this.authGateway.updatePassword(body);
   }
 
-  public async setNewPassword(
-    body: {userId: string; newPassword: string},
-    accessToken: string,
-  ): Promise<void> {
-    await this.authGateway.setNewPassword(body, accessToken);
+  public async setNewPassword(body: {
+    accountId: string;
+    newPassword: string;
+    resetPasswordToken: string;
+  }): Promise<void> {
+    await this.authGateway.setNewPassword(body);
   }
 
   public setAccessToken(accessToken: string): void {
     this.authGateway.setAccessToken(accessToken);
-  }
-
-  public async forgotPassword(email: string): Promise<void> {
-    return this.authGateway.forgotPassword(email);
-  }
-
-  public async changePassword(
-    body: {newPassword: string; newPasswordConfirm: string},
-    accessToken: string,
-  ): Promise<void> {
-    return this.authGateway.changePassword(body, accessToken);
   }
 }

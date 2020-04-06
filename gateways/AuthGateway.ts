@@ -43,7 +43,9 @@ export class AuthGateway {
 
   public async sendResetPasswordEmail(email: string) {
     try {
-      await this.restConnector.post('/accounts/reset', {email});
+      await this.restConnector.post('/accounts/send-reset-password-email', {
+        email,
+      });
     } catch (e) {
       const errResp = _.get(e, 'response.data.error', e);
       switch (errResp.code) {
@@ -87,7 +89,6 @@ export class AuthGateway {
     try {
       await this.restConnector.post('/accounts/change-password', body);
     } catch (e) {
-      console.log(e.response);
       const err = _.get(e, 'response.data.error', e);
 
       if (
@@ -101,26 +102,12 @@ export class AuthGateway {
     }
   }
 
-  public async setNewPassword(
-    body: {userId: string; newPassword: string},
-    accessToken: string,
-  ): Promise<void> {
-    const {userId, newPassword} = body;
-    try {
-      await this.restConnector.post(
-        `/accounts/reset-password?access_token=${accessToken}`,
-        {id: userId, newPassword},
-      );
-    } catch (e) {
-      const err = _.get(e, 'response.data.error', e);
-
-      switch (err.code) {
-        case 'INVALID_PASSWORD':
-          throw new ValidationError(AuthService.error.INVALID_CURRENT_PASSWORD);
-        default:
-          throw err;
-      }
-    }
+  public async setNewPassword(body: {
+    accountId: string;
+    newPassword: string;
+    resetPasswordToken: string;
+  }): Promise<void> {
+    await this.restConnector.post(`/accounts/reset-password`, body);
   }
 
   public setAccessToken(token: string | null) {
@@ -139,15 +126,15 @@ export class AuthGateway {
     return this.restConnector.post('/accounts/reset-password', {email});
   }
 
-  public async changePassword(
-    body: {newPassword: string; newPasswordConfirm: string},
-    accessToken: string,
-  ): Promise<void> {
-    const {newPassword, newPasswordConfirm} = body;
-    this.setAccessToken(accessToken);
-    await this.restConnector.post(`/accounts/change-password?=${accessToken}`, {
-      newPassword,
-      newPasswordConfirm,
-    });
-  }
+  // public async changePassword(
+  //   body: {accountId: string, newPassword: string, resetPasswordToken: string},
+  //   accessToken: string,
+  // ): Promise<void> {
+  //   const {newPassword} = body;
+  //   this.setAccessToken(accessToken);
+  //   await this.restConnector.post(`/accounts/change-password?=${accessToken}`, {
+  //     newPassword,
+  //     newPasswordConfirm,
+  //   });
+  // }
 }

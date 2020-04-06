@@ -1,6 +1,8 @@
 export enum ConfigurationKey {
   SYSTEM_STATUS = 'SYSTEM_STATUS',
   MAIL_SMTP_SETTINGS = 'MAIL_SMTP_SETTINGS',
+  RESET_PASSWORD_SETTINGS = 'RESET_PASSWORD_SETTINGS',
+  VERIFY_ACCOUNT_SETTINGS = 'VERIFY_ACCOUNT_SETTINGS',
 }
 
 export interface MailSmtpSettings {
@@ -10,6 +12,20 @@ export interface MailSmtpSettings {
   senderEmail: string;
   username: string;
   smtpPort: string;
+}
+
+export interface ResetPasswordSettings {
+  emailTemplate: string;
+  subject: string;
+  senderEmail: string;
+  senderName: string;
+}
+
+export interface VerifyAccountSettings {
+  emailTemplate: string;
+  subject: string;
+  senderEmail: string;
+  senderName: string;
 }
 
 export interface EmailFormat {

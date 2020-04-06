@@ -5,16 +5,17 @@ import {Formik, FormikActions} from 'formik';
 import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../hocs';
-// import { systemService } from '../../../services';
-import {EmailFormat} from '../../../models/Configuration';
+import {ResetPasswordSettings} from '../../../models/Configuration';
 import {MailSmtpSettingsValidationSchema} from '../../../view-models/EmailVerification';
+import {systemService} from '../../../services';
+
 class AdminPasswordResetPage extends Component {
-  public render() {
-    const initialValues: EmailFormat = {
+  public render(): JSX.Element {
+    const initialValues: ResetPasswordSettings = {
       senderName: '',
       senderEmail: '',
       subject: '',
-      message: '',
+      emailTemplate: '',
     };
 
     return (
@@ -107,13 +108,14 @@ class AdminPasswordResetPage extends Component {
                             </div>
                           </div>
                           <div className="form-group">
-                            <label>Message</label>
+                            <label>Email template</label>
                             <textarea
                               className={classNames('form-control')}
                               name="message"
                               placeholder="Content ..."
                               onChange={handleChange}
-                              value={values.message}></textarea>
+                              value={values.emailTemplate}
+                            />
                           </div>
                         </div>
                       </div>
@@ -142,36 +144,17 @@ class AdminPasswordResetPage extends Component {
     );
   }
 
-  //   _handleTestSmtpConnection = async (values: MailSmtpSettings) => {
-  //     try {
-  //       this.setState({ isTestingConnection: true });
-  //       const isValid = await systemService.testSmtpConnection(values);
-
-  //       if (isValid) {
-  //         toastr.success('SMTP settings are valid');
-  //       } else {
-  //         toastr.error('Invalid SMTP settings');
-  //       }
-  //     } catch (e) {
-  //       toastr.error(e.message);
-  //     } finally {
-  //       this.setState({ isTestingConnection: false });
-  //     }
-  //   };
-
   public _handleSave = async (
-    values: EmailFormat,
-    actions: FormikActions<EmailFormat>,
+    values: ResetPasswordSettings,
+    actions: FormikActions<ResetPasswordSettings>,
   ) => {
-    actions.setSubmitting(true);
     try {
-      // await systemService.saveSmtpSettings(values);
-      console.log({values});
-
+      actions.setSubmitting(true);
+      await systemService.saveResetPasswordSettings(values);
       toastr.success('Saved');
+      actions.setSubmitting(false);
     } catch (e) {
       toastr.error(e.message);
-    } finally {
       actions.setSubmitting(false);
     }
   };

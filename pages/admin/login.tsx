@@ -88,7 +88,7 @@ class AdminLoginPage extends Component<PageProps> {
                               </button>
                             </div>
                             <div className="col-6 text-right">
-                              <Link href="/admin/forgot-password">
+                              <Link href="/admin/reset-password">
                                 <button
                                   className="btn btn-link px-0"
                                   type="button">
@@ -119,7 +119,7 @@ class AdminLoginPage extends Component<PageProps> {
       const user = await this.props.dispatch(loginWithEmail(values));
 
       if (user) {
-        Router.replace('/admin');
+        await Router.replace('/admin');
       }
     } catch (e) {
       actions.setSubmitting(false);

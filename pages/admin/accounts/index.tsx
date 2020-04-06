@@ -159,7 +159,7 @@ function AdminAccountsPage() {
       });
       setData(accounts.data);
       setPageCount(Math.ceil(accounts.count / pageSize));
-      setTotalRecord(accounts.count);
+      // setTotalRecord(accounts.count);
       setLoadingData(false);
       const queryString = qs.stringify({
         ...filterObj,
