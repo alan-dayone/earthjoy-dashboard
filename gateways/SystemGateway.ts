@@ -99,4 +99,12 @@ export class SystemGateway {
       throw e;
     }
   }
+
+  public async isValidSmtpSettings(values: MailSmtpSettings): Promise<boolean> {
+    const {data} = await this.restConnector.post(
+      '/configurations/validate-mail-smtp-settings',
+      values,
+    );
+    return data.isValid;
+  }
 }

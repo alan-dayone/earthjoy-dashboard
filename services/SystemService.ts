@@ -26,7 +26,7 @@ export class SystemService {
   }
 
   public async testSmtpConnection(values): Promise<boolean> {
-    return values;
+    return this.systemGateway.isValidSmtpSettings(values);
   }
 
   public async saveSmtpSettings(smtpSettings: MailSmtpSettings): Promise<void> {

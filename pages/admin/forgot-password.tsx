@@ -1,6 +1,5 @@
 /* tslint:disable:no-default-export */
 import React from 'react';
-// import Router from 'next/router';
 import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
@@ -13,12 +12,12 @@ interface ForgotPasswordForm {
 }
 
 interface State {
-  isSendMail: boolean;
+  isSubmitted: boolean;
 }
 
 class AdminForgotPasswordPage extends React.Component<any, State> {
   public state: State = {
-    isSendMail: false,
+    isSubmitted: false,
   };
 
   public render() {
@@ -57,12 +56,11 @@ class AdminForgotPasswordPage extends React.Component<any, State> {
                       {props => (
                         <form onSubmit={props.handleSubmit}>
                           <h1>Forgot password</h1>
-                          {!this.state.isSendMail ? (
+                          {!this.state.isSubmitted ? (
                             <div>
                               <p className="text-muted">
-                                Don't worry! Enter your email below and we'll
-                                email you with instructions on how to reset your
-                                password.
+                                Submit your email below. We will send you
+                                instructions to reset your password.
                               </p>
                               <div className="form-group">
                                 <div className="input-group mb-3">
@@ -126,9 +124,10 @@ class AdminForgotPasswordPage extends React.Component<any, State> {
     actions: FormikActions<ForgotPasswordForm>,
   ) => {
     actions.setSubmitting(true);
+
     try {
       await authService.forgotPassword(values.email);
-      this.setState({isSendMail: true});
+      this.setState({isSubmitted: true});
     } catch (e) {
       toastr.error(e.message);
     } finally {

@@ -3,26 +3,11 @@ import React, {Component} from 'react';
 import Head from 'next/head';
 import {Formik, FormikActions} from 'formik';
 import toastr from 'toastr';
-import {NextComponentType, NextPageContext} from 'next';
 import classNames from 'classnames';
-import loIsEqual from 'lodash/isEqual';
 import {adminOnly} from '../../../hocs';
 import {systemService} from '../../../services';
 import {MailSmtpSettings} from '../../../models/Configuration';
 import {MailSmtpSettingsValidationSchema} from '../../../view-models/SmtpConfig';
-import {ToastrWarning} from '../../../view-models/Toastr';
-
-class SmtpSettingToastrWarning extends ToastrWarning {
-  public getWarningMessage(): string {
-    if (this.code === 'NOTHING_CHANGE') {
-      return 'The new SMTP settings are the same';
-    }
-    return 'Warning';
-  }
-  public alert() {
-    toastr.warning(this.getWarningMessage());
-  }
-}
 
 class AdminSmtpSettingsPage extends Component<{
   initialSmtpSettings: MailSmtpSettings;
@@ -250,8 +235,8 @@ class AdminSmtpSettingsPage extends Component<{
   public _handleTestSmtpConnection = async (values: MailSmtpSettings) => {
     try {
       this.setState({isTestingConnection: true});
-      const isValid = await systemService.testSmtpConnection(values);
 
+      const isValid = await systemService.testSmtpConnection(values);
       if (isValid) {
         toastr.success('SMTP settings are valid');
       } else {
@@ -267,27 +252,17 @@ class AdminSmtpSettingsPage extends Component<{
   public _handleSave = async (
     values: MailSmtpSettings,
     actions: FormikActions<MailSmtpSettings>,
-  ) => {
+  ): Promise<void> => {
     try {
       actions.setSubmitting(true);
-      if (loIsEqual(values, this.props.initialSmtpSettings)) {
-        throw new SmtpSettingToastrWarning(
-          SmtpSettingToastrWarning.NOTHING_CHANGE,
-        );
-      }
       await systemService.saveSmtpSettings(values);
+      actions.setSubmitting(false);
       toastr.success('Saved');
     } catch (e) {
-      if (e instanceof SmtpSettingToastrWarning) e.alert();
-      else {
-        toastr.error(e.message);
-      }
-    } finally {
+      toastr.error(e.message);
       actions.setSubmitting(false);
     }
   };
 }
 
-export default adminOnly(
-  AdminSmtpSettingsPage as NextComponentType<NextPageContext, any, any>,
-);
+export default adminOnly(AdminSmtpSettingsPage);
