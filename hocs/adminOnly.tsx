@@ -9,6 +9,7 @@ import {
 import {NextComponentType} from 'next';
 import Router from 'next/router';
 import classNames from 'classnames';
+import * as cookie from 'cookie';
 import JsCookie from 'js-cookie';
 import {connect} from 'react-redux';
 import {CustomNextPageContext} from './types';
@@ -39,15 +40,17 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
       const isServer = !!req;
 
       if (isServer) {
-        authService.setAccessToken(req?.cookies?.jwt);
+        authService.setAccessToken(
+          cookie.parse(req.headers.cookie as string).jwt,
+        );
         const user = await store.dispatch(getLoginUser());
 
         if (!user) {
-          res.redirect('/admin/login');
+          res.writeHead(301, {location: '/admin/login'});
           res.end();
           return;
         } else if (!isAdmin(user)) {
-          res.redirect('/');
+          res.writeHead(301, {location: '/'});
           res.end();
           return;
         }

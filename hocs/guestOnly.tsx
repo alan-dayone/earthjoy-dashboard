@@ -2,6 +2,7 @@ import React from 'react';
 import {NextComponentType} from 'next';
 import Router from 'next/router';
 import classnames from 'classnames';
+import * as cookie from 'cookie';
 import {getLoginUser, selectors} from '../redux/slices/loginUserSlice';
 import {authService} from '../services';
 import {isAdmin} from '../models/Account';
@@ -17,11 +18,13 @@ export const guestOnly = (
       const isServer = !!req;
 
       if (isServer) {
-        authService.setAccessToken(req?.cookies?.jwt);
+        authService.setAccessToken(
+          cookie.parse(req.headers.cookie as string).jwt,
+        );
         const user = await store.dispatch(getLoginUser());
 
         if (user) {
-          res.redirect(isAdmin(user) ? '/admin' : '/');
+          res.writeHead(301, {location: isAdmin(user) ? '/admin' : '/'});
           res.end();
           return;
         }

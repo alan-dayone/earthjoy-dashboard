@@ -2,24 +2,24 @@
 import React from 'react';
 import {compose} from 'redux';
 import {Provider} from 'react-redux';
-import * as cookie from 'cookie';
 import App from 'next/app';
 import withRedux, {ReduxWrapperAppProps} from 'next-redux-wrapper';
-import {AppContext} from 'next/dist/pages/_app';
+import {AppContext} from 'next/app';
+// import * as cookie from 'cookie';
 import {nprogress} from '../hocs';
 import {makeStore} from '../redux/store';
-import {authService} from '../services';
 import {RootState} from '../redux/slices';
+// import {authService} from "../services";
 import '../scss/index.scss';
 
 class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
   public static async getInitialProps(context: AppContext) {
     const {Component, ctx} = context;
 
-    if (ctx.req?.headers.cookie) {
-      const cookies = cookie.parse(ctx.req.headers.cookie);
-      authService.setAccessToken(cookies.jwt);
-    }
+    // const jwt = cookie.parse(ctx.req.headers.cookie as string).jwt;
+    // if (jwt) {
+    //   authService.setAccessToken(jwt);
+    // }
 
     const pageProps = Component.getInitialProps
       ? await Component.getInitialProps(ctx)

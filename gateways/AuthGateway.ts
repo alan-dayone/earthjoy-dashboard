@@ -12,6 +12,7 @@ export class AuthGateway {
   constructor(options: {restConnector: AxiosInstance}) {
     this.jwt = null;
     this.restConnector = options.restConnector;
+    this.loadAccessToken();
   }
 
   public async loginWithEmail(body: {email: string; password: string}) {
@@ -124,6 +125,15 @@ export class AuthGateway {
 
   public async forgotPassword(email: string): Promise<void> {
     return this.restConnector.post('/accounts/reset-password', {email});
+  }
+
+  private loadAccessToken() {
+    // On browser, load access token from cookie storage.
+    const accessToken = Cookies.get('jwt');
+    this.jwt = accessToken;
+    this.restConnector.defaults.headers[
+      'Authorization'
+    ] = `Bearer ${accessToken}`;
   }
 
   // public async changePassword(
