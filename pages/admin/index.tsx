@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import Head from 'next/head';
 import {adminOnly} from '../../hocs';
-import '../../scss/admin/index.scss';
+// import '../../scss/admin/index.scss';
 
 class AdminDashboardPage extends Component {
   public render(): JSX.Element {

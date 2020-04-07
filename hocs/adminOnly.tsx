@@ -17,7 +17,7 @@ import {isAdmin, LoginUser} from '../models/Account';
 import {getLoginUser, logout, selectors} from '../redux/slices/loginUserSlice';
 import {RootState} from '../redux/slices';
 import {AppDispatch} from '../redux/store';
-import '../scss/admin/index.scss';
+// import '../scss/admin/index.scss';
 
 interface AdminWrapperState {
   showSidebar: boolean;

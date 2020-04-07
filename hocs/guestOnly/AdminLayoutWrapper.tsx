@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../scss/admin/index.scss';
+// import '../../scss/admin/index.scss';
 
 export const adminLayoutWrapper = ({
   children,
