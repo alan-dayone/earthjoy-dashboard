@@ -76,7 +76,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
 
     public render() {
       return (
-        <div className="c-app pace-done">
+        <div className="app-layout--admin c-app pace-done">
           {this._renderSidebar()}
           <div className="c-wrapper">
             {this._renderNavbar()}

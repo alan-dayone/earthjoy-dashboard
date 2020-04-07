@@ -3,12 +3,13 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import classnames from 'classnames';
 import toastr from 'toastr';
+import {connect} from 'react-redux';
+import Router from 'next/router';
 import {systemService} from '../../../services';
-import {WithRouterProps} from 'next/dist/client/with-router';
-import {withRouter} from 'next/router';
 import {AppDispatch} from '../../../redux/store';
 import {loginWithEmail} from '../../../redux/slices/loginUserSlice';
 
+// TODO: Password validation is not sufficient.
 const formSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
   email: yup
@@ -24,13 +25,13 @@ interface PageProps {
   correctSystemInitPassword: string;
 }
 
-class InnerCreateFirstAdminForm extends Component<PageProps & WithRouterProps> {
+class CreateFirstAdminForm extends Component<PageProps> {
   public render(): JSX.Element {
     return (
       <div>
         <h1>Create first admin</h1>
         <p className="text-muted">
-          You can use this account to create other accounts.
+          You can use this account to create other accounts and manage the system.
         </p>
         <Formik
           initialValues={{
@@ -39,20 +40,11 @@ class InnerCreateFirstAdminForm extends Component<PageProps & WithRouterProps> {
             password: '',
             confirmPassword: '',
           }}
-          // validate={(values) => {
-          //   const errors = {
-          //     confirmPassword: '',
-          //   };
-          //   if (values.password !== values.confirmPassword) {
-          //     errors.confirmPassword = 'Password and confirm password must match';
-          //   }
-          //   return errors;
-          // }}
           validationSchema={formSchema}
           onSubmit={async (values, {setSubmitting}): Promise<void> => {
             setSubmitting(true);
             try {
-              const {correctSystemInitPassword, dispatch, router} = this.props;
+              const {correctSystemInitPassword, dispatch} = this.props;
               await systemService.initSystem({
                 password: correctSystemInitPassword,
                 admin: {
@@ -60,19 +52,14 @@ class InnerCreateFirstAdminForm extends Component<PageProps & WithRouterProps> {
                   password: values.password,
                 },
               });
-
-              if (dispatch) {
-                await dispatch(
-                  loginWithEmail({
-                    email: values.email,
-                    password: values.password,
-                  }),
-                );
-              }
-
+              await dispatch(
+                loginWithEmail({
+                  email: values.email,
+                  password: values.password,
+                }),
+              );
               setSubmitting(false);
-
-              router.replace('/admin');
+              Router.replace('/admin');
             } catch (e) {
               setSubmitting(false);
               toastr.error(e.message);
@@ -184,4 +171,5 @@ class InnerCreateFirstAdminForm extends Component<PageProps & WithRouterProps> {
     );
   }
 }
-export default withRouter(InnerCreateFirstAdminForm);
+
+export default connect()(CreateFirstAdminForm);

@@ -5,7 +5,7 @@ export const everyone = (Content: React.ElementType) => {
   return class Wrapper extends React.Component {
     public render() {
       return (
-        <div>
+        <div className='app-layout--user'>
           <Head>
             <title>NextJs Boilerplate</title>
           </Head>
