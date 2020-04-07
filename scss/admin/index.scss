@@ -1,3 +1,4 @@
-@import '../vendors/coreui';
-@import '../common/index';
-@import './table';
+.app-layout--admin {
+  @import '~toastr/toastr';
+  @import './table';
+}

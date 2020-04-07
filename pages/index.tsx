@@ -4,20 +4,24 @@ import Head from 'next/head';
 import {everyone} from '../hocs';
 
 const IndexPage: FC = () => (
-  <main className="app-masthead" role="main">
+  <div className="container">
     <Head>
       <title>LoopNext</title>
     </Head>
-    <div className="container">
-      <div className="align-items-center order-md-1 text-md-left pr-md-5">
-        <h1 className="mb-3 app-text--brand text-primary">LoopNext</h1>
-        <p className="lead">
-          Scaffolding project template with common functionality implemented
-          out-of-the-box with best practices and general standards. Including:
-        </p>
-        <div className="masthead-followup row m-0 border border-white">
-          <div className="col-md-4 p-3 p-md-5 bg-light border border-white">
-            <h3>User pages</h3>
+    <h4>
+      Save hundred hours of development cost by project boilerplate including
+      common functionality implemented out-of-the-box with best practices,
+      industrial standards and state-of-the art architecture.
+    </h4>
+    <h5>Update this page as the landing page of your product.</h5>
+    <p className="text-muted mb-0">Version v1.0.0</p>
+    <div className="row mt-5">
+      <div className="col-4">
+        <div className="card">
+          <div className="card-header">
+            <strong>User pages</strong>
+          </div>
+          <div className="card-body">
             <ul>
               <li>Login</li>
               <li>SignUp</li>
@@ -27,8 +31,14 @@ const IndexPage: FC = () => (
               <li>Change password</li>
             </ul>
           </div>
-          <div className="col-md-4 p-3 p-md-5 bg-light border border-white">
-            <h3>Admin dashboard</h3>
+        </div>
+      </div>
+      <div className="col-4">
+        <div className="card">
+          <div className="card-header">
+            <strong>Admin dashboard</strong>
+          </div>
+          <div className="card-body">
             <ul>
               <li>Login</li>
               <li>SignUp</li>
@@ -48,8 +58,14 @@ const IndexPage: FC = () => (
               <li>Server availability management</li>
             </ul>
           </div>
-          <div className="col-md-4 p-3 p-md-5 bg-light border border-white">
-            <h3>{"There're more things"}</h3>
+        </div>
+      </div>
+      <div className="col-4">
+        <div className="card">
+          <div className="card-header">
+            <strong>{"There're more"}</strong>
+          </div>
+          <div className="card-body">
             <ul>
               <li>Multi-languages implementation</li>
               <li>OOP + MVC + Domain driven design + Flux architecture</li>
@@ -60,39 +76,9 @@ const IndexPage: FC = () => (
             </ul>
           </div>
         </div>
-        <div className="d-flex flex-column flex-md-row lead mb-3 mt-5">
-          <a
-            href="/#getting-started"
-            className="btn btn-lg btn-outline-primary mb-3 mb-md-0 mr-md-3 btn--large">
-            Get started
-          </a>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://gitlab.com/dayone-teams/int-boilerplates/int-loopnext"
-            className="btn btn-lg btn-outline-secondary btn--large">
-            Check out source code
-          </a>
-        </div>
-        <p className="text-muted mb-0">Currently v1.0.0</p>
-      </div>
-      <h2 id="getting_started" className="mt-5 app-text--brand text-primary">
-        Getting Started
-      </h2>
-      <div className="bg-light p-3 mt-3">
-        <pre>
-          <code>
-            git clone
-            git@gitlab.com:dayone-teams/int-boilerplates/int-loopnext.git
-            <br />
-            npm install
-            <br />
-            npm run dev
-          </code>
-        </pre>
       </div>
     </div>
-  </main>
+  </div>
 );
 
 export default everyone(IndexPage);

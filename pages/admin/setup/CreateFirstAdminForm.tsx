@@ -31,7 +31,8 @@ class CreateFirstAdminForm extends Component<PageProps> {
       <div>
         <h1>Create first admin</h1>
         <p className="text-muted">
-          You can use this account to create other accounts and manage the system.
+          You can use this account to create other accounts and manage the
+          system.
         </p>
         <Formik
           initialValues={{

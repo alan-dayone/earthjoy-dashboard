@@ -21,7 +21,7 @@ export default class AppDocument extends Document {
             href="https://unpkg.com/@coreui/icons@1.0.0/css/all.min.css"
           />
         </Head>
-        <body>
+        <body className="c-app">
           <Main />
           <NextScript />
         </body>

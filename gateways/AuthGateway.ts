@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import loGet from 'lodash/get';
 import Cookies from 'js-cookie';
 import {AxiosInstance} from 'axios';
 import {errorCode, ValidationError} from '../errors/ValidationError';
@@ -47,7 +47,7 @@ export class AuthGateway {
         email,
       });
     } catch (e) {
-      const errResp = _.get(e, 'response.data.error', e);
+      const errResp = loGet(e, 'response.data.error', e);
       switch (errResp.code) {
         case 'EMAIL_NOT_FOUND':
           throw new ApplicationError(AuthService.error.EMAIL_NOT_FOUND);
@@ -67,10 +67,10 @@ export class AuthGateway {
     try {
       await this.restConnector.patch(`/accounts/me`, body);
     } catch (e) {
-      const errResp = _.get(e, 'response.data.error', e);
+      const errResp = loGet(e, 'response.data.error', e);
       switch (errResp.name) {
         case 'ValidationError': {
-          if (_.get(errResp, 'details.codes.email[0]') === 'uniqueness') {
+          if (loGet(errResp, 'details.codes.email[0]') === 'uniqueness') {
             throw new ValidationError({email: [errorCode.EMAIL_EXISTED]});
           }
           throw new ValidationError({email: [errorCode.INVALID_EMAIL]});
@@ -89,7 +89,7 @@ export class AuthGateway {
     try {
       await this.restConnector.post('/accounts/change-password', body);
     } catch (e) {
-      const err = _.get(e, 'response.data.error', e);
+      const err = loGet(e, 'response.data.error', e);
 
       if (
         err.code === 'INVALID_PASSWORD' ||

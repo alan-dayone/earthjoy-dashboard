@@ -1,2 +1,7 @@
-@import '~toastr/toastr';
+// CoreUI
+@import './coreui/coreui';
+@import url('/static/vendors/coreui-icons/css/all.min.css');
+
 @import './utilities.scss';
+
+.app-layout {}

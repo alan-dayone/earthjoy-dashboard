@@ -10,6 +10,7 @@ import {nprogress} from '../hocs';
 import {makeStore} from '../redux/store';
 import {authService} from '../services';
 import {RootState} from '../redux/slices';
+import '../scss/index.scss';
 
 class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
   public static async getInitialProps(context: AppContext) {
