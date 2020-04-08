@@ -60,6 +60,19 @@ export class AuthGateway {
     }
   }
 
+  public async verifyAccount(
+    accountVerificationToken: string,
+  ): Promise<boolean> {
+    try {
+      await this.restConnector.post('/accounts/verify', {
+        token: accountVerificationToken,
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   public async updateAccountInfo(body: {
     name: string;
     email: string;
@@ -121,10 +134,6 @@ export class AuthGateway {
       Cookies.remove('jwt');
       delete this.restConnector.defaults.headers['Authorization'];
     }
-  }
-
-  public async forgotPassword(email: string): Promise<void> {
-    return this.restConnector.post('/accounts/reset-password', {email});
   }
 
   private loadAccessToken() {

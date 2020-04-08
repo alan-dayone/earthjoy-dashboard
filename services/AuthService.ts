@@ -61,6 +61,12 @@ export class AuthService {
     await this.authGateway.setNewPassword(body);
   }
 
+  public async verifyAccount(
+    accountVerificationToken: string,
+  ): Promise<boolean> {
+    return this.authGateway.verifyAccount(accountVerificationToken);
+  }
+
   public setAccessToken(accessToken: string): void {
     this.authGateway.setAccessToken(accessToken);
   }

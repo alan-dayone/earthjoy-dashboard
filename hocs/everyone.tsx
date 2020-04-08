@@ -1,8 +1,27 @@
 import React from 'react';
 import Head from 'next/head';
+import * as cookie from 'cookie';
+import {NextComponentType} from 'next';
+import {CustomNextPageContext} from './types';
+import {authService} from '../services';
+import {getLoginUser} from '../redux/slices/loginUserSlice';
 
-export const everyone = (Content: React.ElementType) => {
+export const everyone = (Content: NextComponentType) => {
   return class Wrapper extends React.Component {
+    public static async getInitialProps(ctx: CustomNextPageContext) {
+      const {req, store} = ctx;
+      const isServer = !!req;
+
+      if (isServer) {
+        authService.setAccessToken(
+          cookie.parse(req.headers.cookie as string).jwt,
+        );
+        await store.dispatch(getLoginUser());
+      }
+
+      return Content.getInitialProps ? await Content.getInitialProps(ctx) : {};
+    }
+
     public render() {
       return (
         <div className="app-layout--user c-wrapper">
