@@ -24,7 +24,7 @@ const AccountVerificationPage: NextComponentType<
         Your account has been verified successfully.
       </div>
     ) : (
-      <div className="alert alert-danger">Failed to verify your account.</div>
+      <div className="alert alert-danger">Failed to verify account.</div>
     )}
   </div>
 );
@@ -33,6 +33,11 @@ AccountVerificationPage.getInitialProps = async ({
   query,
 }): Promise<PageProps> => {
   const accountVerificationToken = query.token as string;
+
+  if (!accountVerificationToken) {
+    return {verified: false};
+  }
+
   const verified = await authService.verifyAccount(accountVerificationToken);
   return {verified};
 };
