@@ -9,7 +9,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     "plugin:react/recommended",
   ],
-  "rules": {
+  rules: {
     "prettier/prettier": "error"
   }
 };
