@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import classNames from 'classnames';
-import {AccountEmailVerificationText} from '../../view-models/User';
+import {AccountEmailVerificationText} from '../../view-models/Account';
 
 interface Props {
   emailVerified: boolean;

@@ -16,7 +16,9 @@ import {isAdmin, LoginUser} from '../models/Account';
 import {logout, selectors} from '../redux/slices/loginUserSlice';
 import {RootState} from '../redux/slices';
 import {AppDispatch} from '../redux/store';
-import {getCookieFromRequest} from '../utils/cookie';
+import {getBooleanCookieFromRequest} from '../utils/cookie';
+
+const SHOW_SIDEBAR_COOKIE = 'showSidebar';
 
 interface AdminWrapperState {
   showSidebar: boolean;
@@ -39,8 +41,11 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
       const {req, res, store} = ctx;
       const isServer = !!req;
       const loginUser = selectors.selectLoginUser(store.getState());
+      let showSidebar = true;
 
       if (isServer) {
+        showSidebar = getBooleanCookieFromRequest(SHOW_SIDEBAR_COOKIE, req);
+
         if (!loginUser) {
           res.writeHead(301, {location: '/admin/login'});
           res.end();
@@ -59,10 +64,6 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
           return;
         }
       }
-
-      const showSidebar = isServer
-        ? getCookieFromRequest('showSidebar', req) === 'true'
-        : true;
 
       const defaultProps = {showSidebar};
       return Content.getInitialProps
@@ -94,10 +95,6 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
         </div>
       );
     }
-
-    private handleSidebar = (field: string): void => {
-      this.setState({...this.state, [field]: !this.state[field]});
-    };
 
     private renderNavbar: () => JSX.Element = () => {
       const {loginUser} = this.props;
@@ -205,10 +202,8 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
 
     private toggleSideBar = (): void => {
       const newValue = !this.state.showSidebar;
-      console.log(newValue);
       this.setState({showSidebar: newValue});
-      Cookies.set('showSidebar', newValue.toString());
-      this.handleSidebar('showSidebar');
+      Cookies.set(SHOW_SIDEBAR_COOKIE, newValue.toString());
     };
 
     private logout = async (): Promise<void> => {

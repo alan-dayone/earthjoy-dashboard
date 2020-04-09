@@ -21,7 +21,7 @@ import {AccountStatus, Account} from '../../../models/Account';
 import {
   AccountEmailVerificationText,
   AccountStatusText,
-} from '../../../view-models/User';
+} from '../../../view-models/Account';
 import {AccountEmailVerificationLabel} from '../../../components/admin/AccountEmailVerificationLabel';
 import {AccountStatusLabel} from '../../../components/admin/AccountStatusLabel';
 import {isServer} from '../../../utils/environment';

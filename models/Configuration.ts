@@ -28,13 +28,6 @@ export interface VerifyAccountSettings {
   senderName: string;
 }
 
-export interface EmailFormat {
-  senderName: string;
-  senderEmail: string;
-  subject: string;
-  message: string;
-}
-
 export const constraint = {
   senderEmail: {
     MAX_LENGTH: 256,

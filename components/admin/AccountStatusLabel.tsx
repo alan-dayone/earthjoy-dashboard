@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import classNames from 'classnames';
-import {AccountStatusText} from '../../view-models/User';
+import {AccountStatusText} from '../../view-models/Account';
 import {AccountStatus} from '../../models/Account';
 
 interface Props {

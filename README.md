@@ -14,7 +14,7 @@ npm run dev
 
 ### TODO:
 - Create container folder to store page's components
-- Extract reusable code into utils: isServer/isClient, jwt cookie extraction
 - Remove hardcode
 - Extract admin components
 - Add Jest unit testing
+- Multi-languages

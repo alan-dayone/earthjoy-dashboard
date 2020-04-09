@@ -12,7 +12,7 @@ import {
   AccountEmailVerificationText,
   AccountStatusText,
   userFormValidationSchema,
-} from '../../../view-models/User';
+} from '../../../view-models/Account';
 import {accountService} from '../../../services';
 
 const initialValues: Account = {

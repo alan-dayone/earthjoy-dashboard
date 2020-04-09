@@ -13,7 +13,7 @@ import {
   AccountEmailVerificationText,
   AccountStatusText,
   userUpdateInfomationFormValidationSchema,
-} from '../../../../view-models/User';
+} from '../../../../view-models/Account';
 import {accountService} from '../../../../services';
 import {ToastrWarning} from '../../../../view-models/Toastr';
 
