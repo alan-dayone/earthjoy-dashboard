@@ -12,6 +12,7 @@ import {RootState} from '../redux/slices';
 import {authService} from '../services';
 import {getCookieFromRequest} from '../utils/cookie';
 import {getLoginUser} from '../redux/slices/loginUserSlice';
+import {ACCESS_TOKEN_COOKIE} from "../gateways/AuthGateway";
 import '../scss/index.scss';
 
 interface CustomNextAppContext extends AppContext {
@@ -24,7 +25,7 @@ class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
     const isServer = !!ctx.req;
 
     if (isServer) {
-      const jwt = getCookieFromRequest('jwt', ctx.req);
+      const jwt = getCookieFromRequest(ACCESS_TOKEN_COOKIE, ctx.req);
       if (jwt) {
         authService.setAccessToken(jwt);
         await ctx.store.dispatch(getLoginUser());

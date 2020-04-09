@@ -6,6 +6,10 @@ import {AuthService} from '../services/AuthService';
 import {ApplicationError} from '../errors/ApplicationError';
 import {LoginUser} from '../models/Account';
 
+const AUTHORIZATION_HEADER = 'Authorization';
+
+export const ACCESS_TOKEN_COOKIE = 'jwt';
+
 export class AuthGateway {
   private restConnector: AxiosInstance;
   private jwt: string | null;
@@ -124,12 +128,12 @@ export class AuthGateway {
   public setAccessToken(token: string | null): void {
     if (token) {
       this.jwt = token;
-      Cookies.set('jwt', token);
-      this.restConnector.defaults.headers['Authorization'] = `Bearer ${token}`;
+      Cookies.set(ACCESS_TOKEN_COOKIE, token);
+      this.restConnector.defaults.headers[AUTHORIZATION_HEADER] = `Bearer ${token}`;
     } else {
       this.jwt = null;
-      Cookies.remove('jwt');
-      delete this.restConnector.defaults.headers['Authorization'];
+      Cookies.remove(ACCESS_TOKEN_COOKIE);
+      delete this.restConnector.defaults.headers[AUTHORIZATION_HEADER];
     }
   }
 
@@ -139,10 +143,10 @@ export class AuthGateway {
 
   private loadAccessToken(): void {
     // On browser, load access token from cookie storage.
-    const accessToken = Cookies.get('jwt');
+    const accessToken = Cookies.get(ACCESS_TOKEN_COOKIE);
     this.jwt = accessToken;
     this.restConnector.defaults.headers[
-      'Authorization'
+      AUTHORIZATION_HEADER
     ] = `Bearer ${accessToken}`;
   }
 
