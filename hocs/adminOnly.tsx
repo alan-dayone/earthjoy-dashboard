@@ -35,7 +35,9 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
     AdminWrapperProps,
     AdminWrapperState
   > {
-    public static async getInitialProps(ctx: CustomNextPageContext) {
+    public static async getInitialProps(
+      ctx: CustomNextPageContext,
+    ): Promise<{}> {
       const {req, res, store} = ctx;
       const isServer = !!req;
 
@@ -76,7 +78,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
       };
     }
 
-    public render() {
+    public render(): JSX.Element {
       return (
         <div className="app-layout--admin c-app pace-done">
           {this._renderSidebar()}
@@ -94,11 +96,11 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
       );
     }
 
-    private handleSidebar = (feild: string) => {
-      this.setState({...this.state, [feild]: !this.state[feild]});
+    private handleSidebar = (field: string): void => {
+      this.setState({...this.state, [field]: !this.state[field]});
     };
 
-    public componentDidMount() {
+    public componentDidMount(): void {
       const oldState = JsCookie.get('AdminWrapperState');
 
       if (oldState) {
@@ -106,18 +108,18 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
       }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
       JsCookie.set('AdminWrapperState', this.state);
     }
 
-    public _renderNavbar = () => {
+    public _renderNavbar: () => JSX.Element = () => {
       const {loginUser} = this.props;
 
       return (
         <header className="c-header c-header-light c-header-fixed px-3">
           <button
             className="c-header-toggler c-class-toggler d-md-down-none sidebar-toggler"
-            onClick={() => this.handleSidebar('showSidebar')}>
+            onClick={(): void => this.handleSidebar('showSidebar')}>
             <span className="c-header-toggler-icon" />
           </button>
           <ul className="c-header-nav mfs-auto">
@@ -150,7 +152,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
       );
     };
 
-    public _renderSidebar = () => {
+    public _renderSidebar = (): JSX.Element => {
       return (
         <div
           className={classNames('c-sidebar c-sidebar-dark c-sidebar-fixed', {
@@ -213,13 +215,13 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
           </ul>
           <button
             className="c-sidebar-minimizer c-class-toggler"
-            onClick={() => this.handleSidebar('sidebarUnfoldable')}
+            onClick={(): void => this.handleSidebar('sidebarUnfoldable')}
           />
         </div>
       );
     };
 
-    public _logout = async () => {
+    public _logout = async (): Promise<void> => {
       try {
         this.props.dispatch(logout());
         Router.replace('/admin/login');

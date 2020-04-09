@@ -1,5 +1,5 @@
 /* tslint:disable:no-default-export */
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState, FC} from 'react';
 import Head from 'next/head';
 import classNames from 'classnames';
 import {
@@ -8,6 +8,7 @@ import {
   usePagination,
   useTable,
   useSortBy,
+  CellProps,
 } from 'react-table';
 import {NextComponentType, NextPageContext} from 'next';
 import Link from 'next/link';
@@ -16,13 +17,74 @@ import {useRouter} from 'next/router';
 import qs from 'qs';
 import {adminOnly} from '../../../hocs';
 import {accountService} from '../../../services';
-import {AccountStatus} from '../../../models/Account';
+import {AccountStatus, Account} from '../../../models/Account';
 import {
   AccountEmailVerificationText,
   AccountStatusText,
 } from '../../../view-models/User';
 import {AccountEmailVerificationLabel} from '../../../components/admin/AccountEmailVerificationLabel';
 import {AccountStatusLabel} from '../../../components/admin/AccountStatusLabel';
+
+interface FilterProps {
+  column: {
+    filterValue: number | string;
+    setFilter: (value: number | string) => void;
+  };
+}
+
+function SelectStatusFilter({
+  column: {filterValue, setFilter},
+}: FilterProps): JSX.Element {
+  const options = [AccountStatus.ACTIVE, AccountStatus.INACTIVE];
+
+  return (
+    <select
+      className="form-control form-control-sm"
+      value={filterValue}
+      onChange={(e): void => {
+        setFilter(e.target.value || '');
+      }}>
+      <option value="">All</option>
+      {options.map((option, i) => (
+        <option key={i} value={option}>
+          {AccountStatusText[option]}
+        </option>
+      ))}
+    </select>
+  );
+}
+
+const SelectEmailVerificationFilter: FC<FilterProps> = ({
+  column: {filterValue, setFilter},
+}: FilterProps) => {
+  return (
+    <select
+      className="form-control form-control-sm"
+      value={filterValue}
+      onChange={(e): void => {
+        setFilter(e.target.value || '');
+      }}>
+      <option value="">All</option>
+      <option value="true">{AccountEmailVerificationText.VERIFIED}</option>
+      <option value="false">{AccountEmailVerificationText.NOT_VERIFIED}</option>
+    </select>
+  );
+};
+
+const DefaultColumnFilter: FC<FilterProps> = ({
+  column: {filterValue, setFilter},
+}: FilterProps) => {
+  return (
+    <input
+      className="form-control form-control-sm"
+      value={filterValue || ''}
+      onChange={(e): void => {
+        setFilter(e.target.value || '');
+      }}
+      placeholder="Search..."
+    />
+  );
+};
 
 const tableColumns = [
   {
@@ -50,7 +112,7 @@ const tableColumns = [
     accessor: 'emailVerified',
     Filter: SelectEmailVerificationFilter,
     width: '10%',
-    Cell: ({cell: {value}}) => (
+    Cell: ({cell: {value}}): JSX.Element => (
       <AccountEmailVerificationLabel emailVerified={value} />
     ),
   },
@@ -59,14 +121,16 @@ const tableColumns = [
     accessor: 'status',
     Filter: SelectStatusFilter,
     width: '10%',
-    Cell: ({cell: {value}}) => <AccountStatusLabel status={value} />,
+    Cell: ({cell: {value}}): JSX.Element => (
+      <AccountStatusLabel status={value} />
+    ),
   },
   {
     Header: 'Actions',
     sortType: null,
     canFilter: false,
     width: '15%',
-    Cell: ({row}) => (
+    Cell: ({row}): JSX.Element => (
       <>
         <Link
           href="/admin/accounts/[userId]/edit"
@@ -78,60 +142,12 @@ const tableColumns = [
   },
 ];
 
-function SelectStatusFilter({column: {filterValue, setFilter}}) {
-  const options = [AccountStatus.ACTIVE, AccountStatus.INACTIVE];
-
-  return (
-    <select
-      className="form-control form-control-sm"
-      value={filterValue}
-      onChange={e => {
-        setFilter(e.target.value || '');
-      }}>
-      <option value="">All</option>
-      {options.map((option, i) => (
-        <option key={i} value={option}>
-          {AccountStatusText[option]}
-        </option>
-      ))}
-    </select>
-  );
-}
-
-function SelectEmailVerificationFilter({column: {filterValue, setFilter}}) {
-  return (
-    <select
-      className="form-control form-control-sm"
-      value={filterValue}
-      onChange={e => {
-        setFilter(e.target.value || '');
-      }}>
-      <option value="">All</option>
-      <option value="true">{AccountEmailVerificationText.VERIFIED}</option>
-      <option value="false">{AccountEmailVerificationText.NOT_VERIFIED}</option>
-    </select>
-  );
-}
-
-function DefaultColumnFilter({column: {filterValue, setFilter}}) {
-  return (
-    <input
-      className="form-control form-control-sm"
-      value={filterValue || ''}
-      onChange={e => {
-        setFilter(e.target.value || '');
-      }}
-      placeholder="Search..."
-    />
-  );
-}
-
-function AdminAccountsPage() {
+function AdminAccountsPage(): JSX.Element | null {
   if (typeof window === 'undefined') {
     return null;
   }
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Account[]>([]);
   const [pageCount, setPageCount] = useState(1);
   const [totalRecord, setTotalRecord] = useState('...');
   const [loadingData, setLoadingData] = useState(true);
@@ -210,7 +226,20 @@ function AdminAccountsPage() {
   );
 }
 
-function Table({
+interface TableProps<D> {
+  data: D[];
+  fetchData: (value: {}) => void;
+  loadingData: boolean;
+  defaultFilter: {};
+  manualPageCount: number;
+  initialState: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  totalRecord: number | string;
+}
+
+const Table: FC<TableProps<Account>> = ({
   data,
   fetchData,
   loadingData,
@@ -218,7 +247,7 @@ function Table({
   manualPageCount,
   initialState = {pageIndex: 0, pageSize: 10},
   totalRecord,
-}) {
+}: TableProps<Account>) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -264,7 +293,6 @@ function Table({
 
   useEffect(() => {
     if (pageIndex > manualPageCount - 1) gotoPage(0);
-    return () => {};
   }, [manualPageCount]);
 
   return (
@@ -309,10 +337,12 @@ function Table({
             page.map(row => {
               prepareRow(row);
               return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map(cell => {
+                <tr key={row.id} {...row.getRowProps()}>
+                  {row.cells.map((cell, i) => {
                     return (
-                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                      <td key={`${row.id}-${i}`} {...cell.getCellProps()}>
+                        {cell.render('Cell')}
+                      </td>
                     );
                   })}
                 </tr>
@@ -338,7 +368,7 @@ function Table({
               defaultValue={pageIndex + 1}
               min={1}
               max={manualPageCount}
-              onChange={e => {
+              onChange={(e): void => {
                 const page = e.target.value ? Number(e.target.value) - 1 : 0;
                 gotoPage(page);
               }}
@@ -351,22 +381,22 @@ function Table({
           <ul className="pagination justify-content-end">
             <li
               className={classNames('page-item', {disabled: !canPreviousPage})}
-              onClick={() => gotoPage(0)}>
+              onClick={(): void => gotoPage(0)}>
               <a className="page-link u-cursor-pointer">{'<<'}</a>
             </li>
             <li
               className={classNames('page-item', {disabled: !canPreviousPage})}
-              onClick={() => previousPage()}>
+              onClick={(): void => previousPage()}>
               <a className="page-link u-cursor-pointer">{'<'}</a>
             </li>
             <li
               className={classNames('page-item', {disabled: !canNextPage})}
-              onClick={() => nextPage()}>
+              onClick={(): void => nextPage()}>
               <a className="page-link u-cursor-pointer">{'>'}</a>
             </li>
             <li
               className={classNames('page-item', {disabled: !canNextPage})}
-              onClick={() => gotoPage(pageCount - 1)}>
+              onClick={(): void => gotoPage(pageCount - 1)}>
               <a className="page-link u-cursor-pointer">{'>>'}</a>
             </li>
           </ul>
@@ -374,7 +404,7 @@ function Table({
       </div>
     </>
   );
-}
+};
 
 export default adminOnly(
   AdminAccountsPage as NextComponentType<NextPageContext, any, any>,

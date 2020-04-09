@@ -1,9 +1,13 @@
-import React from 'react';
+import React, {FC} from 'react';
 import classNames from 'classnames';
 import {AccountStatusText} from '../../view-models/User';
 import {AccountStatus} from '../../models/Account';
 
-export function AccountStatusLabel({status}) {
+interface Props {
+  status: AccountStatus;
+}
+
+export const AccountStatusLabel: FC<Props> = ({status}: Props) => {
   const accountIsActive = status === AccountStatus.ACTIVE;
 
   return (
@@ -15,4 +19,4 @@ export function AccountStatusLabel({status}) {
       {AccountStatusText[status]}
     </span>
   );
-}
+};

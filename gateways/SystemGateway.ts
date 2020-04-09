@@ -75,7 +75,7 @@ export class SystemGateway {
   public async updateSystemConfiguration(
     id: ConfigurationKey,
     data: ConfigurationData,
-  ) {
+  ): Promise<{}> {
     const resp = await this.restConnector.put(`/configurations/${id}`, {
       id,
       data,

@@ -4,6 +4,7 @@ import {AxiosInstance} from 'axios';
 import {errorCode, ValidationError} from '../errors/ValidationError';
 import {AuthService} from '../services/AuthService';
 import {ApplicationError} from '../errors/ApplicationError';
+import {LoginUser} from '../models/Account';
 
 export class AuthGateway {
   private restConnector: AxiosInstance;
@@ -15,17 +16,15 @@ export class AuthGateway {
     this.loadAccessToken();
   }
 
-  public async loginWithEmail(body: {email: string; password: string}) {
+  public async loginWithEmail(body: {
+    email: string;
+    password: string;
+  }): Promise<{token: string}> {
     const {data} = await this.restConnector.post('/accounts/login', body);
-    return data;
+    return {token: data.token};
   }
 
-  public async create(body: {email: string; password: string}) {
-    await this.restConnector.post('/accounts', body);
-    return this.loginWithEmail(body);
-  }
-
-  public async getLoginUser() {
+  public async getLoginUser(): Promise<LoginUser | null> {
     if (!this.jwt) {
       return null;
     }
@@ -38,11 +37,11 @@ export class AuthGateway {
     }
   }
 
-  public logout() {
+  public logout(): void {
     this.setAccessToken(null);
   }
 
-  public async sendResetPasswordEmail(email: string) {
+  public async sendResetPasswordEmail(email: string): Promise<void> {
     try {
       await this.restConnector.post('/accounts/send-reset-password-email', {
         email,
@@ -77,7 +76,7 @@ export class AuthGateway {
     name: string;
     email: string;
     preferredLanguage: string;
-  }) {
+  }): Promise<void> {
     try {
       await this.restConnector.patch(`/accounts/me`, body);
     } catch (e) {
@@ -89,8 +88,6 @@ export class AuthGateway {
           }
           throw new ValidationError({email: [errorCode.INVALID_EMAIL]});
         }
-        default: {
-        }
       }
       throw e;
     }
@@ -99,7 +96,7 @@ export class AuthGateway {
   public async updatePassword(body: {
     oldPassword: string;
     newPassword: string;
-  }) {
+  }): Promise<void> {
     try {
       await this.restConnector.post('/accounts/change-password', body);
     } catch (e) {
@@ -124,7 +121,7 @@ export class AuthGateway {
     await this.restConnector.post(`/accounts/reset-password`, body);
   }
 
-  public setAccessToken(token: string | null) {
+  public setAccessToken(token: string | null): void {
     if (token) {
       this.jwt = token;
       Cookies.set('jwt', token);
@@ -136,7 +133,11 @@ export class AuthGateway {
     }
   }
 
-  private loadAccessToken() {
+  public async forgotPassword(email: string): Promise<void> {
+    return this.restConnector.post('/accounts/reset-password', {email});
+  }
+
+  private loadAccessToken(): void {
     // On browser, load access token from cookie storage.
     const accessToken = Cookies.get('jwt');
     this.jwt = accessToken;

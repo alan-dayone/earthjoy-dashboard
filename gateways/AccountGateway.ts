@@ -8,12 +8,17 @@ export class AccountGateway {
     this.restConnector = options.restConnector;
   }
 
-  public async create(account: Account) {
+  public async create(account: Account): Promise<Account> {
     const {data} = await this.restConnector.post('/accounts', account);
     return data;
   }
 
-  public async find({pageIndex, pageSize, filters, orders}) {
+  public async find({
+    pageIndex,
+    pageSize,
+    filters,
+    orders,
+  }): Promise<Array<Account>> {
     const filter = {
       offset: pageIndex * pageSize,
       limit: pageSize,
@@ -27,19 +32,19 @@ export class AccountGateway {
     return data;
   }
 
-  public async count({where = {}}) {
+  public async count({where = {}}): Promise<number> {
     const {data} = await this.restConnector.get(
       `/accounts/count?where=${JSON.stringify(where)}`,
     );
     return data.count;
   }
 
-  public async update(id: string, account: Account) {
+  public async update(id: string, account: Account): Promise<Account> {
     const {data} = await this.restConnector.patch(`accounts/${id}`, account);
     return data;
   }
 
-  public async findOne(id: string) {
+  public async findOne(id: string): Promise<Account> {
     const {data} = await this.restConnector.get(`/accounts/${id}`);
     return data;
   }

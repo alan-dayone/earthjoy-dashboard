@@ -37,7 +37,7 @@ export class AccountService {
     return this.accountGateway.create(account);
   }
 
-  public async updateAccount(id: string, account: Account): Promise<void> {
+  public async updateAccount(id: string, account: Account): Promise<Account> {
     return this.accountGateway.update(id, account);
   }
 
