@@ -5,21 +5,31 @@ import {Provider} from 'react-redux';
 import App from 'next/app';
 import withRedux, {ReduxWrapperAppProps} from 'next-redux-wrapper';
 import {AppContext} from 'next/app';
-// import * as cookie from 'cookie';
 import {nprogress} from '../hocs';
+import {CustomNextPageContext} from '../hocs/types';
 import {makeStore} from '../redux/store';
 import {RootState} from '../redux/slices';
-// import {authService} from "../services";
+import {authService} from '../services';
+import {getCookieFromRequest} from '../utils/cookie';
+import {getLoginUser} from '../redux/slices/loginUserSlice';
 import '../scss/index.scss';
 
-class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
-  public static async getInitialProps(context: AppContext) {
-    const {Component, ctx} = context;
+interface CustomNextAppContext extends AppContext {
+  ctx: CustomNextPageContext;
+}
 
-    // const jwt = cookie.parse(ctx.req.headers.cookie as string).jwt;
-    // if (jwt) {
-    //   authService.setAccessToken(jwt);
-    // }
+class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
+  public static async getInitialProps(context: CustomNextAppContext) {
+    const {Component, ctx} = context;
+    const isServer = !!ctx.req;
+
+    if (isServer) {
+      const jwt = getCookieFromRequest('jwt', ctx.req);
+      if (jwt) {
+        authService.setAccessToken(jwt);
+        await ctx.store.dispatch(getLoginUser());
+      }
+    }
 
     const pageProps = Component.getInitialProps
       ? await Component.getInitialProps(ctx)

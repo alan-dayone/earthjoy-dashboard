@@ -9,19 +9,17 @@ import {
 import {NextComponentType} from 'next';
 import Router from 'next/router';
 import classNames from 'classnames';
-import * as cookie from 'cookie';
-import JsCookie from 'js-cookie';
+import Cookies from 'js-cookie';
 import {connect} from 'react-redux';
 import {CustomNextPageContext} from './types';
-import {authService} from '../services';
 import {isAdmin, LoginUser} from '../models/Account';
-import {getLoginUser, logout, selectors} from '../redux/slices/loginUserSlice';
+import {logout, selectors} from '../redux/slices/loginUserSlice';
 import {RootState} from '../redux/slices';
 import {AppDispatch} from '../redux/store';
+import {getCookieFromRequest} from '../utils/cookie';
 
 interface AdminWrapperState {
   showSidebar: boolean;
-  sidebarUnfoldable: boolean;
 }
 
 interface AdminWrapperProps {
@@ -40,50 +38,51 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
     ): Promise<{}> {
       const {req, res, store} = ctx;
       const isServer = !!req;
+      const loginUser = selectors.selectLoginUser(store.getState());
 
       if (isServer) {
-        authService.setAccessToken(
-          cookie.parse(req.headers.cookie as string).jwt,
-        );
-        const user = await store.dispatch(getLoginUser());
-
-        if (!user) {
+        if (!loginUser) {
           res.writeHead(301, {location: '/admin/login'});
           res.end();
           return;
-        } else if (!isAdmin(user)) {
+        } else if (!isAdmin(loginUser)) {
           res.writeHead(301, {location: '/'});
           res.end();
           return;
         }
       } else {
-        const user = selectors.selectLoginUser(store.getState());
-        if (!user) {
+        if (!loginUser) {
           Router.replace('/admin/login');
           return;
-        } else if (!isAdmin(user)) {
+        } else if (!isAdmin(loginUser)) {
           Router.replace('/');
           return;
         }
       }
 
-      return Content.getInitialProps ? Content.getInitialProps(ctx) : {};
+      const showSidebar = isServer
+        ? getCookieFromRequest('showSidebar', req) === 'true'
+        : true;
+
+      const defaultProps = {showSidebar};
+      return Content.getInitialProps
+        ? {...defaultProps, ...Content.getInitialProps(ctx)}
+        : defaultProps;
     }
 
     constructor(props) {
       super(props);
       this.state = {
-        showSidebar: true,
-        sidebarUnfoldable: false,
+        showSidebar: props.showSidebar,
       };
     }
 
     public render(): JSX.Element {
       return (
         <div className="app-layout--admin c-app pace-done">
-          {this._renderSidebar()}
+          {this.renderSidebar()}
           <div className="c-wrapper">
-            {this._renderNavbar()}
+            {this.renderNavbar()}
             <div className="c-body">
               <main className="c-main">
                 <div className="container-fluid">
@@ -100,26 +99,14 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
       this.setState({...this.state, [field]: !this.state[field]});
     };
 
-    public componentDidMount(): void {
-      const oldState = JsCookie.get('AdminWrapperState');
-
-      if (oldState) {
-        this.setState(JSON.parse(oldState));
-      }
-    }
-
-    public componentWillUnmount(): void {
-      JsCookie.set('AdminWrapperState', this.state);
-    }
-
-    public _renderNavbar: () => JSX.Element = () => {
+    private renderNavbar: () => JSX.Element = () => {
       const {loginUser} = this.props;
 
       return (
         <header className="c-header c-header-light c-header-fixed px-3">
           <button
             className="c-header-toggler c-class-toggler d-md-down-none sidebar-toggler"
-            onClick={(): void => this.handleSidebar('showSidebar')}>
+            onClick={this.toggleSideBar}>
             <span className="c-header-toggler-icon" />
           </button>
           <ul className="c-header-nav mfs-auto">
@@ -141,7 +128,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
                     </DropdownToggle>
                     <DropdownMenu>
                       <DropdownItem>Profile</DropdownItem>
-                      <DropdownItem onClick={this._logout}>Logout</DropdownItem>
+                      <DropdownItem onClick={this.logout}>Logout</DropdownItem>
                     </DropdownMenu>
                   </UncontrolledDropdown>
                 </div>
@@ -152,12 +139,11 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
       );
     };
 
-    public _renderSidebar = (): JSX.Element => {
+    private renderSidebar = (): JSX.Element => {
       return (
         <div
           className={classNames('c-sidebar c-sidebar-dark c-sidebar-fixed', {
             'c-sidebar-show': this.state.showSidebar,
-            'c-sidebar-unfoldable': this.state.sidebarUnfoldable,
           })}
           id="sidebar">
           <div className="c-sidebar-brand flex-column" style={{height: '56px'}}>
@@ -213,15 +199,19 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
               </Link>
             </li>
           </ul>
-          <button
-            className="c-sidebar-minimizer c-class-toggler"
-            onClick={(): void => this.handleSidebar('sidebarUnfoldable')}
-          />
         </div>
       );
     };
 
-    public _logout = async (): Promise<void> => {
+    private toggleSideBar = (): void => {
+      const newValue = !this.state.showSidebar;
+      console.log(newValue);
+      this.setState({showSidebar: newValue});
+      Cookies.set('showSidebar', newValue.toString());
+      this.handleSidebar('showSidebar');
+    };
+
+    private logout = async (): Promise<void> => {
       try {
         this.props.dispatch(logout());
         Router.replace('/admin/login');

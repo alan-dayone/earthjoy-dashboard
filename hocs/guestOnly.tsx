@@ -2,9 +2,7 @@ import React from 'react';
 import {NextComponentType} from 'next';
 import Router from 'next/router';
 import classnames from 'classnames';
-import * as cookie from 'cookie';
-import {getLoginUser, selectors} from '../redux/slices/loginUserSlice';
-import {authService} from '../services';
+import {selectors} from '../redux/slices/loginUserSlice';
 import {isAdmin} from '../models/Account';
 import {CustomNextPageContext} from './types';
 
@@ -16,22 +14,14 @@ export const guestOnly = (
     public static async getInitialProps(ctx: CustomNextPageContext) {
       const {req, res, store} = ctx;
       const isServer = !!req;
+      const user = selectors.selectLoginUser(store.getState());
 
-      if (isServer) {
-        authService.setAccessToken(
-          cookie.parse(req.headers.cookie as string).jwt,
-        );
-        const user = await store.dispatch(getLoginUser());
-
-        if (user) {
+      if (user) {
+        if (isServer) {
           res.writeHead(301, {location: isAdmin(user) ? '/admin' : '/'});
           res.end();
           return;
-        }
-      } else {
-        const user = selectors.selectLoginUser(store.getState());
-
-        if (user) {
+        } else {
           Router.replace(isAdmin(user) ? '/admin' : '/');
           return;
         }

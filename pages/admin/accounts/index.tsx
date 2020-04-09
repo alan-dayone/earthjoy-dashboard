@@ -24,6 +24,7 @@ import {
 } from '../../../view-models/User';
 import {AccountEmailVerificationLabel} from '../../../components/admin/AccountEmailVerificationLabel';
 import {AccountStatusLabel} from '../../../components/admin/AccountStatusLabel';
+import {isServer} from '../../../utils/environment';
 
 interface FilterProps {
   column: {
@@ -143,7 +144,7 @@ const tableColumns = [
 ];
 
 function AdminAccountsPage(): JSX.Element | null {
-  if (typeof window === 'undefined') {
+  if (isServer()) {
     return null;
   }
 
