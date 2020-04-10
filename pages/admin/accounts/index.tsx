@@ -113,22 +113,22 @@ const tableColumns: Column[] = [
     accessor: 'emailVerified',
     Filter: SelectEmailVerificationFilter,
     width: '10%',
-    Cell: function cellRender({
+    Cell: function EmailVerificationCell({
       cell: {value},
     }: CellProps<Account>): JSX.Element {
       return <AccountEmailVerificationLabel emailVerified={value} />;
-    },
+    } as FC<CellProps<Account>>,
   },
   {
     Header: 'Status',
     accessor: 'status',
     Filter: SelectStatusFilter,
     width: '10%',
-    Cell: function cellRender({
+    Cell: function AccountStatusCell({
       cell: {value},
     }: CellProps<Account>): JSX.Element {
       return <AccountStatusLabel status={value} />;
-    },
+    } as FC<CellProps<Account>>,
   },
   {
     Header: 'Actions',
@@ -136,7 +136,7 @@ const tableColumns: Column[] = [
     disableSortBy: true,
     disableFilters: true,
     width: '15%',
-    Cell: function cellRender({row}: CellProps<Account>): JSX.Element {
+    Cell: function ActionCell({row}): JSX.Element {
       return (
         <>
           <Link
@@ -146,7 +146,7 @@ const tableColumns: Column[] = [
           </Link>
         </>
       );
-    },
+    } as FC<CellProps<Account>>,
   },
 ];
 

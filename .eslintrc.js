@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-undef
+/* eslint-disable no-undef */
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
@@ -11,5 +11,5 @@ module.exports = {
   ],
   rules: {
     "prettier/prettier": "error"
-  }
+  },
 };
