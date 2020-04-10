@@ -88,16 +88,6 @@ const DefaultColumnFilter: FC<FilterProps> = ({
   );
 };
 
-const ActionButton = ({row}: CellProps<Account>): JSX.Element => (
-  <>
-    <Link
-      href="/admin/accounts/[userId]/edit"
-      as={`/admin/accounts/${row.values.id}/edit`}>
-      <a className="btn btn-sm btn-info">Edit</a>
-    </Link>
-  </>
-)
-
 const tableColumns: Column[] = [
   {
     Header: 'ID',
@@ -124,18 +114,22 @@ const tableColumns: Column[] = [
     accessor: 'emailVerified',
     Filter: SelectEmailVerificationFilter,
     width: '10%',
-    Cell: ({cell: {value}}: CellProps<Account>): JSX.Element => (
-      <AccountEmailVerificationLabel emailVerified={value} />
-    ),
+    Cell: function EmailVerificationCell({
+      cell: {value},
+    }: CellProps<Account>): JSX.Element {
+      return <AccountEmailVerificationLabel emailVerified={value} />;
+    } as FC<CellProps<Account>>,
   },
   {
     Header: 'Status',
     accessor: 'status',
     Filter: SelectStatusFilter,
     width: '10%',
-    Cell: ({cell: {value}}: CellProps<Account>): JSX.Element => (
-      <AccountStatusLabel status={value} />
-    ),
+    Cell: function AccountStatusCell({
+      cell: {value},
+    }: CellProps<Account>): JSX.Element {
+      return <AccountStatusLabel status={value} />;
+    } as FC<CellProps<Account>>,
   },
   {
     Header: 'Actions',
@@ -143,7 +137,17 @@ const tableColumns: Column[] = [
     disableSortBy: true,
     disableFilters: true,
     width: '15%',
-    Cell: ActionButtons,
+    Cell: function ActionCell({row}): JSX.Element {
+      return (
+        <>
+          <Link
+            href="/admin/accounts/[userId]/edit"
+            as={`/admin/accounts/${row.values.id}/edit`}>
+            <a className="btn btn-sm btn-info">Edit</a>
+          </Link>
+        </>
+      );
+    } as FC<CellProps<Account>>,
   },
 ];
 

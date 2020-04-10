@@ -67,7 +67,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
 
       const defaultProps = {showSidebar};
       return Content.getInitialProps
-        ? {...defaultProps, ...await Content.getInitialProps(ctx)}
+        ? {...defaultProps, ...(await Content.getInitialProps(ctx))}
         : defaultProps;
     }
 
