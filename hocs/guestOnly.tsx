@@ -10,8 +10,10 @@ export const guestOnly = (
   Content: NextComponentType,
   options?: {useAdminLayout: boolean},
 ): NextComponentType => {
-  return class GuestWrapper extends React.Component<any, any> {
-    public static async getInitialProps(ctx: CustomNextPageContext) {
+  return class GuestWrapper extends React.Component {
+    public static async getInitialProps(
+      ctx: CustomNextPageContext,
+    ): Promise<object> {
       const {req, res, store} = ctx;
       const isServer = !!req;
       const user = selectors.selectLoginUser(store.getState());
@@ -30,7 +32,7 @@ export const guestOnly = (
       return Content.getInitialProps ? Content.getInitialProps(ctx) : {};
     }
 
-    public render() {
+    public render(): JSX.Element {
       const useAdminLayout = options?.useAdminLayout;
       return (
         <div

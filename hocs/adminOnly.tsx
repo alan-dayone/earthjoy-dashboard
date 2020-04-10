@@ -37,7 +37,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
   > {
     public static async getInitialProps(
       ctx: CustomNextPageContext,
-    ): Promise<{}> {
+    ): Promise<object> {
       const {req, res, store} = ctx;
       const isServer = !!req;
       const loginUser = selectors.selectLoginUser(store.getState());

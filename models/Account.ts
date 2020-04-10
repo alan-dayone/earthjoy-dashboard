@@ -6,6 +6,7 @@ export interface LoginCredentials {
 export interface LoginUser {
   id: string;
   email: string;
+  role: Role;
 }
 
 export enum Role {
@@ -27,7 +28,7 @@ export interface Account {
   emailVerified: boolean;
 }
 
-export const isAdmin = (user: any) => {
+export const isAdmin = (user: LoginUser): boolean => {
   return user.role === Role.ROOT_ADMIN;
 };
 

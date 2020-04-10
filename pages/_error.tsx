@@ -3,7 +3,7 @@ import Router from 'next/router';
 
 export default Error;
 
-Error.getInitialProps = ({res, err, asPath}) => {
+Error.getInitialProps = ({res, err, asPath}): {statusCode: number} => {
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
 
   if (statusCode && statusCode === 404) {

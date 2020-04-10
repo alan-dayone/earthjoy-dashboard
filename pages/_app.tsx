@@ -20,7 +20,9 @@ interface CustomNextAppContext extends AppContext {
 }
 
 class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
-  public static async getInitialProps(context: CustomNextAppContext) {
+  public static async getInitialProps(
+    context: CustomNextAppContext,
+  ): Promise<{pageProps: object}> {
     const {Component, ctx} = context;
     const isServer = !!ctx.req;
 
@@ -38,7 +40,7 @@ class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
     return {pageProps};
   }
 
-  public render() {
+  public render(): JSX.Element {
     const {Component, pageProps, store} = this.props;
     return (
       <Provider store={store}>

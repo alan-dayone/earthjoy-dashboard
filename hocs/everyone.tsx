@@ -3,13 +3,15 @@ import Head from 'next/head';
 import {NextComponentType} from 'next';
 import {CustomNextPageContext} from './types';
 
-export const everyone = (Content: NextComponentType) => {
+export const everyone = (Content: NextComponentType): NextComponentType => {
   return class Wrapper extends React.Component {
-    public static async getInitialProps(ctx: CustomNextPageContext) {
+    public static async getInitialProps(
+      ctx: CustomNextPageContext,
+    ): Promise<object> {
       return Content.getInitialProps ? await Content.getInitialProps(ctx) : {};
     }
 
-    public render() {
+    public render(): JSX.Element {
       return (
         <div className="app-layout--user c-wrapper">
           <Head>
@@ -26,7 +28,7 @@ export const everyone = (Content: NextComponentType) => {
       );
     }
 
-    public _renderNavBar = () => {
+    public _renderNavBar = (): JSX.Element => {
       return (
         <header className="c-header c-header-light c-header-fixed px-3">
           <a className="c-header-brand">
@@ -42,7 +44,7 @@ export const everyone = (Content: NextComponentType) => {
       );
     };
 
-    public _renderFooter = () => {
+    public _renderFooter = (): JSX.Element => {
       return (
         <footer className="c-footer">
           <div>
