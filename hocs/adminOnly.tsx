@@ -67,7 +67,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
 
       const defaultProps = {showSidebar};
       return Content.getInitialProps
-        ? {...defaultProps, ...Content.getInitialProps(ctx)}
+        ? {...defaultProps, ...await Content.getInitialProps(ctx)}
         : defaultProps;
     }
 
@@ -79,8 +79,6 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
     }
 
     public render(): JSX.Element {
-      console.log({hocs: this.props});
-
       return (
         <div className="app-layout--admin c-app pace-done">
           {this.renderSidebar()}
