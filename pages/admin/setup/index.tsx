@@ -2,8 +2,8 @@
 import React, {Component} from 'react';
 import Head from 'next/head';
 import {guestOnly} from '../../../hocs';
-import EnterPasswordForm from './EnterPasswordForm';
-import CreateFirstAdminForm from './CreateFirstAdminForm';
+import EnterPasswordForm from '../../../containers/admin/setup/EnterPasswordForm';
+import CreateFirstAdminForm from '../../../containers/admin/setup/CreateFirstAdminForm';
 
 const STEP = {
   ENTER_PASSWORD: 'enter-password',
