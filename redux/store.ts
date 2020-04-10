@@ -1,13 +1,5 @@
-import {
-  Action,
-  configureStore,
-  Dispatch,
-  EnhancedStore,
-  ThunkAction,
-} from '@reduxjs/toolkit';
-import {ThunkMiddlewareFor} from '@reduxjs/toolkit/src/getDefaultMiddleware';
+import {Action, configureStore, ThunkAction} from '@reduxjs/toolkit';
 import {MakeStore} from 'next-redux-wrapper';
-import {DispatchForMiddlewares} from '@reduxjs/toolkit/src/tsHelpers';
 import rootReducer, {RootState} from './slices';
 
 export type AppThunk<ReturnType = void> = ThunkAction<
@@ -16,15 +8,10 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
-export type AppDispatch = DispatchForMiddlewares<
-  [ThunkMiddlewareFor<RootState>]
-> &
-  Dispatch<Action<string>>;
-export type AppStore = EnhancedStore<
-  RootState,
-  Action<string>,
-  [ThunkMiddlewareFor<RootState>]
->;
+
+const dummyStoreToGetType = configureStore({reducer: rootReducer});
+export type AppStore = typeof dummyStoreToGetType;
+export type AppDispatch = typeof dummyStoreToGetType.dispatch;
 
 export const makeStore: MakeStore = (initialState: RootState): AppStore => {
   return configureStore({
