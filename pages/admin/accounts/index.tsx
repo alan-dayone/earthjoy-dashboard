@@ -88,6 +88,16 @@ const DefaultColumnFilter: FC<FilterProps> = ({
   );
 };
 
+const ActionButton = ({row}: CellProps<Account>): JSX.Element => (
+  <>
+    <Link
+      href="/admin/accounts/[userId]/edit"
+      as={`/admin/accounts/${row.values.id}/edit`}>
+      <a className="btn btn-sm btn-info">Edit</a>
+    </Link>
+  </>
+)
+
 const tableColumns: Column[] = [
   {
     Header: 'ID',
@@ -133,15 +143,7 @@ const tableColumns: Column[] = [
     disableSortBy: true,
     disableFilters: true,
     width: '15%',
-    Cell: ({row}: CellProps<Account>): JSX.Element => (
-      <>
-        <Link
-          href="/admin/accounts/[userId]/edit"
-          as={`/admin/accounts/${row.values.id}/edit`}>
-          <a className="btn btn-sm btn-info">Edit</a>
-        </Link>
-      </>
-    ),
+    Cell: ActionButtons,
   },
 ];
 
