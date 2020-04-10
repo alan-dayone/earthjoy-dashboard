@@ -7,16 +7,12 @@ interface Props {
   status: AccountStatus;
 }
 
-export const AccountStatusLabel: FC<Props> = ({status}: Props) => {
-  const accountIsActive = status === AccountStatus.ACTIVE;
-
-  return (
-    <span
-      className={classNames('badge', {
-        'badge-success': accountIsActive,
-        'badge-secondary': !accountIsActive,
-      })}>
-      {AccountStatusText[status]}
-    </span>
-  );
-};
+export const AccountStatusLabel: FC<Props> = ({status}: Props) => (
+  <span
+    className={classNames(
+      'badge',
+      status === AccountStatus.ACTIVE ? 'badge-success' : 'badge-secondary',
+    )}>
+    {AccountStatusText[status || AccountStatus.INACTIVE] || AccountStatusText}
+  </span>
+);
