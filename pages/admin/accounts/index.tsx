@@ -11,7 +11,6 @@ import {
   CellProps,
   Column,
 } from 'react-table';
-import {NextComponentType, NextPageContext} from 'next';
 import Link from 'next/link';
 import Router from 'next/router';
 import {useRouter} from 'next/router';
@@ -114,18 +113,22 @@ const tableColumns: Column[] = [
     accessor: 'emailVerified',
     Filter: SelectEmailVerificationFilter,
     width: '10%',
-    Cell: ({cell: {value}}: CellProps<Account>): JSX.Element => (
-      <AccountEmailVerificationLabel emailVerified={value} />
-    ),
+    Cell: function cellRender({
+      cell: {value},
+    }: CellProps<Account>): JSX.Element {
+      return <AccountEmailVerificationLabel emailVerified={value} />;
+    },
   },
   {
     Header: 'Status',
     accessor: 'status',
     Filter: SelectStatusFilter,
     width: '10%',
-    Cell: ({cell: {value}}: CellProps<Account>): JSX.Element => (
-      <AccountStatusLabel status={value} />
-    ),
+    Cell: function cellRender({
+      cell: {value},
+    }: CellProps<Account>): JSX.Element {
+      return <AccountStatusLabel status={value} />;
+    },
   },
   {
     Header: 'Actions',
@@ -133,101 +136,19 @@ const tableColumns: Column[] = [
     disableSortBy: true,
     disableFilters: true,
     width: '15%',
-    Cell: ({row}: CellProps<Account>): JSX.Element => (
-      <>
-        <Link
-          href="/admin/accounts/[userId]/edit"
-          as={`/admin/accounts/${row.values.id}/edit`}>
-          <a className="btn btn-sm btn-info">Edit</a>
-        </Link>
-      </>
-    ),
+    Cell: function cellRender({row}: CellProps<Account>): JSX.Element {
+      return (
+        <>
+          <Link
+            href="/admin/accounts/[userId]/edit"
+            as={`/admin/accounts/${row.values.id}/edit`}>
+            <a className="btn btn-sm btn-info">Edit</a>
+          </Link>
+        </>
+      );
+    },
   },
 ];
-
-const AdminAccountsPage: FC<{}> = () => {
-  if (isServer()) {
-    return null;
-  }
-
-  const [data, setData] = useState<Account[]>([]);
-  const [pageCount, setPageCount] = useState(1);
-  const [totalRecord, setTotalRecord] = useState<number>(null);
-  const [loadingData, setLoadingData] = useState(true);
-  const router = useRouter();
-  const {index = 0, size = 5, ...query} = router.query;
-
-  const fetchData = useCallback(
-    async ({pageIndex, pageSize, filters, sortBy}) => {
-      setLoadingData(true);
-      const filterObj = filters.reduce((ac, column) => {
-        if (column.value) {
-          if (column.id === 'emailVerified' && column.value !== '') {
-            ac[column.id] = column.value === 'true';
-          } else {
-            ac[column.id] = column.value;
-          }
-        }
-        return ac;
-      }, {});
-      const accounts = await accountService.findAccountsForAdmin({
-        pageIndex: Number(pageIndex),
-        pageSize: Number(pageSize),
-        filters: filterObj,
-        orders: sortBy,
-      });
-      setData(accounts.data);
-      setPageCount(Math.ceil(accounts.count / pageSize));
-      setTotalRecord(accounts.count);
-      setLoadingData(false);
-      const queryString = qs.stringify({
-        ...filterObj,
-        index: pageIndex,
-        size: pageSize,
-      });
-      if (queryString !== '') Router.push(`/admin/accounts?${queryString}`);
-    },
-    [],
-  );
-
-  const debouncedFetchData = useAsyncDebounce(fetchData, 500);
-
-  return (
-    <div id="admin-accounts-page">
-      <Head>
-        <title>Admin - Account management</title>
-      </Head>
-      <div className="row">
-        <div className="col-12">
-          <div className="card">
-            <div className="card-header">
-              <strong>Account management</strong>
-              <div className="card-header-actions">
-                <Link href="/admin/accounts/create">
-                  <a className="btn btn-sm btn-success">Create</a>
-                </Link>
-              </div>
-            </div>
-            <div className="card-body">
-              <Table
-                data={data}
-                defaultFilter={query}
-                fetchData={debouncedFetchData}
-                loadingData={loadingData}
-                manualPageCount={pageCount}
-                initialState={{
-                  pageIndex: Number(index),
-                  pageSize: Number(size),
-                }}
-                totalRecord={totalRecord}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 interface TableProps<D> {
   data: D[];
@@ -409,6 +330,87 @@ const Table: FC<TableProps<Account>> = ({
   );
 };
 
-export default adminOnly(
-  AdminAccountsPage as NextComponentType<NextPageContext>,
-);
+const AdminAccountsPage: FC<{}> = () => {
+  if (isServer()) {
+    return null;
+  }
+
+  const [data, setData] = useState<Account[]>([]);
+  const [pageCount, setPageCount] = useState(1);
+  const [totalRecord, setTotalRecord] = useState<number>(null);
+  const [loadingData, setLoadingData] = useState(true);
+  const router = useRouter();
+  const {index = 0, size = 5, ...query} = router.query;
+
+  const fetchData = useCallback(
+    async ({pageIndex, pageSize, filters, sortBy}) => {
+      setLoadingData(true);
+      const filterObj = filters.reduce((ac, column) => {
+        if (column.value) {
+          if (column.id === 'emailVerified' && column.value !== '') {
+            ac[column.id] = column.value === 'true';
+          } else {
+            ac[column.id] = column.value;
+          }
+        }
+        return ac;
+      }, {});
+      const accounts = await accountService.findAccountsForAdmin({
+        pageIndex: Number(pageIndex),
+        pageSize: Number(pageSize),
+        filters: filterObj,
+        orders: sortBy,
+      });
+      setData(accounts.data);
+      setPageCount(Math.ceil(accounts.count / pageSize));
+      setTotalRecord(accounts.count);
+      setLoadingData(false);
+      const queryString = qs.stringify({
+        ...filterObj,
+        index: pageIndex,
+        size: pageSize,
+      });
+      if (queryString !== '') Router.push(`/admin/accounts?${queryString}`);
+    },
+    [],
+  );
+
+  const debounceFetchData = useAsyncDebounce(fetchData, 500);
+
+  return (
+    <div id="admin-accounts-page">
+      <Head>
+        <title>Admin - Account management</title>
+      </Head>
+      <div className="row">
+        <div className="col-12">
+          <div className="card">
+            <div className="card-header">
+              <strong>Account management</strong>
+              <div className="card-header-actions">
+                <Link href="/admin/accounts/create">
+                  <a className="btn btn-sm btn-success">Create</a>
+                </Link>
+              </div>
+            </div>
+            <div className="card-body">
+              <Table
+                data={data}
+                defaultFilter={query}
+                fetchData={debounceFetchData}
+                loadingData={loadingData}
+                manualPageCount={pageCount}
+                initialState={{
+                  pageIndex: Number(index),
+                  pageSize: Number(size),
+                }}
+                totalRecord={totalRecord}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+export default adminOnly(AdminAccountsPage);
