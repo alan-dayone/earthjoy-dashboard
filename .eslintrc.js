@@ -11,5 +11,8 @@ module.exports = {
   ],
   rules: {
     "prettier/prettier": "error"
+  },
+  env: {
+    node: true,
   }
 };
