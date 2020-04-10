@@ -1,12 +1,12 @@
 /* tslint:disable:no-default-export */
-import React from 'react';
+import React, {ReactElement} from 'react';
 import Head from 'next/head';
 import {NextComponentType, NextPageContext} from 'next';
 import loGet from 'lodash/get';
 import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../hocs';
-import {Formik} from 'formik';
+import {Formik, FormikProps} from 'formik';
 import {Account, AccountStatus} from '../../../models/Account';
 import {
   AccountEmailVerificationText,
@@ -24,7 +24,7 @@ const initialValues: Account = {
   emailVerified: true,
 };
 
-export function getServerErrorMessage(error) {
+export function getServerErrorMessage(error): string {
   const errorEnum = loGet(error, 'response.data.error.message');
   if (errorEnum === 'EMAIL_EXISTED') {
     return 'Email already existed';
@@ -32,8 +32,8 @@ export function getServerErrorMessage(error) {
   return 'Unknown error';
 }
 
-function AdminAccountCreationPage() {
-  async function _handleSave(values: Account, actions) {
+function AdminAccountCreationPage(): ReactElement {
+  async function _handleSave(values: Account, actions): Promise<void> {
     try {
       actions.setSubmitting(true);
       await accountService.createAccount(values);
@@ -61,7 +61,7 @@ function AdminAccountCreationPage() {
           values,
           isSubmitting,
           setFieldValue,
-        }) => (
+        }: FormikProps<Account>): JSX.Element => (
           <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
@@ -182,7 +182,7 @@ function AdminAccountCreationPage() {
                         name="emailVerified"
                         className="form-control"
                         value={String(values.emailVerified)}
-                        onChange={e => {
+                        onChange={(e): void => {
                           if (e.target.value === 'true')
                             setFieldValue('emailVerified', true);
                           else setFieldValue('emailVerified', false);
@@ -221,5 +221,5 @@ function AdminAccountCreationPage() {
 }
 
 export default adminOnly(
-  AdminAccountCreationPage as NextComponentType<NextPageContext, any, any>,
+  AdminAccountCreationPage as NextComponentType<NextPageContext>,
 );

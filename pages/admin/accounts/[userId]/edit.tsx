@@ -1,14 +1,15 @@
 /* tslint:disable:no-default-export */
 import React from 'react';
 import Head from 'next/head';
-import {NextComponentType, NextPageContext} from 'next';
+import {NextPageContext, NextPage} from 'next';
+import {Router} from 'next/router';
 import loGet from 'lodash/get';
 import loIsEqual from 'lodash/isEqual';
 import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../../hocs';
-import {Formik} from 'formik';
-import {AccountStatus} from '../../../../models/Account';
+import {Formik, FormikActions, FormikProps} from 'formik';
+import {AccountStatus, Account} from '../../../../models/Account';
 import {
   AccountEmailVerificationText,
   AccountStatusText,
@@ -17,7 +18,7 @@ import {
 import {accountService} from '../../../../services';
 import {ToastrWarning} from '../../../../view-models/Toastr';
 
-export function getServerErrorMessage(error) {
+export function getServerErrorMessage(error): string {
   const errorEnum = loGet(error, 'response.data.error.message');
   if (errorEnum === 'EMAIL_EXISTED') {
     return 'Email already existed';
@@ -28,22 +29,33 @@ export function getServerErrorMessage(error) {
 class UserToastrWarning extends ToastrWarning {
   public getWarningMessage(): string {
     if (this.code === 'NOTHING_CHANGE') {
-      return 'The new user infomation is the same';
+      return 'The new user information is the same';
     }
     return 'Warning';
   }
-  public alert() {
+  public alert(): void {
     toastr.warning(this.getWarningMessage());
   }
 }
 
-function AdminAccountEditingPage({router, originalAccount}) {
-  const _handleSave = async (values, actions) => {
+interface Props {
+  router: Router;
+  originalAccount: Account;
+}
+
+const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
+  router,
+  originalAccount,
+}) => {
+  const _handleSave = async (
+    values: Account,
+    actions: FormikActions<Account>,
+  ): Promise<void> => {
     try {
       actions.setSubmitting(true);
       if (loIsEqual(values, originalAccount))
         throw new UserToastrWarning(UserToastrWarning.NOTHING_CHANGE);
-      const userId = await loGet(router, ['query', 'userId']);
+      const userId = loGet(router, ['query', 'userId']) as string;
       await accountService.updateAccount(userId, values);
       toastr.success('Success');
     } catch (e) {
@@ -71,7 +83,7 @@ function AdminAccountEditingPage({router, originalAccount}) {
           values,
           isSubmitting,
           setFieldValue,
-        }) => (
+        }: FormikProps<Account>): JSX.Element => (
           <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
@@ -168,7 +180,7 @@ function AdminAccountEditingPage({router, originalAccount}) {
                         name="emailVerified"
                         className="form-control"
                         value={values.emailVerified ? 'true' : 'false'}
-                        onChange={e => {
+                        onChange={(e): void => {
                           if (e.target.value === 'true')
                             setFieldValue('emailVerified', true);
                           else setFieldValue('emailVerified', false);
@@ -204,14 +216,17 @@ function AdminAccountEditingPage({router, originalAccount}) {
       </Formik>
     </div>
   );
-}
-
-AdminAccountEditingPage.getInitialProps = async ({query}) => {
+};
+AdminAccountEditingPage.getInitialProps = async (
+  context: NextPageContext<Props>,
+): Promise<Partial<Props>> => {
+  const originalAccount = await accountService.findOneForAdmin(
+    context.query['userId'] as string,
+  );
+  console.log({originalAccount});
   return {
-    originalAccount: await accountService.findOneForAdmin(query.userId),
+    originalAccount,
   };
 };
 
-export default adminOnly(
-  AdminAccountEditingPage as NextComponentType<NextPageContext, any, any>,
-);
+export default adminOnly(AdminAccountEditingPage);

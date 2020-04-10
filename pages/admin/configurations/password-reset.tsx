@@ -1,7 +1,7 @@
 /* tslint:disable:no-default-export */
 import React, {Component} from 'react';
 import Head from 'next/head';
-import {Formik, FormikActions} from 'formik';
+import {Formik, FormikActions, FormikProps} from 'formik';
 import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../hocs';
@@ -29,7 +29,13 @@ class AdminPasswordResetPage extends Component {
               initialValues={initialValues}
               onSubmit={this._handleSave}
               validationSchema={MailSmtpSettingsValidationSchema}>
-              {({errors, handleChange, handleSubmit, isSubmitting, values}) => (
+              {({
+                errors,
+                handleChange,
+                handleSubmit,
+                isSubmitting,
+                values,
+              }: FormikProps<ResetPasswordSettings>): JSX.Element => (
                 <form onSubmit={handleSubmit}>
                   <div className="card">
                     <div className="card-header">
@@ -147,7 +153,7 @@ class AdminPasswordResetPage extends Component {
   public _handleSave = async (
     values: ResetPasswordSettings,
     actions: FormikActions<ResetPasswordSettings>,
-  ) => {
+  ): Promise<void> => {
     try {
       actions.setSubmitting(true);
       await systemService.saveResetPasswordSettings(values);

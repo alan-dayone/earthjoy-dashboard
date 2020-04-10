@@ -14,7 +14,7 @@ const AccountVerificationPage: NextComponentType<
   CustomNextPageContext,
   {},
   PageProps
-> = ({verified}) => (
+> = ({verified}: PageProps) => (
   <div className="container">
     <Head>
       <title>Account verification</title>

@@ -129,7 +129,9 @@ export class AuthGateway {
     if (token) {
       this.jwt = token;
       Cookies.set(ACCESS_TOKEN_COOKIE, token);
-      this.restConnector.defaults.headers[AUTHORIZATION_HEADER] = `Bearer ${token}`;
+      this.restConnector.defaults.headers[
+        AUTHORIZATION_HEADER
+      ] = `Bearer ${token}`;
     } else {
       this.jwt = null;
       Cookies.remove(ACCESS_TOKEN_COOKIE);

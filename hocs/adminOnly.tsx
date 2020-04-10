@@ -79,6 +79,8 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
     }
 
     public render(): JSX.Element {
+      console.log({hocs: this.props});
+
       return (
         <div className="app-layout--admin c-app pace-done">
           {this.renderSidebar()}
@@ -157,7 +159,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
           </div>
           <ul
             className="c-sidebar-nav ps ps--active-y"
-            data-drodpown-accordion="true">
+            data-dropdown-accordion="true">
             <li className="c-sidebar-nav-item">
               <Link href="/admin">
                 <a className="c-sidebar-nav-link">

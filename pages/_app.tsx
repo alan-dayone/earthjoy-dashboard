@@ -12,7 +12,7 @@ import {RootState} from '../redux/slices';
 import {authService} from '../services';
 import {getCookieFromRequest} from '../utils/cookie';
 import {getLoginUser} from '../redux/slices/loginUserSlice';
-import {ACCESS_TOKEN_COOKIE} from "../gateways/AuthGateway";
+import {ACCESS_TOKEN_COOKIE} from '../gateways/AuthGateway';
 import '../scss/index.scss';
 
 interface CustomNextAppContext extends AppContext {

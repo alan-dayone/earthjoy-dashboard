@@ -1,7 +1,7 @@
 /* tslint:disable:no-default-export */
 import React, {Component} from 'react';
 import Head from 'next/head';
-import {Formik, FormikActions} from 'formik';
+import {Formik, FormikActions, FormikProps} from 'formik';
 import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../hocs';
@@ -29,7 +29,13 @@ class AdminEmailAddressVerificationPage extends Component {
               initialValues={initialValues}
               onSubmit={this._handleSave}
               validationSchema={MailSmtpSettingsValidationSchema}>
-              {({handleChange, handleSubmit, values, errors, isSubmitting}) => (
+              {({
+                handleChange,
+                handleSubmit,
+                values,
+                errors,
+                isSubmitting,
+              }: FormikProps<VerifyAccountSettings>): JSX.Element => (
                 <form onSubmit={handleSubmit}>
                   <div className="card">
                     <div className="card-header">
@@ -147,7 +153,7 @@ class AdminEmailAddressVerificationPage extends Component {
   public _handleSave = async (
     values: VerifyAccountSettings,
     actions: FormikActions<VerifyAccountSettings>,
-  ) => {
+  ): Promise<void> => {
     try {
       actions.setSubmitting(true);
       await systemService.saveAccountVerificationSettings(values);

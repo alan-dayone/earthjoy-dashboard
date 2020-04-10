@@ -4,7 +4,7 @@ import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
 import * as Yup from 'yup';
-import {Formik, FormikActions} from 'formik';
+import {Formik, FormikActions, FormikProps} from 'formik';
 import {guestOnly} from '../../hocs';
 import {authService} from '../../services';
 import {constraint} from '../../models/Account';
@@ -17,12 +17,12 @@ interface State {
   isSubmitted: boolean;
 }
 
-class AdminResetPasswordPage extends React.Component<any, State> {
+class AdminResetPasswordPage extends React.Component<{}, State> {
   public state: State = {
     isSubmitted: false,
   };
 
-  public render() {
+  public render(): JSX.Element {
     return (
       <div
         id="admin-reset-password-page"
@@ -48,7 +48,7 @@ class AdminResetPasswordPage extends React.Component<any, State> {
                             'Email is too long',
                           ),
                       })}>
-                      {props => (
+                      {(props: FormikProps<{email: string}>): JSX.Element => (
                         <form onSubmit={props.handleSubmit}>
                           <h1>Forgot password</h1>
                           {!this.state.isSubmitted ? (
@@ -94,7 +94,7 @@ class AdminResetPasswordPage extends React.Component<any, State> {
                           ) : (
                             <div className="mt-3">
                               <div className="alert alert-success">
-                                We've just sent you an email to reset your
+                                We&#39ve just sent you an email to reset your
                                 password.
                               </div>
                             </div>
@@ -115,7 +115,7 @@ class AdminResetPasswordPage extends React.Component<any, State> {
   public _handleForgotPassword = async (
     values: ForgotPasswordForm,
     actions: FormikActions<ForgotPasswordForm>,
-  ) => {
+  ): Promise<void> => {
     actions.setSubmitting(true);
     try {
       await authService.sendResetPasswordEmail(values.email);

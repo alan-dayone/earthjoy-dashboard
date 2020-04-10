@@ -1,7 +1,7 @@
 /* tslint:disable:no-default-export */
 import React, {Component} from 'react';
 import Head from 'next/head';
-import {Formik, FormikActions} from 'formik';
+import {Formik, FormikActions, FormikProps} from 'formik';
 import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../hocs';
@@ -16,14 +16,14 @@ class AdminSmtpSettingsPage extends Component<{
     isTestingConnection: false,
   };
 
-  public static async getInitialProps() {
+  public static async getInitialProps(): Promise<{}> {
     const initialSmtpSettings = await systemService.getSmtpSettings();
     return {
       initialSmtpSettings,
     };
   }
 
-  public render() {
+  public render(): JSX.Element {
     const initialValues: MailSmtpSettings = this.props.initialSmtpSettings || {
       smtpHost: '',
       smtpPort: '',
@@ -45,7 +45,13 @@ class AdminSmtpSettingsPage extends Component<{
               initialValues={initialValues}
               onSubmit={this._handleSave}
               validationSchema={MailSmtpSettingsValidationSchema}>
-              {({values, handleChange, isSubmitting, handleSubmit, errors}) => (
+              {({
+                values,
+                handleChange,
+                isSubmitting,
+                handleSubmit,
+                errors,
+              }: FormikProps<MailSmtpSettings>): JSX.Element => (
                 <form onSubmit={handleSubmit}>
                   <div className="card">
                     <div className="card-header">
@@ -211,7 +217,7 @@ class AdminSmtpSettingsPage extends Component<{
                       &nbsp;
                       <button
                         className="btn btn-sm btn-info"
-                        onClick={async e => {
+                        onClick={async (e): Promise<void> => {
                           e.preventDefault();
                           await this._handleTestSmtpConnection(values);
                         }}
@@ -232,7 +238,9 @@ class AdminSmtpSettingsPage extends Component<{
     );
   }
 
-  public _handleTestSmtpConnection = async (values: MailSmtpSettings) => {
+  public _handleTestSmtpConnection = async (
+    values: MailSmtpSettings,
+  ): Promise<void> => {
     try {
       this.setState({isTestingConnection: true});
 

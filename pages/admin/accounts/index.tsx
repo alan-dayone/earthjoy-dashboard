@@ -9,6 +9,7 @@ import {
   useTable,
   useSortBy,
   CellProps,
+  Column,
 } from 'react-table';
 import {NextComponentType, NextPageContext} from 'next';
 import Link from 'next/link';
@@ -87,7 +88,7 @@ const DefaultColumnFilter: FC<FilterProps> = ({
   );
 };
 
-const tableColumns = [
+const tableColumns: Column[] = [
   {
     Header: 'ID',
     accessor: 'id',
@@ -113,7 +114,7 @@ const tableColumns = [
     accessor: 'emailVerified',
     Filter: SelectEmailVerificationFilter,
     width: '10%',
-    Cell: ({cell: {value}}): JSX.Element => (
+    Cell: ({cell: {value}}: CellProps<Account>): JSX.Element => (
       <AccountEmailVerificationLabel emailVerified={value} />
     ),
   },
@@ -122,16 +123,17 @@ const tableColumns = [
     accessor: 'status',
     Filter: SelectStatusFilter,
     width: '10%',
-    Cell: ({cell: {value}}): JSX.Element => (
+    Cell: ({cell: {value}}: CellProps<Account>): JSX.Element => (
       <AccountStatusLabel status={value} />
     ),
   },
   {
     Header: 'Actions',
     sortType: null,
-    canFilter: false,
+    disableSortBy: true,
+    disableFilters: true,
     width: '15%',
-    Cell: ({row}): JSX.Element => (
+    Cell: ({row}: CellProps<Account>): JSX.Element => (
       <>
         <Link
           href="/admin/accounts/[userId]/edit"
@@ -143,14 +145,14 @@ const tableColumns = [
   },
 ];
 
-function AdminAccountsPage(): JSX.Element | null {
+const AdminAccountsPage: FC<{}> = () => {
   if (isServer()) {
     return null;
   }
 
   const [data, setData] = useState<Account[]>([]);
   const [pageCount, setPageCount] = useState(1);
-  const [totalRecord, setTotalRecord] = useState('...');
+  const [totalRecord, setTotalRecord] = useState<number>(null);
   const [loadingData, setLoadingData] = useState(true);
   const router = useRouter();
   const {index = 0, size = 5, ...query} = router.query;
@@ -176,7 +178,7 @@ function AdminAccountsPage(): JSX.Element | null {
       });
       setData(accounts.data);
       setPageCount(Math.ceil(accounts.count / pageSize));
-      // setTotalRecord(accounts.count);
+      setTotalRecord(accounts.count);
       setLoadingData(false);
       const queryString = qs.stringify({
         ...filterObj,
@@ -225,7 +227,7 @@ function AdminAccountsPage(): JSX.Element | null {
       </div>
     </div>
   );
-}
+};
 
 interface TableProps<D> {
   data: D[];
@@ -408,5 +410,5 @@ const Table: FC<TableProps<Account>> = ({
 };
 
 export default adminOnly(
-  AdminAccountsPage as NextComponentType<NextPageContext, any, any>,
+  AdminAccountsPage as NextComponentType<NextPageContext>,
 );
