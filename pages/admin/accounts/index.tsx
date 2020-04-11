@@ -1,23 +1,21 @@
 /* tslint:disable:no-default-export */
-import React, {useCallback, useEffect, useState, FC} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import Head from 'next/head';
-import classNames from 'classnames';
 import {
+  CellProps,
+  Column,
   useAsyncDebounce,
   useFilters,
   usePagination,
-  useTable,
   useSortBy,
-  CellProps,
-  Column,
+  useTable,
 } from 'react-table';
 import Link from 'next/link';
-import Router from 'next/router';
-import {useRouter} from 'next/router';
+import Router, {useRouter} from 'next/router';
 import qs from 'qs';
 import {adminOnly} from '../../../hocs';
 import {accountService} from '../../../services';
-import {AccountStatus, Account} from '../../../models/Account';
+import {Account, AccountStatus} from '../../../models/Account';
 import {
   AccountEmailVerificationText,
   AccountStatusText,
@@ -25,6 +23,8 @@ import {
 import {AccountEmailVerificationLabel} from '../../../components/admin/AccountEmailVerificationLabel';
 import {AccountStatusLabel} from '../../../components/admin/AccountStatusLabel';
 import {isServer} from '../../../utils/environment';
+import {PaginationContainer} from '../../../components/admin/DataTable';
+import {PAGE_SIZE} from '../../../view-models/admin/DataTable';
 
 interface FilterProps {
   column: {
@@ -155,7 +155,7 @@ interface TableProps<D> {
   fetchData: (value: {}) => void;
   loadingData: boolean;
   defaultFilter: {};
-  manualPageCount: number;
+  pageCount: number;
   initialState: {
     pageIndex: number;
     pageSize: number;
@@ -168,8 +168,8 @@ const Table: FC<TableProps<Account>> = ({
   fetchData,
   loadingData,
   defaultFilter,
-  manualPageCount,
-  initialState = {pageIndex: 0, pageSize: 10},
+  pageCount,
+  initialState = {pageIndex: 0, pageSize: PAGE_SIZE},
   totalRecord,
 }: TableProps<Account>) => {
   const {
@@ -178,13 +178,7 @@ const Table: FC<TableProps<Account>> = ({
     headers,
     page,
     prepareRow,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
     gotoPage,
-    nextPage,
-    previousPage,
     state: {pageIndex, filters, pageSize, sortBy},
   } = useTable(
     {
@@ -204,7 +198,7 @@ const Table: FC<TableProps<Account>> = ({
       manualPagination: true,
       autoResetPage: true,
       manualSortBy: true,
-      pageCount: manualPageCount,
+      pageCount,
     },
     useFilters,
     useSortBy,
@@ -215,10 +209,7 @@ const Table: FC<TableProps<Account>> = ({
     fetchData({pageIndex, pageSize, filters, sortBy});
   }, [fetchData, pageIndex, pageSize, filters, sortBy]);
 
-  useEffect(() => {
-    if (pageIndex > manualPageCount - 1) gotoPage(0);
-  }, [manualPageCount]);
-
+  // TODO: {...header.getHeaderProps(header.getSortByToggleProps())} cause style of <th> to be overwritten.
   return (
     <>
       <table className="table table-responsive-sm" {...getTableProps()}>
@@ -275,57 +266,12 @@ const Table: FC<TableProps<Account>> = ({
           )}
         </tbody>
       </table>
-      <div className="row">
-        <div className="col-6">
-          <span>
-            Page{' '}
-            <strong>
-              {pageIndex + 1} of {pageOptions.length}
-            </strong>
-          </span>{' '}
-          |{' '}
-          <span>
-            Go to page:
-            <input
-              type="number"
-              className="form-control d-inline-block ml-1"
-              defaultValue={pageIndex + 1}
-              min={1}
-              max={manualPageCount}
-              onChange={(e): void => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                gotoPage(page);
-              }}
-              style={{width: '100px'}}
-            />
-          </span>
-          <span className="ml-2">Total records: {totalRecord}</span>
-        </div>
-        <div className="col-6">
-          <ul className="pagination justify-content-end">
-            <li
-              className={classNames('page-item', {disabled: !canPreviousPage})}
-              onClick={(): void => gotoPage(0)}>
-              <a className="page-link u-cursor-pointer">{'<<'}</a>
-            </li>
-            <li
-              className={classNames('page-item', {disabled: !canPreviousPage})}
-              onClick={(): void => previousPage()}>
-              <a className="page-link u-cursor-pointer">{'<'}</a>
-            </li>
-            <li
-              className={classNames('page-item', {disabled: !canNextPage})}
-              onClick={(): void => nextPage()}>
-              <a className="page-link u-cursor-pointer">{'>'}</a>
-            </li>
-            <li
-              className={classNames('page-item', {disabled: !canNextPage})}
-              onClick={(): void => gotoPage(pageCount - 1)}>
-              <a className="page-link u-cursor-pointer">{'>>'}</a>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <PaginationContainer
+        pageSize={pageSize}
+        pageIndex={pageIndex}
+        totalRecord={totalRecord as number}
+        onPageChange={gotoPage}
+      />
     </>
   );
 };
@@ -339,8 +285,7 @@ const AdminAccountsPage: FC<{}> = () => {
   const [pageCount, setPageCount] = useState(1);
   const [totalRecord, setTotalRecord] = useState<number>(null);
   const [loadingData, setLoadingData] = useState(true);
-  const router = useRouter();
-  const {index = 0, size = 5, ...query} = router.query;
+  const {pageIndex = 0, ...query} = Router.query;
 
   const fetchData = useCallback(
     async ({pageIndex, pageSize, filters, sortBy}) => {
@@ -356,8 +301,8 @@ const AdminAccountsPage: FC<{}> = () => {
         return ac;
       }, {});
       const accounts = await accountService.findAccountsForAdmin({
-        pageIndex: Number(pageIndex),
-        pageSize: Number(pageSize),
+        pageIndex,
+        pageSize,
         filters: filterObj,
         orders: sortBy,
       });
@@ -367,16 +312,19 @@ const AdminAccountsPage: FC<{}> = () => {
       setLoadingData(false);
       const queryString = qs.stringify({
         ...filterObj,
-        index: pageIndex,
-        size: pageSize,
+        pageIndex,
       });
-      if (queryString !== '') Router.push(`/admin/accounts?${queryString}`);
+
+      if (queryString !== '') {
+        Router.push(`/admin/accounts?${queryString}`);
+      }
     },
     [],
   );
 
   const debounceFetchData = useAsyncDebounce(fetchData, 500);
 
+  console.log('render');
   return (
     <div id="admin-accounts-page">
       <Head>
@@ -399,10 +347,10 @@ const AdminAccountsPage: FC<{}> = () => {
                 defaultFilter={query}
                 fetchData={debounceFetchData}
                 loadingData={loadingData}
-                manualPageCount={pageCount}
+                pageCount={pageCount}
                 initialState={{
-                  pageIndex: Number(index),
-                  pageSize: Number(size),
+                  pageIndex: Number(pageIndex),
+                  pageSize: PAGE_SIZE,
                 }}
                 totalRecord={totalRecord}
               />
