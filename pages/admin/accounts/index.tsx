@@ -2,6 +2,7 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import Head from 'next/head';
 import {
+  FilterProps,
   CellProps,
   Column,
   useAsyncDebounce,
@@ -11,7 +12,7 @@ import {
   useTable,
 } from 'react-table';
 import Link from 'next/link';
-import Router, {useRouter} from 'next/router';
+import Router from 'next/router';
 import qs from 'qs';
 import {adminOnly} from '../../../hocs';
 import {accountService} from '../../../services';
@@ -23,69 +24,9 @@ import {
 import {AccountEmailVerificationLabel} from '../../../components/admin/AccountEmailVerificationLabel';
 import {AccountStatusLabel} from '../../../components/admin/AccountStatusLabel';
 import {isServer} from '../../../utils/environment';
-import {PaginationContainer} from '../../../components/admin/DataTable';
+import {PaginationContainer} from '../../../components/admin/DataTable/Pagination';
 import {PAGE_SIZE} from '../../../view-models/admin/DataTable';
-
-interface FilterProps {
-  column: {
-    filterValue: number | string;
-    setFilter: (value: number | string) => void;
-  };
-}
-
-function SelectStatusFilter({
-  column: {filterValue, setFilter},
-}: FilterProps): JSX.Element {
-  const options = [AccountStatus.ACTIVE, AccountStatus.INACTIVE];
-
-  return (
-    <select
-      className="form-control form-control-sm"
-      value={filterValue}
-      onChange={(e): void => {
-        setFilter(e.target.value || '');
-      }}>
-      <option value="">All</option>
-      {options.map((option, i) => (
-        <option key={i} value={option}>
-          {AccountStatusText[option]}
-        </option>
-      ))}
-    </select>
-  );
-}
-
-const SelectEmailVerificationFilter: FC<FilterProps> = ({
-  column: {filterValue, setFilter},
-}: FilterProps) => {
-  return (
-    <select
-      className="form-control form-control-sm"
-      value={filterValue}
-      onChange={(e): void => {
-        setFilter(e.target.value || '');
-      }}>
-      <option value="">All</option>
-      <option value="true">{AccountEmailVerificationText.VERIFIED}</option>
-      <option value="false">{AccountEmailVerificationText.NOT_VERIFIED}</option>
-    </select>
-  );
-};
-
-const DefaultColumnFilter: FC<FilterProps> = ({
-  column: {filterValue, setFilter},
-}: FilterProps) => {
-  return (
-    <input
-      className="form-control form-control-sm"
-      value={filterValue || ''}
-      onChange={(e): void => {
-        setFilter(e.target.value || '');
-      }}
-      placeholder="Search..."
-    />
-  );
-};
+import {DataTable} from '../../../components/admin/DataTable/DataTable';
 
 const tableColumns: Column[] = [
   {
@@ -111,7 +52,22 @@ const tableColumns: Column[] = [
   {
     Header: 'Email verification',
     accessor: 'emailVerified',
-    Filter: SelectEmailVerificationFilter,
+    Filter: (props: FilterProps<Account>) => {
+      return (
+        <select
+          className="form-control form-control-sm"
+          value={props.column.filterValue}
+          onChange={(e): void => {
+            props.column.setFilter(e.target.value || '');
+          }}>
+          <option value="">All</option>
+          <option value="true">{AccountEmailVerificationText.VERIFIED}</option>
+          <option value="false">
+            {AccountEmailVerificationText.NOT_VERIFIED}
+          </option>
+        </select>
+      );
+    },
     width: '10%',
     Cell: function EmailVerificationCell({
       cell: {value},
@@ -122,7 +78,24 @@ const tableColumns: Column[] = [
   {
     Header: 'Status',
     accessor: 'status',
-    Filter: SelectStatusFilter,
+    Filter: (props: FilterProps<Account>) => {
+      const options = [AccountStatus.ACTIVE, AccountStatus.INACTIVE];
+      return (
+        <select
+          className="form-control form-control-sm"
+          value={props.column.filterValue}
+          onChange={(e): void => {
+            props.column.setFilter(e.target.value || '');
+          }}>
+          <option value="">All</option>
+          {options.map((option, i) => (
+            <option key={i} value={option}>
+              {AccountStatusText[option]}
+            </option>
+          ))}
+        </select>
+      );
+    },
     width: '10%',
     Cell: function AccountStatusCell({
       cell: {value},
@@ -192,9 +165,9 @@ const Table: FC<TableProps<Account>> = ({
         })),
         ...initialState,
       },
-      defaultColumn: {
-        Filter: DefaultColumnFilter,
-      },
+      // defaultColumn: {
+      //   Filter: DefaultColumnFilter,
+      // },
       manualPagination: true,
       autoResetPage: true,
       manualSortBy: true,
@@ -281,48 +254,57 @@ const AdminAccountsPage: FC<{}> = () => {
     return null;
   }
 
-  const [data, setData] = useState<Account[]>([]);
-  const [pageCount, setPageCount] = useState(1);
-  const [totalRecord, setTotalRecord] = useState<number>(null);
-  const [loadingData, setLoadingData] = useState(true);
-  const {pageIndex = 0, ...query} = Router.query;
+  // const [data, setData] = useState<Account[]>([]);
+  // const [pageCount, setPageCount] = useState(1);
+  // const [totalRecord, setTotalRecord] = useState<number>(null);
+  // const [loadingData, setLoadingData] = useState(true);
+  // const {pageIndex = 0, ...query} = Router.query;
 
-  const fetchData = useCallback(
-    async ({pageIndex, pageSize, filters, sortBy}) => {
-      setLoadingData(true);
-      const filterObj = filters.reduce((ac, column) => {
-        if (column.value) {
-          if (column.id === 'emailVerified' && column.value !== '') {
-            ac[column.id] = column.value === 'true';
-          } else {
-            ac[column.id] = column.value;
-          }
-        }
-        return ac;
-      }, {});
-      const accounts = await accountService.findAccountsForAdmin({
-        pageIndex,
-        pageSize,
-        filters: filterObj,
-        orders: sortBy,
-      });
-      setData(accounts.data);
-      setPageCount(Math.ceil(accounts.count / pageSize));
-      setTotalRecord(accounts.count);
-      setLoadingData(false);
-      const queryString = qs.stringify({
-        ...filterObj,
-        pageIndex,
-      });
+  // const fetchData = useCallback(
+  //   async ({pageIndex, pageSize, filters, sortBy}) => {
+  //     setLoadingData(true);
+  //     const filterObj = filters.reduce((ac, column) => {
+  //       if (column.value) {
+  //         if (column.id === 'emailVerified' && column.value !== '') {
+  //           ac[column.id] = column.value === 'true';
+  //         } else {
+  //           ac[column.id] = column.value;
+  //         }
+  //       }
+  //       return ac;
+  //     }, {});
+  //     const accounts = await accountService.findAccountsForAdmin({
+  //       pageIndex,
+  //       pageSize,
+  //       filters: filterObj,
+  //       orders: sortBy,
+  //     });
+  //     setData(accounts.data);
+  //     setPageCount(Math.ceil(accounts.count / pageSize));
+  //     setTotalRecord(accounts.count);
+  //     setLoadingData(false);
+  //
+  //     // Persist search, sort, pagination criteria to browser URL.
+  //     const queryString = qs.stringify({
+  //       ...filterObj,
+  //       pageIndex,
+  //     });
+  //     if (queryString !== '') {
+  //       Router.push(`/admin/accounts?${queryString}`);
+  //     }
+  //   },
+  //   [],
+  // );
 
-      if (queryString !== '') {
-        Router.push(`/admin/accounts?${queryString}`);
-      }
-    },
-    [],
-  );
-
-  const debounceFetchData = useAsyncDebounce(fetchData, 500);
+  const fetchData = async ({pageIndex, filters, pageSize, orders}) => {
+    console.log('fetch data');
+    return accountService.findAccountsForAdmin({
+      pageIndex,
+      pageSize,
+      filters,
+      orders,
+    });
+  };
 
   console.log('render');
   return (
@@ -342,17 +324,21 @@ const AdminAccountsPage: FC<{}> = () => {
               </div>
             </div>
             <div className="card-body">
-              <Table
-                data={data}
-                defaultFilter={query}
-                fetchData={debounceFetchData}
-                loadingData={loadingData}
-                pageCount={pageCount}
-                initialState={{
-                  pageIndex: Number(pageIndex),
-                  pageSize: PAGE_SIZE,
-                }}
-                totalRecord={totalRecord}
+              {/*<Table*/}
+              {/*  data={data}*/}
+              {/*  defaultFilter={query}*/}
+              {/*  fetchData={debounceFetchData}*/}
+              {/*  loadingData={loadingData}*/}
+              {/*  pageCount={pageCount}*/}
+              {/*  initialState={{*/}
+              {/*    pageIndex: Number(pageIndex),*/}
+              {/*    pageSize: PAGE_SIZE,*/}
+              {/*  }}*/}
+              {/*  totalRecord={totalRecord}*/}
+              {/*/>*/}
+              <DataTable
+                tableColumns={tableColumns}
+                fetchData={fetchData}
               />
             </div>
           </div>

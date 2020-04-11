@@ -2,7 +2,6 @@
   table-layout: fixed;
 
   td {
-    white-space: nowrap;
-    overflow-x: scroll;
+    word-break: break-all;
   }
 }

@@ -15,15 +15,12 @@ export class AccountService {
     filters,
     orders,
   }): Promise<{data: Array<Account>; count: number}> {
-    const orderArray = await orders.map(value => {
-      return `${value.id} ${value.desc ? 'desc' : 'asc'}`;
-    });
     const [data, count] = await Promise.all([
       this.accountGateway.find({
         pageIndex,
         pageSize,
         filters,
-        orders: orderArray,
+        orders,
       }),
       this.accountGateway.count({where: filters}),
     ]);
