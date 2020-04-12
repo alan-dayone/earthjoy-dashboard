@@ -1,9 +1,11 @@
 import React, {FC} from 'react';
 import ReactPaginate from 'react-paginate';
+import classnames from 'classnames';
 
 interface Props {
   pageIndex: number;
   pageCount: number;
+  alignRight?: boolean;
   onPageChange: (page: number) => void;
 }
 
@@ -11,13 +13,16 @@ const PAGE_RANGE_DISPLAYED = 5;
 const MARGIN_PAGES_DISPLAYED = 2;
 
 export const Pagination: FC<Props> = ({
+  alignRight,
   pageIndex,
   pageCount,
   onPageChange,
 }: Props) => {
   return (
     <ReactPaginate
-      containerClassName="pagination justify-content-end"
+      containerClassName={classnames('pagination mb-0', {
+        'justify-content-end': alignRight,
+      })}
       pageClassName="page-item"
       pageLinkClassName="page-link u-cursor-pointer"
       nextClassName="page-item"

@@ -141,10 +141,7 @@ const AdminAccountsPage: FC<{}> = () => {
               </div>
             </div>
             <div className="card-body">
-              <DataTable
-                tableColumns={tableColumns}
-                findData={findData}
-              />
+              <DataTable tableColumns={tableColumns} findData={findData} />
             </div>
           </div>
         </div>

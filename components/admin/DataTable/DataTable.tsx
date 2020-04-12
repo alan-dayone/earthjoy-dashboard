@@ -37,10 +37,7 @@ const DefaultColumnFilter = ({
   );
 };
 
-export const DataTable: FC<Props> = ({
-  tableColumns,
-  findData,
-}: Props) => {
+export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
   if (isServer()) {
     return null;
   }
@@ -210,13 +207,13 @@ export const DataTable: FC<Props> = ({
       {data.length > 0 && (
         <div className="row">
           <div className="col-6">
-            Showing{' '}
-            <strong>{Math.min(pageIndex * pageSize + 1, total)}</strong> to{' '}
-            <strong>{Math.min((pageIndex + 1) * pageSize, total)}</strong> of{' '}
+            Showing <strong>{Math.min(pageIndex * pageSize + 1, total)}</strong>{' '}
+            to <strong>{Math.min((pageIndex + 1) * pageSize, total)}</strong> of{' '}
             <strong>{total}</strong> entries
           </div>
           <div className="col-6">
             <Pagination
+              alignRight
               pageCount={Math.ceil(total / pageSize)}
               pageIndex={pageIndex}
               onPageChange={gotoPage}
