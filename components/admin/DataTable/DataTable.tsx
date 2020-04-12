@@ -49,7 +49,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
   } = qs.parse(Router.query);
   const initialPageIndex = parseInt(initialPageIndexStr);
 
-  const isFirstRender = useRef(true);
+  const tableLoadedInitialData = useRef(false);
   const [loadingData, setLoadingData] = useState(true);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
@@ -83,7 +83,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
     usePagination,
   );
 
-  const handleChange = useAsyncDebounce(async () => {
+  const fetchData = useAsyncDebounce(async () => {
     setLoadingData(true);
 
     const filterObj = filters.reduce(
@@ -104,35 +104,40 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
     setData(data);
     setTotal(count);
 
-    const queryStr = qs.stringify({
-      pageIndex: pageIndex || undefined,
-      filters,
-      sortBy,
-    });
-    const basePath = Router.pathname;
-    const newUrl = queryStr === '' ? basePath : `${basePath}?${queryStr}`;
-    Router.push(newUrl);
+    if (tableLoadedInitialData.current) {
+      console.log(tableLoadedInitialData.current);
+      const queryStr = qs.stringify({
+        pageIndex: pageIndex || undefined,
+        filters,
+        sortBy,
+      });
+      const basePath = Router.pathname;
+      const newUrl = queryStr === '' ? basePath : `${basePath}?${queryStr}`;
+      Router.replace(newUrl);
+    } else {
+      tableLoadedInitialData.current = true;
+    }
 
     setLoadingData(false);
   }, DELAY_FETCHING_DATA);
 
-  const gotoFirstPage = useAsyncDebounce(() => {
-    gotoPage(0);
+  // Reset page index to 0 when user changes filters or sorting.
+  const handleFiltersAndSortByChange = useAsyncDebounce(() => {
+    if (pageIndex === 0) {
+      fetchData();
+    } else {
+      setLoadingData(true);
+      gotoPage(0);
+    }
   }, DELAY_FETCHING_DATA);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-    } else if (pageIndex === 0) {
-      handleChange();
-    } else {
-      gotoFirstPage();
-    }
-  }, [filters]);
+    fetchData();
+  }, [pageIndex]);
 
   useEffect(() => {
-    handleChange();
-  }, [pageIndex, sortBy]);
+    handleFiltersAndSortByChange();
+  }, [filters, sortBy]);
 
   return (
     <div>
