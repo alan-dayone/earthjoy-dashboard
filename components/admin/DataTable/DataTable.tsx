@@ -11,14 +11,13 @@ import {
 } from 'react-table';
 import Router from 'next/router';
 import qs from 'qs';
-import {PaginationContainer} from './Pagination';
+import {Pagination} from './Pagination';
 import {PAGE_SIZE} from '../../../view-models/admin/DataTable';
 import {isServer} from '../../../utils/environment';
 
 const DELAY_FETCHING_DATA = 500; // 500ms to avoid calling API while typing search.
 
 interface Props {
-  refineFilter?: Function;
   tableColumns: Column[];
   findData: Function;
 }
@@ -41,7 +40,6 @@ const DefaultColumnFilter = ({
 export const DataTable: FC<Props> = ({
   tableColumns,
   findData,
-  refineFilter,
 }: Props) => {
   if (isServer()) {
     return null;
@@ -73,7 +71,7 @@ export const DataTable: FC<Props> = ({
       initialState: {
         pageIndex: initialPageIndex,
         pageSize: PAGE_SIZE,
-        filters: refineFilter ? refineFilter(initialFilters) : initialFilters,
+        filters: initialFilters,
         sortBy: initialSortBy,
       },
       defaultColumn: {
@@ -106,7 +104,6 @@ export const DataTable: FC<Props> = ({
       orders: sortByArr,
     });
 
-    setLoadingData(false);
     setData(data);
     setTotal(count);
 
@@ -118,6 +115,8 @@ export const DataTable: FC<Props> = ({
     const basePath = Router.pathname;
     const newUrl = queryStr === '' ? basePath : `${basePath}?${queryStr}`;
     Router.push(newUrl);
+
+    setLoadingData(false);
   }, DELAY_FETCHING_DATA);
 
   const gotoFirstPage = useAsyncDebounce(() => {
@@ -209,12 +208,21 @@ export const DataTable: FC<Props> = ({
         </tbody>
       </table>
       {data.length > 0 && (
-        <PaginationContainer
-          pageSize={pageSize}
-          pageIndex={pageIndex}
-          totalRecord={total}
-          onPageChange={gotoPage}
-        />
+        <div className="row">
+          <div className="col-6">
+            Showing{' '}
+            <strong>{Math.min(pageIndex * pageSize + 1, total)}</strong> to{' '}
+            <strong>{Math.min((pageIndex + 1) * pageSize, total)}</strong> of{' '}
+            <strong>{total}</strong> entries
+          </div>
+          <div className="col-6">
+            <Pagination
+              pageCount={Math.ceil(total / pageSize)}
+              pageIndex={pageIndex}
+              onPageChange={gotoPage}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

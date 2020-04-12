@@ -142,12 +142,6 @@ const AdminAccountsPage: FC<{}> = () => {
             </div>
             <div className="card-body">
               <DataTable
-                // refineFilter={filters => filters.map(filter => {
-                //   if (filter.id === 'emailVerified') {
-                //     filter.value = filter.value === 'true';
-                //   }
-                //   return filter;
-                // })}
                 tableColumns={tableColumns}
                 findData={findData}
               />
