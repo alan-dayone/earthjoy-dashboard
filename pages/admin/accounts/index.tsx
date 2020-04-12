@@ -1,7 +1,7 @@
 /* tslint:disable:no-default-export */
 import React, {FC} from 'react';
 import Head from 'next/head';
-import {CellProps, Column, FilterProps} from 'react-table';
+import {Renderer, CellProps, Column, FilterProps} from 'react-table';
 import Link from 'next/link';
 import {adminOnly} from '../../../hocs';
 import {accountService} from '../../../services';
@@ -38,7 +38,7 @@ const tableColumns: Column[] = [
   {
     Header: 'Email verification',
     accessor: 'emailVerified',
-    Filter: (props: FilterProps<Account>) => {
+    Filter: function EmailVerificationFilter(props: FilterProps<Account>) {
       return (
         <select
           className="form-control form-control-sm"
@@ -53,18 +53,18 @@ const tableColumns: Column[] = [
           </option>
         </select>
       );
-    },
+    } as Renderer<FilterProps<Account>>,
     width: '10%',
     Cell: function EmailVerificationCell({
       cell: {value},
     }: CellProps<Account>): JSX.Element {
       return <AccountEmailVerificationLabel emailVerified={value} />;
-    } as FC<CellProps<Account>>,
+    } as Renderer<CellProps<Account>>,
   },
   {
     Header: 'Status',
     accessor: 'status',
-    Filter: (props: FilterProps<Account>) => {
+    Filter: function AccountStatusFilter(props: FilterProps<Account>) {
       const options = [AccountStatus.ACTIVE, AccountStatus.INACTIVE];
       return (
         <select
@@ -81,13 +81,13 @@ const tableColumns: Column[] = [
           ))}
         </select>
       );
-    },
+    } as Renderer<FilterProps<Account>>,
     width: '10%',
     Cell: function AccountStatusCell({
       cell: {value},
     }: CellProps<Account>): JSX.Element {
       return <AccountStatusLabel status={value} />;
-    } as FC<CellProps<Account>>,
+    } as Renderer<CellProps<Account>>,
   },
   {
     Header: 'Actions',
@@ -105,12 +105,17 @@ const tableColumns: Column[] = [
           </Link>
         </>
       );
-    } as FC<CellProps<Account>>,
+    } as Renderer<CellProps<Account>>,
   },
 ];
 
 const AdminAccountsPage: FC<{}> = () => {
-  const findData = async ({pageIndex, filters, pageSize, orders}): Promise<{data: Array<Account>, count: number}> => {
+  const findData = async ({
+    pageIndex,
+    filters,
+    pageSize,
+    orders,
+  }): Promise<{data: Array<Account>; count: number}> => {
     return accountService.findAccountsForAdmin({
       pageIndex,
       pageSize,

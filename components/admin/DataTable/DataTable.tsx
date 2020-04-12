@@ -1,10 +1,8 @@
-import React, {FC, useState, useEffect, useRef} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {
-  Renderer,
-  FilterProps,
-  CellProps,
   Column,
-  Filters,
+  FilterProps,
+  Renderer,
   useAsyncDebounce,
   useFilters,
   usePagination,
@@ -25,7 +23,9 @@ interface Props {
   findData: Function;
 }
 
-const DefaultColumnFilter = ({column: {filterValue, setFilter}}) => {
+const DefaultColumnFilter = ({
+  column: {filterValue, setFilter},
+}: FilterProps<object>): Renderer<FilterProps<object>> => {
   return (
     <input
       className="form-control form-control-sm"
