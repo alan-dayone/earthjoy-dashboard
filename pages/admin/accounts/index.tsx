@@ -1,7 +1,7 @@
 /* tslint:disable:no-default-export */
 import React, {FC} from 'react';
 import Head from 'next/head';
-import {CellProps, Column, FilterProps, Renderer} from 'react-table';
+import {CellProps, Column, Renderer} from 'react-table';
 import Link from 'next/link';
 import {adminOnly} from '../../../hocs';
 import {accountService} from '../../../services';
@@ -55,24 +55,18 @@ const tableColumns: Column[] = [
   {
     Header: 'Status',
     accessor: 'status',
-    Filter: function AccountStatusFilter(props: FilterProps<Account>) {
-      const options = [AccountStatus.ACTIVE, AccountStatus.INACTIVE];
-      return (
-        <select
-          className="form-control form-control-sm"
-          value={props.column.filterValue}
-          onChange={(e): void => {
-            props.column.setFilter(e.target.value || '');
-          }}>
-          <option value="">All</option>
-          {options.map((option, i) => (
-            <option key={i} value={option}>
-              {AccountStatusText[option]}
-            </option>
-          ))}
-        </select>
-      );
-    } as Renderer<FilterProps<Account>>,
+    Filter: createSelectFilter<Account>({
+      items: [
+        {
+          value: AccountStatus.ACTIVE,
+          label: AccountStatusText[AccountStatus.ACTIVE],
+        },
+        {
+          value: AccountStatus.INACTIVE,
+          label: AccountStatusText[AccountStatus.INACTIVE],
+        },
+      ],
+    }),
     width: '10%',
     Cell: function AccountStatusCell({
       cell: {value},
