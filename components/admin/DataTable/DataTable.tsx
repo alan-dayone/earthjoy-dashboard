@@ -1,23 +1,28 @@
-import React, {useState, useEffect} from 'react';
+import React, {FC, useState, useEffect, useRef} from 'react';
 import {
   Renderer,
   FilterProps,
   CellProps,
   Column,
+  Filters,
   useAsyncDebounce,
   useFilters,
   usePagination,
   useSortBy,
   useTable,
 } from 'react-table';
+import Router from 'next/router';
+import qs from 'qs';
 import {PaginationContainer} from './Pagination';
 import {PAGE_SIZE} from '../../../view-models/admin/DataTable';
+import {isServer} from '../../../utils/environment';
 
 const DELAY_FETCHING_DATA = 500; // 500ms to avoid calling API while typing search.
 
 interface Props {
+  refineFilter?: Function;
   tableColumns: Column[];
-  fetchData: Function;
+  findData: Function;
 }
 
 const DefaultColumnFilter = ({column: {filterValue, setFilter}}) => {
@@ -33,14 +38,28 @@ const DefaultColumnFilter = ({column: {filterValue, setFilter}}) => {
   );
 };
 
-export const DataTable = ({tableColumns, fetchData}: Props) => {
+export const DataTable: FC<Props> = ({
+  tableColumns,
+  findData,
+  refineFilter,
+}: Props) => {
+  if (isServer()) {
+    return null;
+  }
+
+  const {
+    filters: initialFilters = [],
+    pageIndex: initialPageIndexStr = 0,
+    sortBy: initialSortBy = [],
+  } = qs.parse(Router.query);
+  const initialPageIndex = parseInt(initialPageIndexStr);
+
+  const isFirstRender = useRef(true);
   const [loadingData, setLoadingData] = useState(true);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
 
   const {
-    getTableProps,
-    getTableBodyProps,
     headers,
     page,
     prepareRow,
@@ -52,9 +71,10 @@ export const DataTable = ({tableColumns, fetchData}: Props) => {
       data,
       manualFilters: true,
       initialState: {
-        pageIndex: 0,
+        pageIndex: initialPageIndex,
         pageSize: PAGE_SIZE,
-        filters: [],
+        filters: refineFilter ? refineFilter(initialFilters) : initialFilters,
+        sortBy: initialSortBy,
       },
       defaultColumn: {
         Filter: DefaultColumnFilter,
@@ -79,7 +99,7 @@ export const DataTable = ({tableColumns, fetchData}: Props) => {
       return `${value.id} ${value.desc ? 'desc' : 'asc'}`;
     });
 
-    const {data, count} = await fetchData({
+    const {data, count} = await findData({
       pageIndex,
       filters: filterObj,
       pageSize,
@@ -89,14 +109,37 @@ export const DataTable = ({tableColumns, fetchData}: Props) => {
     setLoadingData(false);
     setData(data);
     setTotal(count);
+
+    const queryStr = qs.stringify({
+      pageIndex: pageIndex || undefined,
+      filters,
+      sortBy,
+    });
+    const basePath = Router.pathname;
+    const newUrl = queryStr === '' ? basePath : `${basePath}?${queryStr}`;
+    Router.push(newUrl);
+  }, DELAY_FETCHING_DATA);
+
+  const gotoFirstPage = useAsyncDebounce(() => {
+    gotoPage(0);
   }, DELAY_FETCHING_DATA);
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else if (pageIndex === 0) {
+      handleChange();
+    } else {
+      gotoFirstPage();
+    }
+  }, [filters]);
+
+  useEffect(() => {
     handleChange();
-  }, [pageIndex, filters, sortBy]);
+  }, [pageIndex, sortBy]);
 
   return (
-    <>
+    <div>
       <table className="admin-table table table-responsive-sm">
         <thead>
           <tr>
@@ -111,15 +154,17 @@ export const DataTable = ({tableColumns, fetchData}: Props) => {
                   style={{width: header.width, ...headerStyle}}
                   {...otherHeaderProps}>
                   {header.render('Header')}
-                  <span className="float-right">
-                    {header.isSorted ? (
-                      header.isSortedDesc ? (
-                        <i className="cil-sort-descending" />
-                      ) : (
-                        <i className="cil-sort-ascending" />
-                      )
-                    ) : null}
-                  </span>
+                  {header.isSorted && (
+                    <span className="float-right">
+                      <i
+                        className={
+                          header.isSortedDesc
+                            ? 'cil-sort-descending'
+                            : 'cil-sort-ascending'
+                        }
+                      />
+                    </span>
+                  )}
                 </th>
               );
             })}
@@ -139,7 +184,7 @@ export const DataTable = ({tableColumns, fetchData}: Props) => {
                 <div className="spinner-grow" />
               </td>
             </tr>
-          ) : (
+          ) : page.length > 0 ? (
             page.map(row => {
               prepareRow(row);
               return (
@@ -154,15 +199,23 @@ export const DataTable = ({tableColumns, fetchData}: Props) => {
                 </tr>
               );
             })
+          ) : (
+            <tr>
+              <td colSpan={tableColumns.length} className="text-center">
+                <p className="text-center">No data</p>
+              </td>
+            </tr>
           )}
         </tbody>
       </table>
-      <PaginationContainer
-        pageSize={pageSize}
-        pageIndex={pageIndex}
-        totalRecord={total}
-        onPageChange={gotoPage}
-      />
-    </>
+      {data.length > 0 && (
+        <PaginationContainer
+          pageSize={pageSize}
+          pageIndex={pageIndex}
+          totalRecord={total}
+          onPageChange={gotoPage}
+        />
+      )}
+    </div>
   );
 };

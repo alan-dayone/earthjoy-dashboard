@@ -22,7 +22,8 @@ export const PaginationContainer: FC<Props> = ({
   return (
     <div className="row">
       <div className="col-6">
-        Showing <strong>{pageIndex * pageSize + 1}</strong> to{' '}
+        Showing{' '}
+        <strong>{Math.min(pageIndex * pageSize + 1, totalRecord)}</strong> to{' '}
         <strong>{Math.min((pageIndex + 1) * pageSize, totalRecord)}</strong> of{' '}
         <strong>{totalRecord}</strong> entries
       </div>

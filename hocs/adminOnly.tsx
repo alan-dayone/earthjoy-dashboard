@@ -145,14 +145,16 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
           id="sidebar">
           <div className="c-sidebar-brand flex-column" style={{height: '56px'}}>
             <img
-              className="h-100 c-sidebar-brand-full"
+              className="c-sidebar-brand-full"
               src="/static/img/admin_logo_bw_full.svg"
               alt="ADMIN PORTAL"
+              style={{height: 40}}
             />
             <img
-              className="h-100 c-sidebar-brand-minimized"
+              className="c-sidebar-brand-minimized"
               src="/static/img/admin_logo_bw_minimized.svg"
               alt="ADMIN"
+              style={{height: 40}}
             />
           </div>
           <ul

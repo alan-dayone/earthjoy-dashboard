@@ -1,19 +1,8 @@
 /* tslint:disable:no-default-export */
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC} from 'react';
 import Head from 'next/head';
-import {
-  FilterProps,
-  CellProps,
-  Column,
-  useAsyncDebounce,
-  useFilters,
-  usePagination,
-  useSortBy,
-  useTable,
-} from 'react-table';
+import {CellProps, Column, FilterProps} from 'react-table';
 import Link from 'next/link';
-import Router from 'next/router';
-import qs from 'qs';
 import {adminOnly} from '../../../hocs';
 import {accountService} from '../../../services';
 import {Account, AccountStatus} from '../../../models/Account';
@@ -23,9 +12,6 @@ import {
 } from '../../../view-models/Account';
 import {AccountEmailVerificationLabel} from '../../../components/admin/AccountEmailVerificationLabel';
 import {AccountStatusLabel} from '../../../components/admin/AccountStatusLabel';
-import {isServer} from '../../../utils/environment';
-import {PaginationContainer} from '../../../components/admin/DataTable/Pagination';
-import {PAGE_SIZE} from '../../../view-models/admin/DataTable';
 import {DataTable} from '../../../components/admin/DataTable/DataTable';
 
 const tableColumns: Column[] = [
@@ -123,181 +109,8 @@ const tableColumns: Column[] = [
   },
 ];
 
-interface TableProps<D> {
-  data: D[];
-  fetchData: (value: {}) => void;
-  loadingData: boolean;
-  defaultFilter: {};
-  pageCount: number;
-  initialState: {
-    pageIndex: number;
-    pageSize: number;
-  };
-  totalRecord: number | string;
-}
-
-const Table: FC<TableProps<Account>> = ({
-  data,
-  fetchData,
-  loadingData,
-  defaultFilter,
-  pageCount,
-  initialState = {pageIndex: 0, pageSize: PAGE_SIZE},
-  totalRecord,
-}: TableProps<Account>) => {
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headers,
-    page,
-    prepareRow,
-    gotoPage,
-    state: {pageIndex, filters, pageSize, sortBy},
-  } = useTable(
-    {
-      columns: tableColumns,
-      data,
-      manualFilters: true,
-      initialState: {
-        filters: Object.keys(defaultFilter).map(key => ({
-          id: key,
-          value: defaultFilter[key],
-        })),
-        ...initialState,
-      },
-      // defaultColumn: {
-      //   Filter: DefaultColumnFilter,
-      // },
-      manualPagination: true,
-      autoResetPage: true,
-      manualSortBy: true,
-      pageCount,
-    },
-    useFilters,
-    useSortBy,
-    usePagination,
-  );
-
-  useEffect(() => {
-    fetchData({pageIndex, pageSize, filters, sortBy});
-  }, [fetchData, pageIndex, pageSize, filters, sortBy]);
-
-  // TODO: {...header.getHeaderProps(header.getSortByToggleProps())} cause style of <th> to be overwritten.
-  return (
-    <>
-      <table className="table table-responsive-sm" {...getTableProps()}>
-        <thead>
-          <tr>
-            {headers.map((header, index) => (
-              <th
-                key={`th-${index}`}
-                style={{width: header.width}}
-                {...header.getHeaderProps(header.getSortByToggleProps())}>
-                {header.render('Header')}
-                <span className="float-right">
-                  {header.isSorted ? (
-                    header.isSortedDesc ? (
-                      <i className="cil-sort-descending"></i>
-                    ) : (
-                      <i className="cil-sort-ascending"></i>
-                    )
-                  ) : null}
-                </span>
-              </th>
-            ))}
-          </tr>
-          <tr>
-            {headers.map((header, index) => (
-              <th key={`th-filter-${index}`}>
-                {header.canFilter ? header.render('Filter') : null}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="mh-50" {...getTableBodyProps()}>
-          {loadingData ? (
-            <tr>
-              <td colSpan={tableColumns.length} className="text-center">
-                <div className="spinner-grow" />
-              </td>
-            </tr>
-          ) : (
-            page.map(row => {
-              prepareRow(row);
-              return (
-                <tr key={row.id} {...row.getRowProps()}>
-                  {row.cells.map((cell, i) => {
-                    return (
-                      <td key={`${row.id}-${i}`} {...cell.getCellProps()}>
-                        {cell.render('Cell')}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })
-          )}
-        </tbody>
-      </table>
-      <PaginationContainer
-        pageSize={pageSize}
-        pageIndex={pageIndex}
-        totalRecord={totalRecord as number}
-        onPageChange={gotoPage}
-      />
-    </>
-  );
-};
-
 const AdminAccountsPage: FC<{}> = () => {
-  if (isServer()) {
-    return null;
-  }
-
-  // const [data, setData] = useState<Account[]>([]);
-  // const [pageCount, setPageCount] = useState(1);
-  // const [totalRecord, setTotalRecord] = useState<number>(null);
-  // const [loadingData, setLoadingData] = useState(true);
-  // const {pageIndex = 0, ...query} = Router.query;
-
-  // const fetchData = useCallback(
-  //   async ({pageIndex, pageSize, filters, sortBy}) => {
-  //     setLoadingData(true);
-  //     const filterObj = filters.reduce((ac, column) => {
-  //       if (column.value) {
-  //         if (column.id === 'emailVerified' && column.value !== '') {
-  //           ac[column.id] = column.value === 'true';
-  //         } else {
-  //           ac[column.id] = column.value;
-  //         }
-  //       }
-  //       return ac;
-  //     }, {});
-  //     const accounts = await accountService.findAccountsForAdmin({
-  //       pageIndex,
-  //       pageSize,
-  //       filters: filterObj,
-  //       orders: sortBy,
-  //     });
-  //     setData(accounts.data);
-  //     setPageCount(Math.ceil(accounts.count / pageSize));
-  //     setTotalRecord(accounts.count);
-  //     setLoadingData(false);
-  //
-  //     // Persist search, sort, pagination criteria to browser URL.
-  //     const queryString = qs.stringify({
-  //       ...filterObj,
-  //       pageIndex,
-  //     });
-  //     if (queryString !== '') {
-  //       Router.push(`/admin/accounts?${queryString}`);
-  //     }
-  //   },
-  //   [],
-  // );
-
-  const fetchData = async ({pageIndex, filters, pageSize, orders}) => {
-    console.log('fetch data');
+  const findData = async ({pageIndex, filters, pageSize, orders}): Promise<{data: Array<Account>, count: number}> => {
     return accountService.findAccountsForAdmin({
       pageIndex,
       pageSize,
@@ -306,7 +119,6 @@ const AdminAccountsPage: FC<{}> = () => {
     });
   };
 
-  console.log('render');
   return (
     <div id="admin-accounts-page">
       <Head>
@@ -324,21 +136,15 @@ const AdminAccountsPage: FC<{}> = () => {
               </div>
             </div>
             <div className="card-body">
-              {/*<Table*/}
-              {/*  data={data}*/}
-              {/*  defaultFilter={query}*/}
-              {/*  fetchData={debounceFetchData}*/}
-              {/*  loadingData={loadingData}*/}
-              {/*  pageCount={pageCount}*/}
-              {/*  initialState={{*/}
-              {/*    pageIndex: Number(pageIndex),*/}
-              {/*    pageSize: PAGE_SIZE,*/}
-              {/*  }}*/}
-              {/*  totalRecord={totalRecord}*/}
-              {/*/>*/}
               <DataTable
+                // refineFilter={filters => filters.map(filter => {
+                //   if (filter.id === 'emailVerified') {
+                //     filter.value = filter.value === 'true';
+                //   }
+                //   return filter;
+                // })}
                 tableColumns={tableColumns}
-                fetchData={fetchData}
+                findData={findData}
               />
             </div>
           </div>
@@ -347,4 +153,5 @@ const AdminAccountsPage: FC<{}> = () => {
     </div>
   );
 };
+
 export default adminOnly(AdminAccountsPage);
