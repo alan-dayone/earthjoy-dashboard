@@ -121,7 +121,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
   }, DELAY_FETCHING_DATA);
 
   // Reset page index to 0 when user changes filters or sorting.
-  const handleFiltersAndSortByChange = useAsyncDebounce(() => {
+  const handleFiltersAndSortChange = useAsyncDebounce(() => {
     if (pageIndex === 0) {
       fetchData();
     } else {
@@ -135,7 +135,9 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
   }, [pageIndex]);
 
   useEffect(() => {
-    handleFiltersAndSortByChange();
+    if (tableLoadedInitialData.current) {
+      handleFiltersAndSortChange();
+    }
   }, [filters, sortBy]);
 
   return (
