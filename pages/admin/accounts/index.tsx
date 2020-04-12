@@ -1,7 +1,7 @@
 /* tslint:disable:no-default-export */
 import React, {FC} from 'react';
 import Head from 'next/head';
-import {Renderer, CellProps, Column, FilterProps} from 'react-table';
+import {CellProps, Column, FilterProps, Renderer} from 'react-table';
 import Link from 'next/link';
 import {adminOnly} from '../../../hocs';
 import {accountService} from '../../../services';
@@ -97,13 +97,11 @@ const tableColumns: Column[] = [
     width: '15%',
     Cell: function ActionCell({row}): JSX.Element {
       return (
-        <>
-          <Link
-            href="/admin/accounts/[userId]/edit"
-            as={`/admin/accounts/${row.values.id}/edit`}>
-            <a className="btn btn-sm btn-info">Edit</a>
-          </Link>
-        </>
+        <Link
+          href="/admin/accounts/[userId]/edit"
+          as={`/admin/accounts/${row.values.id}/edit`}>
+          <a className="btn btn-sm btn-info">Edit</a>
+        </Link>
       );
     } as Renderer<CellProps<Account>>,
   },
