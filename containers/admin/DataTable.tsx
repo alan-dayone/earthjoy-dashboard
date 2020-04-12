@@ -11,9 +11,9 @@ import {
 } from 'react-table';
 import Router from 'next/router';
 import qs from 'qs';
-import {Pagination} from './Pagination';
-import {PAGE_SIZE} from '../../../view-models/admin/DataTable';
-import {isServer} from '../../../utils/environment';
+import {Pagination} from '../../components/admin/Pagination';
+import {PAGE_SIZE} from '../../view-models/admin/DataTable';
+import {isServer} from '../../utils/environment';
 
 const DELAY_FETCHING_DATA = 500; // 500ms to avoid calling API while typing search.
 
@@ -105,7 +105,6 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
     setTotal(count);
 
     if (tableLoadedInitialData.current) {
-      console.log(tableLoadedInitialData.current);
       const queryStr = qs.stringify({
         pageIndex: pageIndex || undefined,
         filters,

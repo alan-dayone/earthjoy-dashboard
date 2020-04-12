@@ -12,7 +12,7 @@ import {
 } from '../../../view-models/Account';
 import {AccountEmailVerificationLabel} from '../../../components/admin/AccountEmailVerificationLabel';
 import {AccountStatusLabel} from '../../../components/admin/AccountStatusLabel';
-import {DataTable} from '../../../components/admin/DataTable/DataTable';
+import {DataTable} from '../../../containers/admin/DataTable';
 
 const tableColumns: Column[] = [
   {
