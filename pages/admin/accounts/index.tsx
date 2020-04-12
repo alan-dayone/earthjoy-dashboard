@@ -13,6 +13,7 @@ import {
 import {AccountEmailVerificationLabel} from '../../../components/admin/AccountEmailVerificationLabel';
 import {AccountStatusLabel} from '../../../components/admin/AccountStatusLabel';
 import {DataTable} from '../../../containers/admin/DataTable';
+import {createSelectFilter} from '../../../components/admin/DataTable/SelectFilter';
 
 const tableColumns: Column[] = [
   {
@@ -38,22 +39,12 @@ const tableColumns: Column[] = [
   {
     Header: 'Email verification',
     accessor: 'emailVerified',
-    Filter: function EmailVerificationFilter(props: FilterProps<Account>) {
-      return (
-        <select
-          className="form-control form-control-sm"
-          value={props.column.filterValue}
-          onChange={(e): void => {
-            props.column.setFilter(e.target.value || '');
-          }}>
-          <option value="">All</option>
-          <option value="true">{AccountEmailVerificationText.VERIFIED}</option>
-          <option value="false">
-            {AccountEmailVerificationText.NOT_VERIFIED}
-          </option>
-        </select>
-      );
-    } as Renderer<FilterProps<Account>>,
+    Filter: createSelectFilter<Account>({
+      items: [
+        {value: 'true', label: AccountEmailVerificationText.VERIFIED},
+        {value: 'false', label: AccountEmailVerificationText.NOT_VERIFIED},
+      ],
+    }),
     width: '10%',
     Cell: function EmailVerificationCell({
       cell: {value},

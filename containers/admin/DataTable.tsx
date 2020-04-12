@@ -14,6 +14,7 @@ import qs from 'qs';
 import {Pagination} from '../../components/admin/Pagination';
 import {PAGE_SIZE} from '../../view-models/admin/DataTable';
 import {isServer} from '../../utils/environment';
+import {InputFilter} from '../../components/admin/DataTable/InputFilter';
 
 const DELAY_FETCHING_DATA = 500; // 500ms to avoid calling API while typing search.
 
@@ -24,18 +25,9 @@ interface Props {
 
 const DefaultColumnFilter = ({
   column: {filterValue, setFilter},
-}: FilterProps<object>): Renderer<FilterProps<object>> => {
-  return (
-    <input
-      className="form-control form-control-sm"
-      value={filterValue || ''}
-      onChange={(e): void => {
-        setFilter(e.target.value || '');
-      }}
-      placeholder="Search..."
-    />
-  );
-};
+}: FilterProps<object>): Renderer<FilterProps<object>> => (
+  <InputFilter value={filterValue} onChange={setFilter} />
+);
 
 export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
   if (isServer()) {
