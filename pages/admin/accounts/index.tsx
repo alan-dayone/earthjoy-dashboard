@@ -107,45 +107,34 @@ const tableColumns: Column[] = [
   },
 ];
 
-const AdminAccountsPage: FC<{}> = () => {
-  const findData = async ({
-    pageIndex,
-    filters,
-    pageSize,
-    orders,
-  }): Promise<{data: Array<Account>; count: number}> => {
-    return accountService.findAccountsForAdmin({
-      pageIndex,
-      pageSize,
-      filters,
-      orders,
-    });
-  };
-
-  return (
-    <div id="admin-accounts-page">
-      <Head>
-        <title>Admin - Account management</title>
-      </Head>
-      <div className="row">
-        <div className="col-12">
-          <div className="card">
-            <div className="card-header">
-              <strong>Account management</strong>
-              <div className="card-header-actions">
-                <Link href="/admin/accounts/create">
-                  <a className="btn btn-sm btn-success">Create</a>
-                </Link>
-              </div>
+const AdminAccountsPage: FC<{}> = () => (
+  <div id="admin-accounts-page">
+    <Head>
+      <title>Admin - Account management</title>
+    </Head>
+    <div className="row">
+      <div className="col-12">
+        <div className="card">
+          <div className="card-header">
+            <strong>Account management</strong>
+            <div className="card-header-actions">
+              <Link href="/admin/accounts/create">
+                <a className="btn btn-sm btn-success">Create</a>
+              </Link>
             </div>
-            <div className="card-body">
-              <DataTable tableColumns={tableColumns} findData={findData} />
-            </div>
+          </div>
+          <div className="card-body">
+            <DataTable
+              tableColumns={tableColumns}
+              findData={accountService.findAccountsForAdmin.bind(
+                accountService,
+              )}
+            />
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 export default adminOnly(AdminAccountsPage);
