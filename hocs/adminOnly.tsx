@@ -79,6 +79,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
     }
 
     public render(): JSX.Element {
+      const {loginUser, dispatch, ...pageProps} = this.props;
       return (
         <div className="app-layout--admin c-app pace-done">
           {this.renderSidebar()}
@@ -87,7 +88,7 @@ export const adminOnly = (Content: NextComponentType): NextComponentType => {
             <div className="c-body">
               <main className="c-main">
                 <div className="container-fluid">
-                  <Content {...this.props} />
+                  <Content {...pageProps} />
                 </div>
               </main>
             </div>

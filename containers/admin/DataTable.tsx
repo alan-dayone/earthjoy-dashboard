@@ -210,7 +210,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
       </table>
       {data.length > 0 && (
         <div className="row">
-          <div className="col-6">
+          <div className="col-6 align-self-end">
             Showing <strong>{Math.min(pageIndex * pageSize + 1, total)}</strong>{' '}
             to <strong>{Math.min((pageIndex + 1) * pageSize, total)}</strong> of{' '}
             <strong>{total}</strong> entries
