@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Formik} from 'formik';
-import * as yup from 'yup';
 import classnames from 'classnames';
 import toastr from 'toastr';
 import {connect} from 'react-redux';
@@ -8,17 +7,7 @@ import Router from 'next/router';
 import {systemService} from '../../../services';
 import {AppDispatch} from '../../../redux/store';
 import {loginWithEmail} from '../../../redux/slices/loginUserSlice';
-
-// TODO: Password validation is not sufficient.
-const formSchema = yup.object().shape({
-  name: yup.string().required('Name is required'),
-  email: yup
-    .string()
-    .email('Email must be valid')
-    .required('Email is required'),
-  password: yup.string().required('Password is required'),
-  confirmPassword: yup.string().required('Confirm password is required'),
-});
+import {createFirstAdminFormSchema} from '../../../view-models/Account';
 
 interface PageProps {
   dispatch: AppDispatch;
@@ -41,7 +30,7 @@ class CreateFirstAdminForm extends Component<PageProps> {
             password: '',
             confirmPassword: '',
           }}
-          validationSchema={formSchema}
+          validationSchema={createFirstAdminFormSchema}
           onSubmit={async (values, {setSubmitting}): Promise<void> => {
             setSubmitting(true);
             try {

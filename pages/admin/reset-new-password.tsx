@@ -4,13 +4,12 @@ import Router from 'next/router';
 import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
-import * as Yup from 'yup';
 import {Formik, FormikActions} from 'formik';
 import {guestOnly} from '../../hocs';
 import {authService} from '../../services';
-import {constraint} from '../../models/Account';
+import {adminResetNewPasswordFormSchema} from '../../view-models/Account';
 
-interface ResetPasswordForm {
+interface ResetNewPasswordForm {
   newPassword: string;
   confirmPassword: string;
 }
@@ -36,24 +35,7 @@ class AdminResetNewPasswordPage extends Component {
                         confirmPassword: '',
                       }}
                       onSubmit={this._handleResetPassword}
-                      validationSchema={Yup.object().shape({
-                        newPassword: Yup.string()
-                          .required('Password is required')
-                          .min(
-                            constraint.password.MIN_LENGTH,
-                            `Must be ${constraint.password.MIN_LENGTH} - ${constraint.password.MAX_LENGTH} characters`,
-                          )
-                          .max(
-                            constraint.password.MAX_LENGTH,
-                            `Must be ${constraint.password.MIN_LENGTH} - ${constraint.password.MAX_LENGTH} characters`,
-                          ),
-                        confirmPassword: Yup.string()
-                          .oneOf(
-                            [Yup.ref('newPassword'), null],
-                            'Passwords must match',
-                          )
-                          .required('Confirm password is required'),
-                      })}>
+                      validationSchema={adminResetNewPasswordFormSchema}>
                       {({
                         values,
                         handleChange,
@@ -137,8 +119,8 @@ class AdminResetNewPasswordPage extends Component {
   }
 
   private _handleResetPassword = async (
-    values: ResetPasswordForm,
-    actions: FormikActions<ResetPasswordForm>,
+    values: ResetNewPasswordForm,
+    actions: FormikActions<ResetNewPasswordForm>,
   ): Promise<void> => {
     actions.setSubmitting(true);
     try {

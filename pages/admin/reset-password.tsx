@@ -3,11 +3,10 @@ import React from 'react';
 import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
-import * as Yup from 'yup';
 import {Formik, FormikActions, FormikProps} from 'formik';
 import {guestOnly} from '../../hocs';
 import {authService} from '../../services';
-import {constraint} from '../../models/Account';
+import {adminResetPasswordFormSchema} from '../../view-models/Account';
 
 interface ForgotPasswordForm {
   email: string;
@@ -39,15 +38,7 @@ class AdminResetPasswordPage extends React.Component<{}, State> {
                     <Formik
                       initialValues={{email: ''}}
                       onSubmit={this._handleForgotPassword}
-                      validationSchema={Yup.object().shape({
-                        email: Yup.string()
-                          .email('Please provide a valid email')
-                          .required('Please provide a valid email')
-                          .max(
-                            constraint.email.MAX_LENGTH,
-                            'Email is too long',
-                          ),
-                      })}>
+                      validationSchema={adminResetPasswordFormSchema}>
                       {(props: FormikProps<{email: string}>): JSX.Element => (
                         <form onSubmit={props.handleSubmit}>
                           <h1>Forgot password</h1>
