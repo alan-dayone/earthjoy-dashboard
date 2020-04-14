@@ -2,19 +2,14 @@
 import React, {FC} from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import {WithTranslationProps, UseTranslationResponse} from 'react-i18next';
 import {everyone} from '../hocs';
 
-const IndexPage: FC<WithTranslationProps> = (props: UseTranslationResponse) => {
-  const {t, i18n} = props;
+const IndexPage: FC = () => {
   return (
     <div className="container">
       <Head>
         <title>LoopNext</title>
       </Head>
-      <button onClick={async () => {
-        await i18n.changeLanguage('vn');
-      }}>{t('abc')}</button>
       <Link href="/admin/login">
         <a className="c-sidebar-nav-link">
           <i className="c-sidebar-nav-icon cil-speedometer" />

@@ -1,31 +1,28 @@
-import React, {useState, ReactNode} from 'react';
-import { withTranslation, withSSR } from 'react-i18next'
-import {NextComponentType} from 'next';
+import React, {ReactNode} from 'react';
+import {Resource} from 'i18next';
+import {initReactI18next, withSSR, withTranslation} from 'react-i18next';
 import i18next from 'i18next';
-import {initReactI18next} from 'react-i18next';
 import i18nextXhrBackend from 'i18next-xhr-backend';
 import i18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
-import Cookie from 'js-cookie';
-import {
-  getBooleanCookieFromRequest,
-  getCookieFromRequest
-} from "../utils/cookie";
-import {CustomNextPageContext} from "./types";
-import {logout, selectors} from "../redux/slices/loginUserSlice";
-import {isAdmin} from "../models/Account";
-import {RootState} from "../redux/slices";
-import {isServer} from "../utils/environment";
+import {getCookieFromRequest} from '../utils/cookie';
+import {CustomNextPageContext} from './types';
+import {isServer} from '../utils/environment';
 
 export interface InitialI18nextData {
-  initialI18nStore?: object;
+  initialI18nStore?: Resource;
   initialLanguage?: string;
+}
+
+interface WrapperProps {
+  pageProps: object;
+  initialI18nextData: InitialI18nextData;
 }
 
 export const getInitialI18nextData = (i18next): InitialI18nextData => {
   return {
     initialI18nStore: i18next.services.resourceStore.data,
-    initialLanguage: i18next.language
-  }
+    initialLanguage: i18next.language,
+  };
 };
 
 if (!isServer()) {
@@ -37,7 +34,7 @@ if (!isServer()) {
       .init({
         fallbackLng: 'en',
         backend: {
-          loadPath: '/static/locales/{{lng}}.json'
+          loadPath: '/static/locales/{{lng}}.json',
         },
         detection: {
           lookupCookie: 'lng',
@@ -49,7 +46,10 @@ if (!isServer()) {
 }
 
 export const withI18next = (Component): ReactNode => {
-  const ExtendedComponent = ({pageProps, initialI18nextData}) => {
+  const ExtendedComponent = ({
+    pageProps,
+    initialI18nextData,
+  }: WrapperProps): JSX.Element => {
     const ComposedComponent = withSSR()(withTranslation()(Component));
     return (
       <ComposedComponent
@@ -57,12 +57,12 @@ export const withI18next = (Component): ReactNode => {
         initialLanguage={initialI18nextData.initialLanguage}
         {...pageProps}
       />
-    )
+    );
   };
 
   ExtendedComponent.getInitialProps = async (
     ctx: CustomNextPageContext,
-  ): Promise<{pageProps: object, initialI18nextData: InitialI18nextData}> => {
+  ): Promise<WrapperProps> => {
     const {req} = ctx;
     const isServer = !!req;
 
@@ -84,7 +84,7 @@ export const withI18next = (Component): ReactNode => {
         ? await Component.getInitialProps(ctx)
         : {},
       initialI18nextData: isServer ? getInitialI18nextData(i18next) : {},
-    }
+    };
   };
 
   return ExtendedComponent;

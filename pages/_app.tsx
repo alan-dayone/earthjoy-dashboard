@@ -4,10 +4,8 @@ import {compose} from 'redux';
 import {Provider} from 'react-redux';
 import App, {AppContext} from 'next/app';
 import withRedux, {ReduxWrapperAppProps} from 'next-redux-wrapper';
-import {I18nextProvider, initReactI18next, withSSR} from 'react-i18next';
+import {I18nextProvider} from 'react-i18next';
 import i18next from 'i18next';
-import i18nextXhrBackend from 'i18next-xhr-backend';
-import Cookie from 'js-cookie';
 import {nprogress} from '../hocs';
 import {CustomNextPageContext} from '../hocs/types';
 import {makeStore} from '../redux/store';
@@ -16,18 +14,16 @@ import {authService} from '../services';
 import {getCookieFromRequest} from '../utils/cookie';
 import {getLoginUser} from '../redux/slices/loginUserSlice';
 import {ACCESS_TOKEN_COOKIE} from '../gateways/AuthGateway';
-import {isServer} from "../utils/environment";
-import {getInitialI18nextData, InitialI18nextData} from "../hocs/withI18next";
 import '../scss/index.scss';
 
 interface CustomNextAppContext extends AppContext {
   ctx: CustomNextPageContext;
 }
 
-class ComposedApp extends App<ReduxWrapperAppProps<RootState> & {initialI18nextData: InitialI18nextData}> {
+class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
   public static async getInitialProps(
     context: CustomNextAppContext,
-  ): Promise<{pageProps: object, initialI18nextData: InitialI18nextData}> {
+  ): Promise<{pageProps: object}> {
     const {Component, ctx} = context;
     const isServer = !!ctx.req;
 
@@ -39,26 +35,19 @@ class ComposedApp extends App<ReduxWrapperAppProps<RootState> & {initialI18nextD
       }
     }
 
-    const pageProps = Component.getInitialProps
-      ? await Component.getInitialProps(ctx)
-      : {};
     return {
-      pageProps,
-      initialI18nextData: isServer ? getInitialI18nextData(i18next) : {},
+      pageProps: Component.getInitialProps
+        ? await Component.getInitialProps(ctx)
+        : {},
     };
   }
 
   public render(): JSX.Element {
-    const {Component, pageProps, store, initialI18nextData} = this.props;
-    const WithI18nextComponent = withSSR()(Component);
+    const {Component, pageProps, store} = this.props;
     return (
       <Provider store={store}>
         <I18nextProvider i18n={i18next}>
-          <WithI18nextComponent
-            initialI18nStore={initialI18nextData.initialI18nStore}
-            initialLanguage={initialI18nextData.initialLanguage}
-            {...pageProps}
-          />
+          <Component {...pageProps} />
         </I18nextProvider>
       </Provider>
     );
