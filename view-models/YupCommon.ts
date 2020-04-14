@@ -61,6 +61,7 @@ export const YupSmtp = (
   port: Yup.StringSchema<string>;
   username: Yup.StringSchema<string>;
   senderName: Yup.StringSchema<string>;
+  senderEmail: Yup.StringSchema<string>;
 } => ({
   host: Yup.string()
     .required('SMTP host is required.')
@@ -82,5 +83,12 @@ export const YupSmtp = (
     .max(
       config.senderName.MAX_LENGTH,
       `Sender name length must be less than ${config.senderName.MAX_LENGTH} characters.`,
+    ),
+  senderEmail: Yup.string()
+    .required('Email is required.')
+    .email('Invalid Email.')
+    .max(
+      config.senderName.MAX_LENGTH,
+      `Sender email length must be less than ${config.senderEmail.MAX_LENGTH} characters.`,
     ),
 });
