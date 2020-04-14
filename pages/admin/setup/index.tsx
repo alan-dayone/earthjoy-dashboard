@@ -1,4 +1,3 @@
-/* tslint:disable:no-default-export */
 import React, {Component} from 'react';
 import Head from 'next/head';
 import {guestOnly} from '../../../hocs';

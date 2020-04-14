@@ -1,4 +1,3 @@
-/* tslint:disable:no-default-export */
 import React from 'react';
 import {compose} from 'redux';
 import {Provider} from 'react-redux';

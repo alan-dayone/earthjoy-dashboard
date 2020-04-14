@@ -1,4 +1,3 @@
-/* tslint:disable:no-default-export */
 import React from 'react';
 import Head from 'next/head';
 import {NextComponentType} from 'next';

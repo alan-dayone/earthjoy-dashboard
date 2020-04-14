@@ -1,4 +1,3 @@
-/* tslint:disable:no-default-export */
 import React, {FC} from 'react';
 import Head from 'next/head';
 import {Column, CellProps, Renderer} from 'react-table';
