@@ -7,7 +7,7 @@ import {isAdmin} from '../models/Account';
 import {CustomNextPageContext} from './types';
 
 export const guestOnly = (
-  Content: NextComponentType,
+  Content,
   options?: {useAdminLayout: boolean},
 ): NextComponentType => {
   return class GuestWrapper extends React.Component {

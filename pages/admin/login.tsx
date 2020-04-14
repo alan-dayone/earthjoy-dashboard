@@ -6,7 +6,7 @@ import toastr from 'toastr';
 import {connect} from 'react-redux';
 import {Formik, FormikActions} from 'formik';
 import {AxiosError} from 'axios';
-import {guestOnly} from '../../hocs';
+import {guestOnly, withI18next, WithI18nextProps} from '../../hocs';
 import {loginWithEmail} from '../../redux/slices/loginUserSlice';
 import {AppDispatch} from '../../redux/store';
 
@@ -19,8 +19,9 @@ interface PageProps {
   dispatch: AppDispatch;
 }
 
-class AdminLoginPage extends Component<PageProps> {
+class AdminLoginPage extends Component<PageProps & WithI18nextProps> {
   public render(): JSX.Element {
+    const {t, i18n} = this.props;
     return (
       <div
         id="admin-login-page"
@@ -83,7 +84,7 @@ class AdminLoginPage extends Component<PageProps> {
                                 {props.isSubmitting && (
                                   <div className="spinner-border spinner-border-sm mr-1" />
                                 )}
-                                Login
+                                {t('login')}
                               </button>
                             </div>
                             <div className="col-6 text-right">
@@ -96,6 +97,15 @@ class AdminLoginPage extends Component<PageProps> {
                               </Link>
                             </div>
                           </div>
+                          <button
+                            onClick={e => {
+                              e.preventDefault();
+                              i18n.changeLanguage(
+                                i18n.language === 'en' ? 'vn' : 'en',
+                              );
+                            }}>
+                            Switch language
+                          </button>
                         </form>
                       )}
                     </Formik>
@@ -138,4 +148,6 @@ class AdminLoginPage extends Component<PageProps> {
   };
 }
 
-export default guestOnly(connect()(AdminLoginPage), {useAdminLayout: true});
+export default withI18next(
+  guestOnly(connect()(AdminLoginPage), {useAdminLayout: true}),
+);

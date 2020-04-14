@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {Resource} from 'i18next';
+import {Resource, TFunction, i18n} from 'i18next';
 import {initReactI18next, withSSR, withTranslation} from 'react-i18next';
 import i18next from 'i18next';
 import i18nextXhrBackend from 'i18next-xhr-backend';
@@ -11,6 +11,12 @@ import {isServer} from '../utils/environment';
 export interface InitialI18nextData {
   initialI18nStore?: Resource;
   initialLanguage?: string;
+}
+
+export interface WithI18nextProps {
+  t: TFunction;
+  i18n: i18n;
+  ready: boolean;
 }
 
 interface WrapperProps {
