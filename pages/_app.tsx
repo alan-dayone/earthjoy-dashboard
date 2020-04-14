@@ -24,28 +24,6 @@ interface CustomNextAppContext extends AppContext {
   ctx: CustomNextPageContext;
 }
 
-if (!isServer()) {
-  if (!i18next.isInitialized) {
-    const language = Cookie.get('lng') || 'en';
-    i18next
-      .use(i18nextXhrBackend)
-      .use(initReactI18next)
-      .init({
-        lng: language,
-        fallbackLng: 'en',
-        resources: {
-          [language]: {
-            translation: require(`../public/static/locales/${language}.json`),
-          },
-        },
-        backend: {
-          loadPath: '/static/locales/{{lng}}.json'
-        },
-        partialBundledLanguages: true,
-      });
-  }
-}
-
 class ComposedApp extends App<ReduxWrapperAppProps<RootState> & {initialI18nextData: InitialI18nextData}> {
   public static async getInitialProps(
     context: CustomNextAppContext,
@@ -58,31 +36,6 @@ class ComposedApp extends App<ReduxWrapperAppProps<RootState> & {initialI18nextD
       if (jwt) {
         authService.setAccessToken(jwt);
         await ctx.store.dispatch(getLoginUser());
-      }
-
-      const language = getCookieFromRequest('lng', ctx.req) || 'en';
-      await i18next.use(initReactI18next).init({
-        lng: language,
-        fallbackLng: 'en',
-        resources: {
-          [language]: {
-            translation: require(`../public/static/locales/${language}.json`),
-          },
-        },
-      });
-    } else {
-      if (!i18next.isInitialized) {
-        const language = Cookie.get('lng') || 'en';
-        await i18next
-          .use(i18nextXhrBackend)
-          .use(initReactI18next)
-          .init({
-            lng: language,
-            fallbackLng: 'en',
-            backend: {
-              loadPath: '/static/locales/{{lng}}.json'
-            }
-          });
       }
     }
 
