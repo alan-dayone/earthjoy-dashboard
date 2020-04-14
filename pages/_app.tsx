@@ -2,9 +2,12 @@
 import React from 'react';
 import {compose} from 'redux';
 import {Provider} from 'react-redux';
-import App from 'next/app';
+import App, {AppContext} from 'next/app';
 import withRedux, {ReduxWrapperAppProps} from 'next-redux-wrapper';
-import {AppContext} from 'next/app';
+import {I18nextProvider, initReactI18next, withSSR} from 'react-i18next';
+import i18next from 'i18next';
+import i18nextXhrBackend from 'i18next-xhr-backend';
+import Cookie from 'js-cookie';
 import {nprogress} from '../hocs';
 import {CustomNextPageContext} from '../hocs/types';
 import {makeStore} from '../redux/store';
@@ -13,16 +16,40 @@ import {authService} from '../services';
 import {getCookieFromRequest} from '../utils/cookie';
 import {getLoginUser} from '../redux/slices/loginUserSlice';
 import {ACCESS_TOKEN_COOKIE} from '../gateways/AuthGateway';
+import {isServer} from "../utils/environment";
+import {getInitialI18nextData, InitialI18nextData} from "../hocs/withI18next";
 import '../scss/index.scss';
 
 interface CustomNextAppContext extends AppContext {
   ctx: CustomNextPageContext;
 }
 
-class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
+if (!isServer()) {
+  if (!i18next.isInitialized) {
+    const language = Cookie.get('lng') || 'en';
+    i18next
+      .use(i18nextXhrBackend)
+      .use(initReactI18next)
+      .init({
+        lng: language,
+        fallbackLng: 'en',
+        resources: {
+          [language]: {
+            translation: require(`../public/static/locales/${language}.json`),
+          },
+        },
+        backend: {
+          loadPath: '/static/locales/{{lng}}.json'
+        },
+        partialBundledLanguages: true,
+      });
+  }
+}
+
+class ComposedApp extends App<ReduxWrapperAppProps<RootState> & {initialI18nextData: InitialI18nextData}> {
   public static async getInitialProps(
     context: CustomNextAppContext,
-  ): Promise<{pageProps: object}> {
+  ): Promise<{pageProps: object, initialI18nextData: InitialI18nextData}> {
     const {Component, ctx} = context;
     const isServer = !!ctx.req;
 
@@ -32,19 +59,54 @@ class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
         authService.setAccessToken(jwt);
         await ctx.store.dispatch(getLoginUser());
       }
+
+      const language = getCookieFromRequest('lng', ctx.req) || 'en';
+      await i18next.use(initReactI18next).init({
+        lng: language,
+        fallbackLng: 'en',
+        resources: {
+          [language]: {
+            translation: require(`../public/static/locales/${language}.json`),
+          },
+        },
+      });
+    } else {
+      if (!i18next.isInitialized) {
+        const language = Cookie.get('lng') || 'en';
+        await i18next
+          .use(i18nextXhrBackend)
+          .use(initReactI18next)
+          .init({
+            lng: language,
+            fallbackLng: 'en',
+            backend: {
+              loadPath: '/static/locales/{{lng}}.json'
+            }
+          });
+      }
     }
 
     const pageProps = Component.getInitialProps
       ? await Component.getInitialProps(ctx)
       : {};
-    return {pageProps};
+    return {
+      pageProps,
+      initialI18nextData: isServer ? getInitialI18nextData(i18next) : {},
+    };
   }
 
   public render(): JSX.Element {
-    const {Component, pageProps, store} = this.props;
+    const {Component, pageProps, store, initialI18nextData} = this.props;
+    const WithI18nextComponent = withSSR()(Component);
     return (
       <Provider store={store}>
-        <Component {...pageProps} />
+        <I18nextProvider i18n={i18next}>
+          <WithI18nextComponent
+            initialI18nStore={initialI18nextData.initialI18nStore}
+            initialLanguage={initialI18nextData.initialLanguage}
+            {...pageProps}
+          />
+        </I18nextProvider>
       </Provider>
     );
   }

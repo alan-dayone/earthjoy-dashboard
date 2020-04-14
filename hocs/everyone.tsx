@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import Head from 'next/head';
 import {NextComponentType} from 'next';
 import {CustomNextPageContext} from './types';
+import {withI18next} from "./withI18next";
 
-export const everyone = (Content: NextComponentType): NextComponentType => {
-  return class Wrapper extends React.Component {
+export const everyone = (Content: NextComponentType): ReactNode => {
+  class Wrapper extends React.Component {
     public static async getInitialProps(
       ctx: CustomNextPageContext,
     ): Promise<object> {
@@ -53,5 +54,7 @@ export const everyone = (Content: NextComponentType): NextComponentType => {
         </footer>
       );
     };
-  };
+  }
+
+  return withI18next(Wrapper);
 };
