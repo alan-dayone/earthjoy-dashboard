@@ -1,7 +1,7 @@
 /* tslint:disable:no-default-export */
 import React, {FC} from 'react';
 import Head from 'next/head';
-import {CellProps, Column, Renderer} from 'react-table';
+import {Column, CellProps, Renderer} from 'react-table';
 import Link from 'next/link';
 import {adminOnly} from '../../../hocs';
 import {accountService} from '../../../services';
@@ -14,6 +14,7 @@ import {AccountEmailVerificationLabel} from '../../../components/admin/AccountEm
 import {AccountStatusLabel} from '../../../components/admin/AccountStatusLabel';
 import {DataTable} from '../../../containers/admin/DataTable';
 import {createSelectFilter} from '../../../components/admin/DataTable/SelectFilter';
+import {createCell} from '../../../components/admin/DataTable/cellUtils';
 
 const tableColumns: Column[] = [
   {
@@ -46,6 +47,7 @@ const tableColumns: Column[] = [
       ],
     }),
     width: '10%',
+    /**@description write a Cell's render function using react-table types*/
     Cell: function EmailVerificationCell({
       cell: {value},
     }: CellProps<Account>): JSX.Element {
@@ -68,11 +70,10 @@ const tableColumns: Column[] = [
       ],
     }),
     width: '10%',
-    Cell: function AccountStatusCell({
-      cell: {value},
-    }: CellProps<Account>): JSX.Element {
+    /**@description write a Cell's render function using custom cell utility*/
+    Cell: createCell<Account>(({cell: {value}}) => {
       return <AccountStatusLabel status={value} />;
-    } as Renderer<CellProps<Account>>,
+    }),
   },
   {
     Header: 'Actions',
@@ -80,7 +81,7 @@ const tableColumns: Column[] = [
     disableSortBy: true,
     disableFilters: true,
     width: '15%',
-    Cell: function ActionCell({row}): JSX.Element {
+    Cell: createCell<Account>(({row}) => {
       return (
         <Link
           href="/admin/accounts/[userId]/edit"
@@ -88,7 +89,7 @@ const tableColumns: Column[] = [
           <a className="btn btn-sm btn-info">Edit</a>
         </Link>
       );
-    } as Renderer<CellProps<Account>>,
+    }),
   },
 ];
 
