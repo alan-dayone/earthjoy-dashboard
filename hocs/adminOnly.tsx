@@ -1,4 +1,4 @@
-import React, {useState, ReactNode} from 'react';
+import React, {ReactNode, useState} from 'react';
 import Link from 'next/link';
 import {
   DropdownItem,
@@ -11,16 +11,18 @@ import Router from 'next/router';
 import classNames from 'classnames';
 import Cookies from 'js-cookie';
 import {connect} from 'react-redux';
+import {WithTranslation} from 'react-i18next';
 import {CustomNextPageContext} from './types';
 import {isAdmin, LoginUser} from '../models/Account';
 import {logout, selectors} from '../redux/slices/loginUserSlice';
 import {RootState} from '../redux/slices';
 import {AppDispatch} from '../redux/store';
 import {getBooleanCookieFromRequest} from '../utils/cookie';
+import {withI18next} from './withI18next';
 
 const SHOW_SIDEBAR_COOKIE = 'showSidebar';
 
-interface AdminWrapperProps {
+interface AdminWrapperProps extends WithTranslation {
   loginUser: LoginUser;
   dispatch: AppDispatch;
   showSidebar: boolean;
@@ -38,7 +40,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
     AdminWrapperServerProps,
     AdminWrapperProps
   > = (props: AdminWrapperProps): JSX.Element => {
-    const {loginUser, dispatch, pageProps} = props;
+    const {loginUser, dispatch, pageProps, t} = props;
     const [showSidebar, setShowSidebar] = useState(props.showSidebar);
 
     const toggleSideBar = (): void => {
@@ -84,7 +86,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
               <Link href="/admin">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-speedometer" />
-                  Dashboard
+                  {t('dashboard')}
                 </a>
               </Link>
             </li>
@@ -92,7 +94,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
               <Link href="/admin/accounts">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-speedometer" />
-                  Accounts
+                  {t('accounts')}
                 </a>
               </Link>
             </li>
@@ -101,19 +103,19 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
               <Link href="/admin/configurations/smtp-settings">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-settings" />
-                  SMTP settings
+                  {t('smtpSettings')}
                 </a>
               </Link>
               <Link href="/admin/configurations/email-address-verification">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-send" />
-                  Email address verification
+                  {t('emailAddressVerification')}
                 </a>
               </Link>
               <Link href="/admin/configurations/password-reset">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-send" />
-                  Password reset
+                  {t('passwordReset')}
                 </a>
               </Link>
             </li>
@@ -144,9 +146,9 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
                         {loginUser.email}
                       </DropdownToggle>
                       <DropdownMenu>
-                        <DropdownItem>Profile</DropdownItem>
+                        <DropdownItem>{t('profile')}</DropdownItem>
                         <DropdownItem onClick={handleLogout}>
-                          Logout
+                          {t('logout')}
                         </DropdownItem>
                       </DropdownMenu>
                     </UncontrolledDropdown>
@@ -207,5 +209,5 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
 
   return connect((state: RootState) => ({
     loginUser: selectors.selectLoginUser(state),
-  }))(AdminWrapper);
+  }))(withI18next(AdminWrapper));
 };

@@ -1,36 +1,12 @@
-import React, {ReactNode} from 'react';
-import {Resource} from 'i18next';
-import {
-  initReactI18next,
-  withSSR,
-  withTranslation,
-  WithTranslation,
-} from 'react-i18next';
-import i18next from 'i18next';
+import React from 'react';
+import {NextComponentType} from 'next';
+import i18next, {Resource} from 'i18next';
+import {initReactI18next, withSSR, withTranslation} from 'react-i18next';
 import i18nextXhrBackend from 'i18next-xhr-backend';
 import i18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import {getCookieFromRequest} from '../utils/cookie';
 import {CustomNextPageContext} from './types';
 import {isServer} from '../utils/environment';
-
-export interface InitialI18nextData {
-  initialI18nStore?: Resource;
-  initialLanguage?: string;
-}
-
-export type WithI18nextProps = WithTranslation;
-
-interface WrapperProps {
-  pageProps: object;
-  initialI18nextData: InitialI18nextData;
-}
-
-export const getInitialI18nextData = (i18next): InitialI18nextData => {
-  return {
-    initialI18nStore: i18next.services.resourceStore.data,
-    initialLanguage: i18next.language,
-  };
-};
 
 if (!isServer()) {
   if (!i18next.isInitialized) {
@@ -52,29 +28,36 @@ if (!isServer()) {
   }
 }
 
-export const withI18next = (Component): ReactNode => {
-  const ExtendedComponent = ({
-    pageProps,
-    initialI18nextData,
-  }: WrapperProps): JSX.Element => {
-    const ComposedComponent = withSSR()(withTranslation()(Component));
+interface WrapperProps {
+  initialI18nStore: Resource;
+  initialLanguage: string;
+  pageProps: object;
+}
+
+export const withI18next = (
+  Component,
+): NextComponentType<CustomNextPageContext, WrapperProps, WrapperProps> => {
+  const LoadI18next = (props: WrapperProps): JSX.Element => {
+    const WithSsrAndTransactionProps = withSSR()(withTranslation()(Component));
+    const {initialI18nStore, initialLanguage, pageProps, ...otherProps} = props;
     return (
-      <ComposedComponent
-        initialI18nStore={initialI18nextData.initialI18nStore}
-        initialLanguage={initialI18nextData.initialLanguage}
+      <WithSsrAndTransactionProps
+        initialI18nStore={initialI18nStore}
+        initialLanguage={initialLanguage}
         {...pageProps}
+        {...otherProps}
       />
     );
   };
 
-  ExtendedComponent.getInitialProps = async (
+  LoadI18next.getInitialProps = async (
     ctx: CustomNextPageContext,
   ): Promise<WrapperProps> => {
     const {req} = ctx;
     const isServer = !!req;
 
     if (isServer) {
-      const language = getCookieFromRequest('lng', ctx.req) || 'en';
+      const language = getCookieFromRequest('lng', req) || 'en';
       await i18next.use(initReactI18next).init({
         lng: language,
         fallbackLng: 'en',
@@ -90,9 +73,10 @@ export const withI18next = (Component): ReactNode => {
       pageProps: Component.getInitialProps
         ? await Component.getInitialProps(ctx)
         : {},
-      initialI18nextData: isServer ? getInitialI18nextData(i18next) : {},
+      initialLanguage: i18next.language,
+      initialI18nStore: i18next.services.resourceStore.data,
     };
   };
 
-  return ExtendedComponent;
+  return LoadI18next;
 };

@@ -4,8 +4,9 @@ import {NextComponentType, NextPageContext} from 'next';
 import loGet from 'lodash/get';
 import toastr from 'toastr';
 import classNames from 'classnames';
-import {adminOnly} from '../../../hocs';
 import {Formik, FormikProps, Field} from 'formik';
+import {useTranslation} from 'react-i18next';
+import {adminOnly} from '../../../hocs';
 import {Account, AccountStatus} from '../../../models/Account';
 import {
   AccountEmailVerificationText,
@@ -35,6 +36,8 @@ export function getServerErrorMessage(error): string {
 const EmailField = createInputGroup<Account, Account>();
 
 function AdminAccountCreationPage(): ReactElement {
+  const {t} = useTranslation();
+
   async function _handleSave(values: Account, actions): Promise<void> {
     try {
       actions.setSubmitting(true);
@@ -67,7 +70,7 @@ function AdminAccountCreationPage(): ReactElement {
           <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
-                <strong>Create account</strong>
+                <strong>{t('createAccount')}</strong>
               </div>
               <div className="card-body">
                 <div className="row">

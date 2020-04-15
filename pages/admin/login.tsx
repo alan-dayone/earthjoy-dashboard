@@ -6,7 +6,7 @@ import toastr from 'toastr';
 import {connect} from 'react-redux';
 import {Formik, FormikHelpers as FormikActions} from 'formik';
 import {AxiosError} from 'axios';
-import {guestOnly, withI18next, WithI18nextProps} from '../../hocs';
+import {guestOnly} from '../../hocs';
 import {loginWithEmail} from '../../redux/slices/loginUserSlice';
 import {AppDispatch} from '../../redux/store';
 
@@ -19,9 +19,8 @@ interface PageProps {
   dispatch: AppDispatch;
 }
 
-class AdminLoginPage extends Component<PageProps & WithI18nextProps> {
+class AdminLoginPage extends Component<PageProps> {
   public render(): JSX.Element {
-    const {t, i18n} = this.props;
     return (
       <div
         id="admin-login-page"
@@ -84,7 +83,6 @@ class AdminLoginPage extends Component<PageProps & WithI18nextProps> {
                                 {props.isSubmitting && (
                                   <div className="spinner-border spinner-border-sm mr-1" />
                                 )}
-                                {t('login')}
                               </button>
                             </div>
                             <div className="col-6 text-right">
@@ -97,15 +95,6 @@ class AdminLoginPage extends Component<PageProps & WithI18nextProps> {
                               </Link>
                             </div>
                           </div>
-                          <button
-                            onClick={(e): void => {
-                              e.preventDefault();
-                              i18n.changeLanguage(
-                                i18n.language === 'en' ? 'vn' : 'en',
-                              );
-                            }}>
-                            Switch language
-                          </button>
                         </form>
                       )}
                     </Formik>
@@ -148,6 +137,4 @@ class AdminLoginPage extends Component<PageProps & WithI18nextProps> {
   };
 }
 
-export default withI18next(
-  guestOnly(connect()(AdminLoginPage), {useAdminLayout: true}),
-);
+export default guestOnly(connect()(AdminLoginPage), {useAdminLayout: true});
