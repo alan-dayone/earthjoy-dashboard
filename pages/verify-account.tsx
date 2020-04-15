@@ -11,7 +11,7 @@ interface PageProps {
 
 const AccountVerificationPage: NextComponentType<
   CustomNextPageContext,
-  {},
+  PageProps,
   PageProps
 > = ({verified}: PageProps) => (
   <div className="container">
