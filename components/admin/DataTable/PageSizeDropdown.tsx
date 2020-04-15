@@ -13,6 +13,8 @@ interface Props {
   onSetPageSize?: (pageSize: number) => void;
   direction?: Direction;
   pageSizeText?: string;
+  menuClassName?: string;
+  itemClassName?: string;
 }
 
 export const PageSizeDropdown: FC<Props> = ({
@@ -21,6 +23,8 @@ export const PageSizeDropdown: FC<Props> = ({
   onSetPageSize,
   direction,
   pageSizeText,
+  menuClassName,
+  itemClassName,
 }: PropsWithChildren<Props>) => {
   const [pageSize, setPageSize] = useState(pageSizes[0] || 0);
   return (
@@ -28,10 +32,11 @@ export const PageSizeDropdown: FC<Props> = ({
       <DropdownToggle>
         {pageSize} {pageSizeText || 'rows'}
       </DropdownToggle>
-      <DropdownMenu>
+      <DropdownMenu className={menuClassName}>
         {pageSizes.map((v, i) => (
           <DropdownItem
             key={i}
+            className={itemClassName}
             onClick={(): void => {
               setPageSize(v);
               onSetPageSize(v);
