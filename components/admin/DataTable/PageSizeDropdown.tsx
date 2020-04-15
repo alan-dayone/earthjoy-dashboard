@@ -6,11 +6,13 @@ import {
   DropdownToggle,
 } from 'reactstrap';
 import {Direction} from 'reactstrap/lib/Dropdown';
+
 interface Props {
   pageSizes: number[];
   className?: string;
   onSetPageSize?: (pageSize: number) => void;
   direction?: Direction;
+  pageSizeText?: string;
 }
 
 export const PageSizeDropdown: FC<Props> = ({
@@ -18,11 +20,14 @@ export const PageSizeDropdown: FC<Props> = ({
   className,
   onSetPageSize,
   direction,
+  pageSizeText,
 }: PropsWithChildren<Props>) => {
   const [pageSize, setPageSize] = useState(pageSizes[0] || 0);
   return (
     <UncontrolledDropdown className={className} direction={direction}>
-      <DropdownToggle>{pageSize} rows</DropdownToggle>
+      <DropdownToggle>
+        {pageSize} {pageSizeText || 'rows'}
+      </DropdownToggle>
       <DropdownMenu>
         {pageSizes.map((v, i) => (
           <DropdownItem
@@ -31,7 +36,7 @@ export const PageSizeDropdown: FC<Props> = ({
               setPageSize(v);
               onSetPageSize(v);
             }}>
-            {v} rows
+            {v} {pageSizeText || 'rows'}
           </DropdownItem>
         ))}
       </DropdownMenu>
