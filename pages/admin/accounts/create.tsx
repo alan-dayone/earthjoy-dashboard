@@ -5,7 +5,7 @@ import loGet from 'lodash/get';
 import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../hocs';
-import {Formik, FormikProps} from 'formik';
+import {Formik, FormikProps, Field} from 'formik';
 import {Account, AccountStatus} from '../../../models/Account';
 import {
   AccountEmailVerificationText,
@@ -13,6 +13,7 @@ import {
   userFormValidationSchema,
 } from '../../../view-models/Account';
 import {accountService} from '../../../services';
+import {createInputGroup} from '../../../components/common/Formik';
 
 const initialValues: Account = {
   email: '',
@@ -30,6 +31,8 @@ export function getServerErrorMessage(error): string {
   }
   return 'Unknown error';
 }
+
+const EmailField = createInputGroup<Account, Account>();
 
 function AdminAccountCreationPage(): ReactElement {
   async function _handleSave(values: Account, actions): Promise<void> {
@@ -69,27 +72,7 @@ function AdminAccountCreationPage(): ReactElement {
               <div className="card-body">
                 <div className="row">
                   <div className="col-12">
-                    <div className="form-group">
-                      <label>Email</label>
-                      <div className="input-group">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text">
-                            <i className="cil-envelope-closed" />
-                          </span>
-                        </div>
-                        <input
-                          className={classNames('form-control', {
-                            'is-invalid': errors.email,
-                          })}
-                          name="email"
-                          onChange={handleChange}
-                          value={values.email}
-                        />
-                        {errors.email && (
-                          <div className="invalid-feedback">{errors.email}</div>
-                        )}
-                      </div>
-                    </div>
+                    <Field name="lastName" component={EmailField} />
                     <div className="form-group">
                       <label>Password</label>
                       <div className="input-group">

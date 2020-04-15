@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Head from 'next/head';
-import {Formik, FormikActions, FormikProps} from 'formik';
+import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../hocs';

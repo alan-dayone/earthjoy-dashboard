@@ -3,7 +3,7 @@ import Router from 'next/router';
 import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
-import {Formik, FormikActions} from 'formik';
+import {Formik, FormikHelpers as FormikActions} from 'formik';
 import {guestOnly} from '../../hocs';
 import {authService} from '../../services';
 import {adminResetNewPasswordFormSchema} from '../../view-models/Account';

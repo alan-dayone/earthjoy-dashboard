@@ -1,13 +1,12 @@
 import React from 'react';
 import Head from 'next/head';
 import {NextPageContext, NextPage} from 'next';
-import {Router} from 'next/router';
 import loGet from 'lodash/get';
 import loIsEqual from 'lodash/isEqual';
 import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../../hocs';
-import {Formik, FormikActions, FormikProps} from 'formik';
+import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import {AccountStatus, Account} from '../../../../models/Account';
 import {
   AccountEmailVerificationText,
@@ -38,12 +37,10 @@ class UserToastrWarning extends ToastrWarning {
 }
 
 interface Props {
-  router: Router;
   originalAccount: Account;
 }
 
 const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
-  router,
   originalAccount,
 }) => {
   const _handleSave = async (
@@ -54,13 +51,14 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
       actions.setSubmitting(true);
       if (loIsEqual(values, originalAccount))
         throw new UserToastrWarning(UserToastrWarning.NOTHING_CHANGE);
-      const userId = loGet(router, ['query', 'userId']) as string;
+      const userId = originalAccount.id;
       await accountService.updateAccount(userId, values);
       toastr.success('Success');
     } catch (e) {
       if (e instanceof UserToastrWarning) e.alert();
       else if (loGet(e, 'e.response.data.error', false))
         toastr.error(getServerErrorMessage(e));
+      else toastr.error('Some thing went wrong...');
     } finally {
       actions.setSubmitting(false);
     }
@@ -222,7 +220,6 @@ AdminAccountEditingPage.getInitialProps = async (
   const originalAccount = await accountService.findOneForAdmin(
     context.query['userId'] as string,
   );
-  console.log({originalAccount});
   return {
     originalAccount,
   };

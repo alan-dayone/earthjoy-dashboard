@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Head from 'next/head';
 import toastr from 'toastr';
 import {connect} from 'react-redux';
-import {Formik, FormikActions} from 'formik';
+import {Formik, FormikHelpers as FormikActions} from 'formik';
 import {AxiosError} from 'axios';
 import {guestOnly, withI18next, WithI18nextProps} from '../../hocs';
 import {loginWithEmail} from '../../redux/slices/loginUserSlice';

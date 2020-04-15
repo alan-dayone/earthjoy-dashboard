@@ -13,8 +13,7 @@ npm run dev
 ```
 
 ### TODO:
-- Create container folder to store page's components
-- Remove hardcode
-- Extract admin components
 - Add Jest unit testing
 - Multi-languages
+- Reactstrap colors and styles not customize yet
+- simplify formik code

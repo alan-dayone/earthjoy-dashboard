@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
-import {Formik, FormikActions, FormikProps} from 'formik';
+import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import {guestOnly} from '../../hocs';
 import {authService} from '../../services';
 import {adminResetPasswordFormSchema} from '../../view-models/Account';
