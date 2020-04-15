@@ -12,9 +12,10 @@ import {
 import Router from 'next/router';
 import qs from 'qs';
 import {Pagination} from '../../components/admin/Pagination';
-import {PAGE_SIZE} from '../../view-models/admin/DataTable';
+import {PAGE_SIZE, PAGE_SIZE_LIST} from '../../view-models/admin/DataTable';
 import {isServer} from '../../utils/environment';
 import {InputFilter} from '../../components/admin/DataTable/InputFilter';
+import {PageSizeDropdown} from '../../components/admin/DataTable/PageSizeDropdown';
 
 const DELAY_FETCHING_DATA = 500; // 500ms to avoid calling API while typing search.
 
@@ -52,6 +53,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
     prepareRow,
     gotoPage,
     state: {pageIndex, filters, pageSize, sortBy},
+    setPageSize,
   } = useTable(
     {
       columns: tableColumns,
@@ -124,7 +126,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
 
   useEffect(() => {
     fetchData();
-  }, [pageIndex]);
+  }, [pageIndex, pageSize]);
 
   useEffect(() => {
     if (tableLoadedInitialData.current) {
@@ -204,10 +206,18 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
       </table>
       {data.length > 0 && (
         <div className="row">
-          <div className="col-6 align-self-end">
-            Showing <strong>{Math.min(pageIndex * pageSize + 1, total)}</strong>{' '}
-            to <strong>{Math.min((pageIndex + 1) * pageSize, total)}</strong> of{' '}
-            <strong>{total}</strong> entries
+          <div className="col-6 d-flex align-self-end align-items-center">
+            <PageSizeDropdown
+              className="d-inline px-2"
+              pageSizes={PAGE_SIZE_LIST}
+              onSetPageSize={setPageSize}
+            />
+            <span>
+              Showing{' '}
+              <strong>{Math.min(pageIndex * pageSize + 1, total)}</strong> to{' '}
+              <strong>{Math.min((pageIndex + 1) * pageSize, total)}</strong> of{' '}
+              <strong>{total}</strong> entries
+            </span>
           </div>
           <div className="col-6">
             <Pagination

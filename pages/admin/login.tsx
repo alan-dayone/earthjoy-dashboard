@@ -98,7 +98,7 @@ class AdminLoginPage extends Component<PageProps & WithI18nextProps> {
                             </div>
                           </div>
                           <button
-                            onClick={e => {
+                            onClick={(e): void => {
                               e.preventDefault();
                               i18n.changeLanguage(
                                 i18n.language === 'en' ? 'vn' : 'en',
