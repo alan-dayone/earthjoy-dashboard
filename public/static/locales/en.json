@@ -1,4 +1,10 @@
 {
   "login": "Login",
-  "accounts": "Accounts"
+  "accounts": "Accounts",
+  "dashboard": "Dashboard",
+  "smtpSettings": "SMTP settings",
+  "emailAddressVerification": "Email address verification",
+  "passwordReset": "Password reset",
+  "profile": "Profile",
+  "logout": "Logout"
 }

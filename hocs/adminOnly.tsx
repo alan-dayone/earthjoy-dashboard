@@ -18,7 +18,7 @@ import {logout, selectors} from '../redux/slices/loginUserSlice';
 import {RootState} from '../redux/slices';
 import {AppDispatch} from '../redux/store';
 import {getBooleanCookieFromRequest} from '../utils/cookie';
-import {withI18next2} from './withI18next';
+import {withI18next} from './withI18next';
 
 const SHOW_SIDEBAR_COOKIE = 'showSidebar';
 
@@ -52,7 +52,6 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
     AdminWrapperProps
   > = (props: AdminWrapperProps): JSX.Element => {
     const {loginUser, dispatch, pageProps, t} = props;
-    // console.log(props);
     const [showSidebar, setShowSidebar] = useState(props.showSidebar);
 
     const toggleSideBar = (): void => {
@@ -98,7 +97,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
               <Link href="/admin">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-speedometer" />
-                  Dashboard
+                  {t('dashboard')}
                 </a>
               </Link>
             </li>
@@ -115,19 +114,19 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
               <Link href="/admin/configurations/smtp-settings">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-settings" />
-                  SMTP settings
+                  {t('smtpSettings')}
                 </a>
               </Link>
               <Link href="/admin/configurations/email-address-verification">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-send" />
-                  Email address verification
+                  {t('emailAddressVerification')}
                 </a>
               </Link>
               <Link href="/admin/configurations/password-reset">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-send" />
-                  Password reset
+                  {t('passwordReset')}
                 </a>
               </Link>
             </li>
@@ -158,9 +157,9 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
                         {loginUser.email}
                       </DropdownToggle>
                       <DropdownMenu>
-                        <DropdownItem>Profile</DropdownItem>
+                        <DropdownItem>{t('profile')}</DropdownItem>
                         <DropdownItem onClick={handleLogout}>
-                          Logout
+                          {t('logout')}
                         </DropdownItem>
                       </DropdownMenu>
                     </UncontrolledDropdown>
@@ -221,5 +220,5 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
 
   return connect((state: RootState) => ({
     loginUser: selectors.selectLoginUser(state),
-  }))(withI18next2(AdminWrapper));
+  }))(withI18next(AdminWrapper));
 };
