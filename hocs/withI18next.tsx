@@ -8,7 +8,7 @@ import {getCookieFromRequest} from '../utils/cookie';
 import {CustomNextPageContext} from './types';
 import {isServer} from '../utils/environment';
 
-if (!isServer()) {
+if (!isServer) {
   if (!i18next.isInitialized) {
     i18next
       .use(i18nextXhrBackend)

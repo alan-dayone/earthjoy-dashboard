@@ -31,7 +31,7 @@ const DefaultColumnFilter = ({
 );
 
 export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
-  if (isServer()) {
+  if (isServer) {
     return null;
   }
 
