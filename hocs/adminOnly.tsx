@@ -34,17 +34,6 @@ interface AdminWrapperServerProps {
   pageProps: object;
 }
 
-// const Component1: NextComponentType<
-//   CustomNextPageContext,
-//   {},
-//   {abc: string} & WithTranslation
-// > = (props: {abc: string} & WithTranslation): JSX.Element => (
-//   <div>{JSON.stringify(Object.keys(props))}</div>
-// );
-// Component1.getInitialProps = () => {
-//   return null;
-// };
-
 export const adminOnly = (Content: NextComponentType): ReactNode => {
   const AdminWrapper: NextComponentType<
     CustomNextPageContext,

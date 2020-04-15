@@ -6,5 +6,6 @@
   "emailAddressVerification": "Email address verification",
   "passwordReset": "Password reset",
   "profile": "Profile",
-  "logout": "Logout"
+  "logout": "Logout",
+  "createAccount": "Create account"
 }
