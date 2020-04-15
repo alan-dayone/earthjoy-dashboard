@@ -137,6 +137,4 @@ class AdminLoginPage extends Component<PageProps> {
   };
 }
 
-export default withI18next(
-  guestOnly(connect()(AdminLoginPage), {useAdminLayout: true}),
-);
+export default guestOnly(connect()(AdminLoginPage), {useAdminLayout: true});

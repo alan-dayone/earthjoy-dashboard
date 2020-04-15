@@ -18,7 +18,7 @@ import {logout, selectors} from '../redux/slices/loginUserSlice';
 import {RootState} from '../redux/slices';
 import {AppDispatch} from '../redux/store';
 import {getBooleanCookieFromRequest} from '../utils/cookie';
-import {withI18next} from './withI18next';
+import {withI18next2} from './withI18next';
 
 const SHOW_SIDEBAR_COOKIE = 'showSidebar';
 
@@ -221,5 +221,5 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
 
   return connect((state: RootState) => ({
     loginUser: selectors.selectLoginUser(state),
-  }))(withI18next()(AdminWrapper));
+  }))(withI18next2(AdminWrapper));
 };
