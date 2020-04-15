@@ -38,10 +38,11 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
   const {
     filters: initialFilters = [],
     pageIndex: initialPageIndexStr = 0,
+    pageSize: initialPageSizeStr = PAGE_SIZE,
     sortBy: initialSortBy = [],
   } = qs.parse(Router.query);
   const initialPageIndex = parseInt(initialPageIndexStr);
-
+  const initialPageSize = parseInt(initialPageSizeStr);
   const tableLoadedInitialData = useRef(false);
   const [loadingData, setLoadingData] = useState(true);
   const [data, setData] = useState([]);
@@ -61,7 +62,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
       manualFilters: true,
       initialState: {
         pageIndex: initialPageIndex,
-        pageSize: PAGE_SIZE,
+        pageSize: initialPageSize,
         filters: initialFilters,
         sortBy: initialSortBy,
       },
@@ -103,6 +104,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
         pageIndex: pageIndex || undefined,
         filters,
         sortBy,
+        pageSize,
       });
       const basePath = Router.pathname;
       const newUrl = queryStr === '' ? basePath : `${basePath}?${queryStr}`;
