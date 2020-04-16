@@ -35,10 +35,7 @@ export function getServerErrorMessage(error): string {
   return 'Unknown error';
 }
 
-const EmailField = createInputGroup<string, Account>();
-const PasswordField = createInputGroup<string, Account>();
-const FNField = createInputGroup<string, Account>();
-const LNField = createInputGroup<string, Account>();
+const TextField = createInputGroup<string, Account>();
 const CustomField = createFieldGroup<string, Account>();
 function AdminAccountCreationPage(): ReactElement {
   const {t} = useTranslation();
@@ -75,7 +72,7 @@ function AdminAccountCreationPage(): ReactElement {
                   <div className="col-12">
                     <Field name="email">
                       {(p: FieldProps<string>): JSX.Element => (
-                        <EmailField
+                        <TextField
                           {...p}
                           labelText="Email"
                           iconName="cil-envelope-closed"
@@ -84,7 +81,7 @@ function AdminAccountCreationPage(): ReactElement {
                     </Field>
                     <Field name="password">
                       {(p: FieldProps<string>): JSX.Element => (
-                        <PasswordField
+                        <TextField
                           {...p}
                           type="password"
                           labelText="Password"
@@ -94,7 +91,7 @@ function AdminAccountCreationPage(): ReactElement {
                     </Field>
                     <Field name="firstName">
                       {(p: FieldProps<string>): JSX.Element => (
-                        <FNField
+                        <TextField
                           {...p}
                           labelText="First name"
                           iconName="cil-user"
@@ -103,7 +100,7 @@ function AdminAccountCreationPage(): ReactElement {
                     </Field>
                     <Field name="lastName">
                       {(p: FieldProps<string>): JSX.Element => (
-                        <LNField
+                        <TextField
                           {...p}
                           labelText="Last name"
                           iconName="cil-user"
