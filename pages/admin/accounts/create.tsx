@@ -3,8 +3,7 @@ import Head from 'next/head';
 import {NextComponentType, NextPageContext} from 'next';
 import loGet from 'lodash/get';
 import toastr from 'toastr';
-import classNames from 'classnames';
-import {Formik, FormikProps, Field} from 'formik';
+import {Formik, FormikProps, Field, FieldProps} from 'formik';
 import {useTranslation} from 'react-i18next';
 import {adminOnly} from '../../../hocs';
 import {Account, AccountStatus} from '../../../models/Account';
@@ -14,7 +13,10 @@ import {
   userFormValidationSchema,
 } from '../../../view-models/Account';
 import {accountService} from '../../../services';
-import {createInputGroup} from '../../../components/common/Formik';
+import {
+  createInputGroup,
+  createFieldGroup,
+} from '../../../components/common/Formik';
 
 const initialValues: Account = {
   email: '',
@@ -33,8 +35,9 @@ export function getServerErrorMessage(error): string {
   return 'Unknown error';
 }
 
-const EmailField = createInputGroup<Account, Account>();
-
+const TextField = createInputGroup<Account, Account>();
+const PasswordField = createInputGroup<Account, Account>();
+const CustomField = createFieldGroup<Account, Account>();
 function AdminAccountCreationPage(): ReactElement {
   const {t} = useTranslation();
 
@@ -59,14 +62,7 @@ function AdminAccountCreationPage(): ReactElement {
         initialValues={initialValues}
         onSubmit={_handleSave}
         validationSchema={userFormValidationSchema}>
-        {({
-          errors,
-          handleChange,
-          handleSubmit,
-          values,
-          isSubmitting,
-          setFieldValue,
-        }: FormikProps<Account>): JSX.Element => (
+        {({handleSubmit, isSubmitting}: FormikProps<Account>): JSX.Element => (
           <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
@@ -75,111 +71,93 @@ function AdminAccountCreationPage(): ReactElement {
               <div className="card-body">
                 <div className="row">
                   <div className="col-12">
-                    <Field name="lastName" component={EmailField} />
-                    <div className="form-group">
-                      <label>Password</label>
-                      <div className="input-group">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text">
-                            <i className="cil-lock-locked" />
-                          </span>
-                        </div>
-                        <input
-                          className={classNames('form-control', {
-                            'is-invalid': errors.password,
-                          })}
-                          name="password"
+                    <Field name="email">
+                      {(p: FieldProps<Account>): JSX.Element => (
+                        <TextField
+                          {...p}
+                          labelText="Email"
+                          iconName="cil-envelope-closed"
+                        />
+                      )}
+                    </Field>
+                    <Field name="password">
+                      {(p: FieldProps<Account>): JSX.Element => (
+                        <PasswordField
+                          {...p}
                           type="password"
-                          onChange={handleChange}
-                          value={values.password}
+                          labelText="Password"
+                          iconName="cil-lock-locked"
                         />
-                        {errors.password && (
-                          <div className="invalid-feedback">
-                            {errors.password}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>First name</label>
-                      <div className="input-group">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text">
-                            <i className="cil-user" />
-                          </span>
-                        </div>
-                        <input
-                          name="firstName"
-                          className={classNames('form-control', {
-                            'is-invalid': errors.firstName,
-                          })}
-                          onChange={handleChange}
-                          value={values.firstName}
+                      )}
+                    </Field>
+                    <Field name="firstName">
+                      {(p: FieldProps<Account>): JSX.Element => (
+                        <TextField
+                          {...p}
+                          labelText="First name"
+                          iconName="cil-user"
                         />
-                        {errors.firstName && (
-                          <div className="invalid-feedback">
-                            {errors.firstName}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>Last name</label>
-                      <div className="input-group">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text">
-                            <i className="cil-user" />
-                          </span>
-                        </div>
-                        <input
-                          name="lastName"
-                          className={classNames('form-control', {
-                            'is-invalid': errors.lastName,
-                          })}
-                          onChange={handleChange}
-                          value={values.lastName}
+                      )}
+                    </Field>
+                    <Field name="lastName">
+                      {(p: FieldProps<Account>): JSX.Element => (
+                        <TextField
+                          {...p}
+                          labelText="Last name"
+                          iconName="cil-user"
                         />
-                        {errors.lastName && (
-                          <div className="invalid-feedback">
-                            {errors.lastName}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>Account status</label>
-                      <select
-                        name="status"
-                        className="form-control"
-                        value={values.status}
-                        onChange={handleChange}>
-                        <option value={AccountStatus.ACTIVE}>
-                          {AccountStatusText[AccountStatus.ACTIVE]}
-                        </option>
-                        <option value={AccountStatus.INACTIVE}>
-                          {AccountStatusText[AccountStatus.INACTIVE]}
-                        </option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label>Email verification</label>
-                      <select
-                        name="emailVerified"
-                        className="form-control"
-                        value={String(values.emailVerified)}
-                        onChange={(e): void => {
-                          if (e.target.value === 'true')
-                            setFieldValue('emailVerified', true);
-                          else setFieldValue('emailVerified', false);
-                        }}>
-                        <option value="true">
-                          {AccountEmailVerificationText.VERIFIED}
-                        </option>
-                        <option value="false">
-                          {AccountEmailVerificationText.NOT_VERIFIED}
-                        </option>
-                      </select>
-                    </div>
+                      )}
+                    </Field>
+                    <Field name="status">
+                      {(p: FieldProps<Account>): JSX.Element => (
+                        <CustomField
+                          {...p}
+                          labelText="Account status"
+                          iconName="cil-user">
+                          {({values, handleChange}): JSX.Element => (
+                            <select
+                              name="status"
+                              className="form-control"
+                              value={values.status}
+                              onChange={handleChange}>
+                              <option value={AccountStatus.ACTIVE}>
+                                {AccountStatusText[AccountStatus.ACTIVE]}
+                              </option>
+                              <option value={AccountStatus.INACTIVE}>
+                                {AccountStatusText[AccountStatus.INACTIVE]}
+                              </option>
+                            </select>
+                          )}
+                        </CustomField>
+                      )}
+                    </Field>
+                    <Field name="emailVerified">
+                      {(p: FieldProps<Account>): JSX.Element => (
+                        <CustomField
+                          {...p}
+                          labelText="Email verification"
+                          iconName="cil-user">
+                          {({values, setFieldValue}): JSX.Element => (
+                            <select
+                              name="emailVerified"
+                              className="form-control"
+                              value={String(values.emailVerified)}
+                              onChange={(e): void => {
+                                if (e.target.value === 'true')
+                                  setFieldValue('emailVerified', true);
+                                else setFieldValue('emailVerified', false);
+                              }}>
+                              <option value="true">
+                                {AccountEmailVerificationText.VERIFIED}
+                              </option>
+                              <option value="false">
+                                {AccountEmailVerificationText.NOT_VERIFIED}
+                              </option>
+                            </select>
+                          )}
+                        </CustomField>
+                      )}
+                    </Field>
                   </div>
                 </div>
               </div>
