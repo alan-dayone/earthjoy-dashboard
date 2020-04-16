@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, ReactNode} from 'react';
 import {FieldProps, FieldInputProps, FormikProps, Field} from 'formik';
 import classNames from 'classnames';
 
@@ -9,7 +9,7 @@ interface CommonProps<V, FormValues> {
   type?: string;
   children?: (
     props: Partial<FieldInputProps<V> & FormikProps<FormValues>>,
-  ) => React.ReactNode;
+  ) => React.ReactNode | ReactNode;
 }
 
 interface Props<V, FormValues>
@@ -136,7 +136,7 @@ export const createField = <V, FormValues>(): FC<CommonProps<
   V,
   FormValues
 >> => {
-  const component: FC<Props<V, FormValues>> = ({
+  const component: FC<CommonProps<V, FormValues>> = ({
     className,
     iconName,
     labelText,
@@ -164,6 +164,51 @@ export const createField = <V, FormValues>(): FC<CommonProps<
             </div>
           );
         }}
+      </Field>
+    );
+  };
+  return component;
+};
+
+export const createSelectField = <V, FormValues>(): FC<CommonProps<
+  V,
+  FormValues
+>> => {
+  const component: FC<Props<V, FormValues>> = ({
+    className,
+    iconName,
+    labelText,
+    children,
+  }: CommonProps<V, FormValues>) => {
+    return (
+      <Field>
+        {({
+          field: {name},
+          form: {errors, handleChange, values},
+        }: FieldProps<V, FormValues>): JSX.Element => (
+          <div className={classNames('form-group', className)}>
+            <label>{labelText}</label>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text">
+                  <i className={iconName} />
+                </span>
+              </div>
+              <select
+                className={classNames('form-control', {
+                  'is-invalid': errors[name],
+                })}
+                name={name}
+                onChange={handleChange}
+                value={values[name]}>
+                {children}
+              </select>
+              {errors[name] && (
+                <div className="invalid-feedback">{errors[name]}</div>
+              )}
+            </div>
+          </div>
+        )}
       </Field>
     );
   };
