@@ -3,7 +3,7 @@ import Head from 'next/head';
 import {NextComponentType, NextPageContext} from 'next';
 import loGet from 'lodash/get';
 import toastr from 'toastr';
-import {Formik, FormikProps, Field, FieldProps} from 'formik';
+import {Formik, FormikProps} from 'formik';
 import {useTranslation} from 'react-i18next';
 import {adminOnly} from '../../../hocs';
 import {Account, AccountStatus} from '../../../models/Account';
@@ -13,10 +13,7 @@ import {
   userFormValidationSchema,
 } from '../../../view-models/Account';
 import {accountService} from '../../../services';
-import {
-  createInputGroup,
-  createFieldGroup,
-} from '../../../components/common/Formik';
+import {createField, createTextField} from '../../../components/common/Formik';
 
 const initialValues: Account = {
   email: '',
@@ -35,8 +32,9 @@ export function getServerErrorMessage(error): string {
   return 'Unknown error';
 }
 
-const TextField = createInputGroup<string, Account>();
-const CustomField = createFieldGroup<string, Account>();
+const TextField = createTextField<string, Account>();
+const CustomField = createField<string, Account>();
+
 function AdminAccountCreationPage(): ReactElement {
   const {t} = useTranslation();
 
@@ -70,93 +68,55 @@ function AdminAccountCreationPage(): ReactElement {
               <div className="card-body">
                 <div className="row">
                   <div className="col-12">
-                    <Field name="email">
-                      {(p: FieldProps<string>): JSX.Element => (
-                        <TextField
-                          {...p}
-                          labelText="Email"
-                          iconName="cil-envelope-closed"
-                        />
+                    <TextField
+                      labelText="Email"
+                      iconName="cil-envelope-closed"
+                    />
+                    <TextField
+                      type="password"
+                      labelText="Password"
+                      iconName="cil-lock-locked"
+                    />
+                    <TextField labelText="First name" iconName="cil-user" />
+                    <TextField labelText="Last name" iconName="cil-user" />
+                    <CustomField labelText="Account status" iconName="cil-user">
+                      {({values, handleChange}): JSX.Element => (
+                        <select
+                          name="status"
+                          className="form-control"
+                          value={values.status}
+                          onChange={handleChange}>
+                          <option value={AccountStatus.ACTIVE}>
+                            {AccountStatusText[AccountStatus.ACTIVE]}
+                          </option>
+                          <option value={AccountStatus.INACTIVE}>
+                            {AccountStatusText[AccountStatus.INACTIVE]}
+                          </option>
+                        </select>
                       )}
-                    </Field>
-                    <Field name="password">
-                      {(p: FieldProps<string>): JSX.Element => (
-                        <TextField
-                          {...p}
-                          type="password"
-                          labelText="Password"
-                          iconName="cil-lock-locked"
-                        />
+                    </CustomField>
+                    <CustomField
+                      labelText="Email verification"
+                      iconName="cil-user">
+                      {({values, setFieldValue}): JSX.Element => (
+                        <select
+                          name="emailVerified"
+                          className="form-control"
+                          value={String(values.emailVerified)}
+                          onChange={(e): void => {
+                            if (e.target.value === 'true')
+                              setFieldValue('emailVerified', true);
+                            else setFieldValue('emailVerified', false);
+                          }}>
+                          <option value="true">
+                            {AccountEmailVerificationText.VERIFIED}
+                          </option>
+                          <option value="false">
+                            {AccountEmailVerificationText.NOT_VERIFIED}
+                          </option>
+                        </select>
                       )}
-                    </Field>
-                    <Field name="firstName">
-                      {(p: FieldProps<string>): JSX.Element => (
-                        <TextField
-                          {...p}
-                          labelText="First name"
-                          iconName="cil-user"
-                        />
-                      )}
-                    </Field>
-                    <Field name="lastName">
-                      {(p: FieldProps<string>): JSX.Element => (
-                        <TextField
-                          {...p}
-                          labelText="Last name"
-                          iconName="cil-user"
-                        />
-                      )}
-                    </Field>
-                    <Field name="status">
-                      {(p: FieldProps<string>): JSX.Element => (
-                        <CustomField
-                          {...p}
-                          labelText="Account status"
-                          iconName="cil-user">
-                          {({values, handleChange}): JSX.Element => (
-                            <select
-                              name="status"
-                              className="form-control"
-                              value={values.status}
-                              onChange={handleChange}>
-                              <option value={AccountStatus.ACTIVE}>
-                                {AccountStatusText[AccountStatus.ACTIVE]}
-                              </option>
-                              <option value={AccountStatus.INACTIVE}>
-                                {AccountStatusText[AccountStatus.INACTIVE]}
-                              </option>
-                            </select>
-                          )}
-                        </CustomField>
-                      )}
-                    </Field>
-                    <Field name="emailVerified">
-                      {(p: FieldProps<string>): JSX.Element => (
-                        <CustomField
-                          {...p}
-                          labelText="Email verification"
-                          iconName="cil-user">
-                          {({values, setFieldValue}): JSX.Element => (
-                            <select
-                              name="emailVerified"
-                              className="form-control"
-                              value={String(values.emailVerified)}
-                              onChange={(e): void => {
-                                if (e.target.value === 'true')
-                                  setFieldValue('emailVerified', true);
-                                else setFieldValue('emailVerified', false);
-                              }}>
-                              <option value="true">
-                                {AccountEmailVerificationText.VERIFIED}
-                              </option>
-                              <option value="false">
-                                {AccountEmailVerificationText.NOT_VERIFIED}
-                              </option>
-                            </select>
-                          )}
-                        </CustomField>
-                      )}
-                    </Field>
+                    </CustomField>
                   </div>
                 </div>
               </div>

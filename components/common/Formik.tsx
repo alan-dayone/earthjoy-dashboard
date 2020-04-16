@@ -1,7 +1,8 @@
 import React, {FC} from 'react';
-import {FieldProps, FieldInputProps, FormikProps} from 'formik';
+import {FieldProps, FieldInputProps, FormikProps, Field} from 'formik';
 import classNames from 'classnames';
-interface Props<V, FormValues> extends FieldProps<V, FormValues> {
+
+interface CommonProps<V, FormValues> {
   className?: string;
   iconName?: string;
   labelText?: string;
@@ -11,7 +12,14 @@ interface Props<V, FormValues> extends FieldProps<V, FormValues> {
   ) => React.ReactNode;
 }
 
-export const createInputGroup = <V, FormValues>(): FC<Props<V, FormValues>> => {
+interface Props<V, FormValues>
+  extends FieldProps<V, FormValues>,
+    CommonProps<V, FormValues> {}
+
+export const createTextInputGroup = <V, FormValues>(): FC<Props<
+  V,
+  FormValues
+>> => {
   const component: FC<Props<V, FormValues>> = ({
     field: {name, value},
     form: {handleChange, errors},
@@ -48,7 +56,7 @@ export const createInputGroup = <V, FormValues>(): FC<Props<V, FormValues>> => {
   return component;
 };
 
-export const createFieldGroup = <V, FormValues>(): FC<Props<V, FormValues>> => {
+export const createInputGroup = <V, FormValues>(): FC<Props<V, FormValues>> => {
   const component: FC<Props<V, FormValues>> = ({
     field,
     form,
@@ -74,6 +82,89 @@ export const createFieldGroup = <V, FormValues>(): FC<Props<V, FormValues>> => {
           )}
         </div>
       </div>
+    );
+  };
+  return component;
+};
+
+export const createTextField = <V, FormValues>(): FC<CommonProps<
+  V,
+  FormValues
+>> => {
+  const component: FC<Props<V, FormValues>> = ({
+    className,
+    iconName,
+    labelText,
+    type,
+  }: CommonProps<V, FormValues>) => {
+    return (
+      <Field>
+        {({
+          field: {name},
+          form: {errors, handleChange, values},
+        }: FieldProps<V, FormValues>): JSX.Element => (
+          <div className={classNames('form-group', className)}>
+            <label>{labelText}</label>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text">
+                  <i className={iconName} />
+                </span>
+              </div>
+              <input
+                type={type}
+                className={classNames('form-control', {
+                  'is-invalid': errors[name],
+                })}
+                name={name}
+                onChange={handleChange}
+                value={values[name]}
+              />
+              {errors[name] && (
+                <div className="invalid-feedback">{errors[name]}</div>
+              )}
+            </div>
+          </div>
+        )}
+      </Field>
+    );
+  };
+  return component;
+};
+
+export const createField = <V, FormValues>(): FC<CommonProps<
+  V,
+  FormValues
+>> => {
+  const component: FC<Props<V, FormValues>> = ({
+    className,
+    iconName,
+    labelText,
+    children,
+  }: CommonProps<V, FormValues>) => {
+    return (
+      <Field>
+        {({field, form}: FieldProps<V, FormValues>): JSX.Element => {
+          const {name} = field;
+          const {errors} = form;
+          return (
+            <div className={classNames('form-group', className)}>
+              <label>{labelText}</label>
+              <div className="input-group">
+                <div className="input-group-prepend">
+                  <span className="input-group-text">
+                    <i className={iconName} />
+                  </span>
+                </div>
+                {children({...field, ...form})}
+                {errors[name] && (
+                  <div className="invalid-feedback">{errors[name]}</div>
+                )}
+              </div>
+            </div>
+          );
+        }}
+      </Field>
     );
   };
   return component;
