@@ -35,9 +35,11 @@ export function getServerErrorMessage(error): string {
   return 'Unknown error';
 }
 
-const TextField = createInputGroup<Account, Account>();
-const PasswordField = createInputGroup<Account, Account>();
-const CustomField = createFieldGroup<Account, Account>();
+const EmailField = createInputGroup<string, Account>();
+const PasswordField = createInputGroup<string, Account>();
+const FNField = createInputGroup<string, Account>();
+const LNField = createInputGroup<string, Account>();
+const CustomField = createFieldGroup<string, Account>();
 function AdminAccountCreationPage(): ReactElement {
   const {t} = useTranslation();
 
@@ -72,8 +74,8 @@ function AdminAccountCreationPage(): ReactElement {
                 <div className="row">
                   <div className="col-12">
                     <Field name="email">
-                      {(p: FieldProps<Account>): JSX.Element => (
-                        <TextField
+                      {(p: FieldProps<string>): JSX.Element => (
+                        <EmailField
                           {...p}
                           labelText="Email"
                           iconName="cil-envelope-closed"
@@ -81,7 +83,7 @@ function AdminAccountCreationPage(): ReactElement {
                       )}
                     </Field>
                     <Field name="password">
-                      {(p: FieldProps<Account>): JSX.Element => (
+                      {(p: FieldProps<string>): JSX.Element => (
                         <PasswordField
                           {...p}
                           type="password"
@@ -91,8 +93,8 @@ function AdminAccountCreationPage(): ReactElement {
                       )}
                     </Field>
                     <Field name="firstName">
-                      {(p: FieldProps<Account>): JSX.Element => (
-                        <TextField
+                      {(p: FieldProps<string>): JSX.Element => (
+                        <FNField
                           {...p}
                           labelText="First name"
                           iconName="cil-user"
@@ -100,8 +102,8 @@ function AdminAccountCreationPage(): ReactElement {
                       )}
                     </Field>
                     <Field name="lastName">
-                      {(p: FieldProps<Account>): JSX.Element => (
-                        <TextField
+                      {(p: FieldProps<string>): JSX.Element => (
+                        <LNField
                           {...p}
                           labelText="Last name"
                           iconName="cil-user"
@@ -109,7 +111,7 @@ function AdminAccountCreationPage(): ReactElement {
                       )}
                     </Field>
                     <Field name="status">
-                      {(p: FieldProps<Account>): JSX.Element => (
+                      {(p: FieldProps<string>): JSX.Element => (
                         <CustomField
                           {...p}
                           labelText="Account status"
@@ -132,7 +134,7 @@ function AdminAccountCreationPage(): ReactElement {
                       )}
                     </Field>
                     <Field name="emailVerified">
-                      {(p: FieldProps<Account>): JSX.Element => (
+                      {(p: FieldProps<string>): JSX.Element => (
                         <CustomField
                           {...p}
                           labelText="Email verification"

@@ -34,7 +34,7 @@ export const createInputGroup = <V, FormValues>(): FC<Props<V, FormValues>> => {
             className={classNames('form-control', {
               'is-invalid': errors[name],
             })}
-            name="email"
+            name={name}
             onChange={handleChange}
             value={value[name]}
           />
