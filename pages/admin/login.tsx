@@ -23,6 +23,17 @@ interface PageProps {
 const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
   const {t} = useTranslation();
 
+  const getErrorMessage = (error: AxiosError): string => {
+    if (
+      error.response?.data?.error?.code === 'VALIDATION_FAILED' ||
+      error.response?.data?.error?.message === 'invalid_credentials_email'
+    ) {
+      return 'Incorrect email or password';
+    }
+
+    return error.message;
+  };
+
   const handleLogin = async (
     values: LoginForm,
     actions: FormikActions<LoginForm>,
@@ -38,17 +49,6 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
       actions.setSubmitting(false);
       toastr.error(getErrorMessage(e));
     }
-  };
-
-  const getErrorMessage = (error: AxiosError): string => {
-    if (
-      error.response?.data?.error?.code === 'VALIDATION_FAILED' ||
-      error.response?.data?.error?.message === 'invalid_credentials_email'
-    ) {
-      return 'Incorrect email or password';
-    }
-
-    return error.message;
   };
 
   return (
