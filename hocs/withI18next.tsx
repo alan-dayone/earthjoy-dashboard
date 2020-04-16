@@ -1,14 +1,13 @@
 import React from 'react';
-import {NextComponentType} from 'next';
+import {NextPage, NextPageContext} from 'next';
 import i18next, {Resource} from 'i18next';
-import {initReactI18next, withSSR, withTranslation} from 'react-i18next';
+import {initReactI18next, useSSR} from 'react-i18next';
 import i18nextXhrBackend from 'i18next-xhr-backend';
 import i18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import {getCookieFromRequest} from '../utils/cookie';
-import {CustomNextPageContext} from './types';
-import {isServer} from '../utils/environment';
+import {isBrowser} from '../utils/environment';
 
-if (!isServer) {
+if (isBrowser) {
   if (!i18next.isInitialized) {
     i18next
       .use(i18nextXhrBackend)
@@ -28,31 +27,28 @@ if (!isServer) {
   }
 }
 
-interface WrapperProps {
-  initialI18nStore: Resource;
-  initialLanguage: string;
-  pageProps: object;
-}
-
-export const withI18next = (
-  Component,
-): NextComponentType<CustomNextPageContext, WrapperProps, WrapperProps> => {
-  const LoadI18next = (props: WrapperProps): JSX.Element => {
-    const WithSsrAndTransactionProps = withSSR()(withTranslation()(Component));
+export const withI18next = <P, IP>(
+  Component: NextPage<P, IP>,
+): ((props: P) => JSX.Element) => {
+  const LoadI18next = (
+    props: {
+      initialI18nStore: Resource;
+      initialLanguage: string;
+      pageProps: IP;
+    } & P,
+  ): JSX.Element => {
     const {initialI18nStore, initialLanguage, pageProps, ...otherProps} = props;
-    return (
-      <WithSsrAndTransactionProps
-        initialI18nStore={initialI18nStore}
-        initialLanguage={initialLanguage}
-        {...pageProps}
-        {...otherProps}
-      />
-    );
+    useSSR(initialI18nStore, initialLanguage);
+    return <Component {...pageProps} {...((otherProps as unknown) as P)} />;
   };
 
   LoadI18next.getInitialProps = async (
-    ctx: CustomNextPageContext,
-  ): Promise<WrapperProps> => {
+    ctx: NextPageContext,
+  ): Promise<{
+    initialI18nStore: Resource;
+    initialLanguage: string;
+    pageProps: IP;
+  }> => {
     const {req} = ctx;
     const isServer = !!req;
 
@@ -72,7 +68,7 @@ export const withI18next = (
     return {
       pageProps: Component.getInitialProps
         ? await Component.getInitialProps(ctx)
-        : {},
+        : undefined,
       initialLanguage: i18next.language,
       initialI18nStore: i18next.services.resourceStore.data,
     };

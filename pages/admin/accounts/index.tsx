@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import Head from 'next/head';
 import {Column, CellProps, Renderer} from 'react-table';
 import Link from 'next/link';
-import {adminOnly} from '../../../hocs';
+import {adminOnly, withI18next} from '../../../hocs';
 import {accountService} from '../../../services';
 import {Account, AccountStatus} from '../../../models/Account';
 import {
@@ -109,6 +109,7 @@ const AdminAccountsPage: FC<{}> = () => (
             </div>
           </div>
           <div className="card-body">
+            <Comp />
             <DataTable
               tableColumns={tableColumns}
               findData={accountService.findAccountsForAdmin.bind(
@@ -121,5 +122,10 @@ const AdminAccountsPage: FC<{}> = () => (
     </div>
   </div>
 );
+
+const Comp = withI18next(props => {
+  console.log(props);
+  return null;
+});
 
 export default adminOnly(AdminAccountsPage);

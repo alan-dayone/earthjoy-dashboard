@@ -11,7 +11,7 @@ import Router from 'next/router';
 import classNames from 'classnames';
 import Cookies from 'js-cookie';
 import {connect} from 'react-redux';
-import {WithTranslation} from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import {CustomNextPageContext} from './types';
 import {isAdmin, LoginUser} from '../models/Account';
 import {logout, selectors} from '../redux/slices/loginUserSlice';
@@ -22,7 +22,7 @@ import {withI18next} from './withI18next';
 
 const SHOW_SIDEBAR_COOKIE = 'showSidebar';
 
-interface AdminWrapperProps extends WithTranslation {
+interface AdminWrapperProps {
   loginUser: LoginUser;
   dispatch: AppDispatch;
   showSidebar: boolean;
@@ -40,7 +40,8 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
     AdminWrapperServerProps,
     AdminWrapperProps
   > = (props: AdminWrapperProps): JSX.Element => {
-    const {loginUser, dispatch, pageProps, t} = props;
+    const {loginUser, dispatch, pageProps} = props;
+    const {t} = useTranslation();
     const [showSidebar, setShowSidebar] = useState(props.showSidebar);
 
     const toggleSideBar = (): void => {
