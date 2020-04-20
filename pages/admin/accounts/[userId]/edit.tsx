@@ -11,7 +11,7 @@ import {AccountStatus, Account} from '../../../../models/Account';
 import {
   AccountEmailVerificationText,
   AccountStatusText,
-  userUpdateInfomationFormValidationSchema,
+  userUpdateInformationFormValidationSchema,
 } from '../../../../view-models/Account';
 import {accountService} from '../../../../services';
 import {ToastrWarning} from '../../../../view-models/Toastr';
@@ -72,7 +72,7 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
       <Formik
         initialValues={originalAccount}
         onSubmit={_handleSave}
-        validationSchema={userUpdateInfomationFormValidationSchema}>
+        validationSchema={userUpdateInformationFormValidationSchema}>
         {({
           errors,
           handleChange,

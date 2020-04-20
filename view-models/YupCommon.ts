@@ -18,6 +18,32 @@ export const YupConfirmPassword = Yup.string().oneOf(
   'Passwords must match.',
 );
 
+export const inputSchema = (
+  name: string,
+  options?: {required?: boolean; min?: number; max?: number},
+): Yup.StringSchema => {
+  const schema = Yup.string();
+  if (options?.required || options?.min) {
+    schema.required(`${name} is required.`);
+  }
+
+  if (options?.min) {
+    schema.min(
+      options.min,
+      `${name} must contain at least ${options.min} characters.`,
+    );
+  }
+
+  if (options?.max) {
+    schema.min(
+      options.max,
+      `${name} must contain at most ${options.max} characters.`,
+    );
+  }
+
+  return schema;
+};
+
 export const YupFirstName = (max: number): Yup.StringSchema<string> =>
   Yup.string()
     .required('First name is required')

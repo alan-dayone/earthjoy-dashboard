@@ -45,8 +45,8 @@ export const constraint = {
     MAX_LENGTH: 256,
   },
   password: {
-    MIN_LENGTH: 6,
-    MAX_LENGTH: 50,
+    MIN_LENGTH: 1,
+    MAX_LENGTH: 256,
   },
   smtpPort: {
     MIN_LENGTH: 1,
