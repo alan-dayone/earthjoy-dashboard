@@ -2,7 +2,6 @@ import React from 'react';
 import Head from 'next/head';
 import {NextPageContext, NextPage} from 'next';
 import loGet from 'lodash/get';
-import loIsEqual from 'lodash/isEqual';
 import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../../hocs';
@@ -14,7 +13,6 @@ import {
   userUpdateInformationFormValidationSchema,
 } from '../../../../view-models/Account';
 import {accountService} from '../../../../services';
-import {ToastrWarning} from '../../../../view-models/Toastr';
 
 export function getServerErrorMessage(error): string {
   const errorEnum = loGet(error, 'response.data.error.message');
@@ -22,18 +20,6 @@ export function getServerErrorMessage(error): string {
     return 'Email already existed';
   }
   return 'Unknown error';
-}
-
-class UserToastrWarning extends ToastrWarning {
-  public getWarningMessage(): string {
-    if (this.code === 'NOTHING_CHANGE') {
-      return 'The new user information is the same';
-    }
-    return 'Warning';
-  }
-  public alert(): void {
-    toastr.warning(this.getWarningMessage());
-  }
 }
 
 interface Props {
@@ -49,14 +35,13 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
   ): Promise<void> => {
     try {
       actions.setSubmitting(true);
-      if (loIsEqual(values, originalAccount))
-        throw new UserToastrWarning(UserToastrWarning.NOTHING_CHANGE);
+
       const userId = originalAccount.id;
       await accountService.updateAccount(userId, values);
+
       toastr.success('Success');
     } catch (e) {
-      if (e instanceof UserToastrWarning) e.alert();
-      else if (loGet(e, 'e.response.data.error', false))
+      if (loGet(e, 'e.response.data.error', false))
         toastr.error(getServerErrorMessage(e));
       else toastr.error('Some thing went wrong...');
     } finally {

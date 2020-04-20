@@ -16,8 +16,6 @@ import {isServer} from '../../utils/environment';
 import {InputFilter} from '../../components/admin/DataTable/InputFilter';
 import {useDebounceLoad} from '../../components/admin/DataTable/hooks';
 
-const DELAY_FETCHING_DATA = 500; // 500ms to avoid calling API.
-const DELAY_FETCHING_DATA_SEARCH = 1000; // 500ms to avoid calling API while typing search.
 interface Props {
   tableColumns: Column[];
   findData: Function;
@@ -28,6 +26,9 @@ const DefaultColumnFilter = ({
 }: FilterProps<object>): Renderer<FilterProps<object>> => (
   <InputFilter value={filterValue} onChange={setFilter} />
 );
+
+const DELAY_FETCHING_DATA = 500; // 500ms to avoid calling API.
+const DELAY_FETCHING_DATA_SEARCH = 1000; // 500ms to avoid calling API while typing search.
 
 export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
   if (isServer) {
@@ -117,6 +118,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
     defaultWait: DELAY_FETCHING_DATA,
   });
 
+  // TODO: Not really need this as one debounce is enough.
   // Reset page index to 0 when user changes filters or sorting.
   const handleFiltersAndSortChange = useDebounceLoad({
     defaultFn: () => {
