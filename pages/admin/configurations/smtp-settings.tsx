@@ -8,7 +8,7 @@ import {
   MailSmtpSettings,
   ConfigurationKey,
 } from '../../../models/Configuration';
-import {MailSmtpSettingsValidationSchema} from '../../../view-models/SmtpConfig';
+import {smtpSettingsValidationSchema} from '../../../view-models/Configuration';
 import {FormGroup} from '../../../components/admin/FormGroup';
 
 class AdminSmtpSettingsPage extends Component<{
@@ -48,7 +48,7 @@ class AdminSmtpSettingsPage extends Component<{
             <Formik
               initialValues={initialValues}
               onSubmit={this._handleSave}
-              validationSchema={MailSmtpSettingsValidationSchema}>
+              validationSchema={smtpSettingsValidationSchema}>
               {({
                 values,
                 isSubmitting,

@@ -4,7 +4,7 @@ import {
   AccountStatus,
   constraint as AccountConstraint,
 } from '../models/Account';
-import {inputSchema, YupConfirmPassword, YupPassword} from './YupCommon';
+import {emailSchema, inputSchema} from './YupCommon';
 
 export const AccountStatusText = {
   [AccountStatus.ACTIVE]: 'Active',
@@ -17,7 +17,7 @@ export enum AccountEmailVerificationText {
 }
 
 const validationSchema = {
-  email: inputSchema('Email', {required: true}).email('Must be valid email.'),
+  email: emailSchema,
   lastName: inputSchema('Last name', {
     required: true,
     max: AccountConstraint.firstName.MAX_LENGTH,
@@ -41,7 +41,10 @@ export const userFormValidationSchema = Yup.object().shape({
   email: validationSchema.email,
   lastName: validationSchema.lastName,
   password: validationSchema.password,
-  confirmPassword: YupConfirmPassword,
+  confirmPassword: inputSchema('Confirm password', {required: true}).oneOf(
+    [Yup.ref('password'), null],
+    'Passwords must match.',
+  ),
 });
 
 export const userUpdateInformationFormValidationSchema = Yup.object().shape(
@@ -58,9 +61,9 @@ export const adminResetPasswordFormSchema = Yup.object().shape({
 });
 
 export const adminResetNewPasswordFormSchema = Yup.object().shape({
-  newPassword: YupPassword(
-    AccountConstraint.password.MIN_LENGTH,
-    AccountConstraint.password.MAX_LENGTH,
+  newPassword: validationSchema.password,
+  confirmPassword: inputSchema('Confirm password', {required: true}).oneOf(
+    [Yup.ref('newPassword'), null],
+    'Passwords must match.',
   ),
-  confirmPassword: YupConfirmPassword,
 });

@@ -7,7 +7,7 @@ import {
   VerifyAccountSettings,
   ConfigurationKey,
 } from '../../../models/Configuration';
-import {MailSmtpSettingsValidationSchema} from '../../../view-models/EmailVerification';
+import {emailVerificationValidationSchema} from '../../../view-models/Configuration';
 import {FormGroup} from '../../../components/admin/FormGroup';
 import {systemService} from '../../../services';
 import {VerifyAccountSetting} from '../../../gateways/SystemGateway';
@@ -30,7 +30,7 @@ const AdminEmailAddressVerificationPage: FC = () => {
   }, []);
 
   return (
-    <div id="admin-smtp-settings-page">
+    <div id="admin-email-address-verification-page">
       <Head>
         <title>Admin - Configuration: Email address verification</title>
       </Head>
@@ -56,7 +56,7 @@ const AdminEmailAddressVerificationPage: FC = () => {
                 actions.setSubmitting(false);
               }
             }}
-            validationSchema={MailSmtpSettingsValidationSchema}>
+            validationSchema={emailVerificationValidationSchema}>
             {({
               handleSubmit,
               isSubmitting,

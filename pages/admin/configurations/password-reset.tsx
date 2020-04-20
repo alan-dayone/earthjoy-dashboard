@@ -8,7 +8,7 @@ import {
   ResetPasswordSettings,
   ConfigurationKey,
 } from '../../../models/Configuration';
-import {MailSmtpSettingsValidationSchema} from '../../../view-models/EmailVerification';
+import {passwordResetValidationSchema} from '../../../view-models/Configuration';
 import {systemService} from '../../../services';
 
 class AdminPasswordResetPage extends Component {
@@ -30,7 +30,7 @@ class AdminPasswordResetPage extends Component {
             <Formik
               initialValues={initialValues}
               onSubmit={this._handleSave}
-              validationSchema={MailSmtpSettingsValidationSchema}>
+              validationSchema={passwordResetValidationSchema}>
               {({
                 errors,
                 handleChange,

@@ -35,7 +35,6 @@ export class AccountService {
   }
 
   public async updateAccount(id: string, account: Account): Promise<Account> {
-    console.log({id});
     return this.accountGateway.update(id, account);
   }
 

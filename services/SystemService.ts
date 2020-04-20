@@ -40,8 +40,6 @@ export class SystemService {
     configurationKey: ConfigurationKey,
     newConfig: T,
   ): Promise<void> {
-    console.log(typeof newConfig);
-
     await this.systemGateway.updateSystemConfiguration(
       configurationKey,
       newConfig,
