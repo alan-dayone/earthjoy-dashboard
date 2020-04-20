@@ -4,7 +4,10 @@ import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import toastr from 'toastr';
 import classNames from 'classnames';
 import {adminOnly} from '../../../hocs';
-import {ResetPasswordSettings} from '../../../models/Configuration';
+import {
+  ResetPasswordSettings,
+  ConfigurationKey,
+} from '../../../models/Configuration';
 import {MailSmtpSettingsValidationSchema} from '../../../view-models/EmailVerification';
 import {systemService} from '../../../services';
 
@@ -155,7 +158,10 @@ class AdminPasswordResetPage extends Component {
   ): Promise<void> => {
     try {
       actions.setSubmitting(true);
-      await systemService.saveResetPasswordSettings(values);
+      await systemService.saveConfiguration<ResetPasswordSettings>(
+        ConfigurationKey.RESET_PASSWORD_SETTINGS,
+        values,
+      );
       toastr.success('Saved');
       actions.setSubmitting(false);
     } catch (e) {

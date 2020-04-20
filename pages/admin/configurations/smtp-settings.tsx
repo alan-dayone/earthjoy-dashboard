@@ -4,7 +4,10 @@ import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import toastr from 'toastr';
 import {adminOnly} from '../../../hocs';
 import {systemService} from '../../../services';
-import {MailSmtpSettings} from '../../../models/Configuration';
+import {
+  MailSmtpSettings,
+  ConfigurationKey,
+} from '../../../models/Configuration';
 import {MailSmtpSettingsValidationSchema} from '../../../view-models/SmtpConfig';
 import {FormGroup} from '../../../components/admin/FormGroup';
 
@@ -16,7 +19,9 @@ class AdminSmtpSettingsPage extends Component<{
   };
 
   public static async getInitialProps(): Promise<{}> {
-    const initialSmtpSettings = await systemService.getSmtpSettings();
+    const initialSmtpSettings = await systemService.getConfiguration<
+      MailSmtpSettings
+    >(ConfigurationKey.MAIL_SMTP_SETTINGS);
     return {
       initialSmtpSettings,
     };
@@ -158,7 +163,10 @@ class AdminSmtpSettingsPage extends Component<{
   ): Promise<void> => {
     try {
       actions.setSubmitting(true);
-      await systemService.saveSmtpSettings(values);
+      await systemService.saveConfiguration<MailSmtpSettings>(
+        ConfigurationKey.MAIL_SMTP_SETTINGS,
+        values,
+      );
       actions.setSubmitting(false);
       toastr.success('Saved');
     } catch (e) {

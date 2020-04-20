@@ -3,10 +3,14 @@ import Head from 'next/head';
 import {Formik, FormikProps, FormikHelpers} from 'formik';
 import toastr from 'toastr';
 import {adminOnly} from '../../../hocs';
-import {VerifyAccountSettings} from '../../../models/Configuration';
+import {
+  VerifyAccountSettings,
+  ConfigurationKey,
+} from '../../../models/Configuration';
 import {MailSmtpSettingsValidationSchema} from '../../../view-models/EmailVerification';
 import {FormGroup} from '../../../components/admin/FormGroup';
 import {systemService} from '../../../services';
+import {VerifyAccountSetting} from '../../../gateways/SystemGateway';
 
 const AdminEmailAddressVerificationPage: FC = () => {
   const [initialValues, setInitialValues] = useState({
@@ -18,7 +22,9 @@ const AdminEmailAddressVerificationPage: FC = () => {
 
   useEffect(() => {
     (async (): Promise<void> => {
-      const emailVerificationSettings = await systemService.getEmailVerificationSettings();
+      const emailVerificationSettings = await systemService.getConfiguration<
+        VerifyAccountSetting
+      >(ConfigurationKey.VERIFY_ACCOUNT_SETTINGS);
       setInitialValues(emailVerificationSettings);
     })();
   }, []);
@@ -39,7 +45,10 @@ const AdminEmailAddressVerificationPage: FC = () => {
             ): Promise<void> => {
               try {
                 actions.setSubmitting(true);
-                await systemService.saveAccountVerificationSettings(values);
+                await systemService.saveConfiguration<VerifyAccountSettings>(
+                  ConfigurationKey.VERIFY_ACCOUNT_SETTINGS,
+                  values,
+                );
                 toastr.success('Saved');
                 actions.setSubmitting(false);
               } catch (e) {

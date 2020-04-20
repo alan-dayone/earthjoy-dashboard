@@ -17,3 +17,5 @@ npm run dev
 - Multi-languages
 - Reactstrap colors and styles not customize yet
 - simplify formik code
+- Profile page
+- Refactor to FC

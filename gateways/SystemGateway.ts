@@ -5,7 +5,7 @@ export interface SystemStatusData {
   status: string;
 }
 
-export interface MailSmtpSettings {
+export type MailSmtpSettings = {
   password: string;
   smtpHost: string;
   username: string;

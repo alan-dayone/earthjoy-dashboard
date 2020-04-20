@@ -1,11 +1,6 @@
-import {SystemGateway, VerifyAccountSetting} from '../gateways/SystemGateway';
-import {
-  ConfigurationKey,
-  MailSmtpSettings,
-  ResetPasswordSettings,
-  VerifyAccountSettings,
-} from '../models/Configuration';
+import {SystemGateway, ConfigurationData} from '../gateways/SystemGateway';
 import {ServiceContext} from './index';
+import {ConfigurationKey} from '../models/Configuration';
 
 export class SystemService {
   private systemGateway: SystemGateway;
@@ -34,42 +29,22 @@ export class SystemService {
     return this.systemGateway.isValidSmtpSettings(values);
   }
 
-  public async saveSmtpSettings(smtpSettings: MailSmtpSettings): Promise<void> {
-    await this.systemGateway.updateSystemConfiguration(
-      ConfigurationKey.MAIL_SMTP_SETTINGS,
-      smtpSettings,
-    );
+  public async getConfiguration<T extends ConfigurationData>(
+    configurationKey: ConfigurationKey,
+  ): Promise<T | null> {
+    const config = await this.systemGateway.getConfiguration(configurationKey);
+    return (config?.data as T) || null;
   }
 
-  public async saveAccountVerificationSettings(
-    verifyAccountSettings: VerifyAccountSettings,
+  public async saveConfiguration<T extends ConfigurationData>(
+    configurationKey: ConfigurationKey,
+    newConfig: T,
   ): Promise<void> {
+    console.log(typeof newConfig);
+
     await this.systemGateway.updateSystemConfiguration(
-      ConfigurationKey.VERIFY_ACCOUNT_SETTINGS,
-      verifyAccountSettings,
+      configurationKey,
+      newConfig,
     );
-  }
-
-  public async saveResetPasswordSettings(
-    resetPasswordSettings: ResetPasswordSettings,
-  ): Promise<void> {
-    await this.systemGateway.updateSystemConfiguration(
-      ConfigurationKey.RESET_PASSWORD_SETTINGS,
-      resetPasswordSettings,
-    );
-  }
-
-  public async getSmtpSettings(): Promise<MailSmtpSettings | null> {
-    const smtpConfig = await this.systemGateway.getConfiguration(
-      ConfigurationKey.MAIL_SMTP_SETTINGS,
-    );
-    return (smtpConfig?.data as MailSmtpSettings) || null;
-  }
-
-  public async getEmailVerificationSettings(): Promise<VerifyAccountSetting | null> {
-    const config = await this.systemGateway.getConfiguration(
-      ConfigurationKey.VERIFY_ACCOUNT_SETTINGS,
-    );
-    return (config?.data as VerifyAccountSetting) || null;
   }
 }
