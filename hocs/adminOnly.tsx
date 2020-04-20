@@ -66,20 +66,22 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
             'c-sidebar-show': showSidebar,
           })}
           id="sidebar">
-          <div className="c-sidebar-brand flex-column" style={{height: '56px'}}>
-            <img
-              className="c-sidebar-brand-full"
-              src="/static/img/admin_logo_bw_full.svg"
-              alt="ADMIN PORTAL"
-              style={{height: 40}}
-            />
-            <img
-              className="c-sidebar-brand-minimized"
-              src="/static/img/admin_logo_bw_minimized.svg"
-              alt="ADMIN"
-              style={{height: 40}}
-            />
-          </div>
+          <Link href="/admin">
+            <a className="c-sidebar-brand flex-column" style={{height: '56px'}}>
+              <img
+                className="c-sidebar-brand-full"
+                src="/static/img/admin_logo_bw_full.svg"
+                alt="ADMIN PORTAL"
+                style={{height: 40}}
+              />
+              <img
+                className="c-sidebar-brand-minimized"
+                src="/static/img/admin_logo_bw_minimized.svg"
+                alt="ADMIN"
+                style={{height: 40}}
+              />
+            </a>
+          </Link>
           <ul
             className="c-sidebar-nav ps ps--active-y"
             data-dropdown-accordion="true">
