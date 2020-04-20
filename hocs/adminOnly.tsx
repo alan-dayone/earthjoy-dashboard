@@ -41,7 +41,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
     AdminWrapperProps
   > = (props: AdminWrapperProps): JSX.Element => {
     const {loginUser, dispatch, pageProps} = props;
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
     const [showSidebar, setShowSidebar] = useState(props.showSidebar);
 
     const toggleSideBar = (): void => {
@@ -148,7 +148,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
                         className="u-cursor-pointer">
                         {loginUser.email}
                       </DropdownToggle>
-                      <DropdownMenu>
+                      <DropdownMenu right>
                         <DropdownItem>{t('profile')}</DropdownItem>
                         <DropdownItem onClick={handleLogout}>
                           {t('logout')}
