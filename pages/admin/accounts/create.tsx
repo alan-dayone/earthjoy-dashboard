@@ -13,7 +13,10 @@ import {
   userFormValidationSchema,
 } from '../../../view-models/Account';
 import {accountService} from '../../../services';
-import {createField, createTextField} from '../../../components/common/Formik';
+import {
+  createTextField,
+  createSelectField,
+} from '../../../components/common/Formik';
 
 const initialValues: Account = {
   email: '',
@@ -33,7 +36,8 @@ export function getServerErrorMessage(error): string {
 }
 
 const TextField = createTextField<string, Account>();
-const CustomField = createField<string, Account>();
+const SelectField = createSelectField<string, Account>();
+const SelectBooleanField = createSelectField<boolean, Account>();
 
 function AdminAccountCreationPage(): ReactElement {
   const {t} = useTranslation();
@@ -69,54 +73,45 @@ function AdminAccountCreationPage(): ReactElement {
                 <div className="row">
                   <div className="col-12">
                     <TextField
+                      name="email"
                       labelText="Email"
                       iconName="cil-envelope-closed"
                     />
                     <TextField
+                      name="password"
                       type="password"
                       labelText="Password"
                       iconName="cil-lock-locked"
                     />
-                    <TextField labelText="First name" iconName="cil-user" />
-                    <TextField labelText="Last name" iconName="cil-user" />
-                    <CustomField labelText="Account status" iconName="cil-user">
-                      {({values, handleChange}): JSX.Element => (
-                        <select
-                          name="status"
-                          className="form-control"
-                          value={values.status}
-                          onChange={handleChange}>
-                          <option value={AccountStatus.ACTIVE}>
-                            {AccountStatusText[AccountStatus.ACTIVE]}
-                          </option>
-                          <option value={AccountStatus.INACTIVE}>
-                            {AccountStatusText[AccountStatus.INACTIVE]}
-                          </option>
-                        </select>
-                      )}
-                    </CustomField>
-                    <CustomField
+                    <TextField
+                      name="firstName"
+                      labelText="First name"
+                      iconName="cil-user"
+                    />
+                    <TextField
+                      name="lastName"
+                      labelText="Last name"
+                      iconName="cil-user"
+                    />
+                    <SelectField name="status" labelText="Account status">
+                      <option value={AccountStatus.ACTIVE}>
+                        {AccountStatusText[AccountStatus.ACTIVE]}
+                      </option>
+                      <option value={AccountStatus.INACTIVE}>
+                        {AccountStatusText[AccountStatus.INACTIVE]}
+                      </option>
+                    </SelectField>
+                    <SelectBooleanField
+                      name="emailVerified"
                       labelText="Email verification"
-                      iconName="cil-user">
-                      {({values, setFieldValue}): JSX.Element => (
-                        <select
-                          name="emailVerified"
-                          className="form-control"
-                          value={String(values.emailVerified)}
-                          onChange={(e): void => {
-                            if (e.target.value === 'true')
-                              setFieldValue('emailVerified', true);
-                            else setFieldValue('emailVerified', false);
-                          }}>
-                          <option value="true">
-                            {AccountEmailVerificationText.VERIFIED}
-                          </option>
-                          <option value="false">
-                            {AccountEmailVerificationText.NOT_VERIFIED}
-                          </option>
-                        </select>
-                      )}
-                    </CustomField>
+                      onChangeProcess={(v): boolean => v === 'true'}>
+                      <option value="true">
+                        {AccountEmailVerificationText.VERIFIED}
+                      </option>
+                      <option value="false">
+                        {AccountEmailVerificationText.NOT_VERIFIED}
+                      </option>
+                    </SelectBooleanField>
                   </div>
                 </div>
               </div>
