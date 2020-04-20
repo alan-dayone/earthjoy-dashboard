@@ -1,4 +1,4 @@
-import {ConfigurationData, SystemGateway} from '../gateways/SystemGateway';
+import {SystemGateway, VerifyAccountSetting} from '../gateways/SystemGateway';
 import {
   ConfigurationKey,
   MailSmtpSettings,
@@ -59,10 +59,17 @@ export class SystemService {
     );
   }
 
-  public async getSmtpSettings(): Promise<ConfigurationData | null> {
+  public async getSmtpSettings(): Promise<MailSmtpSettings | null> {
     const smtpConfig = await this.systemGateway.getConfiguration(
       ConfigurationKey.MAIL_SMTP_SETTINGS,
     );
-    return smtpConfig?.data || null;
+    return (smtpConfig?.data as MailSmtpSettings) || null;
+  }
+
+  public async getEmailVerificationSettings(): Promise<VerifyAccountSetting | null> {
+    const config = await this.systemGateway.getConfiguration(
+      ConfigurationKey.VERIFY_ACCOUNT_SETTINGS,
+    );
+    return (config?.data as VerifyAccountSetting) || null;
   }
 }

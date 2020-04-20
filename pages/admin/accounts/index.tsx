@@ -46,7 +46,6 @@ const tableColumns: Column[] = [
       ],
     }),
     width: '10%',
-    /**@description write a Cell's render function using react-table types*/
     Cell: function EmailVerificationCell({
       cell: {value},
     }: CellProps<Account>): JSX.Element {
@@ -69,7 +68,6 @@ const tableColumns: Column[] = [
       ],
     }),
     width: '10%',
-    /**@description write a Cell's render function using custom cell utility*/
     Cell: createCell<Account>(({cell: {value}}) => {
       return <AccountStatusLabel status={value} />;
     }),
