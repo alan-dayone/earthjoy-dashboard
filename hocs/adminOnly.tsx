@@ -41,7 +41,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
     AdminWrapperProps
   > = (props: AdminWrapperProps): JSX.Element => {
     const {loginUser, dispatch, pageProps} = props;
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
     const [showSidebar, setShowSidebar] = useState(props.showSidebar);
 
     const toggleSideBar = (): void => {
