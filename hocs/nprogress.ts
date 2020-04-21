@@ -22,15 +22,19 @@ Router.router?.events.on('onRouteChangeError', () => {
   clearTimeout(timer as number);
 });
 
-type nprogressPageType = (page: NextPage) => NextPage;
+type NprogressPageType = (page: NextPage) => NextPage;
 
 export const nprogress = (
   _delayMs = delayMs,
   configOptions: {showSpinner: boolean},
-): nprogressPageType => {
+): NprogressPageType => {
   delayMs = _delayMs;
+
   // configure NProgress if configuration object is passed
-  if (configOptions) NProgress.configure(configOptions);
+  if (configOptions) {
+    NProgress.configure(configOptions);
+  }
+
   // receive page and return it as is
   return (page: NextPage): NextPage => page;
 };
