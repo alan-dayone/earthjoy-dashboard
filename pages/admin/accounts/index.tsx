@@ -13,7 +13,6 @@ import {AccountEmailVerificationLabel} from '../../../components/admin/AccountEm
 import {AccountStatusLabel} from '../../../components/admin/AccountStatusLabel';
 import {DataTable} from '../../../containers/admin/DataTable';
 import {createSelectFilter} from '../../../components/admin/DataTable/SelectFilter';
-import {createCell} from '../../../components/admin/DataTable/cellUtils';
 
 const tableColumns: Column[] = [
   {
@@ -68,9 +67,11 @@ const tableColumns: Column[] = [
       ],
     }),
     width: '10%',
-    Cell: createCell<Account>(({cell: {value}}) => {
+    Cell: function AccountStatusCell({
+      cell: {value},
+    }: CellProps<Account>): JSX.Element {
       return <AccountStatusLabel status={value} />;
-    }),
+    } as Renderer<CellProps<Account>>,
   },
   {
     Header: 'Actions',
@@ -78,15 +79,15 @@ const tableColumns: Column[] = [
     disableSortBy: true,
     disableFilters: true,
     width: '15%',
-    Cell: createCell<Account>(({row}) => {
+    Cell: function ActionsCell({row}: CellProps<Account>): JSX.Element {
       return (
         <Link
-          href="/admin/accounts/[userId]/edit"
-          as={`/admin/accounts/${row.values.id}/edit`}>
+          as={`/admin/accounts/${row.values.id}/edit`}
+          href="/admin/accounts/[userId]/edit">
           <a className="btn btn-sm btn-info">Edit</a>
         </Link>
       );
-    }),
+    } as Renderer<CellProps<Account>>,
   },
 ];
 
