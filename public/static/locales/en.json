@@ -21,6 +21,8 @@
   "username": "Username",
   "password": "Password",
   "save": "Save",
+  "subject": "Subject",
+  "emailTemplate": "Email template",
   "validation": {
     "isRequired": "$t({{labelKey}}) is required",
     "isEmail": "Must be a valid email",

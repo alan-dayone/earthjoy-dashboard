@@ -5,7 +5,7 @@ import {
   AccountStatus,
   constraint as AccountConstraint,
 } from '../models/Account';
-import {emailSchema} from './YupCommon';
+import {emailSchema} from './CommonValidationSchemas';
 
 export const AccountStatusText = {
   [AccountStatus.ACTIVE]: 'Active',

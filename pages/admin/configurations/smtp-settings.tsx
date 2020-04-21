@@ -90,7 +90,7 @@ const AdminSmtpSettingsPage: FC = () => {
               <form onSubmit={handleSubmit}>
                 <div className="card">
                   <div className="card-header">
-                    <strong>SMTP settings</strong>
+                    <strong>{t('smtpSettings')}</strong>
                   </div>
                   <div className="card-body">
                     <div className="row">
