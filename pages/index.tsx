@@ -1,6 +1,5 @@
 import React, {FC} from 'react';
 import Head from 'next/head';
-import Link from 'next/link';
 import {everyone} from '../hocs';
 
 const IndexPage: FC = () => {
@@ -9,12 +8,6 @@ const IndexPage: FC = () => {
       <Head>
         <title>LoopNext</title>
       </Head>
-      <Link href="/admin/login">
-        <a className="c-sidebar-nav-link">
-          <i className="c-sidebar-nav-icon cil-speedometer" />
-          Login
-        </a>
-      </Link>
       <h4>
         Save hundred hours of development cost by project boilerplate including
         common functionality implemented out-of-the-box with best practices,
@@ -26,7 +19,7 @@ const IndexPage: FC = () => {
         <div className="col-4">
           <div className="card">
             <div className="card-header">
-              {/*<strong>{t('abc')} User pages</strong>*/}
+              <strong>User pages</strong>
             </div>
             <div className="card-body">
               <ul>
