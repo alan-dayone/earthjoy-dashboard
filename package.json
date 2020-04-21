@@ -7,8 +7,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint . --fix --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx && stylelint ./scss",
+    "lint:fix": "eslint . --fix --ext .js,.jsx,.ts,.tsx && stylelint ./scss --fix",
     "build": "next build"
   },
   "dependencies": {
