@@ -147,6 +147,8 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
     }
   }, [sortBy]);
 
+  const showFiltersOnHeader = !!headers.find(header => header.canFilter);
+
   return (
     <div>
       <table className="admin-table table table-responsive-sm">
@@ -178,13 +180,15 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
               );
             })}
           </tr>
-          <tr>
-            {headers.map((header, index) => (
-              <th key={`th-filter-${index}`}>
-                {header.canFilter ? header.render('Filter') : null}
-              </th>
-            ))}
-          </tr>
+          {showFiltersOnHeader && (
+            <tr>
+              {headers.map((header, index) => (
+                <th key={`th-filter-${index}`}>
+                  {header.canFilter ? header.render('Filter') : null}
+                </th>
+              ))}
+            </tr>
+          )}
         </thead>
         <tbody className="mh-50">
           {loadingData ? (
