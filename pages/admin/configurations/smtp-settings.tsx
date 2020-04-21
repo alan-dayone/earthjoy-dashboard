@@ -2,6 +2,7 @@ import React, {useState, useEffect, FC} from 'react';
 import Head from 'next/head';
 import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import toastr from 'toastr';
+import {useTranslation} from 'react-i18next';
 import {adminOnly} from '../../../hocs';
 import {systemService} from '../../../services';
 import {
@@ -21,6 +22,7 @@ const AdminSmtpSettingsPage: FC = () => {
     senderEmail: '',
     senderName: '',
   });
+  const {t} = useTranslation();
 
   const handleTestSmtpConnection = async (
     values: MailSmtpSettings,
@@ -30,9 +32,9 @@ const AdminSmtpSettingsPage: FC = () => {
 
       const isValid = await systemService.testSmtpConnection(values);
       if (isValid) {
-        toastr.success('SMTP settings are valid');
+        toastr.success(t('smtpSettingsAreValid'));
       } else {
-        toastr.error('Invalid SMTP settings');
+        toastr.error(t('smtpSettingsAreInvalid'));
       }
     } catch (e) {
       toastr.error(e.message);
@@ -52,7 +54,7 @@ const AdminSmtpSettingsPage: FC = () => {
         values,
       );
       actions.setSubmitting(false);
-      toastr.success('Saved');
+      toastr.success(t('saved'));
     } catch (e) {
       toastr.error(e.message);
       actions.setSubmitting(false);
@@ -95,37 +97,37 @@ const AdminSmtpSettingsPage: FC = () => {
                       <div className="col-12">
                         <FormGroup
                           name="smtpHost"
-                          label="SMTP server host"
+                          label={t('smtpServerHost')}
                           icon="cil-cast"
                           required
                         />
                         <FormGroup
                           name="smtpPort"
-                          label="SMTP server port"
+                          label={t('smtpServerPort')}
                           icon="cil-lan"
                           required
                         />
                         <FormGroup
                           name="senderName"
-                          label="Sender name"
+                          label={t('senderName')}
                           icon="cil-user"
                           required
                         />
                         <FormGroup
                           name="senderEmail"
-                          label="Sender email"
+                          label={t('senderEmail')}
                           icon="cil-envelope-closed"
                           required
                         />
                         <FormGroup
                           name="username"
-                          label="SMTP account username"
+                          label={t('smtpAccountUsername')}
                           icon="cil-user"
                           required
                         />
                         <FormGroup
                           name="password"
-                          label="SMTP account password"
+                          label={t('smtpAccountPassword')}
                           icon="cil-lock-locked"
                           required
                         />
@@ -143,7 +145,7 @@ const AdminSmtpSettingsPage: FC = () => {
                           role="status"
                         />
                       )}
-                      {isSubmitting ? 'Saving...' : 'Save'}
+                      {isSubmitting ? 'Saving...' : t('save')}
                     </button>
                     &nbsp;
                     <button
@@ -156,7 +158,7 @@ const AdminSmtpSettingsPage: FC = () => {
                       {isTestingConnection && (
                         <div className="spinner-border spinner-border-sm mr-1" />
                       )}
-                      Test connection
+                      {t('testConnection')}
                     </button>
                   </div>
                 </div>

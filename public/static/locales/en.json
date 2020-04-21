@@ -7,5 +7,17 @@
   "passwordReset": "Password reset",
   "profile": "Profile",
   "logout": "Logout",
-  "createAccount": "Create account"
+  "createAccount": "Create account",
+  "smtpSettingsAreValid": "SMTP settings are valid",
+  "smtpSettingsAreInvalid": "SMTP settings are invalid",
+  "saved": "Saved",
+  "smtpServerHost": "SMTP server host",
+  "smtpServerPort": "SMTP server port",
+  "senderName": "Sender name",
+  "senderEmail": "Sender email",
+  "smtpAccountUsername": "SMTP account username",
+  "smtpAccountPassword": "SMTP account password",
+  "testConnection": "Test connection",
+  "testConnection": "Test connection",
+  "save": "Save"
 }
