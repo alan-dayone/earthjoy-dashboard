@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import Head from 'next/head';
 import {Column, CellProps, Renderer} from 'react-table';
 import Link from 'next/link';
-import {adminOnly} from '../../../hocs';
+import {adminOnly} from '../../../hocs/adminOnly';
 import {accountService} from '../../../services';
 import {Account, AccountStatus, Role} from '../../../models/Account';
 import {

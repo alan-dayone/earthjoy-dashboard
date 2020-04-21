@@ -5,7 +5,7 @@ import loGet from 'lodash/get';
 import toastr from 'toastr';
 import {Formik, FormikProps} from 'formik';
 import {useTranslation} from 'react-i18next';
-import {adminOnly} from '../../../hocs';
+import {adminOnly} from '../../../hocs/adminOnly';
 import {Account, AccountStatus} from '../../../models/Account';
 import {
   AccountEmailVerificationText,

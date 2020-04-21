@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import {NextComponentType} from 'next';
-import {everyone} from '../hocs';
+import {everyone} from '../hocs/everyone';
 import {authService} from '../services';
 import {CustomNextPageContext} from '../hocs/types';
 

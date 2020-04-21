@@ -4,7 +4,7 @@ import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
 import {Formik, FormikHelpers as FormikActions} from 'formik';
-import {guestOnly} from '../../hocs';
+import {guestOnly} from '../../hocs/guestOnly';
 import {authService} from '../../services';
 import {adminResetNewPasswordFormSchema} from '../../view-models/Account';
 

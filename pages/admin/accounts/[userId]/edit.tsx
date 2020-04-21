@@ -4,7 +4,7 @@ import {NextPageContext, NextPage} from 'next';
 import loGet from 'lodash/get';
 import toastr from 'toastr';
 import classNames from 'classnames';
-import {adminOnly} from '../../../../hocs';
+import {adminOnly} from '../../../../hocs/adminOnly';
 import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import {AccountStatus, Account} from '../../../../models/Account';
 import {

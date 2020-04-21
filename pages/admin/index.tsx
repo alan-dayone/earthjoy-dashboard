@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Head from 'next/head';
-import {adminOnly} from '../../hocs';
+import {adminOnly} from '../../hocs/adminOnly';
 // import '../../scss/admin/index.scss';
 
 class AdminDashboardPage extends Component {

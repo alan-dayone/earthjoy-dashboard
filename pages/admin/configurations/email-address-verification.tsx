@@ -2,7 +2,7 @@ import React, {FC, useEffect, useState} from 'react';
 import Head from 'next/head';
 import {Formik, FormikProps, FormikHelpers} from 'formik';
 import toastr from 'toastr';
-import {adminOnly} from '../../../hocs';
+import {adminOnly} from '../../../hocs/adminOnly';
 import {
   VerifyAccountSettings,
   ConfigurationKey,

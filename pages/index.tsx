@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import Head from 'next/head';
-import {everyone} from '../hocs';
+import {everyone} from '../hocs/everyone';
 
 const IndexPage: FC = () => {
   return (

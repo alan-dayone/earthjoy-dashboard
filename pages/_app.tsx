@@ -5,7 +5,7 @@ import App, {AppContext} from 'next/app';
 import withRedux, {ReduxWrapperAppProps} from 'next-redux-wrapper';
 import {I18nextProvider} from 'react-i18next';
 import i18next from 'i18next';
-import {nprogress} from '../hocs';
+import {nprogress} from '../hocs/nprogress';
 import {CustomNextPageContext} from '../hocs/types';
 import {makeStore} from '../redux/store';
 import {RootState} from '../redux/slices';

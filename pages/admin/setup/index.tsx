@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Head from 'next/head';
-import {guestOnly} from '../../../hocs';
+import {guestOnly} from '../../../hocs/guestOnly';
 import EnterPasswordForm from '../../../containers/admin/setup/EnterPasswordForm';
 import CreateFirstAdminForm from '../../../containers/admin/setup/CreateFirstAdminForm';
 

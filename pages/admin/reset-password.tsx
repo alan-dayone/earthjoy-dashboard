@@ -3,7 +3,7 @@ import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
 import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
-import {guestOnly} from '../../hocs';
+import {guestOnly} from '../../hocs/guestOnly';
 import {authService} from '../../services';
 import {adminResetPasswordFormSchema} from '../../view-models/Account';
 

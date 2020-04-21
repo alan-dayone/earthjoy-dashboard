@@ -5,7 +5,12 @@ export const getCookieFromRequest = (
   cookieName: string,
   req: IncomingMessage,
 ): string | null => {
-  return cookie.parse(req.headers.cookie as string)[cookieName] || null;
+  const cookieStr = req.headers.cookie as string;
+  if (!cookieStr) {
+    return null;
+  }
+
+  return cookie.parse(cookieStr)[cookieName] || null;
 };
 
 export const getBooleanCookieFromRequest = (

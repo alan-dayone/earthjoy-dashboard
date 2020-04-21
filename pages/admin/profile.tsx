@@ -4,7 +4,7 @@ import {Formik, FormikHelpers} from 'formik';
 import toastr from 'toastr';
 import _isEqual from 'lodash/isEqual';
 import Router from 'next/router';
-import {adminOnly} from '../../hocs';
+import {adminOnly} from '../../hocs/adminOnly';
 import {Account, LoginUser} from '../../models/Account';
 import {accountService} from '../../services';
 import {FormGroup} from '../../components/admin/FormGroup';

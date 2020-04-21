@@ -3,7 +3,7 @@ import Head from 'next/head';
 import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import toastr from 'toastr';
 import classNames from 'classnames';
-import {adminOnly} from '../../../hocs';
+import {adminOnly} from '../../../hocs/adminOnly';
 import {
   ResetPasswordSettings,
   ConfigurationKey,

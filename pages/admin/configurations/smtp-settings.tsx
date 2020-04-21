@@ -4,7 +4,7 @@ import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import toastr from 'toastr';
 import {useTranslation} from 'react-i18next';
 import {smtpSettingsValidationSchema} from '../../../view-models/Configuration';
-import {adminOnly} from '../../../hocs';
+import {adminOnly} from '../../../hocs/adminOnly';
 import {systemService} from '../../../services';
 import {
   ConfigurationKey,
