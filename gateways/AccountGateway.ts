@@ -48,4 +48,14 @@ export class AccountGateway {
     const {data} = await this.restConnector.get(`/accounts/${id}`);
     return data;
   }
+
+  public async changePassword(
+    oldPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    await this.restConnector.post('/accounts/change-password', {
+      oldPassword,
+      newPassword,
+    });
+  }
 }

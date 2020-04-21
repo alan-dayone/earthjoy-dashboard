@@ -3,6 +3,7 @@ import Head from 'next/head';
 import {Formik, FormikHelpers} from 'formik';
 import toastr from 'toastr';
 import _isEqual from 'lodash/isEqual';
+import Router from 'next/router';
 import {adminOnly} from '../../hocs';
 import {Account, LoginUser} from '../../models/Account';
 import {accountService} from '../../services';
@@ -60,7 +61,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
       await accountService.updateAccount(loginUser.id, values);
       toastr.success('Update profile succeed.');
     } catch {
-      toastr.success('Update profile failed.');
+      toastr.error('Update profile failed.');
     } finally {
       formikHelpers.setSubmitting(false);
     }
@@ -72,10 +73,14 @@ const ProfilePage: FC<Props> = (props: Props) => {
   ): Promise<void> => {
     try {
       formikHelpers.setSubmitting(true);
-
-      toastr.success('Update profile succeed.');
+      await accountService.changePassword(
+        values.currentPassword,
+        values.newPassword,
+      );
+      toastr.success('Update password succeed.');
+      Router.reload();
     } catch {
-      toastr.success('Update profile failed.');
+      toastr.error('Update password failed.');
     } finally {
       formikHelpers.setSubmitting(false);
     }
@@ -89,7 +94,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
       <div className="container card p-4">
         <div className="row">
           <div className="col-6 border-right">
-            <h4 className="text-center text-primary pb-2 border-bottom">
+            <h4 className="text-center text-primary pb-2 mb-4 border-bottom">
               Profile
             </h4>
             <Formik
@@ -98,7 +103,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
               onSubmit={handleUpdateProfile}
               validationSchema={adminUpdateProfileSchema}>
               {({handleSubmit, isSubmitting, values}): JSX.Element => (
-                <form className="px-2" onSubmit={handleSubmit}>
+                <form className="px-5" onSubmit={handleSubmit}>
                   <FormGroup name="firstName" label="First name" />
                   <FormGroup name="lastName" label="Last name" />
                   <FormGroup name="email" label="Email" readOnly />
@@ -123,7 +128,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
             </Formik>
           </div>
           <div className="col-6">
-            <h4 className="text-center text-primary pb-2 border-bottom">
+            <h4 className="text-center text-primary pb-2 mb-4 border-bottom">
               Change password
             </h4>
             <Formik
@@ -131,9 +136,10 @@ const ProfilePage: FC<Props> = (props: Props) => {
               onSubmit={handleChangePassword}
               validationSchema={adminResetNewPasswordFormSchema}>
               {({handleSubmit, isSubmitting}): JSX.Element => (
-                <form className="px-2" onSubmit={handleSubmit}>
+                <form className="px-5" onSubmit={handleSubmit}>
                   <FormGroup
                     name="currentPassword"
+                    type="password"
                     label="Current password"
                     required
                   />
