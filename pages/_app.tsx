@@ -43,7 +43,6 @@ class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
 
   public render(): JSX.Element {
     const {Component, pageProps, store} = this.props;
-    console.log('render app', this.props);
     return (
       <Provider store={store}>
         <I18nextProvider i18n={i18next}>
