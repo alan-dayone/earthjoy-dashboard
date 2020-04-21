@@ -4,7 +4,7 @@ import {Column, CellProps, Renderer} from 'react-table';
 import Link from 'next/link';
 import {adminOnly} from '../../../hocs';
 import {accountService} from '../../../services';
-import {Account, AccountStatus} from '../../../models/Account';
+import {Account, AccountStatus, Role} from '../../../models/Account';
 import {
   AccountEmailVerificationText,
   AccountStatusText,
@@ -23,12 +23,12 @@ const tableColumns: Column[] = [
   {
     Header: 'First name',
     accessor: 'firstName',
-    width: '15%',
+    width: '10%',
   },
   {
     Header: 'Last name',
     accessor: 'lastName',
-    width: '15%',
+    width: '10%',
   },
   {
     Header: 'Email',
@@ -50,6 +50,23 @@ const tableColumns: Column[] = [
     }: CellProps<Account>): JSX.Element {
       return <AccountEmailVerificationLabel emailVerified={value} />;
     } as Renderer<CellProps<Account>>,
+  },
+  {
+    Header: 'Role',
+    accessor: 'role',
+    Filter: createSelectFilter<Account>({
+      items: [
+        {
+          value: Role.ROOT_ADMIN,
+          label: 'Root admin',
+        },
+        {
+          value: Role.USER,
+          label: 'User',
+        },
+      ],
+    }),
+    width: '10%',
   },
   {
     Header: 'Status',
