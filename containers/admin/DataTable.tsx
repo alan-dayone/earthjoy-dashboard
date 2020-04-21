@@ -3,6 +3,7 @@ import {
   Column,
   FilterProps,
   Renderer,
+  useAsyncDebounce,
   useFilters,
   usePagination,
   useSortBy,
@@ -14,7 +15,8 @@ import {Pagination} from '../../components/admin/Pagination';
 import {PAGE_SIZE_LIST} from '../../view-models/admin/DataTable';
 import {isServer} from '../../utils/environment';
 import {InputFilter} from '../../components/admin/DataTable/InputFilter';
-import {useDebounceLoad} from '../../components/admin/DataTable/hooks';
+
+const DELAY_FILTER_CHANGE = 500; // 500ms to avoid calling API while typing search.
 
 interface Props {
   tableColumns: Column[];
@@ -26,9 +28,6 @@ const DefaultColumnFilter = ({
 }: FilterProps<object>): Renderer<FilterProps<object>> => (
   <InputFilter value={filterValue} onChange={setFilter} />
 );
-
-const DELAY_FETCHING_DATA = 500; // 500ms to avoid calling API.
-const DELAY_FETCHING_DATA_SEARCH = 1000; // 500ms to avoid calling API while typing search.
 
 export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
   if (isServer) {
@@ -78,68 +77,75 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
     usePagination,
   );
 
-  const fetchData = useDebounceLoad({
-    beforeFn: () => setLoadingData(true),
-    defaultFn: async () => {
-      const filterObj = filters.reduce(
-        (acc, {id, value}) => ({...acc, [id]: value}),
-        {},
-      );
-      const sortByArr = sortBy.map(value => {
-        return `${value.id} ${value.desc ? 'desc' : 'asc'}`;
-      });
+  const fetchData = async (): Promise<void> => {
+    setLoadingData(true);
 
-      const {data, count} = await findData({
-        pageIndex,
-        filters: filterObj,
+    const filterObj = filters.reduce(
+      (acc, {id, value}) => ({...acc, [id]: value}),
+      {},
+    );
+    const sortByArr = sortBy.map(value => {
+      return `${value.id} ${value.desc ? 'desc' : 'asc'}`;
+    });
+
+    const {data, count} = await findData({
+      pageIndex,
+      filters: filterObj,
+      pageSize,
+      orders: sortByArr,
+    });
+
+    setData(data);
+    setTotal(count);
+
+    if (tableLoadedInitialData.current) {
+      const queryStr = qs.stringify({
+        pageIndex: pageIndex || undefined,
+        filters,
+        sortBy,
         pageSize,
-        orders: sortByArr,
       });
+      const basePath = Router.pathname;
+      const newUrl = queryStr === '' ? basePath : `${basePath}?${queryStr}`;
+      Router.replace(newUrl);
+    } else {
+      tableLoadedInitialData.current = true;
+    }
 
-      setData(data);
-      setTotal(count);
+    setLoadingData(false);
+  };
 
-      if (tableLoadedInitialData.current) {
-        const queryStr = qs.stringify({
-          pageIndex: pageIndex || undefined,
-          filters,
-          sortBy,
-          pageSize,
-        });
-        const basePath = Router.pathname;
-        const newUrl = queryStr === '' ? basePath : `${basePath}?${queryStr}`;
-        Router.replace(newUrl);
-      } else {
-        tableLoadedInitialData.current = true;
-      }
+  const fetchAndResetToFirstPage = (): void => {
+    if (pageIndex === 0) {
+      fetchData();
+    } else {
+      gotoPage(0);
+    }
+  };
 
-      setLoadingData(false);
-    },
-    defaultWait: DELAY_FETCHING_DATA,
-  });
+  const handleFiltersChange = useAsyncDebounce(
+    fetchAndResetToFirstPage,
+    DELAY_FILTER_CHANGE,
+  );
 
-  // TODO: Not really need this as one debounce is enough.
-  // Reset page index to 0 when user changes filters or sorting.
-  const handleFiltersAndSortChange = useDebounceLoad({
-    defaultFn: () => {
-      if (pageIndex === 0) {
-        fetchData();
-      } else {
-        gotoPage(0);
-      }
-    },
-    defaultWait: DELAY_FETCHING_DATA_SEARCH,
-  });
-
+  // Fetch initial data and listen to page index and page size change to fetch new data.
   useEffect(() => {
     fetchData();
   }, [pageIndex, pageSize]);
 
+  // Reset page index to 0 when user changes filters, but debounce the change to wait for user typing.
   useEffect(() => {
     if (tableLoadedInitialData.current) {
-      handleFiltersAndSortChange();
+      handleFiltersChange();
     }
-  }, [filters, sortBy]);
+  }, [filters]);
+
+  // Reset page index to 0 when user changes sorting.
+  useEffect(() => {
+    if (tableLoadedInitialData.current) {
+      fetchAndResetToFirstPage();
+    }
+  }, [sortBy]);
 
   return (
     <div>
