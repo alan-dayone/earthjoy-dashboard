@@ -219,11 +219,11 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
       showSidebar = getBooleanCookieFromRequest(SHOW_SIDEBAR_COOKIE, req);
 
       if (!loginUser) {
-        res.writeHead(301, {location: '/admin/login'});
+        res.writeHead(302, {Location: '/admin/login'});
         res.end();
         return;
       } else if (!isAdmin(loginUser)) {
-        res.writeHead(301, {location: '/'});
+        res.writeHead(302, {Location: '/'});
         res.end();
         return;
       }

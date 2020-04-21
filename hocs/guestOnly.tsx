@@ -39,7 +39,7 @@ export const guestOnly = (
 
     if (user) {
       if (isServer) {
-        res.writeHead(301, {location: isAdmin(user) ? '/admin' : '/'});
+        res.writeHead(302, {Location: isAdmin(user) ? '/admin' : '/'});
         res.end();
         return;
       } else {
