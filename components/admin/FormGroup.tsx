@@ -20,7 +20,7 @@ export const FormGroup: FC<Props> = ({
   const {children} = otherProps;
   return (
     <div className="form-group">
-      <label>{`${label}${required && ' *'}`}</label>
+      <label>{`${label}${required ? ' *' : ''}`}</label>
       <Field {...otherProps} required={required}>
         {(props: FieldProps): ReactNode => {
           const className = classnames(
@@ -36,7 +36,10 @@ export const FormGroup: FC<Props> = ({
             case 'select':
               return (
                 <>
-                  <select className={className} {...props.field}>
+                  <select
+                    className={className}
+                    {...props.field}
+                    {...otherProps}>
                     {children}
                   </select>
                   {error}
@@ -45,7 +48,10 @@ export const FormGroup: FC<Props> = ({
             case 'textarea':
               return (
                 <>
-                  <textarea className={className} {...props.field}>
+                  <textarea
+                    className={className}
+                    {...props.field}
+                    {...otherProps}>
                     {children}
                   </textarea>
                   {error}
@@ -61,12 +67,20 @@ export const FormGroup: FC<Props> = ({
                           <i className={icon} />
                         </span>
                       </div>
-                      <input className={className} {...props.field} />
+                      <input
+                        className={className}
+                        {...props.field}
+                        {...otherProps}
+                      />
                       {error}
                     </div>
                   ) : (
                     <>
-                      <input className={className} {...props.field} />
+                      <input
+                        className={className}
+                        {...props.field}
+                        {...otherProps}
+                      />
                       {error}
                     </>
                   )}

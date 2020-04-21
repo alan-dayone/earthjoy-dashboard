@@ -63,3 +63,8 @@ export const adminResetNewPasswordFormSchema = Yup.object().shape({
       // 'Passwords must match.',
     ),
 });
+
+export const adminUpdateProfileSchema = Yup.object().shape({
+  firstName: validationSchema.firstName,
+  lastName: validationSchema.lastName,
+});

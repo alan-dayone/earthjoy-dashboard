@@ -7,7 +7,7 @@ import {
   UncontrolledDropdown,
 } from 'reactstrap';
 import {NextComponentType} from 'next';
-import Router from 'next/router';
+import Router, {useRouter} from 'next/router';
 import classNames from 'classnames';
 import Cookies from 'js-cookie';
 import {connect} from 'react-redux';
@@ -43,11 +43,20 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
     const {loginUser, dispatch, pageProps} = props;
     const {t} = useTranslation();
     const [showSidebar, setShowSidebar] = useState(props.showSidebar);
+    const router = useRouter();
 
     const toggleSideBar = (): void => {
       const newValue = !showSidebar;
       setShowSidebar(newValue);
       Cookies.set(SHOW_SIDEBAR_COOKIE, newValue.toString());
+    };
+
+    const handleProfile = async (): Promise<void> => {
+      try {
+        Router.replace('/admin/profile');
+      } catch (e) {
+        toastr.error(e.message);
+      }
     };
 
     const handleLogout = async (): Promise<void> => {
@@ -58,6 +67,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
         toastr.error(e.message);
       }
     };
+    const currentSidebarSection = router.pathname.split('/');
 
     return (
       <div className="app-layout--admin c-app pace-done">
@@ -85,7 +95,10 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
           <ul
             className="c-sidebar-nav ps ps--active-y"
             data-dropdown-accordion="true">
-            <li className="c-sidebar-nav-item">
+            <li
+              className={classNames('c-sidebar-nav-item', {
+                'bg-primary': currentSidebarSection[2] === undefined,
+              })}>
               <Link href="/admin">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-speedometer" />
@@ -93,7 +106,10 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
                 </a>
               </Link>
             </li>
-            <li className="c-sidebar-nav-item">
+            <li
+              className={classNames('c-sidebar-nav-item', {
+                'bg-primary': currentSidebarSection[2] === 'accounts',
+              })}>
               <Link href="/admin/accounts">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-speedometer" />
@@ -102,19 +118,38 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
               </Link>
             </li>
             <li className="c-sidebar-nav-title">EMAIL</li>
-            <li className="c-sidebar-nav-item">
+            <li
+              className={classNames('c-sidebar-nav-item', {
+                'bg-primary':
+                  currentSidebarSection[2] === 'configurations' &&
+                  currentSidebarSection[3] === 'smtp-settings',
+              })}>
               <Link href="/admin/configurations/smtp-settings">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-settings" />
                   {t('smtpSettings')}
                 </a>
               </Link>
+            </li>
+            <li
+              className={classNames('c-sidebar-nav-item', {
+                'bg-primary':
+                  currentSidebarSection[2] === 'configurations' &&
+                  currentSidebarSection[3] === 'email-address-verification',
+              })}>
               <Link href="/admin/configurations/email-address-verification">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-send" />
                   {t('emailAddressVerification')}
                 </a>
               </Link>
+            </li>
+            <li
+              className={classNames('c-sidebar-nav-item', {
+                'bg-primary':
+                  currentSidebarSection[2] === 'configurations' &&
+                  currentSidebarSection[3] === 'password-reset',
+              })}>
               <Link href="/admin/configurations/password-reset">
                 <a className="c-sidebar-nav-link">
                   <i className="c-sidebar-nav-icon cil-send" />
@@ -149,7 +184,9 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
                         {loginUser.email}
                       </DropdownToggle>
                       <DropdownMenu right>
-                        <DropdownItem>{t('profile')}</DropdownItem>
+                        <DropdownItem onClick={handleProfile}>
+                          {t('profile')}
+                        </DropdownItem>
                         <DropdownItem onClick={handleLogout}>
                           {t('logout')}
                         </DropdownItem>
@@ -205,8 +242,8 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
     return {
       showSidebar,
       pageProps: Content.getInitialProps
-        ? await Content.getInitialProps(ctx)
-        : {},
+        ? {...(await Content.getInitialProps(ctx)), loginUser}
+        : {loginUser},
     };
   };
 
