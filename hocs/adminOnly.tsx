@@ -22,16 +22,14 @@ import {withI18next} from './withI18next';
 
 const SHOW_SIDEBAR_COOKIE = 'showSidebar';
 
-interface AdminWrapperProps {
-  loginUser: LoginUser;
-  dispatch: AppDispatch;
-  showSidebar: boolean;
-  pageProps: object;
-}
-
 interface AdminWrapperServerProps {
   showSidebar: boolean;
-  pageProps: object;
+  pageProps?: object;
+}
+
+interface AdminWrapperProps extends AdminWrapperServerProps {
+  loginUser: LoginUser;
+  dispatch: AppDispatch;
 }
 
 export const adminOnly = (Content: NextComponentType): ReactNode => {
@@ -40,10 +38,10 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
     AdminWrapperServerProps,
     AdminWrapperProps
   > = (props: AdminWrapperProps): JSX.Element => {
-    const {loginUser, dispatch, pageProps} = props;
     const {t} = useTranslation();
-    const [showSidebar, setShowSidebar] = useState(props.showSidebar);
     const router = useRouter();
+    const [showSidebar, setShowSidebar] = useState(props.showSidebar);
+    const {loginUser, dispatch, pageProps} = props;
 
     const toggleSideBar = (): void => {
       const newValue = !showSidebar;
@@ -242,8 +240,8 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
     return {
       showSidebar,
       pageProps: Content.getInitialProps
-        ? {...(await Content.getInitialProps(ctx)), loginUser}
-        : {loginUser},
+        ? await Content.getInitialProps(ctx)
+        : undefined,
     };
   };
 
