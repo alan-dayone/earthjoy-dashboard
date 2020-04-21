@@ -23,6 +23,10 @@
   "save": "Save",
   "subject": "Subject",
   "emailTemplate": "Email template",
+  "email": "Email",
+  "loginToYourAccount": "Login to your account",
+  "forgotPassword": "Forgot password?",
+  "incorrectEmailOrPassword": "Incorrect email or password",
   "validation": {
     "isRequired": "$t({{labelKey}}) is required",
     "isEmail": "Must be a valid email",

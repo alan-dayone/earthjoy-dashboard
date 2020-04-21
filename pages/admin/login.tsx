@@ -4,12 +4,13 @@ import Link from 'next/link';
 import Head from 'next/head';
 import toastr from 'toastr';
 import {connect} from 'react-redux';
-import {Formik, FormikProps, FormikHelpers as FormikActions} from 'formik';
+import {Formik, FormikProps, FormikHelpers} from 'formik';
 import {AxiosError} from 'axios';
 import {useTranslation} from 'react-i18next';
 import {guestOnly, withI18next} from '../../hocs';
 import {loginWithEmail} from '../../redux/slices/loginUserSlice';
 import {AppDispatch} from '../../redux/store';
+import {FormGroup} from '../../components/admin/FormGroup';
 
 export interface LoginForm {
   email: string;
@@ -28,7 +29,7 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
       error.response?.data?.error?.code === 'VALIDATION_FAILED' ||
       error.response?.data?.error?.message === 'invalid_credentials_email'
     ) {
-      return 'Incorrect email or password';
+      return 'incorrectEmailOrPassword';
     }
 
     return error.message;
@@ -36,7 +37,7 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
 
   const handleLogin = async (
     values: LoginForm,
-    actions: FormikActions<LoginForm>,
+    actions: FormikHelpers<LoginForm>,
   ): Promise<void> => {
     actions.setSubmitting(true);
     try {
@@ -47,7 +48,7 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
       }
     } catch (e) {
       actions.setSubmitting(false);
-      toastr.error(getErrorMessage(e));
+      toastr.error(t(getErrorMessage(e)));
     }
   };
 
@@ -72,38 +73,19 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
                     onSubmit={handleLogin}>
                     {(props: FormikProps<LoginForm>): JSX.Element => (
                       <form onSubmit={props.handleSubmit}>
-                        <h1>Login</h1>
-                        <p className="text-muted">Sign In to your account</p>
-                        <div className="input-group mb-3">
-                          <div className="input-group-prepend">
-                            <span className="input-group-text">
-                              <i className="cil-user" />
-                            </span>
-                          </div>
-                          <input
-                            name="email"
-                            className="form-control"
-                            type="text"
-                            placeholder="Email"
-                            onChange={props.handleChange}
-                            value={props.values.email}
-                          />
-                        </div>
-                        <div className="input-group mb-4">
-                          <div className="input-group-prepend">
-                            <span className="input-group-text">
-                              <i className="cil-lock-locked" />
-                            </span>
-                          </div>
-                          <input
-                            className="form-control"
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                            onChange={props.handleChange}
-                            value={props.values.password}
-                          />
-                        </div>
+                        <h1>{t('login')}</h1>
+                        <p className="text-muted">{t('loginToYourAccount')}</p>
+                        <FormGroup
+                          name="email"
+                          placeholder={t('email')}
+                          icon="cil-user"
+                        />
+                        <FormGroup
+                          name="password"
+                          placeholder={t('password')}
+                          icon="cil-lock-locked"
+                          type="password"
+                        />
                         <div className="row">
                           <div className="col-6">
                             <button
@@ -121,7 +103,7 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
                               <button
                                 className="btn btn-link px-0"
                                 type="button">
-                                Forgot password?
+                                {t('forgotPassword')}
                               </button>
                             </Link>
                           </div>

@@ -20,7 +20,7 @@ export const FormGroup: FC<Props> = ({
   const {children} = otherProps;
   return (
     <div className="form-group">
-      <label>{`${label}${required ? ' *' : ''}`}</label>
+      {label && <label>{`${label}${required ? ' *' : ''}`}</label>}
       <Field {...otherProps} required={required}>
         {(props: FieldProps): ReactNode => {
           const className = classnames(
