@@ -4,8 +4,28 @@ import i18next, {Resource} from 'i18next';
 import {initReactI18next, useSSR} from 'react-i18next';
 import i18nextXhrBackend from 'i18next-xhr-backend';
 import i18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
+import * as Yup from 'yup';
 import {getCookieFromRequest} from '../utils/cookie';
 import {isBrowser} from '../utils/environment';
+
+Yup.setLocale({
+  mixed: {
+    required: (props): string => {
+      return i18next.t('validation.isRequired', {labelKey: props.path});
+    },
+  },
+  string: {
+    email: (): string => {
+      return i18next.t('validation.isEmail');
+    },
+    min: (props): string => {
+      return i18next.t('validation.atLeast', {labelKey: props.path});
+    },
+    max: (props): string => {
+      return i18next.t('validation.atMost', {labelKey: props.path});
+    },
+  },
+});
 
 if (isBrowser) {
   if (!i18next.isInitialized) {

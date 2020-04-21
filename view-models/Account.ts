@@ -1,10 +1,11 @@
 import * as Yup from 'yup';
 import lopick from 'lodash/pick';
+// import i18next from 'i18next';
 import {
   AccountStatus,
   constraint as AccountConstraint,
 } from '../models/Account';
-import {emailSchema, inputSchema} from './YupCommon';
+import {emailSchema} from './YupCommon';
 
 export const AccountStatusText = {
   [AccountStatus.ACTIVE]: 'Active',
@@ -18,34 +19,27 @@ export enum AccountEmailVerificationText {
 
 const validationSchema = {
   email: emailSchema,
-  lastName: inputSchema('Last name', {
-    required: true,
-    max: AccountConstraint.firstName.MAX_LENGTH,
-  }),
-  firstName: inputSchema('First name', {
-    required: true,
-    max: AccountConstraint.lastName.MAX_LENGTH,
-  }),
-  password: inputSchema('Password', {
-    required: true,
-    min: AccountConstraint.lastName.MIN_LENGTH,
-    max: AccountConstraint.lastName.MAX_LENGTH,
-  }),
-  confirmPassword: inputSchema('Confirm password', {required: true}).oneOf(
-    [Yup.ref('password'), null],
-    'Passwords must match.',
-  ),
+  firstName: Yup.string()
+    .required()
+    .max(AccountConstraint.firstName.MAX_LENGTH),
+  lastName: Yup.string()
+    .required()
+    .max(AccountConstraint.lastName.MAX_LENGTH),
+  password: Yup.string()
+    .required()
+    .min(AccountConstraint.password.MIN_LENGTH)
+    .max(AccountConstraint.password.MAX_LENGTH),
+  confirmPassword: Yup.string()
+    .required()
+    .oneOf(
+      [Yup.ref('password'), null],
+      // i18next.t('passwordsMustMatch'),
+    ),
 };
 
-export const userFormValidationSchema = Yup.object().shape({
-  email: validationSchema.email,
-  lastName: validationSchema.lastName,
-  password: validationSchema.password,
-  confirmPassword: inputSchema('Confirm password', {required: true}).oneOf(
-    [Yup.ref('password'), null],
-    'Passwords must match.',
-  ),
-});
+export const userFormValidationSchema = Yup.object().shape(
+  lopick(validationSchema, ['email', 'firstName', 'lastName', 'password']),
+);
 
 export const userUpdateInformationFormValidationSchema = Yup.object().shape(
   lopick(validationSchema, ['lastName', 'firstName', 'password']),
@@ -62,8 +56,10 @@ export const adminResetPasswordFormSchema = Yup.object().shape({
 
 export const adminResetNewPasswordFormSchema = Yup.object().shape({
   newPassword: validationSchema.password,
-  confirmPassword: inputSchema('Confirm password', {required: true}).oneOf(
-    [Yup.ref('newPassword'), null],
-    'Passwords must match.',
-  ),
+  confirmPassword: Yup.string()
+    .required()
+    .oneOf(
+      [Yup.ref('newPassword'), null],
+      // 'Passwords must match.',
+    ),
 });

@@ -27,7 +27,7 @@ const AdminEmailAddressVerificationPage: FC = () => {
       >(ConfigurationKey.VERIFY_ACCOUNT_SETTINGS);
       setInitialValues(emailVerificationSettings);
     })();
-  }, []);
+  });
 
   return (
     <div id="admin-email-address-verification-page">

@@ -1,37 +1,30 @@
 import * as Yup from 'yup';
-import {emailSchema, inputSchema} from './YupCommon';
+import {emailSchema} from './YupCommon';
 import {constraint} from '../models/Configuration';
 
-const senderName = inputSchema('Sender name', {
-  required: true,
-  max: constraint.senderName.MAX_LENGTH,
-});
+const senderName = Yup.string()
+  .required()
+  .max(constraint.senderName.MAX_LENGTH);
 
 export const smtpSettingsValidationSchema = Yup.object().shape({
-  smtpHost: inputSchema('SMTP host', {required: true}),
-  smtpPort: inputSchema('Port', {required: true}), // TODO: Possible to use .number() with custom error message?
-  senderName,
+  smtpHost: Yup.string().required(),
+  smtpPort: Yup.string().required(),
+  senderName: senderName,
   senderEmail: emailSchema,
-  username: inputSchema('Username', {
-    required: true,
-    max: constraint.username.MAX_LENGTH,
-  }),
-  password: inputSchema('Password', {
-    min: constraint.password.MIN_LENGTH,
-    max: constraint.password.MAX_LENGTH,
-  }),
+  username: Yup.string().required(),
+  password: Yup.string().required(),
 });
 
 export const emailVerificationValidationSchema = Yup.object().shape({
   senderName,
   senderEmail: emailSchema,
-  subject: inputSchema('Email subject', {required: true}),
-  emailTemplate: inputSchema('Email template', {required: true}),
+  subject: Yup.string().required(),
+  emailTemplate: Yup.string().required(),
 });
 
 export const passwordResetValidationSchema = Yup.object().shape({
   senderName,
   senderEmail: emailSchema,
-  subject: inputSchema('Email subject', {required: true}),
-  emailTemplate: inputSchema('Email template', {required: true}),
+  subject: Yup.string().required(),
+  emailTemplate: Yup.string().required(),
 });

@@ -11,13 +11,21 @@
   "smtpSettingsAreValid": "SMTP settings are valid",
   "smtpSettingsAreInvalid": "SMTP settings are invalid",
   "saved": "Saved",
-  "smtpServerHost": "SMTP server host",
-  "smtpServerPort": "SMTP server port",
+  "smtpHost": "SMTP server host",
+  "smtpPort": "SMTP server port",
   "senderName": "Sender name",
   "senderEmail": "Sender email",
   "smtpAccountUsername": "SMTP account username",
   "smtpAccountPassword": "SMTP account password",
   "testConnection": "Test connection",
-  "testConnection": "Test connection",
-  "save": "Save"
+  "username": "Username",
+  "password": "Password",
+  "save": "Save",
+  "validation": {
+    "isRequired": "$t({{labelKey}}) is required",
+    "isEmail": "Must be a valid email",
+    "atLeast": "$t({{labelKey}}) must be at least {{limit}}",
+    "atMost": "$t({{labelKey}}) must be at most {{limit}}",
+    "passwordsMustMatch": "Passwords must match"
+  }
 }

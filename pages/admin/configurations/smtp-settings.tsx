@@ -1,15 +1,15 @@
-import React, {useState, useEffect, FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import Head from 'next/head';
 import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import toastr from 'toastr';
 import {useTranslation} from 'react-i18next';
+import {smtpSettingsValidationSchema} from '../../../view-models/Configuration';
 import {adminOnly} from '../../../hocs';
 import {systemService} from '../../../services';
 import {
-  MailSmtpSettings,
   ConfigurationKey,
+  MailSmtpSettings,
 } from '../../../models/Configuration';
-import {smtpSettingsValidationSchema} from '../../../view-models/Configuration';
 import {FormGroup} from '../../../components/admin/FormGroup';
 
 const AdminSmtpSettingsPage: FC = () => {
@@ -68,7 +68,7 @@ const AdminSmtpSettingsPage: FC = () => {
       >(ConfigurationKey.MAIL_SMTP_SETTINGS);
       setInitialSmtpSettings(initialSmtpSettings);
     })();
-  }, []);
+  });
 
   return (
     <div id="admin-smtp-settings-page">
@@ -97,13 +97,13 @@ const AdminSmtpSettingsPage: FC = () => {
                       <div className="col-12">
                         <FormGroup
                           name="smtpHost"
-                          label={t('smtpServerHost')}
+                          label={t('smtpHost')}
                           icon="cil-cast"
                           required
                         />
                         <FormGroup
                           name="smtpPort"
-                          label={t('smtpServerPort')}
+                          label={t('smtpPort')}
                           icon="cil-lan"
                           required
                         />
