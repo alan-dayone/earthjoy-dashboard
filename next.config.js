@@ -1,6 +1,8 @@
 /* eslint-disable no-undef, @typescript-eslint/no-var-requires */
-const environmentVariables = require('dotenv').config().parsed;
+require('dotenv').config();
 
 module.exports = {
-  env: environmentVariables,
+  publicRuntimeConfig: {
+    BASE_API_URL: process.env.BASE_API_URL,
+  },
 };
