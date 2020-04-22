@@ -5,7 +5,6 @@ import Head from 'next/head';
 import toastr from 'toastr';
 import {connect} from 'react-redux';
 import {Formik, FormikProps, FormikHelpers} from 'formik';
-import {AxiosError} from 'axios';
 import {useTranslation} from 'react-i18next';
 import {guestOnly} from '../../hocs/guestOnly';
 import {withI18next} from '../../hocs/withI18next';
@@ -13,6 +12,7 @@ import {loginWithEmail} from '../../redux/slices/loginUserSlice';
 import {AppDispatch} from '../../redux/store';
 import {FormGroup} from '../../components/admin/FormGroup';
 import {FormikButton} from '../../components/admin/FormikButton';
+import {getErrorCode} from '../../errors/ServerError';
 
 export interface LoginForm {
   email: string;
@@ -26,15 +26,14 @@ interface PageProps {
 const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
   const {t} = useTranslation();
 
-  const getErrorMessage = (error: AxiosError): string => {
-    if (
-      error.response?.data?.error?.code === 'VALIDATION_FAILED' ||
-      error.response?.data?.error?.message === 'invalid_credentials_email'
-    ) {
+  const getErrorMessage = (error): string => {
+    const errCode = getErrorCode(error);
+
+    if (['VALIDATION_FAILED', 'invalid_credentials_email'].includes(errCode)) {
       return 'incorrectEmailOrPassword';
     }
 
-    return error.message;
+    return errCode;
   };
 
   const handleLogin = async (
