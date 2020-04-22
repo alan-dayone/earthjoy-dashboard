@@ -30,6 +30,10 @@ export class AccountService {
     };
   }
 
+  public async countAccount(filters = {}): Promise<number> {
+    return this.accountGateway.count({where: filters});
+  }
+
   public async createAccount(account: Account): Promise<Account> {
     return this.accountGateway.create(account);
   }
