@@ -86,7 +86,6 @@ const AdminSmtpSettingsPage: FC = () => {
             validationSchema={smtpSettingsValidationSchema}>
             {({
               values,
-              isSubmitting,
               handleSubmit,
             }: FormikProps<MailSmtpSettings>): JSX.Element => (
               <form onSubmit={handleSubmit}>
