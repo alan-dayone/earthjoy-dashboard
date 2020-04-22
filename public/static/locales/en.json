@@ -14,6 +14,9 @@
   "emailAlreadyExist": "Email already existed",
   "emailTemplate": "Email template",
   "emailVerification": "Email verification",
+  "error": {
+    "unknown": "Something went wrong"
+  },
   "firstName": "First name",
   "forgotPassword": "Forgot password?",
   "inactive": "Inactive",
@@ -52,8 +55,5 @@
     "isRequired": "$t({{labelKey}}) is required",
     "passwordsMustMatch": "Passwords must match"
   },
-  "verified": "Verified",
-  "error": {
-    "unknown": "Something went wrong"
-  }
+  "verified": "Verified"
 }
