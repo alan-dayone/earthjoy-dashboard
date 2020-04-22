@@ -20,6 +20,9 @@
   "testConnection": "Test connection",
   "username": "Username",
   "password": "Password",
+  "currentPassword": "Current password",
+  "newPassword": "New password",
+  "confirmPassword": "Confirm password",
   "save": "Save",
   "subject": "Subject",
   "emailTemplate": "Email template",
@@ -34,6 +37,8 @@
     "atMost": "$t({{labelKey}}) must be at most {{limit}}",
     "passwordsMustMatch": "Passwords must match"
   },
+  "firstName": "First name",
+  "lastName": "Last name",
   "rootAdmin": "Root admin",
   "user": "User",
   "active": "Active",
