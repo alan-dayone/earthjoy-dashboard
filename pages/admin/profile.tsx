@@ -4,6 +4,7 @@ import {Formik, FormikHelpers} from 'formik';
 import toastr from 'toastr';
 import _isEqual from 'lodash/isEqual';
 import Router from 'next/router';
+import {connect} from 'react-redux';
 import {adminOnly} from '../../hocs/adminOnly';
 import {Account, LoginUser} from '../../models/Account';
 import {accountService} from '../../services';
@@ -11,9 +12,11 @@ import {FormGroup} from '../../components/admin/FormGroup';
 import {AccountStatusLabel} from '../../components/admin/AccountStatusLabel';
 import {AccountEmailVerificationLabel} from '../../components/admin/AccountEmailVerificationLabel';
 import {
-  adminResetNewPasswordFormSchema,
   adminUpdateProfileSchema,
+  adminUpdatePasswordSchema,
 } from '../../view-models/Account';
+import {selectors} from '../../redux/slices/loginUserSlice';
+import {RootState} from '../../redux/slices';
 
 interface Props {
   loginUser: LoginUser;
@@ -32,7 +35,7 @@ const initialChangePasswordForm = {
 };
 
 const ProfilePage: FC<Props> = (props: Props) => {
-  console.log(props);
+  console.log({props});
   const {loginUser} = props;
   const [profile, setProfile] = useState<Account>({
     email: '',
@@ -134,7 +137,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
             <Formik
               initialValues={initialChangePasswordForm}
               onSubmit={handleChangePassword}
-              validationSchema={adminResetNewPasswordFormSchema}>
+              validationSchema={adminUpdatePasswordSchema}>
               {({handleSubmit, isSubmitting}): JSX.Element => (
                 <form className="px-5" onSubmit={handleSubmit}>
                   <FormGroup
@@ -171,4 +174,9 @@ const ProfilePage: FC<Props> = (props: Props) => {
   );
 };
 
-export default adminOnly(ProfilePage);
+export default adminOnly(
+  connect(
+    (state: RootState) => ({loginUser: selectors.selectLoginUser(state)}),
+    null,
+  )(ProfilePage),
+);

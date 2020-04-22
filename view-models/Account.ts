@@ -68,3 +68,14 @@ export const adminUpdateProfileSchema = Yup.object().shape({
   firstName: validationSchema.firstName,
   lastName: validationSchema.lastName,
 });
+
+export const adminUpdatePasswordSchema = Yup.object().shape({
+  currentPassword: validationSchema.password,
+  newPassword: validationSchema.password,
+  confirmPassword: Yup.string()
+    .required()
+    .oneOf(
+      [Yup.ref('newPassword'), null],
+      // 'Passwords must match.',
+    ),
+});
