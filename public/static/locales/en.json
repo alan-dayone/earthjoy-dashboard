@@ -38,5 +38,13 @@
     "passwordsMustMatch": "Passwords must match"
   },
   "firstName": "First name",
-  "lastName": "Last name"
+  "lastName": "Last name",
+  "rootAdmin": "Root admin",
+  "user": "User",
+  "active": "Active",
+  "inactive": "Inactive",
+  "verified": "Verified",
+  "notVerified": "Not verified",
+  "accountManagement": "Account management",
+  "create": "Create"
 }
