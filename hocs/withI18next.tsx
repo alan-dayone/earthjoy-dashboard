@@ -19,10 +19,16 @@ Yup.setLocale({
       return i18next.t('validation.isEmail');
     },
     min: (props): string => {
-      return i18next.t('validation.atLeast', {labelKey: props.path});
+      return i18next.t('validation.atLeast', {
+        labelKey: props.path,
+        limit: props.min,
+      });
     },
     max: (props): string => {
-      return i18next.t('validation.atMost', {labelKey: props.path});
+      return i18next.t('validation.atMost', {
+        labelKey: props.path,
+        limit: props.max,
+      });
     },
   },
 });

@@ -7,7 +7,6 @@ import Router from 'next/router';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {adminOnly} from '../../hocs/adminOnly';
-import {withI18next} from '../../hocs/withI18next';
 import {Account, LoginUser} from '../../models/Account';
 import {accountService} from '../../services';
 import {FormGroup} from '../../components/admin/FormGroup';
@@ -47,6 +46,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
     lastName: '',
     status: undefined,
   });
+
   useEffect(() => {
     (async (): Promise<void> => {
       const userProfile = await accountService.findOneForAdmin(loginUser?.id);
@@ -97,82 +97,94 @@ const ProfilePage: FC<Props> = (props: Props) => {
       <Head>
         <title>Admin - Profile</title>
       </Head>
-      <div className="container card">
-        <div className="card-header row">
-          <strong className="col-6 text-center">Profile</strong>
-          <strong className="col-6 text-center">Change password</strong>
-        </div>
-        <div className="row">
-          <div className="col-6 border-right">
-            <Formik
-              initialValues={profile}
-              enableReinitialize
-              onSubmit={handleUpdateProfile}
-              validationSchema={adminUpdateProfileSchema}>
-              {({handleSubmit, isSubmitting, values}): JSX.Element => (
-                <form className="my-3" onSubmit={handleSubmit}>
-                  <FormGroup name="firstName" label={t('firstName')} />
-                  <FormGroup name="lastName" label={t('lastName')} />
-                  <FormGroup name="email" label={t('email')} readOnly />
-                  <div className="mb-3">
-                    Account status:{' '}
-                    <AccountStatusLabel status={values.status} />
+      <div className="row">
+        <div className="col-6">
+          <Formik
+            initialValues={profile}
+            enableReinitialize
+            onSubmit={handleUpdateProfile}
+            validationSchema={adminUpdateProfileSchema}>
+            {({handleSubmit, isSubmitting, values}): JSX.Element => (
+              <form onSubmit={handleSubmit}>
+                <div className="card">
+                  <div className="card-header">
+                    <strong>{t('profile')}</strong>
                   </div>
-                  <div className="mb-3">
-                    Email verified:{' '}
-                    <AccountEmailVerificationLabel
-                      emailVerified={values.emailVerified}
+                  <div className="card-body">
+                    <FormGroup
+                      name="firstName"
+                      label={t('firstName')}
+                      required
+                    />
+                    <FormGroup name="lastName" label={t('lastName')} required />
+                    <FormGroup name="email" label={t('email')} readOnly />
+                    <div className="form-group">
+                      {t('accountStatus')}:{' '}
+                      <AccountStatusLabel status={values.status} />
+                    </div>
+                    <div className="form-group">
+                      {t('emailVerification')}:{' '}
+                      <AccountEmailVerificationLabel
+                        emailVerified={values.emailVerified}
+                      />
+                    </div>
+                  </div>
+                  <div className="card-footer d-flex justify-content-end">
+                    <button
+                      className="btn btn-sm btn-primary"
+                      type="submit"
+                      disabled={isSubmitting}>
+                      {t('save')}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            )}
+          </Formik>
+        </div>
+        <div className="col-6">
+          <Formik
+            initialValues={initialChangePasswordForm}
+            onSubmit={handleChangePassword}
+            validationSchema={adminUpdatePasswordSchema}>
+            {({handleSubmit, isSubmitting}): JSX.Element => (
+              <form onSubmit={handleSubmit}>
+                <div className="card">
+                  <div className="card-header">
+                    <strong>{t('changePassword')}</strong>
+                  </div>
+                  <div className="card-body">
+                    <FormGroup
+                      name="currentPassword"
+                      type="password"
+                      label={t('currentPassword')}
+                      required
+                    />
+                    <FormGroup
+                      name="newPassword"
+                      type="password"
+                      label={t('newPassword')}
+                      required
+                    />
+                    <FormGroup
+                      name="confirmPassword"
+                      type="password"
+                      label={t('confirmPassword')}
+                      required
                     />
                   </div>
-                  <div className="d-flex justify-content-end">
+                  <div className="card-footer d-flex justify-content-end">
                     <button
-                      className="btn btn-sm btn-success"
+                      className="btn btn-sm btn-primary float-right"
                       type="submit"
                       disabled={isSubmitting}>
-                      Save
+                      {t('submit')}
                     </button>
                   </div>
-                </form>
-              )}
-            </Formik>
-          </div>
-          <div className="col-6">
-            <Formik
-              initialValues={initialChangePasswordForm}
-              onSubmit={handleChangePassword}
-              validationSchema={adminUpdatePasswordSchema}>
-              {({handleSubmit, isSubmitting}): JSX.Element => (
-                <form className="my-3" onSubmit={handleSubmit}>
-                  <FormGroup
-                    name="currentPassword"
-                    type="password"
-                    label={t('currentPassword')}
-                    required
-                  />
-                  <FormGroup
-                    name="newPassword"
-                    type="password"
-                    label={t('newPassword')}
-                    required
-                  />
-                  <FormGroup
-                    name="confirmPassword"
-                    type="password"
-                    label={t('confirmPassword')}
-                    required
-                  />
-                  <div className="d-flex justify-content-end">
-                    <button
-                      className="btn btn-sm btn-success float-right"
-                      type="submit"
-                      disabled={isSubmitting}>
-                      Change
-                    </button>
-                  </div>
-                </form>
-              )}
-            </Formik>
-          </div>
+                </div>
+              </form>
+            )}
+          </Formik>
         </div>
       </div>
     </div>
@@ -185,5 +197,4 @@ export default compose(
     (state: RootState) => ({loginUser: selectors.selectLoginUser(state)}),
     null,
   ),
-  withI18next,
 )(ProfilePage);

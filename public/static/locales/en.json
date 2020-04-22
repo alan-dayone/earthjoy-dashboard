@@ -13,6 +13,7 @@
   "smtpSettingsAreInvalid": "SMTP settings are invalid",
   "saved": "Saved",
   "smtpHost": "SMTP server host",
+  "submit": "Submit",
   "smtpPort": "SMTP server port",
   "senderName": "Sender name",
   "senderEmail": "Sender email",
@@ -27,6 +28,7 @@
   "save": "Save",
   "subject": "Subject",
   "success": "Success",
+  "changePassword": "Change password",
   "emailTemplate": "Email template",
   "email": "Email",
   "emailVerification": "Email verification",
@@ -37,8 +39,8 @@
   "validation": {
     "isRequired": "$t({{labelKey}}) is required",
     "isEmail": "Must be a valid email",
-    "atLeast": "$t({{labelKey}}) must be at least {{limit}}",
-    "atMost": "$t({{labelKey}}) must be at most {{limit}}",
+    "atLeast": "$t({{labelKey}}) must be at least {{limit}} characters",
+    "atMost": "$t({{labelKey}}) must be at most {{limit}} characters",
     "passwordsMustMatch": "Passwords must match"
   },
   "firstName": "First name",
