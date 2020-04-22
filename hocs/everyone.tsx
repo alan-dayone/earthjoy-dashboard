@@ -34,7 +34,7 @@ export const everyone = (Content: NextComponentType): ReactNode => {
         <header className="c-header c-header-light c-header-fixed px-3">
           <a className="c-header-brand">
             <img
-              src="/static/img/company-logo.jpg"
+              src="/static/img/company-logo.png"
               height="40"
               className="d-inline-block align-top"
               alt="Company logo"

@@ -12,11 +12,11 @@ import {
 import Router from 'next/router';
 import qs from 'qs';
 import {Pagination} from '../../components/admin/Pagination';
-import {PAGE_SIZE_LIST} from '../../view-models/admin/DataTable';
 import {isServer} from '../../utils/environment';
 import {InputFilter} from '../../components/admin/DataTable/InputFilter';
 
-const DELAY_FILTER_CHANGE = 500; // 500ms to avoid calling API while typing search.
+const PAGE_SIZE_LIST = [5, 10, 15, 20, 100];
+const DELAY_FILTER_CHANGE = 500; // Delay 500ms while typing search before calling API.
 
 interface Props {
   tableColumns: Column[];
