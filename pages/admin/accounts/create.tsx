@@ -1,6 +1,5 @@
 import React, {FC} from 'react';
 import Head from 'next/head';
-import {NextComponentType, NextPageContext} from 'next';
 import loGet from 'lodash/get';
 import toastr from 'toastr';
 import {Formik, FormikProps} from 'formik';
@@ -20,28 +19,28 @@ const initialValues: Account = {
   emailVerified: true,
 };
 
-export function getServerErrorMessage(error): string {
-  const errorEnum = loGet(error, 'response.data.error.message');
-  if (errorEnum === 'EMAIL_EXISTED') {
-    return 'Email already existed';
-  }
-  return 'Unknown error';
-}
-
 const AdminAccountCreationPage: FC = () => {
   const {t} = useTranslation();
 
-  async function _handleSave(values: Account, actions): Promise<void> {
+  const getServerErrorMessage = (error): string => {
+    const errorEnum = loGet(error, 'response.data.error.message');
+    if (errorEnum === 'EMAIL_EXISTED') {
+      return t('emailAlreadyExist');
+    }
+    return 'Unknown error';
+  };
+
+  const handleSave = async (values: Account, actions): Promise<void> => {
     try {
       actions.setSubmitting(true);
       await accountService.createAccount(values);
-      toastr.success('Success');
+      toastr.success(t('success'));
       actions.setSubmitting(false);
     } catch (e) {
       toastr.error(getServerErrorMessage(e));
       actions.setSubmitting(false);
     }
-  }
+  };
 
   return (
     <div id="admin-create-account-page" className="shadow">
@@ -50,7 +49,7 @@ const AdminAccountCreationPage: FC = () => {
       </Head>
       <Formik
         initialValues={initialValues}
-        onSubmit={_handleSave}
+        onSubmit={handleSave}
         validationSchema={userFormValidationSchema}>
         {({handleSubmit, isSubmitting}: FormikProps<Account>): JSX.Element => (
           <form onSubmit={handleSubmit}>
@@ -131,6 +130,4 @@ const AdminAccountCreationPage: FC = () => {
   );
 };
 
-export default adminOnly(
-  AdminAccountCreationPage as NextComponentType<NextPageContext>,
-);
+export default adminOnly(AdminAccountCreationPage);

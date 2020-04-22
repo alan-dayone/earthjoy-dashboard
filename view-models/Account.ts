@@ -1,21 +1,7 @@
 import * as Yup from 'yup';
 import lopick from 'lodash/pick';
-// import i18next from 'i18next';
-import {
-  AccountStatus,
-  constraint as AccountConstraint,
-} from '../models/Account';
+import {constraint as AccountConstraint} from '../models/Account';
 import {emailSchema} from './CommonValidationSchemas';
-
-export const AccountStatusText = {
-  [AccountStatus.ACTIVE]: 'Active',
-  [AccountStatus.INACTIVE]: 'Inactive',
-};
-
-export enum AccountEmailVerificationText {
-  VERIFIED = 'Verified',
-  NOT_VERIFIED = 'Not verified',
-}
 
 const validationSchema = {
   email: emailSchema,
