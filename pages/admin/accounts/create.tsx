@@ -108,7 +108,7 @@ const AdminAccountCreationPage: FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="card-footer">
+              <div className="card-footer d-flex justify-content-end">
                 <button
                   className="btn btn-sm btn-success"
                   type="submit"

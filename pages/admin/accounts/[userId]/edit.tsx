@@ -27,21 +27,19 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
   originalAccount,
 }) => {
   const {t} = useTranslation();
-  const _handleSave = async (
+  const handleSave = async (
     values: Account,
     actions: FormikActions<Account>,
   ): Promise<void> => {
     try {
       actions.setSubmitting(true);
-
       const userId = originalAccount.id;
       await accountService.updateAccount(userId, values);
-
-      toastr.success('Success');
+      toastr.success(t('success'));
     } catch (e) {
       if (loGet(e, 'e.response.data.error', false))
         toastr.error(getServerErrorMessage(e));
-      else toastr.error('Some thing went wrong...');
+      else toastr.error('error.unknown');
     } finally {
       actions.setSubmitting(false);
     }
@@ -54,7 +52,7 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
       </Head>
       <Formik
         initialValues={originalAccount}
-        onSubmit={_handleSave}
+        onSubmit={handleSave}
         validationSchema={userUpdateInformationFormValidationSchema}>
         {({handleSubmit, isSubmitting}: FormikProps<Account>): JSX.Element => (
           <form onSubmit={handleSubmit}>
@@ -106,7 +104,7 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
                   </div>
                 </div>
               </div>
-              <div className="card-footer">
+              <div className="card-footer d-flex justify-content-end">
                 <button
                   className="btn btn-sm btn-primary"
                   type="submit"

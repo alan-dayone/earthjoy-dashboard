@@ -52,5 +52,8 @@
     "isRequired": "$t({{labelKey}}) is required",
     "passwordsMustMatch": "Passwords must match"
   },
-  "verified": "Verified"
+  "verified": "Verified",
+  "error": {
+    "unknown": "Something went wrong"
+  }
 }

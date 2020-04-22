@@ -28,7 +28,7 @@ export const userFormValidationSchema = Yup.object().shape(
 );
 
 export const userUpdateInformationFormValidationSchema = Yup.object().shape(
-  lopick(validationSchema, ['lastName', 'firstName', 'password']),
+  lopick(validationSchema, ['email', 'lastName', 'firstName']),
 );
 
 export const createFirstAdminFormSchema = Yup.object().shape({
