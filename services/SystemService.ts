@@ -18,6 +18,8 @@ export class SystemService {
   public async initSystem(body: {
     password: string;
     admin: {
+      firstName: string;
+      lastName: string;
       email: string;
       password: string;
     };
