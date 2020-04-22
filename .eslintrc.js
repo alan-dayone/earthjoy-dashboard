@@ -17,4 +17,12 @@ module.exports = {
   rules: {
     "prettier/prettier": "error"
   },
+  "overrides": [
+    {
+      "files": ["./public/static/locales/*.json"],
+      "rules": {
+        "sort-keys": ["warn", "asc"]
+      }
+    }
+  ]
 };
