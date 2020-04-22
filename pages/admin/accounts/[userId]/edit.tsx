@@ -3,16 +3,13 @@ import Head from 'next/head';
 import {NextPageContext, NextPage} from 'next';
 import loGet from 'lodash/get';
 import toastr from 'toastr';
-import classNames from 'classnames';
 import {adminOnly} from '../../../../hocs/adminOnly';
 import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import {AccountStatus, Account} from '../../../../models/Account';
-import {
-  AccountEmailVerificationText,
-  AccountStatusText,
-  userUpdateInformationFormValidationSchema,
-} from '../../../../view-models/Account';
+import {userUpdateInformationFormValidationSchema} from '../../../../view-models/Account';
 import {accountService} from '../../../../services';
+import {FormGroup} from '../../../../components/admin/FormGroup';
+import {useTranslation} from 'react-i18next';
 
 export function getServerErrorMessage(error): string {
   const errorEnum = loGet(error, 'response.data.error.message');
@@ -29,6 +26,7 @@ interface Props {
 const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
   originalAccount,
 }) => {
+  const {t} = useTranslation();
   const _handleSave = async (
     values: Account,
     actions: FormikActions<Account>,
@@ -58,14 +56,7 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
         initialValues={originalAccount}
         onSubmit={_handleSave}
         validationSchema={userUpdateInformationFormValidationSchema}>
-        {({
-          errors,
-          handleChange,
-          handleSubmit,
-          values,
-          isSubmitting,
-          setFieldValue,
-        }: FormikProps<Account>): JSX.Element => (
+        {({handleSubmit, isSubmitting}: FormikProps<Account>): JSX.Element => (
           <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
@@ -74,107 +65,44 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
               <div className="card-body">
                 <div className="row">
                   <div className="col-12">
-                    <div className="form-group">
-                      <label>Email</label>
-                      <div className="input-group">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text">
-                            <i className="cil-envelope-closed" />
-                          </span>
-                        </div>
-                        <input
-                          className={classNames('form-control', {
-                            'is-invalid': errors.email,
-                          })}
-                          name="email"
-                          onChange={handleChange}
-                          value={values.email}
-                        />
-                        {errors.email && (
-                          <div className="invalid-feedback">{errors.email}</div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>First name</label>
-                      <div className="input-group">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text">
-                            <i className="cil-user" />
-                          </span>
-                        </div>
-                        <input
-                          name="firstName"
-                          className={classNames('form-control', {
-                            'is-invalid': errors.firstName,
-                          })}
-                          onChange={handleChange}
-                          value={values.firstName}
-                        />
-                        {errors.firstName && (
-                          <div className="invalid-feedback">
-                            {errors.firstName}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>Last name</label>
-                      <div className="input-group">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text">
-                            <i className="cil-user" />
-                          </span>
-                        </div>
-                        <input
-                          name="lastName"
-                          className={classNames('form-control', {
-                            'is-invalid': errors.lastName,
-                          })}
-                          onChange={handleChange}
-                          value={values.lastName}
-                        />
-                        {errors.lastName && (
-                          <div className="invalid-feedback">
-                            {errors.lastName}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>Account status</label>
-                      <select
-                        name="status"
-                        className="form-control"
-                        value={values.status}
-                        onChange={handleChange}>
-                        <option value={AccountStatus.ACTIVE}>
-                          {AccountStatusText[AccountStatus.ACTIVE]}
-                        </option>
-                        <option value={AccountStatus.INACTIVE}>
-                          {AccountStatusText[AccountStatus.INACTIVE]}
-                        </option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label>Email verification</label>
-                      <select
-                        name="emailVerified"
-                        className="form-control"
-                        value={values.emailVerified ? 'true' : 'false'}
-                        onChange={(e): void => {
-                          if (e.target.value === 'true')
-                            setFieldValue('emailVerified', true);
-                          else setFieldValue('emailVerified', false);
-                        }}>
-                        <option value="true">
-                          {AccountEmailVerificationText.VERIFIED}
-                        </option>
-                        <option value="false">
-                          {AccountEmailVerificationText.NOT_VERIFIED}
-                        </option>
-                      </select>
-                    </div>
+                    <FormGroup
+                      name="email"
+                      label={t('email')}
+                      icon="cil-envelope-closed"
+                      required
+                    />
+                    <FormGroup
+                      name="firstName"
+                      label={t('firstName')}
+                      icon="cil-user"
+                      required
+                    />
+                    <FormGroup
+                      name="lastName"
+                      label={t('lastName')}
+                      icon="cil-user"
+                      required
+                    />
+                    <FormGroup
+                      name="status"
+                      label={t('accountStatus')}
+                      tag="select"
+                      required>
+                      <option value={AccountStatus.ACTIVE}>
+                        {t('active')}
+                      </option>
+                      <option value={AccountStatus.INACTIVE}>
+                        {t('inactive')}
+                      </option>
+                    </FormGroup>
+                    <FormGroup
+                      name="emailVerified"
+                      label={t('emailVerification')}
+                      tag="select"
+                      required>
+                      <option value="true">{t('verified')}</option>
+                      <option value="false">{t('notVerified')}</option>
+                    </FormGroup>
                   </div>
                 </div>
               </div>
@@ -189,7 +117,7 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
                       role="status"
                     />
                   )}
-                  {isSubmitting ? 'Saving...' : 'Save'}
+                  {isSubmitting ? 'Saving...' : t('save')}
                 </button>
               </div>
             </div>

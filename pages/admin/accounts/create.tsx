@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import React, {FC} from 'react';
 import Head from 'next/head';
 import {NextComponentType, NextPageContext} from 'next';
 import loGet from 'lodash/get';
@@ -7,16 +7,9 @@ import {Formik, FormikProps} from 'formik';
 import {useTranslation} from 'react-i18next';
 import {adminOnly} from '../../../hocs/adminOnly';
 import {Account, AccountStatus} from '../../../models/Account';
-import {
-  AccountEmailVerificationText,
-  AccountStatusText,
-  userFormValidationSchema,
-} from '../../../view-models/Account';
+import {userFormValidationSchema} from '../../../view-models/Account';
 import {accountService} from '../../../services';
-import {
-  createTextField,
-  createSelectField,
-} from '../../../components/common/Formik';
+import {FormGroup} from '../../../components/admin/FormGroup';
 
 const initialValues: Account = {
   email: '',
@@ -35,11 +28,7 @@ export function getServerErrorMessage(error): string {
   return 'Unknown error';
 }
 
-const TextField = createTextField<string, Account>();
-const SelectField = createSelectField<string, Account>();
-const SelectBooleanField = createSelectField<boolean, Account>();
-
-function AdminAccountCreationPage(): ReactElement {
+const AdminAccountCreationPage: FC = () => {
   const {t} = useTranslation();
 
   async function _handleSave(values: Account, actions): Promise<void> {
@@ -72,46 +61,51 @@ function AdminAccountCreationPage(): ReactElement {
               <div className="card-body">
                 <div className="row">
                   <div className="col-12">
-                    <TextField
+                    <FormGroup
                       name="email"
-                      labelText="Email"
-                      iconName="cil-envelope-closed"
+                      label={t('email')}
+                      icon="cil-envelope-closed"
+                      required
                     />
-                    <TextField
+                    <FormGroup
                       name="password"
                       type="password"
-                      labelText="Password"
-                      iconName="cil-lock-locked"
+                      label={t('password')}
+                      icon="cil-lock-locked"
+                      required
                     />
-                    <TextField
+                    <FormGroup
                       name="firstName"
-                      labelText="First name"
-                      iconName="cil-user"
+                      label={t('firstName')}
+                      icon="cil-user"
+                      required
                     />
-                    <TextField
+                    <FormGroup
                       name="lastName"
-                      labelText="Last name"
-                      iconName="cil-user"
+                      label={t('lastName')}
+                      icon="cil-user"
+                      required
                     />
-                    <SelectField name="status" labelText="Account status">
+                    <FormGroup
+                      name="status"
+                      label={t('accountStatus')}
+                      tag="select"
+                      required>
                       <option value={AccountStatus.ACTIVE}>
-                        {AccountStatusText[AccountStatus.ACTIVE]}
+                        {t('active')}
                       </option>
                       <option value={AccountStatus.INACTIVE}>
-                        {AccountStatusText[AccountStatus.INACTIVE]}
+                        {t('inactive')}
                       </option>
-                    </SelectField>
-                    <SelectBooleanField
+                    </FormGroup>
+                    <FormGroup
                       name="emailVerified"
-                      labelText="Email verification"
-                      onChangeProcess={(v): boolean => v === 'true'}>
-                      <option value="true">
-                        {AccountEmailVerificationText.VERIFIED}
-                      </option>
-                      <option value="false">
-                        {AccountEmailVerificationText.NOT_VERIFIED}
-                      </option>
-                    </SelectBooleanField>
+                      label={t('emailVerification')}
+                      tag="select"
+                      required>
+                      <option value="true">{t('verified')}</option>
+                      <option value="false">{t('notVerified')}</option>
+                    </FormGroup>
                   </div>
                 </div>
               </div>
@@ -126,7 +120,7 @@ function AdminAccountCreationPage(): ReactElement {
                       role="status"
                     />
                   )}
-                  {isSubmitting ? 'Creating...' : 'Create'}
+                  {isSubmitting ? 'Creating...' : t('create')}
                 </button>
               </div>
             </div>
@@ -135,7 +129,7 @@ function AdminAccountCreationPage(): ReactElement {
       </Formik>
     </div>
   );
-}
+};
 
 export default adminOnly(
   AdminAccountCreationPage as NextComponentType<NextPageContext>,

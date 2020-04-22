@@ -1,6 +1,7 @@
 {
   "login": "Login",
   "accounts": "Accounts",
+  "accountStatus": "Account status",
   "dashboard": "Dashboard",
   "smtpSettings": "SMTP settings",
   "emailAddressVerification": "Email address verification",
@@ -27,6 +28,7 @@
   "subject": "Subject",
   "emailTemplate": "Email template",
   "email": "Email",
+  "emailVerification": "Email verification",
   "loginToYourAccount": "Login to your account",
   "forgotPassword": "Forgot password?",
   "incorrectEmailOrPassword": "Incorrect email or password",
