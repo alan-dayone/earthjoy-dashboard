@@ -14,9 +14,9 @@ import {useTranslation} from 'react-i18next';
 export function getServerErrorMessage(error): string {
   const errorEnum = loGet(error, 'response.data.error.message');
   if (errorEnum === 'EMAIL_EXISTED') {
-    return 'Email already existed';
+    return 'emailAlreadyExist';
   }
-  return 'Unknown error';
+  return 'error.unknown';
 }
 
 interface Props {
@@ -38,8 +38,8 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
       toastr.success(t('success'));
     } catch (e) {
       if (loGet(e, 'e.response.data.error', false))
-        toastr.error(getServerErrorMessage(e));
-      else toastr.error('error.unknown');
+        toastr.error(t(getServerErrorMessage(e)));
+      else toastr.error(t('error.unknown'));
     } finally {
       actions.setSubmitting(false);
     }

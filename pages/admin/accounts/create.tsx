@@ -25,9 +25,9 @@ const AdminAccountCreationPage: FC = () => {
   const getServerErrorMessage = (error): string => {
     const errorEnum = loGet(error, 'response.data.error.message');
     if (errorEnum === 'EMAIL_EXISTED') {
-      return t('emailAlreadyExist');
+      return 'emailAlreadyExist';
     }
-    return 'Unknown error';
+    return 'error.unknown';
   };
 
   const handleSave = async (values: Account, actions): Promise<void> => {
@@ -37,7 +37,7 @@ const AdminAccountCreationPage: FC = () => {
       toastr.success(t('success'));
       actions.setSubmitting(false);
     } catch (e) {
-      toastr.error(getServerErrorMessage(e));
+      toastr.error(t(getServerErrorMessage(e)));
       actions.setSubmitting(false);
     }
   };
