@@ -12,6 +12,7 @@ import {withI18next} from '../../hocs/withI18next';
 import {loginWithEmail} from '../../redux/slices/loginUserSlice';
 import {AppDispatch} from '../../redux/store';
 import {FormGroup} from '../../components/admin/FormGroup';
+import {FormButton} from '../../components/admin/FormButton';
 
 export interface LoginForm {
   email: string;
@@ -89,23 +90,21 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
                         />
                         <div className="row">
                           <div className="col-6">
-                            <button
-                              className="btn btn-primary px-4"
+                            <FormButton
                               type="submit"
-                              disabled={props.isSubmitting}>
-                              {props.isSubmitting && (
-                                <div className="spinner-border spinner-border-sm mr-1" />
-                              )}
+                              color="primary"
+                              loading={props.isSubmitting}>
                               {t('login')}
-                            </button>
+                            </FormButton>
                           </div>
                           <div className="col-6 text-right">
                             <Link href="/admin/reset-password">
-                              <button
-                                className="btn btn-link px-0"
-                                type="button">
+                              <FormButton
+                                type="button"
+                                color="link"
+                                className="px-0">
                                 {t('forgotPassword')}
-                              </button>
+                              </FormButton>
                             </Link>
                           </div>
                         </div>
