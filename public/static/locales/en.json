@@ -33,5 +33,13 @@
     "atLeast": "$t({{labelKey}}) must be at least {{limit}}",
     "atMost": "$t({{labelKey}}) must be at most {{limit}}",
     "passwordsMustMatch": "Passwords must match"
-  }
+  },
+  "rootAdmin": "Root admin",
+  "user": "User",
+  "active": "Active",
+  "inactive": "Inactive",
+  "verified": "Verified",
+  "notVerified": "Not verified",
+  "accountManagement": "Account management",
+  "create": "Create"
 }
