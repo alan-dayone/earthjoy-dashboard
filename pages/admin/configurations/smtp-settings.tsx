@@ -11,6 +11,8 @@ import {
   MailSmtpSettings,
 } from '../../../models/Configuration';
 import {FormGroup} from '../../../components/admin/FormGroup';
+import {FormikButton} from '../../../components/admin/FormikButton';
+import {FormButton} from '../../../components/admin/FormButton';
 
 const AdminSmtpSettingsPage: FC = () => {
   const [isTestingConnection, setIsTestingConnection] = useState(false);
@@ -135,31 +137,20 @@ const AdminSmtpSettingsPage: FC = () => {
                     </div>
                   </div>
                   <div className="card-footer">
-                    <button
-                      className="btn btn-sm btn-primary"
-                      type="submit"
-                      disabled={isSubmitting}>
-                      {isSubmitting && (
-                        <div
-                          className="spinner-border spinner-border-sm mr-1"
-                          role="status"
-                        />
-                      )}
-                      {isSubmitting ? 'Saving...' : t('save')}
-                    </button>
+                    <FormikButton size="sm" color="primary">
+                      {t('save')}
+                    </FormikButton>
                     &nbsp;
-                    <button
-                      className="btn btn-sm btn-info"
+                    <FormButton
+                      size="sm"
+                      color="info"
                       onClick={async (e): Promise<void> => {
                         e.preventDefault();
                         await handleTestSmtpConnection(values);
                       }}
-                      disabled={isTestingConnection}>
-                      {isTestingConnection && (
-                        <div className="spinner-border spinner-border-sm mr-1" />
-                      )}
+                      loading={isTestingConnection}>
                       {t('testConnection')}
-                    </button>
+                    </FormButton>
                   </div>
                 </div>
               </form>

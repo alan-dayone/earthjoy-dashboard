@@ -2,7 +2,6 @@ import React, {FC} from 'react';
 import classnames from 'classnames';
 import {ButtonProps, Button, Spinner} from 'reactstrap';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface Props extends ButtonProps {
   loading?: boolean;
 }
