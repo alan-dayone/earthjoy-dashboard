@@ -25,7 +25,9 @@
   "emailTemplate": "Email template",
   "emailVerification": "Email verification",
   "error": {
-    "unknown": "Something went wrong"
+    "emailNotFound": "Email not found",
+    "networkError": "Network error",
+    "unknown": "Unknown error"
   },
   "firstName": "First name",
   "forgotPassword": "Forgot password?",

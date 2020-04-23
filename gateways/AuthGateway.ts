@@ -1,7 +1,6 @@
 import loGet from 'lodash/get';
 import Cookies from 'js-cookie';
 import {AxiosInstance} from 'axios';
-import {errorCode, ValidationError} from '../errors/ValidationError';
 import {AuthService} from '../services/AuthService';
 import {ApplicationError} from '../errors/ApplicationError';
 import {LoginUser} from '../models/Account';
@@ -46,21 +45,9 @@ export class AuthGateway {
   }
 
   public async sendResetPasswordEmail(email: string): Promise<void> {
-    try {
-      await this.restConnector.post('/accounts/send-reset-password-email', {
-        email,
-      });
-    } catch (e) {
-      const errResp = loGet(e, 'response.data.error', e);
-      switch (errResp.code) {
-        case 'EMAIL_NOT_FOUND':
-          throw new ApplicationError(AuthService.error.EMAIL_NOT_FOUND);
-        case 'EMAIL_REQUIRED':
-          throw new ValidationError({email: [errorCode.REQUIRED]});
-        default:
-          throw e;
-      }
-    }
+    await this.restConnector.post('/accounts/send-reset-password-email', {
+      email,
+    });
   }
 
   public async verifyAccount(
@@ -81,20 +68,7 @@ export class AuthGateway {
     email: string;
     preferredLanguage: string;
   }): Promise<void> {
-    try {
-      await this.restConnector.patch(`/accounts/me`, body);
-    } catch (e) {
-      const errResp = loGet(e, 'response.data.error', e);
-      switch (errResp.name) {
-        case 'ValidationError': {
-          if (loGet(errResp, 'details.codes.email[0]') === 'uniqueness') {
-            throw new ValidationError({email: [errorCode.EMAIL_EXISTED]});
-          }
-          throw new ValidationError({email: [errorCode.INVALID_EMAIL]});
-        }
-      }
-      throw e;
-    }
+    await this.restConnector.patch(`/accounts/me`, body);
   }
 
   public async updatePassword(body: {

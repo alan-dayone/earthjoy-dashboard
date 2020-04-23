@@ -2,23 +2,26 @@ import React, {FC, useState} from 'react';
 import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
-import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
+import {Formik, FormikHelpers, FormikProps} from 'formik';
+import {useTranslation} from 'react-i18next';
+import {withI18next} from '../../hocs/withI18next';
 import {guestOnly} from '../../hocs/guestOnly';
 import {authService} from '../../services';
 import {adminResetPasswordFormSchema} from '../../view-models/Account';
 import {FormikButton} from '../../components/admin/FormikButton';
-import {withI18next} from '../../hocs/withI18next';
+import {getErrorMessageCode} from '../../view-models/Error';
 
 interface ForgotPasswordForm {
   email: string;
 }
 
 const AdminResetPasswordPage: FC = () => {
+  const {t} = useTranslation();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleForgotPassword = async (
     values: ForgotPasswordForm,
-    actions: FormikActions<ForgotPasswordForm>,
+    actions: FormikHelpers<ForgotPasswordForm>,
   ): Promise<void> => {
     actions.setSubmitting(true);
     try {
@@ -27,7 +30,7 @@ const AdminResetPasswordPage: FC = () => {
       toastr.success('Success');
       actions.setSubmitting(false);
     } catch (e) {
-      toastr.error(e.message);
+      toastr.error(t(getErrorMessageCode(e)));
       actions.setSubmitting(false);
     }
   };

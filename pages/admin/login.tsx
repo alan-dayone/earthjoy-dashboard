@@ -12,7 +12,7 @@ import {loginWithEmail} from '../../redux/slices/loginUserSlice';
 import {AppDispatch} from '../../redux/store';
 import {FormGroup} from '../../components/admin/FormGroup';
 import {FormikButton} from '../../components/admin/FormikButton';
-import {getErrorCode} from '../../errors/ServerError';
+import {getErrorMessageCode} from '../../view-models/Error';
 
 export interface LoginForm {
   email: string;
@@ -25,16 +25,6 @@ interface PageProps {
 
 const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
   const {t} = useTranslation();
-
-  const getErrorMessage = (error): string => {
-    const errCode = getErrorCode(error);
-
-    if (['VALIDATION_FAILED', 'invalid_credentials_email'].includes(errCode)) {
-      return 'incorrectEmailOrPassword';
-    }
-
-    return errCode;
-  };
 
   const handleLogin = async (
     values: LoginForm,
@@ -49,7 +39,15 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
       }
     } catch (e) {
       actions.setSubmitting(false);
-      toastr.error(t(getErrorMessage(e)));
+      /* eslint-disable prettier/prettier */
+      toastr.error(
+        t(
+          getErrorMessageCode(e, {
+            'VALIDATION_FAILED': 'incorrectEmailOrPassword',
+            'invalid_credentials_email': 'incorrectEmailOrPassword',
+          }),
+        ),
+      );
     }
   };
 
