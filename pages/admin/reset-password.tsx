@@ -7,6 +7,7 @@ import {guestOnly} from '../../hocs/guestOnly';
 import {authService} from '../../services';
 import {adminResetPasswordFormSchema} from '../../view-models/Account';
 import {FormikButton} from '../../components/admin/FormikButton';
+import {withI18next} from '../../hocs/withI18next';
 
 interface ForgotPasswordForm {
   email: string;
@@ -106,4 +107,6 @@ const AdminResetPasswordPage: FC = () => {
   );
 };
 
-export default guestOnly(AdminResetPasswordPage, {useAdminLayout: true});
+export default guestOnly(withI18next(AdminResetPasswordPage), {
+  useAdminLayout: true,
+});
