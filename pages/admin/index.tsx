@@ -1,4 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import Head from 'next/head';
 import {adminOnly} from '../../hocs/adminOnly';
 import {accountService} from '../../services';
@@ -11,6 +12,7 @@ interface AccountCountState {
 }
 
 const AdminDashboardPage: FC = () => {
+  const {t} = useTranslation();
   const [accountCount, setAccountCount] = useState<AccountCountState>({
     allAccountActivated: 0,
     userVerified: 0,
@@ -44,7 +46,9 @@ const AdminDashboardPage: FC = () => {
   return (
     <div id="admin-dashboard-page">
       <Head>
-        <title>Admin - Dashboard</title>
+        <title>
+          {t('admin')} - {t('dashboard')}
+        </title>
       </Head>
       <div className="row">
         <div className="col">
@@ -54,7 +58,7 @@ const AdminDashboardPage: FC = () => {
                 <div className="text-value-xl">
                   {accountCount.allAccountActivated}
                 </div>
-                <div>Active accounts</div>
+                <div>{t('activeAccounts')}</div>
               </div>
             </div>
             <div className="card-body">
@@ -66,7 +70,7 @@ const AdminDashboardPage: FC = () => {
                     </span>
                   </div>
                   <div className="text-uppercase text-muted small">
-                    Verified users
+                    {t('verifiedUsers')}
                   </div>
                 </div>
                 <div className="c-vr"></div>
@@ -76,7 +80,9 @@ const AdminDashboardPage: FC = () => {
                       {accountCount.adminActivated}
                     </span>
                   </div>
-                  <div className="text-uppercase text-muted small">Admins</div>
+                  <div className="text-uppercase text-muted small">
+                    {t('admins')}
+                  </div>
                 </div>
               </div>
             </div>

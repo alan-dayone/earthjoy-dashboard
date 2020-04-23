@@ -4,7 +4,9 @@
   "accounts": "Accounts",
   "actions": "Actions",
   "active": "Active",
+  "activeAccounts": "Active accounts",
   "admin": "Admin",
+  "admins": "Admins",
   "all": "All",
   "changePassword": "Change password",
   "configuration": "Configuration",
@@ -70,5 +72,6 @@
     "isRequired": "$t({{labelKey}}) is required",
     "passwordsMustMatch": "Passwords must match"
   },
-  "verified": "Verified"
+  "verified": "Verified",
+  "verifiedUsers": "Verified users"
 }
