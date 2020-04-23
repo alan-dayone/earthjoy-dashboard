@@ -58,7 +58,7 @@ const AdminDashboardPage: FC = () => {
                 <div className="text-value-xl">
                   {accountCount.allAccountActivated}
                 </div>
-                <div>{t('activeAccounts')}</div>
+                <div className="text-uppercase">{t('activeAccounts')}</div>
               </div>
             </div>
             <div className="card-body">

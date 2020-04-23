@@ -1,25 +1,24 @@
-import React, {useEffect, useState, FC} from 'react';
+import React, {FC} from 'react';
 import Head from 'next/head';
 import {Formik, FormikHelpers} from 'formik';
 import toastr from 'toastr';
-import _isEqual from 'lodash/isEqual';
 import Router from 'next/router';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {adminOnly} from '../../hocs/adminOnly';
-import {Account, LoginUser} from '../../models/Account';
+import {LoginUser} from '../../models/Account';
 import {accountService, authService} from '../../services';
 import {FormGroup} from '../../components/admin/FormGroup';
-import {AccountStatusLabel} from '../../components/admin/AccountStatusLabel';
 import {AccountEmailVerificationLabel} from '../../components/admin/AccountEmailVerificationLabel';
 import {
-  adminUpdateProfileSchema,
   adminUpdatePasswordSchema,
+  adminUpdateProfileSchema,
 } from '../../view-models/Account';
 import {selectors} from '../../redux/slices/loginUserSlice';
 import {RootState} from '../../redux/slices';
 import {useTranslation} from 'react-i18next';
 import {FormikButton} from '../../components/admin/FormikButton';
+import {getErrorMessageCode} from '../../view-models/Error';
 
 interface Props {
   loginUser: LoginUser;
@@ -37,38 +36,20 @@ const initialChangePasswordForm = {
   confirmPassword: '',
 };
 
-const ProfilePage: FC<Props> = (props: Props) => {
-  const {loginUser} = props;
+const ProfilePage: FC<Props> = ({loginUser}: Props) => {
   const {t} = useTranslation();
-  const [profile, setProfile] = useState<Account>({
-    email: '',
-    emailVerified: undefined,
-    firstName: '',
-    lastName: '',
-    status: undefined,
-  });
-
-  useEffect(() => {
-    (async (): Promise<void> => {
-      const userProfile = await accountService.findOneForAdmin(loginUser?.id);
-      setProfile(userProfile);
-    })();
-  }, [loginUser]);
 
   const handleUpdateProfile = async (
-    values: Account,
-    formikHelpers: FormikHelpers<Account>,
+    values: LoginUser,
+    formikHelpers: FormikHelpers<LoginUser>,
   ): Promise<void> => {
     try {
       formikHelpers.setSubmitting(true);
-      if (_isEqual(values, profile)) {
-        toastr.warning('New profile is the same.');
-        return;
-      }
+      // TODO: Change to use redux.
       await accountService.updateAccount(loginUser.id, values);
-      toastr.success('Update profile succeed.');
-    } catch {
-      toastr.error('Update profile failed.');
+      toastr.success(t('success'));
+    } catch (e) {
+      toastr.error(t(getErrorMessageCode(e)));
     } finally {
       formikHelpers.setSubmitting(false);
     }
@@ -84,10 +65,10 @@ const ProfilePage: FC<Props> = (props: Props) => {
         values.currentPassword,
         values.newPassword,
       );
-      toastr.success('Update password succeed.');
+      toastr.success(t('success'));
       Router.reload();
-    } catch {
-      toastr.error('Update password failed.');
+    } catch (e) {
+      toastr.error(t(getErrorMessageCode(e)));
     } finally {
       formikHelpers.setSubmitting(false);
     }
@@ -103,7 +84,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
       <div className="row">
         <div className="col-6">
           <Formik
-            initialValues={profile}
+            initialValues={loginUser}
             enableReinitialize
             onSubmit={handleUpdateProfile}
             validationSchema={adminUpdateProfileSchema}>
@@ -121,10 +102,6 @@ const ProfilePage: FC<Props> = (props: Props) => {
                     />
                     <FormGroup name="lastName" label={t('lastName')} required />
                     <FormGroup name="email" label={t('email')} readOnly />
-                    <div className="form-group">
-                      {t('accountStatus')}:{' '}
-                      <AccountStatusLabel status={values.status} />
-                    </div>
                     <div className="form-group">
                       {t('emailVerification')}:{' '}
                       <AccountEmailVerificationLabel
@@ -193,8 +170,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
 
 export default compose(
   adminOnly,
-  connect(
-    (state: RootState) => ({loginUser: selectors.selectLoginUser(state)}),
-    null,
-  ),
+  connect((state: RootState) => ({
+    loginUser: selectors.selectLoginUser(state),
+  })),
 )(ProfilePage);
