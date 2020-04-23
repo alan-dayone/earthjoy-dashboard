@@ -10,6 +10,7 @@ import {
 } from '../../../models/Configuration';
 import {passwordResetValidationSchema} from '../../../view-models/Configuration';
 import {systemService} from '../../../services';
+import {FormikButton} from '../../../components/admin/FormikButton';
 
 const initialValues: ResetPasswordSettings = {
   senderName: '',
@@ -52,7 +53,6 @@ const AdminPasswordResetPage: FC = () => {
               errors,
               handleChange,
               handleSubmit,
-              isSubmitting,
               values,
             }: FormikProps<ResetPasswordSettings>): JSX.Element => (
               <form onSubmit={handleSubmit}>
@@ -146,18 +146,9 @@ const AdminPasswordResetPage: FC = () => {
                     </div>
                   </div>
                   <div className="card-footer d-flex justify-content-end">
-                    <button
-                      className="btn btn-sm btn-primary"
-                      type="submit"
-                      disabled={isSubmitting}>
-                      {isSubmitting && (
-                        <div
-                          className="spinner-border spinner-border-sm mr-1"
-                          role="status"
-                        />
-                      )}
-                      {isSubmitting ? 'Saving...' : 'Save'}
-                    </button>
+                    <FormikButton size="sm" color="primary">
+                      Save
+                    </FormikButton>
                   </div>
                 </div>
               </form>

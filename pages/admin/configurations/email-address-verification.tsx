@@ -11,6 +11,7 @@ import {emailVerificationValidationSchema} from '../../../view-models/Configurat
 import {FormGroup} from '../../../components/admin/FormGroup';
 import {systemService} from '../../../services';
 import {VerifyAccountSetting} from '../../../gateways/SystemGateway';
+import {FormikButton} from '../../../components/admin/FormikButton';
 
 const AdminEmailAddressVerificationPage: FC = () => {
   const [initialValues, setInitialValues] = useState({
@@ -59,7 +60,6 @@ const AdminEmailAddressVerificationPage: FC = () => {
             validationSchema={emailVerificationValidationSchema}>
             {({
               handleSubmit,
-              isSubmitting,
             }: FormikProps<VerifyAccountSettings>): JSX.Element => (
               <form onSubmit={handleSubmit}>
                 <div className="card">
@@ -99,18 +99,9 @@ const AdminEmailAddressVerificationPage: FC = () => {
                     </div>
                   </div>
                   <div className="card-footer d-flex justify-content-end">
-                    <button
-                      className="btn btn-sm btn-primary"
-                      type="submit"
-                      disabled={isSubmitting}>
-                      {isSubmitting && (
-                        <div
-                          className="spinner-border spinner-border-sm mr-1"
-                          role="status"
-                        />
-                      )}
-                      {isSubmitting ? 'Saving...' : 'Save'}
-                    </button>
+                    <FormikButton size="sm" color="primary">
+                      Save
+                    </FormikButton>
                   </div>
                 </div>
               </form>

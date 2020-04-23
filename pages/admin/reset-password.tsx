@@ -6,6 +6,7 @@ import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import {guestOnly} from '../../hocs/guestOnly';
 import {authService} from '../../services';
 import {adminResetPasswordFormSchema} from '../../view-models/Account';
+import {FormikButton} from '../../components/admin/FormikButton';
 
 interface ForgotPasswordForm {
   email: string;
@@ -80,15 +81,9 @@ const AdminResetPasswordPage: FC = () => {
                                 )}
                               </div>
                             </div>
-                            <button
-                              className="btn btn-block btn-primary"
-                              type="submit"
-                              disabled={props.isSubmitting}>
-                              {props.isSubmitting && (
-                                <div className="spinner-border spinner-border-sm mr-1" />
-                              )}
+                            <FormikButton color="primary" className="btn-block">
                               Submit
-                            </button>
+                            </FormikButton>
                           </div>
                         ) : (
                           <div className="mt-3">

@@ -19,6 +19,7 @@ import {
 import {selectors} from '../../redux/slices/loginUserSlice';
 import {RootState} from '../../redux/slices';
 import {useTranslation} from 'react-i18next';
+import {FormikButton} from '../../components/admin/FormikButton';
 
 interface Props {
   loginUser: LoginUser;
@@ -104,7 +105,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
             enableReinitialize
             onSubmit={handleUpdateProfile}
             validationSchema={adminUpdateProfileSchema}>
-            {({handleSubmit, isSubmitting, values}): JSX.Element => (
+            {({handleSubmit, values}): JSX.Element => (
               <form onSubmit={handleSubmit}>
                 <div className="card">
                   <div className="card-header">
@@ -130,12 +131,9 @@ const ProfilePage: FC<Props> = (props: Props) => {
                     </div>
                   </div>
                   <div className="card-footer d-flex justify-content-end">
-                    <button
-                      className="btn btn-sm btn-primary"
-                      type="submit"
-                      disabled={isSubmitting}>
+                    <FormikButton size="sm" color="primary">
                       {t('save')}
-                    </button>
+                    </FormikButton>
                   </div>
                 </div>
               </form>
@@ -147,7 +145,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
             initialValues={initialChangePasswordForm}
             onSubmit={handleChangePassword}
             validationSchema={adminUpdatePasswordSchema}>
-            {({handleSubmit, isSubmitting}): JSX.Element => (
+            {({handleSubmit}): JSX.Element => (
               <form onSubmit={handleSubmit}>
                 <div className="card">
                   <div className="card-header">
@@ -174,12 +172,12 @@ const ProfilePage: FC<Props> = (props: Props) => {
                     />
                   </div>
                   <div className="card-footer d-flex justify-content-end">
-                    <button
-                      className="btn btn-sm btn-primary float-right"
-                      type="submit"
-                      disabled={isSubmitting}>
+                    <FormikButton
+                      size="sm"
+                      color="primary"
+                      className="float-right">
                       {t('submit')}
-                    </button>
+                    </FormikButton>
                   </div>
                 </div>
               </form>

@@ -7,6 +7,7 @@ import {Formik, FormikHelpers as FormikActions} from 'formik';
 import {guestOnly} from '../../hocs/guestOnly';
 import {authService} from '../../services';
 import {adminResetNewPasswordFormSchema} from '../../view-models/Account';
+import {FormikButton} from '../../components/admin/FormikButton';
 
 interface ResetNewPasswordForm {
   newPassword: string;
@@ -64,7 +65,6 @@ const AdminResetNewPasswordPage: FC = () => {
                     {({
                       values,
                       handleChange,
-                      isSubmitting,
                       handleSubmit,
                       errors,
                     }): JSX.Element => (
@@ -119,15 +119,9 @@ const AdminResetNewPasswordPage: FC = () => {
                             )}
                           </div>
                         </div>
-                        <button
-                          className="btn btn-block btn-primary"
-                          type="submit"
-                          disabled={isSubmitting}>
-                          {isSubmitting && (
-                            <div className="spinner-border spinner-border-sm mr-1" />
-                          )}
+                        <FormikButton color="primary" className="btn-block">
                           Submit
-                        </button>
+                        </FormikButton>
                       </form>
                     )}
                   </Formik>
