@@ -135,11 +135,7 @@ const AdminSmtpSettingsPage: FC = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="card-footer">
-                    <FormikButton size="sm" color="primary">
-                      {t('save')}
-                    </FormikButton>
-                    &nbsp;
+                  <div className="card-footer d-flex justify-content-end">
                     <FormButton
                       size="sm"
                       color="info"
@@ -150,6 +146,10 @@ const AdminSmtpSettingsPage: FC = () => {
                       loading={isTestingConnection}>
                       {t('testConnection')}
                     </FormButton>
+                    &nbsp;
+                    <FormikButton size="sm" color="primary">
+                      {t('save')}
+                    </FormikButton>
                   </div>
                 </div>
               </form>

@@ -70,4 +70,11 @@ export class AuthService {
   public setAccessToken(accessToken: string): void {
     this.authGateway.setAccessToken(accessToken);
   }
+
+  public async changePassword(
+    oldPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    await this.authGateway.changePassword(oldPassword, newPassword);
+  }
 }

@@ -163,4 +163,14 @@ export class AuthGateway {
   //     newPasswordConfirm,
   //   });
   // }
+
+  public async changePassword(
+    oldPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    await this.restConnector.post('/accounts/change-password', {
+      oldPassword,
+      newPassword,
+    });
+  }
 }

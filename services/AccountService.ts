@@ -45,11 +45,4 @@ export class AccountService {
   public async findOneForAdmin(id: string): Promise<Account | null> {
     return this.accountGateway.findOne(id);
   }
-
-  public async changePassword(
-    oldPassword: string,
-    newPassword: string,
-  ): Promise<void> {
-    await this.accountGateway.changePassword(oldPassword, newPassword);
-  }
 }

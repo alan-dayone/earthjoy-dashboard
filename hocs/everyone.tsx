@@ -2,34 +2,10 @@ import React, {ReactNode} from 'react';
 import Head from 'next/head';
 import {NextComponentType} from 'next';
 import {CustomNextPageContext} from './types';
-// import {withI18next} from './withI18next';
 
 export const everyone = (Content: NextComponentType): ReactNode => {
-  class Wrapper extends React.Component {
-    public static async getInitialProps(
-      ctx: CustomNextPageContext,
-    ): Promise<object> {
-      return Content.getInitialProps ? await Content.getInitialProps(ctx) : {};
-    }
-
-    public render(): JSX.Element {
-      return (
-        <div className="app-layout--user c-wrapper">
-          <Head>
-            <title>NextJs Boilerplate</title>
-          </Head>
-          {this._renderNavBar()}
-          <div className="c-body">
-            <main className="c-main">
-              <Content {...this.props} />
-            </main>
-            {this._renderFooter()}
-          </div>
-        </div>
-      );
-    }
-
-    public _renderNavBar = (): JSX.Element => {
+  const EveryoneWrapper: NextComponentType<CustomNextPageContext> = () => {
+    const renderNavBar = (): JSX.Element => {
       return (
         <header className="c-header c-header-light c-header-fixed px-3">
           <a className="c-header-brand">
@@ -44,8 +20,7 @@ export const everyone = (Content: NextComponentType): ReactNode => {
         </header>
       );
     };
-
-    public _renderFooter = (): JSX.Element => {
+    const renderFooter = (): JSX.Element => {
       return (
         <footer className="c-footer">
           <div>
@@ -54,7 +29,26 @@ export const everyone = (Content: NextComponentType): ReactNode => {
         </footer>
       );
     };
-  }
+    return (
+      <div className="app-layout--user c-wrapper">
+        <Head>
+          <title>NextJs Boilerplate</title>
+        </Head>
+        {renderNavBar()}
+        <div className="c-body">
+          <main className="c-main">
+            <Content {...this.props} />
+          </main>
+          {renderFooter()}
+        </div>
+      </div>
+    );
+  };
+  EveryoneWrapper.getInitialProps = async (
+    ctx: CustomNextPageContext,
+  ): Promise<object> => {
+    return Content.getInitialProps ? await Content.getInitialProps(ctx) : {};
+  };
 
-  return Wrapper;
+  return EveryoneWrapper;
 };

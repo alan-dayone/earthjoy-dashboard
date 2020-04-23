@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {adminOnly} from '../../hocs/adminOnly';
 import {Account, LoginUser} from '../../models/Account';
-import {accountService} from '../../services';
+import {accountService, authService} from '../../services';
 import {FormGroup} from '../../components/admin/FormGroup';
 import {AccountStatusLabel} from '../../components/admin/AccountStatusLabel';
 import {AccountEmailVerificationLabel} from '../../components/admin/AccountEmailVerificationLabel';
@@ -79,7 +79,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
   ): Promise<void> => {
     try {
       formikHelpers.setSubmitting(true);
-      await accountService.changePassword(
+      await authService.changePassword(
         values.currentPassword,
         values.newPassword,
       );
