@@ -21,22 +21,22 @@ const AdminAccountsPage: FC = () => {
       width: '15%',
     },
     {
-      Header: 'First name',
+      Header: t('firstName'),
       accessor: 'firstName',
       width: '10%',
     },
     {
-      Header: 'Last name',
+      Header: t('lastName'),
       accessor: 'lastName',
       width: '10%',
     },
     {
-      Header: 'Email',
+      Header: t('email'),
       accessor: 'email',
       width: '15%',
     },
     {
-      Header: 'Email verification',
+      Header: t('emailVerification'),
       accessor: 'emailVerified',
       Filter: createSelectFilter<Account>({
         items: [
@@ -52,7 +52,7 @@ const AdminAccountsPage: FC = () => {
       } as Renderer<CellProps<Account>>,
     },
     {
-      Header: 'Role',
+      Header: t('role'),
       accessor: 'role',
       Filter: createSelectFilter<Account>({
         items: [
@@ -74,7 +74,7 @@ const AdminAccountsPage: FC = () => {
       } as Renderer<CellProps<Account>>,
     },
     {
-      Header: 'Status',
+      Header: t('accountStatus'),
       accessor: 'status',
       Filter: createSelectFilter<Account>({
         items: [
@@ -96,7 +96,7 @@ const AdminAccountsPage: FC = () => {
       } as Renderer<CellProps<Account>>,
     },
     {
-      Header: 'Actions',
+      Header: t('actions'),
       sortType: null,
       disableSortBy: true,
       disableFilters: true,
@@ -106,7 +106,7 @@ const AdminAccountsPage: FC = () => {
           <Link
             as={`/admin/accounts/${row.values.id}/edit`}
             href="/admin/accounts/[userId]/edit">
-            <a className="btn btn-sm btn-info">Edit</a>
+            <a className="btn btn-sm btn-info">{t('edit')}</a>
           </Link>
         );
       } as Renderer<CellProps<Account>>,
