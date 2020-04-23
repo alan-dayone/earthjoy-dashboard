@@ -2,10 +2,10 @@ import React, {FC, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Head from 'next/head';
 import {connect} from 'react-redux';
-import {withI18next} from '../../../hocs/withI18next';
-import {guestOnly} from '../../../hocs/guestOnly';
-import EnterPasswordForm from '../../../containers/admin/setup/EnterPasswordForm';
-import CreateFirstAdminForm from '../../../containers/admin/setup/CreateFirstAdminForm';
+import {withI18next} from '../../hocs/withI18next';
+import {guestOnly} from '../../hocs/guestOnly';
+import EnterPasswordForm from '../../containers/admin/setup/EnterPasswordForm';
+import CreateFirstAdminForm from '../../containers/admin/setup/CreateFirstAdminForm';
 
 enum STEP {
   ENTER_PASSWORD,
