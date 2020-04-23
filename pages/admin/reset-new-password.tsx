@@ -1,4 +1,5 @@
 import React, {FC} from 'react';
+import {useTranslation} from 'react-i18next';
 import Router from 'next/router';
 import Head from 'next/head';
 import toastr from 'toastr';
@@ -16,9 +17,10 @@ interface ResetNewPasswordForm {
 }
 
 const AdminResetNewPasswordPage: FC = () => {
+  const {t} = useTranslation();
   const getErrorMessage = (e): string => {
     if (e.response?.data?.error?.message === 'invalid_token') {
-      return 'Token is invalid or expired';
+      return t('msgTokenInvalidOrExpired');
     }
     return e.message;
   };
@@ -34,7 +36,7 @@ const AdminResetNewPasswordPage: FC = () => {
         newPassword: values.newPassword,
         resetPasswordToken: Router.query.token as string,
       });
-      toastr.success('Success');
+      toastr.success(t('success'));
       actions.setSubmitting(false);
       await Router.replace('/admin/login');
     } catch (e) {
@@ -48,7 +50,9 @@ const AdminResetNewPasswordPage: FC = () => {
       id="admin-login-page"
       className="align-items-center c-app flex-row pace-done">
       <Head>
-        <title>Admin - Reset password</title>
+        <title>
+          {t('admin')} - {t('resetPassword')}
+        </title>
       </Head>
       <div className="container">
         <div className="row justify-content-center">
@@ -70,8 +74,10 @@ const AdminResetNewPasswordPage: FC = () => {
                       errors,
                     }): JSX.Element => (
                       <form onSubmit={handleSubmit}>
-                        <h1>Reset Password</h1>
-                        <p className="text-muted">Please enter new password.</p>
+                        <h1>{t('resetPassword')}</h1>
+                        <p className="text-muted">
+                          {t('msgPleaseEnterNewPassword')}
+                        </p>
                         <div className="form-group">
                           <div className="input-group mb-3">
                             <div className="input-group-prepend">
@@ -121,7 +127,7 @@ const AdminResetNewPasswordPage: FC = () => {
                           </div>
                         </div>
                         <FormikButton color="primary" className="btn-block">
-                          Submit
+                          {t('submit')}
                         </FormikButton>
                       </form>
                     )}

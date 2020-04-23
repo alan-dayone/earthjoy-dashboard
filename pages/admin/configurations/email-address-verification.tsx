@@ -29,7 +29,9 @@ const AdminEmailAddressVerificationPage: FC = () => {
       const emailVerificationSettings = await systemService.getConfiguration<
         VerifyAccountSetting
       >(ConfigurationKey.VERIFY_ACCOUNT_SETTINGS);
-      setInitialValues(emailVerificationSettings);
+      if (emailVerificationSettings) {
+        setInitialValues(emailVerificationSettings);
+      }
     })();
   });
 

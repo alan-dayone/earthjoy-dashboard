@@ -29,7 +29,9 @@ const AdminPasswordResetPage: FC = () => {
       const emailResetPasswordSettings = await systemService.getConfiguration<
         ResetPasswordSetting
       >(ConfigurationKey.RESET_PASSWORD_SETTINGS);
-      setInitialValues(emailResetPasswordSettings);
+      if (emailResetPasswordSettings) {
+        setInitialValues(emailResetPasswordSettings);
+      }
     })();
   });
 

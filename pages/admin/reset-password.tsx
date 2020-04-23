@@ -27,7 +27,7 @@ const AdminResetPasswordPage: FC = () => {
     try {
       await authService.sendResetPasswordEmail(values.email);
       setIsSubmitted(true);
-      toastr.success('Success');
+      toastr.success(t('success'));
       actions.setSubmitting(false);
     } catch (e) {
       toastr.error(t(getErrorMessageCode(e)));
@@ -40,7 +40,9 @@ const AdminResetPasswordPage: FC = () => {
       id="admin-reset-password-page"
       className="align-items-center c-app flex-row pace-done">
       <Head>
-        <title>Admin - Forgot password</title>
+        <title>
+          {t('admin')} - {t('forgotPassword')}
+        </title>
       </Head>
       <div className="container">
         <div className="row justify-content-center">
@@ -54,12 +56,11 @@ const AdminResetPasswordPage: FC = () => {
                     validationSchema={adminResetPasswordFormSchema}>
                     {(props: FormikProps<{email: string}>): JSX.Element => (
                       <form onSubmit={props.handleSubmit}>
-                        <h1>Forgot password</h1>
+                        <h1>{t('forgotPassword')}</h1>
                         {!isSubmitted ? (
                           <div>
                             <p className="text-muted">
-                              Please enter your email address. We will send you
-                              an email to reset your password.
+                              {t('msgPleaseEnterEmail')}
                             </p>
                             <div className="form-group">
                               <div className="input-group mb-3">
@@ -86,14 +87,13 @@ const AdminResetPasswordPage: FC = () => {
                               </div>
                             </div>
                             <FormikButton color="primary" className="btn-block">
-                              Submit
+                              {t('submit')}
                             </FormikButton>
                           </div>
                         ) : (
                           <div className="mt-3">
                             <div className="alert alert-success">
-                              We&#39ve just sent you an email to reset your
-                              password.
+                              {t('msgPleaseCheckEmail')}
                             </div>
                           </div>
                         )}

@@ -68,7 +68,9 @@ const AdminSmtpSettingsPage: FC = () => {
       const initialSmtpSettings = await systemService.getConfiguration<
         MailSmtpSettings
       >(ConfigurationKey.MAIL_SMTP_SETTINGS);
-      setInitialSmtpSettings(initialSmtpSettings);
+      if (initialSmtpSettings) {
+        setInitialSmtpSettings(initialSmtpSettings);
+      }
     })();
   });
 
