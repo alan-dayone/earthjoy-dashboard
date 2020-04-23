@@ -14,8 +14,4 @@ npm run dev
 
 ### TODO:
 - Add Jest unit testing
-- Multi-languages
 - Reactstrap colors and styles not customize yet
-- simplify formik code
-- Profile page
-- Refactor to FC
