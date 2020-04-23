@@ -14,7 +14,7 @@ export interface MailSmtpSettings {
   senderName: string;
 }
 
-export interface ResetPasswordSettings {
+export interface ResetPasswordSetting {
   emailTemplate: string;
   subject: string;
   senderEmail: string;
@@ -31,7 +31,7 @@ export interface VerifyAccountSetting {
 export type ConfigurationData =
   | SystemStatusData
   | MailSmtpSettings
-  | ResetPasswordSettings
+  | ResetPasswordSetting
   | VerifyAccountSetting;
 
 export interface ConfigurationModel {

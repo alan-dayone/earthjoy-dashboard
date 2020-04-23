@@ -1,7 +1,7 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Head from 'next/head';
-import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
+import {Formik, FormikProps, FormikHelpers as FormikActions} from 'formik';
 import toastr from 'toastr';
 import {adminOnly} from '../../../hocs/adminOnly';
 import {
@@ -9,19 +9,30 @@ import {
   ConfigurationKey,
 } from '../../../models/Configuration';
 import {passwordResetValidationSchema} from '../../../view-models/Configuration';
-import {systemService} from '../../../services';
-import {FormikButton} from '../../../components/admin/FormikButton';
 import {FormGroup} from '../../../components/admin/FormGroup';
-
-const initialValues: ResetPasswordSettings = {
-  senderName: '',
-  senderEmail: '',
-  subject: '',
-  emailTemplate: '',
-};
+import {systemService} from '../../../services';
+import {ResetPasswordSetting} from '../../../gateways/SystemGateway';
+import {FormikButton} from '../../../components/admin/FormikButton';
 
 const AdminPasswordResetPage: FC = () => {
   const {t} = useTranslation();
+
+  const [initialValues, setInitialValues] = useState({
+    emailTemplate: '',
+    subject: '',
+    senderEmail: '',
+    senderName: '',
+  });
+
+  useEffect(() => {
+    (async (): Promise<void> => {
+      const emailResetPasswordSettings = await systemService.getConfiguration<
+        ResetPasswordSetting
+      >(ConfigurationKey.RESET_PASSWORD_SETTINGS);
+      setInitialValues(emailResetPasswordSettings);
+    })();
+  });
+
   const handleSave = async (
     values: ResetPasswordSettings,
     actions: FormikActions<ResetPasswordSettings>,
@@ -32,7 +43,7 @@ const AdminPasswordResetPage: FC = () => {
         ConfigurationKey.RESET_PASSWORD_SETTINGS,
         values,
       );
-      toastr.success('Saved');
+      toastr.success(t('save'));
       actions.setSubmitting(false);
     } catch (e) {
       toastr.error(e.message);
@@ -51,6 +62,7 @@ const AdminPasswordResetPage: FC = () => {
         <div className="col-12">
           <Formik
             initialValues={initialValues}
+            enableReinitialize
             onSubmit={handleSave}
             validationSchema={passwordResetValidationSchema}>
             {({
