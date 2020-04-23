@@ -3,8 +3,16 @@ import Head from 'next/head';
 import {NextComponentType} from 'next';
 import {CustomNextPageContext} from './types';
 
+interface EveryoneWrapperProps {
+  pageProps?: object;
+}
+
 export const everyone = (Content: NextComponentType): ReactNode => {
-  const EveryoneWrapper: NextComponentType<CustomNextPageContext> = () => {
+  const EveryoneWrapper: NextComponentType<
+    CustomNextPageContext,
+    {},
+    EveryoneWrapperProps
+  > = ({pageProps}: EveryoneWrapperProps) => {
     const renderNavBar = (): JSX.Element => {
       return (
         <header className="c-header c-header-light c-header-fixed px-3">
@@ -37,7 +45,7 @@ export const everyone = (Content: NextComponentType): ReactNode => {
         {renderNavBar()}
         <div className="c-body">
           <main className="c-main">
-            <Content {...this.props} />
+            <Content {...pageProps} />
           </main>
           {renderFooter()}
         </div>
@@ -47,7 +55,11 @@ export const everyone = (Content: NextComponentType): ReactNode => {
   EveryoneWrapper.getInitialProps = async (
     ctx: CustomNextPageContext,
   ): Promise<object> => {
-    return Content.getInitialProps ? await Content.getInitialProps(ctx) : {};
+    return {
+      pageProps: Content.getInitialProps
+        ? await Content.getInitialProps(ctx)
+        : {},
+    };
   };
 
   return EveryoneWrapper;
