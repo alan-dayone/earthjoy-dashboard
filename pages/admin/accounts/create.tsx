@@ -46,7 +46,9 @@ const AdminAccountCreationPage: FC = () => {
   return (
     <div id="admin-create-account-page" className="shadow">
       <Head>
-        <title>Admin - Create account</title>
+        <title>
+          {t('admin')} - {t('createAccount')}
+        </title>
       </Head>
       <Formik
         initialValues={initialValues}

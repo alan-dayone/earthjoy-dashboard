@@ -116,7 +116,9 @@ const AdminAccountsPage: FC = () => {
   return (
     <div id="admin-accounts-page">
       <Head>
-        <title>Admin - Account management</title>
+        <title>
+          {t('admin')} - {t('accountManagement')}
+        </title>
       </Head>
       <div className="row">
         <div className="col-12">

@@ -75,7 +75,9 @@ const AdminSmtpSettingsPage: FC = () => {
   return (
     <div id="admin-smtp-settings-page">
       <Head>
-        <title>Admin - Configuration: SMTP settings</title>
+        <title>
+          {t('admin')} - {t('configuration')}: {t('smtpSettings')}
+        </title>
       </Head>
       <div className="row">
         <div className="col-12">

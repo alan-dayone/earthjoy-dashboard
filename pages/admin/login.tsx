@@ -58,7 +58,9 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
       id="admin-login-page"
       className="align-items-center c-app flex-row pace-done">
       <Head>
-        <title>Admin - Login</title>
+        <title>
+          {t('admin')} - {t('login')}
+        </title>
       </Head>
       <div className="container">
         <div className="row justify-content-center">

@@ -49,7 +49,9 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
   return (
     <div id="admin-edit-account-page" className="shadow">
       <Head>
-        <title>Admin - Edit account</title>
+        <title>
+          {t('admin')} - {t('editAccount')}
+        </title>
       </Head>
       <Formik
         initialValues={originalAccount}
@@ -59,7 +61,7 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
           <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
-                <strong>Edit account</strong>
+                <strong>{t('editAccount')}</strong>
               </div>
               <div className="card-body">
                 <div className="row">

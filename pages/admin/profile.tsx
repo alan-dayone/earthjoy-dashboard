@@ -96,7 +96,9 @@ const ProfilePage: FC<Props> = (props: Props) => {
   return (
     <div id="admin-profile-page">
       <Head>
-        <title>Admin - Profile</title>
+        <title>
+          {t('admin')} - {t('profile')}
+        </title>
       </Head>
       <div className="row">
         <div className="col-6">
