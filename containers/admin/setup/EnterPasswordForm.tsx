@@ -2,6 +2,8 @@ import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Formik, FormikProps} from 'formik';
 import toastr from 'toastr';
+import {connect} from 'react-redux';
+import {withI18next} from '../../../hocs/withI18next';
 import {systemService} from '../../../services';
 import {systemInitializationFormSchema} from '../../../view-models/Account';
 import {FormikButton} from '../../../components/admin/FormikButton';
@@ -68,4 +70,4 @@ const EnterPasswordForm: FC<Props> = ({onSuccess}) => {
   );
 };
 
-export default EnterPasswordForm;
+export default connect()(withI18next(EnterPasswordForm));

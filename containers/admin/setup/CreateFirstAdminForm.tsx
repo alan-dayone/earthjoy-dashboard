@@ -4,6 +4,7 @@ import {Formik, FormikProps, FormikHelpers} from 'formik';
 import toastr from 'toastr';
 import {connect} from 'react-redux';
 import Router from 'next/router';
+import {withI18next} from '../../../hocs/withI18next';
 import {Account} from '../../../models/Account';
 import {systemService} from '../../../services';
 import {AppDispatch} from '../../../redux/store';
@@ -120,4 +121,4 @@ const CreateFirstAdminForm: FC<Props> = ({
   );
 };
 
-export default connect()(CreateFirstAdminForm);
+export default connect()(withI18next(CreateFirstAdminForm));
