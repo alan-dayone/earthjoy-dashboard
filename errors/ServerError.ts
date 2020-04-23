@@ -1,5 +1,5 @@
 export const getErrorCode = (error): string => {
-  if (!error.status) {
+  if (error.message === 'Network Error') {
     return 'networkError';
   }
 

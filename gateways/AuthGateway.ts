@@ -1,8 +1,5 @@
-import loGet from 'lodash/get';
 import Cookies from 'js-cookie';
 import {AxiosInstance} from 'axios';
-import {AuthService} from '../services/AuthService';
-import {ApplicationError} from '../errors/ApplicationError';
 import {LoginUser} from '../models/Account';
 
 const AUTHORIZATION_HEADER = 'Authorization';
@@ -69,26 +66,6 @@ export class AuthGateway {
     preferredLanguage: string;
   }): Promise<void> {
     await this.restConnector.patch(`/accounts/me`, body);
-  }
-
-  public async updatePassword(body: {
-    oldPassword: string;
-    newPassword: string;
-  }): Promise<void> {
-    try {
-      await this.restConnector.post('/accounts/change-password', body);
-    } catch (e) {
-      const err = loGet(e, 'response.data.error', e);
-
-      if (
-        err.code === 'INVALID_PASSWORD' ||
-        err.message === 'oldPassword is a required argument'
-      ) {
-        throw new ApplicationError(AuthService.error.INVALID_CURRENT_PASSWORD);
-      }
-
-      throw err;
-    }
   }
 
   public async setNewPassword(body: {

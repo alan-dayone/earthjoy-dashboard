@@ -46,13 +46,6 @@ export class AuthService {
     await this.authGateway.updateAccountInfo(body);
   }
 
-  public async updatePassword(body: {
-    oldPassword: string;
-    newPassword: string;
-  }): Promise<void> {
-    await this.authGateway.updatePassword(body);
-  }
-
   public async setNewPassword(body: {
     accountId: string;
     newPassword: string;

@@ -27,7 +27,8 @@
   "error": {
     "emailNotFound": "Email not found",
     "networkError": "Network error",
-    "unknown": "Unknown error"
+    "unknown": "Unknown error",
+    "user_not_found": "User not found"
   },
   "firstName": "First name",
   "forgotPassword": "Forgot password?",
