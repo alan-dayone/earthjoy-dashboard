@@ -1,9 +1,10 @@
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Formik, FormikProps} from 'formik';
+import {Formik, FormikProps, FormikHelpers} from 'formik';
 import toastr from 'toastr';
 import {connect} from 'react-redux';
 import Router from 'next/router';
+import {Account} from '../../../models/Account';
 import {systemService} from '../../../services';
 import {AppDispatch} from '../../../redux/store';
 import {loginWithEmail} from '../../../redux/slices/loginUserSlice';
@@ -16,7 +17,11 @@ interface Props {
   correctSystemInitPassword: string;
 }
 
-const initialValues = {
+interface FormData extends Partial<Account> {
+  confirmPassword: string;
+}
+
+const initialValues: FormData = {
   firstName: '',
   lastName: '',
   email: '',
@@ -30,10 +35,12 @@ const CreateFirstAdminForm: FC<Props> = ({
 }) => {
   const {t} = useTranslation();
 
-  const handleSubmit = async (values, actions): Promise<void> => {
+  const handleInitSystem = async (
+    values: FormData,
+    actions: FormikHelpers<FormData>,
+  ): Promise<void> => {
     try {
       actions.setSubmitting(true);
-
       await systemService.initSystem({
         password: correctSystemInitPassword,
         admin: {
@@ -66,8 +73,8 @@ const CreateFirstAdminForm: FC<Props> = ({
       <Formik
         initialValues={initialValues}
         validationSchema={userFormValidationSchema}
-        onSubmit={handleSubmit}>
-        {({handleSubmit}: FormikProps<Account>): JSX.Element => (
+        onSubmit={handleInitSystem}>
+        {({handleSubmit}: FormikProps<FormData>): JSX.Element => (
           <form onSubmit={handleSubmit}>
             <FormGroup
               name="firstName"

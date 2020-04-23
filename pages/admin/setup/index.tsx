@@ -5,18 +5,18 @@ import {guestOnly} from '../../../hocs/guestOnly';
 import EnterPasswordForm from '../../../containers/admin/setup/EnterPasswordForm';
 import CreateFirstAdminForm from '../../../containers/admin/setup/CreateFirstAdminForm';
 
-const STEP = {
-  ENTER_PASSWORD: 'enter-password',
-  CREATE_FIRST_ADMIN: 'create-first-admin',
-};
+enum STEP {
+  ENTER_PASSWORD,
+  CREATE_FIRST_ADMIN,
+}
 
 const AdminSetupPage: FC = () => {
   const {t} = useTranslation();
 
-  const [step, setStep] = useState(STEP.ENTER_PASSWORD);
-  const [correctSystemInitPassword, setCorrectSystemInitPassword] = useState(
-    null,
-  );
+  const [step, setStep] = useState<STEP>(STEP.ENTER_PASSWORD);
+  const [correctSystemInitPassword, setCorrectSystemInitPassword] = useState<
+    string
+  >('');
 
   // TODO: show 404 if system initialized already
 
@@ -34,7 +34,7 @@ const AdminSetupPage: FC = () => {
               <div className="card-body">
                 {step === STEP.CREATE_FIRST_ADMIN ? (
                   <CreateFirstAdminForm
-                    correctSystemInitPassword={correctSystemInitPassword || ''}
+                    correctSystemInitPassword={correctSystemInitPassword}
                   />
                 ) : (
                   <EnterPasswordForm
