@@ -1,4 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import Head from 'next/head';
 import {Formik, FormikProps, FormikHelpers} from 'formik';
 import toastr from 'toastr';
@@ -11,8 +12,11 @@ import {emailVerificationValidationSchema} from '../../../view-models/Configurat
 import {FormGroup} from '../../../components/admin/FormGroup';
 import {systemService} from '../../../services';
 import {VerifyAccountSetting} from '../../../gateways/SystemGateway';
+import {FormikButton} from '../../../components/admin/FormikButton';
 
 const AdminEmailAddressVerificationPage: FC = () => {
+  const {t} = useTranslation();
+
   const [initialValues, setInitialValues] = useState({
     emailTemplate: '',
     subject: '',
@@ -32,7 +36,9 @@ const AdminEmailAddressVerificationPage: FC = () => {
   return (
     <div id="admin-email-address-verification-page">
       <Head>
-        <title>Admin - Configuration: Email address verification</title>
+        <title>
+          {t('admin')} - {t('configuration')}: {t('emailAddressVerification')}
+        </title>
       </Head>
       <div className="row">
         <div className="col-12">
@@ -49,7 +55,7 @@ const AdminEmailAddressVerificationPage: FC = () => {
                   ConfigurationKey.VERIFY_ACCOUNT_SETTINGS,
                   values,
                 );
-                toastr.success('Saved');
+                toastr.success(t('save'));
                 actions.setSubmitting(false);
               } catch (e) {
                 toastr.error(e.message);
@@ -59,58 +65,48 @@ const AdminEmailAddressVerificationPage: FC = () => {
             validationSchema={emailVerificationValidationSchema}>
             {({
               handleSubmit,
-              isSubmitting,
             }: FormikProps<VerifyAccountSettings>): JSX.Element => (
               <form onSubmit={handleSubmit}>
                 <div className="card">
                   <div className="card-header">
-                    <strong>Email address verification</strong>
+                    <strong>{t('emailAddressVerification')}</strong>
                   </div>
                   <div className="card-body">
                     <div className="row">
                       <div className="col-12">
                         <FormGroup
                           name="senderName"
-                          label="Sender name"
+                          label={t('senderName')}
                           icon="cil-user"
                           required
                         />
                         <FormGroup
                           name="senderEmail"
-                          label="Sender email"
+                          label={t('senderEmail')}
                           icon="cil-envelope-closed"
                           required
                         />
                         <FormGroup
                           name="subject"
-                          label="Subject"
+                          label={t('subject')}
                           icon="cil-user"
                           required
                         />
                         <FormGroup
                           name="emailTemplate"
                           tag="textarea"
-                          label="Email template"
+                          label={t('emailTemplate')}
                           icon="cil-short-text"
-                          placeholder="Content ..."
+                          placeholder={t('content') + '...'}
                           required
                         />
                       </div>
                     </div>
                   </div>
                   <div className="card-footer d-flex justify-content-end">
-                    <button
-                      className="btn btn-sm btn-primary"
-                      type="submit"
-                      disabled={isSubmitting}>
-                      {isSubmitting && (
-                        <div
-                          className="spinner-border spinner-border-sm mr-1"
-                          role="status"
-                        />
-                      )}
-                      {isSubmitting ? 'Saving...' : 'Save'}
-                    </button>
+                    <FormikButton size="sm" color="primary">
+                      {t('save')}
+                    </FormikButton>
                   </div>
                 </div>
               </form>

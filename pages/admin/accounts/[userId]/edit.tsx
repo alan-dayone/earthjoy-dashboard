@@ -10,6 +10,7 @@ import {userUpdateInformationFormValidationSchema} from '../../../../view-models
 import {accountService} from '../../../../services';
 import {FormGroup} from '../../../../components/admin/FormGroup';
 import {useTranslation} from 'react-i18next';
+import {FormikButton} from '../../../../components/admin/FormikButton';
 
 export function getServerErrorMessage(error): string {
   const errorEnum = loGet(error, 'response.data.error.message');
@@ -48,21 +49,19 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
   return (
     <div id="admin-edit-account-page" className="shadow">
       <Head>
-        <title>Admin - Edit account</title>
+        <title>
+          {t('admin')} - {t('editAccount')}
+        </title>
       </Head>
       <Formik
         initialValues={originalAccount}
         onSubmit={handleSave}
         validationSchema={userUpdateInformationFormValidationSchema}>
-        {({
-          handleSubmit,
-          isSubmitting,
-          setFieldValue,
-        }: FormikProps<Account>): JSX.Element => (
+        {({handleSubmit, setFieldValue}: FormikProps<Account>): JSX.Element => (
           <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
-                <strong>Edit account</strong>
+                <strong>{t('editAccount')}</strong>
               </div>
               <div className="card-body">
                 <div className="row">
@@ -115,18 +114,9 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
                 </div>
               </div>
               <div className="card-footer d-flex justify-content-end">
-                <button
-                  className="btn btn-sm btn-primary"
-                  type="submit"
-                  disabled={isSubmitting}>
-                  {isSubmitting && (
-                    <div
-                      className="spinner-border spinner-border-sm mr-1"
-                      role="status"
-                    />
-                  )}
-                  {isSubmitting ? 'Saving...' : t('save')}
-                </button>
+                <FormikButton size="sm" color="primary">
+                  {t('save')}
+                </FormikButton>
               </div>
             </div>
           </form>

@@ -1,91 +1,73 @@
-import React, {Component} from 'react';
-import {Formik} from 'formik';
+import React, {FC} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Formik, FormikProps} from 'formik';
 import toastr from 'toastr';
+import {connect} from 'react-redux';
+import {withI18next} from '../../../hocs/withI18next';
 import {systemService} from '../../../services';
+import {systemInitializationFormSchema} from '../../../view-models/Account';
+import {FormikButton} from '../../../components/admin/FormikButton';
+import {FormGroup} from '../../../components/admin/FormGroup';
 
 interface Props {
   onSuccess: (password: string) => void;
 }
 
-interface ValidationError {
-  password?: string;
-}
+const initialValues = {
+  password: '',
+};
 
-export default class EnterPasswordForm extends Component<Props> {
-  public render(): JSX.Element {
-    return (
-      <div>
-        <h1>System initialization</h1>
-        <p className="text-muted">
-          Use secret system initialization password to initialize the system and
-          create your first admin account.
-        </p>
-        <Formik
-          initialValues={{password: ''}}
-          validate={(values): ValidationError => {
-            const errors = {} as ValidationError;
+const EnterPasswordForm: FC<Props> = ({onSuccess}) => {
+  const {t} = useTranslation();
 
-            if (values.password === '') {
-              errors.password = 'Required';
-            }
+  const handleSubmit = async (values, actions): Promise<void> => {
+    try {
+      actions.setSubmitting(true);
 
-            return errors;
-          }}
-          onSubmit={async (values, {setSubmitting}): Promise<void> => {
-            setSubmitting(true);
-            try {
-              const passwordIsCorrect = await systemService.validateSystemInitializationPassword(
-                values.password,
-              );
+      const passwordIsCorrect = await systemService.validateSystemInitializationPassword(
+        values.password,
+      );
 
-              setSubmitting(false);
+      if (!passwordIsCorrect) {
+        toastr.error(t('invalidPassword'));
+        return;
+      }
 
-              if (!passwordIsCorrect) {
-                toastr.error('Invalid password');
-                return;
-              }
+      onSuccess(values.password);
+    } catch (e) {
+      toastr.error(e.message);
+    } finally {
+      actions.setSubmitting(false);
+    }
+  };
 
-              this.props.onSuccess(values.password);
-            } catch (e) {
-              setSubmitting(false);
-              toastr.error(e.message);
-            }
-          }}>
-          {({
-            values,
-            handleChange,
-            handleSubmit,
-            isSubmitting,
-            isValid,
-          }): JSX.Element => (
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4 input-group">
-                <div className="input-group-prepend">
-                  <span className="input-group-text">
-                    <i className="cil-lock-locked" />
-                  </span>
-                </div>
-                <input
-                  name="password"
-                  value={values.password}
-                  onChange={handleChange}
-                  placeholder="System initialization password"
-                  type="password"
-                  className="form-control"
-                />
-              </div>
-              <div>
-                <button
-                  type="submit"
-                  disabled={!isValid || isSubmitting}
-                  className="px-4 btn btn-primary">
-                  Next
-                </button>
-              </div>
-            </form>
-          )}
-        </Formik>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <h1>{t('systemInitialization')}</h1>
+      <p className="text-muted">{t('msgSystemInitialization')}</p>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={systemInitializationFormSchema}
+        onSubmit={handleSubmit}>
+        {({handleSubmit}: FormikProps<Account>): JSX.Element => (
+          <form onSubmit={handleSubmit}>
+            <FormGroup
+              name="password"
+              type="password"
+              label={t('password')}
+              icon="cil-lock-locked"
+              required
+            />
+            <div>
+              <FormikButton color="primary" className="px-4">
+                {t('next')}
+              </FormikButton>
+            </div>
+          </form>
+        )}
+      </Formik>
+    </div>
+  );
+};
+
+export default connect()(withI18next(EnterPasswordForm));

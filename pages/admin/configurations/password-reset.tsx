@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
+import {useTranslation} from 'react-i18next';
 import Head from 'next/head';
 import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import toastr from 'toastr';
-import classNames from 'classnames';
 import {adminOnly} from '../../../hocs/adminOnly';
 import {
   ResetPasswordSettings,
@@ -10,6 +10,8 @@ import {
 } from '../../../models/Configuration';
 import {passwordResetValidationSchema} from '../../../view-models/Configuration';
 import {systemService} from '../../../services';
+import {FormikButton} from '../../../components/admin/FormikButton';
+import {FormGroup} from '../../../components/admin/FormGroup';
 
 const initialValues: ResetPasswordSettings = {
   senderName: '',
@@ -19,6 +21,7 @@ const initialValues: ResetPasswordSettings = {
 };
 
 const AdminPasswordResetPage: FC = () => {
+  const {t} = useTranslation();
   const handleSave = async (
     values: ResetPasswordSettings,
     actions: FormikActions<ResetPasswordSettings>,
@@ -40,7 +43,9 @@ const AdminPasswordResetPage: FC = () => {
   return (
     <div id="admin-smtp-settings-page">
       <Head>
-        <title>Admin - Configuration: Password Reset</title>
+        <title>
+          {t('admin')} - {t('configuration')}: {t('passwordReset')}
+        </title>
       </Head>
       <div className="row">
         <div className="col-12">
@@ -49,115 +54,49 @@ const AdminPasswordResetPage: FC = () => {
             onSubmit={handleSave}
             validationSchema={passwordResetValidationSchema}>
             {({
-              errors,
-              handleChange,
               handleSubmit,
-              isSubmitting,
-              values,
             }: FormikProps<ResetPasswordSettings>): JSX.Element => (
               <form onSubmit={handleSubmit}>
                 <div className="card">
                   <div className="card-header">
-                    <strong>Password reset</strong>
+                    <strong>{t('passwordReset')}</strong>
                   </div>
                   <div className="card-body">
                     <div className="row">
                       <div className="col-12">
-                        <div className="form-group">
-                          <label>Sender name</label>
-                          <div className="input-group">
-                            <div className="input-group-prepend">
-                              <span className="input-group-text">
-                                <i className="cil-user" />
-                              </span>
-                            </div>
-                            <input
-                              className={classNames('form-control', {
-                                'is-invalid': errors.senderName,
-                              })}
-                              name="senderName"
-                              onChange={handleChange}
-                              value={values.senderName}
-                            />
-                            {errors.senderName && (
-                              <div className="invalid-feedback">
-                                {errors.senderName}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <div className="form-group">
-                          <label>Sender email</label>
-                          <div className="input-group">
-                            <div className="input-group-prepend">
-                              <span className="input-group-text">
-                                <i className="cil-envelope-closed" />
-                              </span>
-                            </div>
-                            <input
-                              className={classNames('form-control', {
-                                'is-invalid': errors.senderEmail,
-                              })}
-                              name="senderEmail"
-                              onChange={handleChange}
-                              value={values.senderEmail}
-                            />
-                            {errors.senderEmail && (
-                              <div className="invalid-feedback">
-                                {errors.senderEmail}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <div className="form-group">
-                          <label>Subject</label>
-                          <div className="input-group">
-                            <div className="input-group-prepend">
-                              <span className="input-group-text">
-                                <i className="cil-short-text" />
-                              </span>
-                            </div>
-                            <input
-                              className={classNames('form-control', {
-                                'is-invalid': errors.subject,
-                              })}
-                              name="subject"
-                              onChange={handleChange}
-                              value={values.subject}
-                            />
-                            {errors.subject && (
-                              <div className="invalid-feedback">
-                                {errors.subject}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <div className="form-group">
-                          <label>Email template</label>
-                          <textarea
-                            className={classNames('form-control')}
-                            name="message"
-                            placeholder="Content ..."
-                            onChange={handleChange}
-                            value={values.emailTemplate}
-                          />
-                        </div>
+                        <FormGroup
+                          name="senderName"
+                          label={t('senderName')}
+                          icon="cil-user"
+                          required
+                        />
+                        <FormGroup
+                          name="senderEmail"
+                          label={t('senderEmail')}
+                          icon="cil-envelope-closed"
+                          required
+                        />
+                        <FormGroup
+                          name="subject"
+                          label={t('subject')}
+                          icon="cil-user"
+                          required
+                        />
+                        <FormGroup
+                          name="emailTemplate"
+                          tag="textarea"
+                          label={t('emailTemplate')}
+                          icon="cil-short-text"
+                          placeholder={t('content') + '...'}
+                          required
+                        />
                       </div>
                     </div>
                   </div>
                   <div className="card-footer d-flex justify-content-end">
-                    <button
-                      className="btn btn-sm btn-primary"
-                      type="submit"
-                      disabled={isSubmitting}>
-                      {isSubmitting && (
-                        <div
-                          className="spinner-border spinner-border-sm mr-1"
-                          role="status"
-                        />
-                      )}
-                      {isSubmitting ? 'Saving...' : 'Save'}
-                    </button>
+                    <FormikButton size="sm" color="primary">
+                      {t('save')}
+                    </FormikButton>
                   </div>
                 </div>
               </form>

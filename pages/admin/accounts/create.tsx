@@ -9,6 +9,7 @@ import {Account, AccountStatus} from '../../../models/Account';
 import {userFormValidationSchema} from '../../../view-models/Account';
 import {accountService} from '../../../services';
 import {FormGroup} from '../../../components/admin/FormGroup';
+import {FormikButton} from '../../../components/admin/FormikButton';
 
 const initialValues: Account = {
   email: '',
@@ -45,17 +46,15 @@ const AdminAccountCreationPage: FC = () => {
   return (
     <div id="admin-create-account-page" className="shadow">
       <Head>
-        <title>Admin - Create account</title>
+        <title>
+          {t('admin')} - {t('createAccount')}
+        </title>
       </Head>
       <Formik
         initialValues={initialValues}
         onSubmit={handleSave}
         validationSchema={userFormValidationSchema}>
-        {({
-          handleSubmit,
-          isSubmitting,
-          setFieldValue,
-        }: FormikProps<Account>): JSX.Element => (
+        {({handleSubmit, setFieldValue}: FormikProps<Account>): JSX.Element => (
           <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
@@ -119,18 +118,9 @@ const AdminAccountCreationPage: FC = () => {
                 </div>
               </div>
               <div className="card-footer d-flex justify-content-end">
-                <button
-                  className="btn btn-sm btn-success"
-                  type="submit"
-                  disabled={isSubmitting}>
-                  {isSubmitting && (
-                    <div
-                      className="spinner-border spinner-border-sm mr-1"
-                      role="status"
-                    />
-                  )}
-                  {isSubmitting ? 'Creating...' : t('create')}
-                </button>
+                <FormikButton size="sm" color="primary">
+                  {t('create')}
+                </FormikButton>
               </div>
             </div>
           </form>

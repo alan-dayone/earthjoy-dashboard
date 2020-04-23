@@ -36,6 +36,10 @@ export const createFirstAdminFormSchema = Yup.object().shape({
   email: validationSchema.email,
 });
 
+export const systemInitializationFormSchema = Yup.object().shape({
+  password: validationSchema.password,
+});
+
 export const adminResetPasswordFormSchema = Yup.object().shape({
   email: validationSchema.email,
 });
