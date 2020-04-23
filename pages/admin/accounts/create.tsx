@@ -51,7 +51,11 @@ const AdminAccountCreationPage: FC = () => {
         initialValues={initialValues}
         onSubmit={handleSave}
         validationSchema={userFormValidationSchema}>
-        {({handleSubmit, isSubmitting}: FormikProps<Account>): JSX.Element => (
+        {({
+          handleSubmit,
+          isSubmitting,
+          setFieldValue,
+        }: FormikProps<Account>): JSX.Element => (
           <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
@@ -101,6 +105,12 @@ const AdminAccountCreationPage: FC = () => {
                       name="emailVerified"
                       label={t('emailVerification')}
                       tag="select"
+                      onChange={(e): void =>
+                        setFieldValue(
+                          'emailVerified',
+                          e.target.value === 'true',
+                        )
+                      }
                       required>
                       <option value="true">{t('verified')}</option>
                       <option value="false">{t('notVerified')}</option>
