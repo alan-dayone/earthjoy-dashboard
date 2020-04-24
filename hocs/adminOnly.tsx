@@ -67,6 +67,93 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
     };
     const currentSidebarSection = router.pathname.split('/');
 
+    const renderSidebarContent = (): JSX.Element => (
+      <>
+        <Link href="/admin">
+          <a className="c-sidebar-brand flex-column" style={{height: '56px'}}>
+            <img
+              className="c-sidebar-brand-full"
+              src="/static/img/admin_logo_bw_full.svg"
+              alt="ADMIN PORTAL"
+              style={{height: 40}}
+            />
+            <img
+              className="c-sidebar-brand-minimized"
+              src="/static/img/admin_logo_bw_minimized.svg"
+              alt="ADMIN"
+              style={{height: 40}}
+            />
+          </a>
+        </Link>
+        <ul
+          className="c-sidebar-nav ps ps--active-y"
+          data-dropdown-accordion="true">
+          <li
+            className={classNames('c-sidebar-nav-item', {
+              'bg-primary': currentSidebarSection[2] === undefined,
+            })}>
+            <Link href="/admin">
+              <a className="c-sidebar-nav-link">
+                <i className="c-sidebar-nav-icon cil-speedometer" />
+                {t('dashboard')}
+              </a>
+            </Link>
+          </li>
+          <li
+            className={classNames('c-sidebar-nav-item', {
+              'bg-primary': currentSidebarSection[2] === 'accounts',
+            })}>
+            <Link href="/admin/accounts">
+              <a className="c-sidebar-nav-link">
+                <i className="c-sidebar-nav-icon cil-speedometer" />
+                {t('accounts')}
+              </a>
+            </Link>
+          </li>
+          <li className="c-sidebar-nav-title">EMAIL</li>
+          <li
+            className={classNames('c-sidebar-nav-item', {
+              'bg-primary':
+                currentSidebarSection[2] === 'configurations' &&
+                currentSidebarSection[3] === 'smtp-settings',
+            })}>
+            <Link href="/admin/configurations/smtp-settings">
+              <a className="c-sidebar-nav-link">
+                <i className="c-sidebar-nav-icon cil-settings" />
+                {t('smtpSettings')}
+              </a>
+            </Link>
+          </li>
+          <li
+            className={classNames('c-sidebar-nav-item', {
+              'bg-primary':
+                currentSidebarSection[2] === 'configurations' &&
+                currentSidebarSection[3] === 'email-address-verification',
+            })}>
+            <Link href="/admin/configurations/email-address-verification">
+              <a className="c-sidebar-nav-link">
+                <i className="c-sidebar-nav-icon cil-send" />
+                {t('emailAddressVerification')}
+              </a>
+            </Link>
+          </li>
+          <li
+            className={classNames('c-sidebar-nav-item', {
+              'bg-primary':
+                currentSidebarSection[2] === 'configurations' &&
+                currentSidebarSection[3] === 'password-reset',
+            })}>
+            <Link href="/admin/configurations/password-reset">
+              <a className="c-sidebar-nav-link">
+                <i className="c-sidebar-nav-icon cil-send" />
+                {t('passwordReset')}
+              </a>
+            </Link>
+          </li>
+        </ul>
+      </>
+    );
+
     return (
       <div className="app-layout--admin c-app pace-done">
         <div
@@ -74,93 +161,22 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
             'c-sidebar-show': showSidebar,
           })}
           id="sidebar">
-          <Link href="/admin">
-            <a className="c-sidebar-brand flex-column" style={{height: '56px'}}>
-              <img
-                className="c-sidebar-brand-full"
-                src="/static/img/admin_logo_bw_full.svg"
-                alt="ADMIN PORTAL"
-                style={{height: 40}}
-              />
-              <img
-                className="c-sidebar-brand-minimized"
-                src="/static/img/admin_logo_bw_minimized.svg"
-                alt="ADMIN"
-                style={{height: 40}}
-              />
-            </a>
-          </Link>
-          <ul
-            className="c-sidebar-nav ps ps--active-y"
-            data-dropdown-accordion="true">
-            <li
-              className={classNames('c-sidebar-nav-item', {
-                'bg-primary': currentSidebarSection[2] === undefined,
-              })}>
-              <Link href="/admin">
-                <a className="c-sidebar-nav-link">
-                  <i className="c-sidebar-nav-icon cil-speedometer" />
-                  {t('dashboard')}
-                </a>
-              </Link>
-            </li>
-            <li
-              className={classNames('c-sidebar-nav-item', {
-                'bg-primary': currentSidebarSection[2] === 'accounts',
-              })}>
-              <Link href="/admin/accounts">
-                <a className="c-sidebar-nav-link">
-                  <i className="c-sidebar-nav-icon cil-speedometer" />
-                  {t('accounts')}
-                </a>
-              </Link>
-            </li>
-            <li className="c-sidebar-nav-title">EMAIL</li>
-            <li
-              className={classNames('c-sidebar-nav-item', {
-                'bg-primary':
-                  currentSidebarSection[2] === 'configurations' &&
-                  currentSidebarSection[3] === 'smtp-settings',
-              })}>
-              <Link href="/admin/configurations/smtp-settings">
-                <a className="c-sidebar-nav-link">
-                  <i className="c-sidebar-nav-icon cil-settings" />
-                  {t('smtpSettings')}
-                </a>
-              </Link>
-            </li>
-            <li
-              className={classNames('c-sidebar-nav-item', {
-                'bg-primary':
-                  currentSidebarSection[2] === 'configurations' &&
-                  currentSidebarSection[3] === 'email-address-verification',
-              })}>
-              <Link href="/admin/configurations/email-address-verification">
-                <a className="c-sidebar-nav-link">
-                  <i className="c-sidebar-nav-icon cil-send" />
-                  {t('emailAddressVerification')}
-                </a>
-              </Link>
-            </li>
-            <li
-              className={classNames('c-sidebar-nav-item', {
-                'bg-primary':
-                  currentSidebarSection[2] === 'configurations' &&
-                  currentSidebarSection[3] === 'password-reset',
-              })}>
-              <Link href="/admin/configurations/password-reset">
-                <a className="c-sidebar-nav-link">
-                  <i className="c-sidebar-nav-icon cil-send" />
-                  {t('passwordReset')}
-                </a>
-              </Link>
-            </li>
-          </ul>
+          {renderSidebarContent()}
         </div>
+        <div
+          className={classNames('c-sidebar-backdrop c-fade', {
+            'c-show': showSidebar,
+          })}
+          onClick={(): void => setShowSidebar(false)}></div>
         <div className="c-wrapper">
           <header className="c-header c-header-light c-header-fixed px-3">
             <button
               className="c-header-toggler c-class-toggler d-md-down-none sidebar-toggler u-outline-none"
+              onClick={toggleSideBar}>
+              <span className="c-header-toggler-icon" />
+            </button>
+            <button
+              className="c-header-toggler c-class-toggler d-lg-none mfe-auto"
               onClick={toggleSideBar}>
               <span className="c-header-toggler-icon" />
             </button>
