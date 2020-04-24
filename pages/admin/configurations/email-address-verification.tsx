@@ -33,7 +33,7 @@ const AdminEmailAddressVerificationPage: FC = () => {
         setInitialValues(emailVerificationSettings);
       }
     })();
-  });
+  }, []);
 
   return (
     <div id="admin-email-address-verification-page">

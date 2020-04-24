@@ -33,7 +33,7 @@ const AdminPasswordResetPage: FC = () => {
         setInitialValues(emailResetPasswordSettings);
       }
     })();
-  });
+  }, []);
 
   const handleSave = async (
     values: ResetPasswordSettings,

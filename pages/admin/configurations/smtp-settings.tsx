@@ -72,7 +72,7 @@ const AdminSmtpSettingsPage: FC = () => {
         setInitialSmtpSettings(initialSmtpSettings);
       }
     })();
-  });
+  }, []);
 
   return (
     <div id="admin-smtp-settings-page">

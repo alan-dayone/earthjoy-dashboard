@@ -46,7 +46,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
 
     const toggleSideBar = (): void => {
       const newValue = !showSidebar;
-      setShowSidebar(newValue);
+      // setShowSidebar(newValue);
       Cookies.set(SHOW_SIDEBAR_COOKIE, newValue.toString());
     };
 
