@@ -33,24 +33,22 @@ Yup.setLocale({
   },
 });
 
-if (isBrowser) {
-  if (!i18next.isInitialized) {
-    i18next
-      .use(i18nextXhrBackend)
-      .use(i18nextBrowserLanguageDetector)
-      .use(initReactI18next)
-      .init({
-        fallbackLng: 'en',
-        backend: {
-          loadPath: '/static/locales/{{lng}}.json',
-        },
-        detection: {
-          lookupCookie: 'lng',
-          caches: ['cookie'],
-        },
-        partialBundledLanguages: true,
-      });
-  }
+if (isBrowser && !i18next.isInitialized) {
+  i18next
+    .use(i18nextXhrBackend)
+    .use(i18nextBrowserLanguageDetector)
+    .use(initReactI18next)
+    .init({
+      fallbackLng: 'en',
+      backend: {
+        loadPath: '/static/locales/{{lng}}.json',
+      },
+      detection: {
+        lookupCookie: 'lng',
+        caches: ['cookie'],
+      },
+      partialBundledLanguages: true,
+    });
 }
 
 export const withI18next = <P, IP>(
