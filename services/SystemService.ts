@@ -46,4 +46,8 @@ export class SystemService {
       newConfig,
     );
   }
+
+  async checkSystemInitializationStatus(): Promise<boolean> {
+    return this.systemGateway.checkSystemInitializationStatus();
+  }
 }

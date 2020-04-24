@@ -109,4 +109,11 @@ export class SystemGateway {
     );
     return data.isValid;
   }
+
+  public async checkSystemInitializationStatus(): Promise<boolean> {
+    const resp = await this.restConnector.post(
+      '/configurations/check-system-initialization-status',
+    );
+    return resp.data.isInitialized;
+  }
 }
