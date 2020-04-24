@@ -4,6 +4,7 @@ import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import toastr from 'toastr';
 import {useTranslation} from 'react-i18next';
 import {smtpSettingsValidationSchema} from '../../../view-models/Configuration';
+import {getErrorMessageCode} from '../../../view-models/Error';
 import {adminOnly} from '../../../hocs/adminOnly';
 import {systemService} from '../../../services';
 import {
@@ -39,7 +40,7 @@ const AdminSmtpSettingsPage: FC = () => {
         toastr.error(t('smtpSettingsAreInvalid'));
       }
     } catch (e) {
-      toastr.error(e.message);
+      toastr.error(t(getErrorMessageCode(e)));
     } finally {
       setIsTestingConnection(false);
     }
@@ -58,7 +59,7 @@ const AdminSmtpSettingsPage: FC = () => {
       actions.setSubmitting(false);
       toastr.success(t('saved'));
     } catch (e) {
-      toastr.error(e.message);
+      toastr.error(t(getErrorMessageCode(e)));
       actions.setSubmitting(false);
     }
   };

@@ -23,7 +23,6 @@ import {RootState} from '../../redux/slices';
 import {useTranslation} from 'react-i18next';
 import {FormikButton} from '../../components/admin/FormikButton';
 import {getErrorMessageCode} from '../../view-models/Error';
-import {getErrorCode} from '../../errors/ServerError';
 
 interface Props {
   loginUser: LoginUser;
@@ -59,7 +58,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
       await updateLoginUserProfile(values);
       toastr.success(t('success'));
     } catch (e) {
-      toastr.error(t(getErrorCode(e)));
+      toastr.error(t(getErrorMessageCode(e)));
     } finally {
       formikHelpers.setSubmitting(false);
     }

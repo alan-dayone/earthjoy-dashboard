@@ -9,6 +9,7 @@ import {
   ConfigurationKey,
 } from '../../../models/Configuration';
 import {emailVerificationValidationSchema} from '../../../view-models/Configuration';
+import {getErrorMessageCode} from '../../../view-models/Error';
 import {FormGroup} from '../../../components/admin/FormGroup';
 import {systemService} from '../../../services';
 import {VerifyAccountSetting} from '../../../gateways/SystemGateway';
@@ -60,7 +61,7 @@ const AdminEmailAddressVerificationPage: FC = () => {
                 toastr.success(t('save'));
                 actions.setSubmitting(false);
               } catch (e) {
-                toastr.error(e.message);
+                toastr.error(t(getErrorMessageCode(e)));
                 actions.setSubmitting(false);
               }
             }}

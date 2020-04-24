@@ -25,12 +25,11 @@ const AdminSetupPage: NextComponentType<
   Props,
   Props
 > = ({isInitialized}: Props) => {
-  const {t} = useTranslation();
-
   if (isInitialized) {
     return <Error statusCode={404} />;
   }
 
+  const {t} = useTranslation();
   const [step, setStep] = useState<STEP>(STEP.ENTER_PASSWORD);
   const [correctSystemInitPassword, setCorrectSystemInitPassword] = useState<
     string

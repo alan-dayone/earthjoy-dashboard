@@ -5,8 +5,9 @@ import toastr from 'toastr';
 import {Formik, FormikProps} from 'formik';
 import {useTranslation} from 'react-i18next';
 import {adminOnly} from '../../../hocs/adminOnly';
-import {Account, AccountStatus} from '../../../models/Account';
+import {Account, AccountStatus, Role} from '../../../models/Account';
 import {userFormValidationSchema} from '../../../view-models/Account';
+import {getErrorMessageCode} from '../../../view-models/Error';
 import {accountService} from '../../../services';
 import {FormGroup} from '../../../components/admin/FormGroup';
 import {FormikButton} from '../../../components/admin/FormikButton';
@@ -16,6 +17,7 @@ const initialValues: Account = {
   firstName: '',
   lastName: '',
   password: '',
+  role: Role.USER,
   status: AccountStatus.ACTIVE,
   emailVerified: true,
 };
@@ -23,22 +25,20 @@ const initialValues: Account = {
 const AdminAccountCreationPage: FC = () => {
   const {t} = useTranslation();
 
-  const getServerErrorMessage = (error): string => {
-    const errorEnum = loGet(error, 'response.data.error.message');
-    if (errorEnum === 'EMAIL_EXISTED') {
-      return 'emailAlreadyExist';
-    }
-    return 'error.unknown';
-  };
-
   const handleSave = async (values: Account, actions): Promise<void> => {
     try {
       actions.setSubmitting(true);
       await accountService.createAccount(values);
       toastr.success(t('success'));
-      actions.setSubmitting(false);
     } catch (e) {
-      toastr.error(t(getServerErrorMessage(e)));
+      toastr.error(
+        t(
+          getErrorMessageCode(e, {
+            EMAIL_EXISTED: 'emailAlreadyExist',
+          }),
+        ),
+      );
+    } finally {
       actions.setSubmitting(false);
     }
   };
@@ -88,6 +88,14 @@ const AdminAccountCreationPage: FC = () => {
                       icon="cil-user"
                       required
                     />
+                    <FormGroup
+                      name="role"
+                      label={t('role')}
+                      tag="select"
+                      required>
+                      <option value={Role.USER}>{t('user')}</option>
+                      <option value={Role.ROOT_ADMIN}>{t('admin')}</option>
+                    </FormGroup>
                     <FormGroup
                       name="status"
                       label={t('accountStatus')}

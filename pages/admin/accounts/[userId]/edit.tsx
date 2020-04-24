@@ -5,20 +5,13 @@ import loGet from 'lodash/get';
 import toastr from 'toastr';
 import {adminOnly} from '../../../../hocs/adminOnly';
 import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
-import {AccountStatus, Account} from '../../../../models/Account';
+import {AccountStatus, Account, Role} from '../../../../models/Account';
 import {userUpdateInformationFormValidationSchema} from '../../../../view-models/Account';
+import {getErrorMessageCode} from '../../../../view-models/Error';
 import {accountService} from '../../../../services';
 import {FormGroup} from '../../../../components/admin/FormGroup';
 import {useTranslation} from 'react-i18next';
 import {FormikButton} from '../../../../components/admin/FormikButton';
-
-export function getServerErrorMessage(error): string {
-  const errorEnum = loGet(error, 'response.data.error.message');
-  if (errorEnum === 'EMAIL_EXISTED') {
-    return 'emailAlreadyExist';
-  }
-  return 'error.unknown';
-}
 
 interface Props {
   originalAccount: Account;
@@ -38,9 +31,7 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
       await accountService.updateAccount(userId, values);
       toastr.success(t('success'));
     } catch (e) {
-      if (loGet(e, 'e.response.data.error', false))
-        toastr.error(t(getServerErrorMessage(e)));
-      else toastr.error(t('error.unknown'));
+      toastr.error(t(getErrorMessageCode(e)));
     } finally {
       actions.setSubmitting(false);
     }
@@ -84,6 +75,14 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
                       icon="cil-user"
                       required
                     />
+                    <FormGroup
+                      name="role"
+                      label={t('role')}
+                      tag="select"
+                      required>
+                      <option value={Role.USER}>{t('user')}</option>
+                      <option value={Role.ROOT_ADMIN}>{t('admin')}</option>
+                    </FormGroup>
                     <FormGroup
                       name="status"
                       label={t('accountStatus')}
