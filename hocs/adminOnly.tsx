@@ -56,14 +56,6 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
       setShowMobileSidebar(newValue);
     };
 
-    const handleProfile = async (): Promise<void> => {
-      try {
-        Router.replace('/admin/profile');
-      } catch (e) {
-        toastr.error(e.message);
-      }
-    };
-
     const handleLogout = async (): Promise<void> => {
       try {
         dispatch(logout());
@@ -179,7 +171,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
                     role="button"
                     aria-haspopup="true"
                     aria-expanded="false">
-                    <UncontrolledDropdown>
+                    <UncontrolledDropdown inNavbar>
                       <DropdownToggle
                         caret
                         nav
@@ -188,9 +180,9 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
                         {getAccountName(loginUser)}
                       </DropdownToggle>
                       <DropdownMenu right>
-                        <DropdownItem onClick={handleProfile}>
-                          {t('profile')}
-                        </DropdownItem>
+                        <Link href="/admin/profile">
+                          <a className="dropdown-item">{t('profile')}</a>
+                        </Link>
                         <DropdownItem onClick={handleLogout}>
                           {t('logout')}
                         </DropdownItem>

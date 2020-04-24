@@ -56,7 +56,7 @@ const AdminResetNewPasswordPage: FC = () => {
       </Head>
       <div className="container">
         <div className="row justify-content-center">
-          <div className="col-md-4">
+          <div className="col-lg-4 col-md-6 col-10">
             <div className="card-group">
               <div className="p-4 card">
                 <div className="card-body">

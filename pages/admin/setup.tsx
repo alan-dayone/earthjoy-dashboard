@@ -44,7 +44,7 @@ const AdminSetupPage: NextComponentType<
       </Head>
       <div className="container">
         <div className="justify-content-center row">
-          <div className="col-md-6">
+          <div className="col-lg-4 col-md-6">
             <div className="p-4 card">
               <div className="card-body">
                 {step === STEP.CREATE_FIRST_ADMIN ? (

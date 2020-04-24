@@ -62,7 +62,7 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
       </Head>
       <div className="container">
         <div className="row justify-content-center">
-          <div className="col-md-4">
+          <div className="col-lg-4 col-md-6 col-10">
             <div className="card-group">
               <div className="card p-4">
                 <div className="card-body">
@@ -88,12 +88,12 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
                           type="password"
                         />
                         <div className="row">
-                          <div className="col-6">
+                          <div className="col-4">
                             <FormikButton color="primary">
                               {t('login')}
                             </FormikButton>
                           </div>
-                          <div className="col-6 text-right">
+                          <div className="col-8 text-right">
                             <Link href="/admin/reset-password">
                               <a className="btn btn-link px-0">
                                 {t('forgotPassword')}
