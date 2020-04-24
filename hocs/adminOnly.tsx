@@ -41,12 +41,18 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
     const {t} = useTranslation();
     const router = useRouter();
     const [showSidebar, setShowSidebar] = useState(props.showSidebar);
+    const [showMobileSidebar, setShowMobileSidebar] = useState(false);
     const {loginUser, dispatch, pageProps} = props;
 
     const toggleSideBar = (): void => {
       const newValue = !showSidebar;
       setShowSidebar(newValue);
       Cookies.set(SHOW_SIDEBAR_COOKIE, newValue.toString());
+    };
+
+    const toggleMobileSideBar = (): void => {
+      const newValue = !showMobileSidebar;
+      setShowMobileSidebar(newValue);
     };
 
     const handleProfile = async (): Promise<void> => {
@@ -158,16 +164,12 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
       <div className="app-layout--admin c-app pace-done">
         <div
           className={classNames('c-sidebar c-sidebar-dark c-sidebar-fixed', {
-            'c-sidebar-show': showSidebar,
+            'c-sidebar-lg-show': showSidebar,
+            'c-sidebar-show': showMobileSidebar,
           })}
           id="sidebar">
           {renderSidebarContent()}
         </div>
-        <div
-          className={classNames('c-sidebar-backdrop c-fade', {
-            'c-show': showSidebar,
-          })}
-          onClick={(): void => setShowSidebar(false)}></div>
         <div className="c-wrapper">
           <header className="c-header c-header-light c-header-fixed px-3">
             <button
@@ -177,7 +179,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
             </button>
             <button
               className="c-header-toggler c-class-toggler d-lg-none mfe-auto"
-              onClick={toggleSideBar}>
+              onClick={toggleMobileSideBar}>
               <span className="c-header-toggler-icon" />
             </button>
             <ul className="c-header-nav mfs-auto">
@@ -219,6 +221,12 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
             </main>
           </div>
         </div>
+        {showMobileSidebar && (
+          <div
+            className="c-sidebar-backdrop c-fade c-show"
+            onClick={(): void => setShowMobileSidebar(false)}
+          />
+        )}
       </div>
     );
   };
