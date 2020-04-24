@@ -82,5 +82,8 @@
     "passwordsMustMatch": "Passwords must match"
   },
   "verified": "Verified",
-  "verifiedUsers": "Verified users"
+  "verifiedUsers": "Verified users",
+  "warning": {
+    "nothingChange": "The new {{name}} is the same"
+  }
 }

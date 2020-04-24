@@ -23,6 +23,7 @@ import {RootState} from '../../redux/slices';
 import {useTranslation} from 'react-i18next';
 import {FormikButton} from '../../components/admin/FormikButton';
 import {getErrorMessageCode} from '../../view-models/Error';
+import {getErrorCode} from '../../errors/ServerError';
 
 interface Props {
   loginUser: LoginUser;
@@ -52,13 +53,13 @@ const ProfilePage: FC<Props> = (props: Props) => {
     try {
       formikHelpers.setSubmitting(true);
       if (_isEqual(values, loginUser)) {
-        toastr.warning('New profile is the same.');
+        toastr.warning(t('warning.nothingChange', {name: 'profile'}));
         return;
       }
       await updateLoginUserProfile(values);
-      toastr.success('Update profile succeed.');
-    } catch {
-      toastr.error('Update profile failed.');
+      toastr.success(t('success'));
+    } catch (e) {
+      toastr.error(t(getErrorCode(e)));
     } finally {
       formikHelpers.setSubmitting(false);
     }
