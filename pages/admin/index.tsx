@@ -51,7 +51,7 @@ const AdminDashboardPage: FC = () => {
         </title>
       </Head>
       <div className="row">
-        <div className="col-12 col-md-4">
+        <div className="col-sm-6 col-lg-4">
           <div className="card">
             <div className="card-header bg-gradient-info text-white">
               <div className="text-center">

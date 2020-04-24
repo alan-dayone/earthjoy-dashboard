@@ -152,7 +152,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
   return (
     <div>
       <div className="table-responsive">
-        <table className="admin-table table ">
+        <table className="admin-table table">
           <thead>
             <tr>
               {headers.map((header, index) => {
@@ -165,18 +165,22 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
                     key={`th-${index}`}
                     style={{width: header.width, ...headerStyle}}
                     {...otherHeaderProps}>
-                    {header.render('Header')}
-                    {header.isSorted && (
-                      <span className="float-right">
-                        <i
-                          className={
-                            header.isSortedDesc
-                              ? 'cil-sort-descending'
-                              : 'cil-sort-ascending'
-                          }
-                        />
-                      </span>
-                    )}
+                    <div className="d-flex">
+                      <div className="flex-grow-1 admin-table__header-text">
+                        {header.render('Header')}
+                      </div>
+                      {header.isSorted && (
+                        <span className="align-self-end">
+                          <i
+                            className={
+                              header.isSortedDesc
+                                ? 'cil-sort-descending'
+                                : 'cil-sort-ascending'
+                            }
+                          />
+                        </span>
+                      )}
+                    </div>
                   </th>
                 );
               })}
@@ -191,7 +195,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
               </tr>
             )}
           </thead>
-          <tbody className="mh-50">
+          <tbody>
             {loadingData ? (
               <tr>
                 <td colSpan={tableColumns.length} className="text-center">
@@ -225,7 +229,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
       </div>
       {data.length > 0 && (
         <div className="row">
-          <div className="col-6 d-flex align-self-end align-items-center">
+          <div className="col-md-6 d-flex align-self-end align-items-center mb-2 mb-sm-0">
             <span>
               Showing{' '}
               <strong>{Math.min(pageIndex * pageSize + 1, total)}</strong> to{' '}
@@ -245,7 +249,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
             </select>
             &nbsp;per page
           </div>
-          <div className="col-6">
+          <div className="col-md-6">
             <Pagination
               alignRight
               pageCount={Math.ceil(total / pageSize)}

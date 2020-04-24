@@ -19,6 +19,7 @@ import {RootState} from '../redux/slices';
 import {AppDispatch} from '../redux/store';
 import {getBooleanCookieFromRequest} from '../utils/cookie';
 import {withI18next} from './withI18next';
+import {getAccountName} from '../view-models/Account';
 
 const SHOW_SIDEBAR_COOKIE = 'showSidebar';
 
@@ -71,94 +72,12 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
         toastr.error(e.message);
       }
     };
-    const currentSidebarSection = router.pathname.split('/');
 
-    const renderSidebarContent = (): JSX.Element => (
-      <>
-        <Link href="/admin">
-          <a className="c-sidebar-brand flex-column" style={{height: '56px'}}>
-            <img
-              className="c-sidebar-brand-full"
-              src="/static/img/admin_logo_bw_full.svg"
-              alt="ADMIN PORTAL"
-              style={{height: 40}}
-            />
-            <img
-              className="c-sidebar-brand-minimized"
-              src="/static/img/admin_logo_bw_minimized.svg"
-              alt="ADMIN"
-              style={{height: 40}}
-            />
-          </a>
-        </Link>
-        <ul
-          className="c-sidebar-nav ps ps--active-y"
-          data-dropdown-accordion="true">
-          <li
-            className={classNames('c-sidebar-nav-item', {
-              'bg-primary': currentSidebarSection[2] === undefined,
-            })}>
-            <Link href="/admin">
-              <a className="c-sidebar-nav-link">
-                <i className="c-sidebar-nav-icon cil-speedometer" />
-                {t('dashboard')}
-              </a>
-            </Link>
-          </li>
-          <li
-            className={classNames('c-sidebar-nav-item', {
-              'bg-primary': currentSidebarSection[2] === 'accounts',
-            })}>
-            <Link href="/admin/accounts">
-              <a className="c-sidebar-nav-link">
-                <i className="c-sidebar-nav-icon cil-speedometer" />
-                {t('accounts')}
-              </a>
-            </Link>
-          </li>
-          <li className="c-sidebar-nav-title">EMAIL</li>
-          <li
-            className={classNames('c-sidebar-nav-item', {
-              'bg-primary':
-                currentSidebarSection[2] === 'configurations' &&
-                currentSidebarSection[3] === 'smtp-settings',
-            })}>
-            <Link href="/admin/configurations/smtp-settings">
-              <a className="c-sidebar-nav-link">
-                <i className="c-sidebar-nav-icon cil-settings" />
-                {t('smtpSettings')}
-              </a>
-            </Link>
-          </li>
-          <li
-            className={classNames('c-sidebar-nav-item', {
-              'bg-primary':
-                currentSidebarSection[2] === 'configurations' &&
-                currentSidebarSection[3] === 'email-address-verification',
-            })}>
-            <Link href="/admin/configurations/email-address-verification">
-              <a className="c-sidebar-nav-link">
-                <i className="c-sidebar-nav-icon cil-send" />
-                {t('emailAddressVerification')}
-              </a>
-            </Link>
-          </li>
-          <li
-            className={classNames('c-sidebar-nav-item', {
-              'bg-primary':
-                currentSidebarSection[2] === 'configurations' &&
-                currentSidebarSection[3] === 'password-reset',
-            })}>
-            <Link href="/admin/configurations/password-reset">
-              <a className="c-sidebar-nav-link">
-                <i className="c-sidebar-nav-icon cil-send" />
-                {t('passwordReset')}
-              </a>
-            </Link>
-          </li>
-        </ul>
-      </>
-    );
+    const getSidebarNavItemLinkClass = (path): string => {
+      return router.asPath === path
+        ? 'c-sidebar-nav-link c-active'
+        : 'c-sidebar-nav-link';
+    };
 
     return (
       <div className="app-layout--admin c-app pace-done">
@@ -168,7 +87,76 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
             'c-sidebar-show': showMobileSidebar,
           })}
           id="sidebar">
-          {renderSidebarContent()}
+          <Link href="/admin">
+            <a className="c-sidebar-brand flex-column" style={{height: '56px'}}>
+              <img
+                className="c-sidebar-brand-full"
+                src="/static/img/admin_logo_bw_full.svg"
+                alt="ADMIN PORTAL"
+                style={{height: 40}}
+              />
+              <img
+                className="c-sidebar-brand-minimized"
+                src="/static/img/admin_logo_bw_minimized.svg"
+                alt="ADMIN"
+                style={{height: 40}}
+              />
+            </a>
+          </Link>
+          <ul
+            className="c-sidebar-nav ps ps--active-y"
+            data-dropdown-accordion="true">
+            <li className="c-sidebar-nav-item">
+              <Link href="/admin">
+                <a className={getSidebarNavItemLinkClass('/admin')}>
+                  <i className="c-sidebar-nav-icon cil-speedometer" />
+                  {t('dashboard')}
+                </a>
+              </Link>
+            </li>
+            <li className="c-sidebar-nav-item">
+              <Link href="/admin/accounts">
+                <a className={getSidebarNavItemLinkClass('/admin/accounts')}>
+                  <i className="c-sidebar-nav-icon cil-speedometer" />
+                  {t('accounts')}
+                </a>
+              </Link>
+            </li>
+            <li className="c-sidebar-nav-title">EMAIL</li>
+            <li className="c-sidebar-nav-item">
+              <Link href="/admin/configurations/smtp-settings">
+                <a
+                  className={getSidebarNavItemLinkClass(
+                    '/admin/configurations/smtp-settings',
+                  )}>
+                  <i className="c-sidebar-nav-icon cil-settings" />
+                  {t('smtpSettings')}
+                </a>
+              </Link>
+            </li>
+            <li className="c-sidebar-nav-item">
+              <Link href="/admin/configurations/email-address-verification">
+                <a
+                  className={getSidebarNavItemLinkClass(
+                    '/admin/configurations/email-address-verification',
+                  )}>
+                  <i className="c-sidebar-nav-icon cil-send" />
+                  {t('emailAddressVerification')}
+                </a>
+              </Link>
+            </li>
+            <li className="c-sidebar-nav-item">
+              <Link href="/admin/configurations/password-reset">
+                <a
+                  className={getSidebarNavItemLinkClass(
+                    '/admin/configurations/password-reset',
+                  )}>
+                  <i className="c-sidebar-nav-icon cil-send" />
+                  {t('passwordReset')}
+                </a>
+              </Link>
+            </li>
+          </ul>
         </div>
         <div className="c-wrapper">
           <header className="c-header c-header-light c-header-fixed px-3">
@@ -178,7 +166,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
               <span className="c-header-toggler-icon" />
             </button>
             <button
-              className="c-header-toggler c-class-toggler d-lg-none mfe-auto"
+              className="c-header-toggler c-class-toggler d-lg-none sidebar-toggler u-outline-none"
               onClick={toggleMobileSideBar}>
               <span className="c-header-toggler-icon" />
             </button>
@@ -197,7 +185,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
                         nav
                         tag="a"
                         className="u-cursor-pointer">
-                        {loginUser.firstName || loginUser.email}
+                        {getAccountName(loginUser)}
                       </DropdownToggle>
                       <DropdownMenu right>
                         <DropdownItem onClick={handleProfile}>

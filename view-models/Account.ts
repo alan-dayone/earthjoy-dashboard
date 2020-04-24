@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import lopick from 'lodash/pick';
-import {constraint as AccountConstraint} from '../models/Account';
+import {constraint as AccountConstraint, Account} from '../models/Account';
 import {emailSchema} from './CommonValidationSchemas';
 
 const validationSchema = {
@@ -21,6 +21,10 @@ const validationSchema = {
       [Yup.ref('password'), null],
       // i18next.t('passwordsMustMatch'),
     ),
+};
+
+export const getAccountName = (account: Account): string => {
+  return [account.firstName, account.lastName].filter(str => !!str).join(' ');
 };
 
 export const userFormValidationSchema = Yup.object().shape(
