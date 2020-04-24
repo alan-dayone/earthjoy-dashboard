@@ -13,6 +13,7 @@ import {AppDispatch} from '../../redux/store';
 import {FormGroup} from '../../components/admin/FormGroup';
 import {FormikButton} from '../../components/admin/FormikButton';
 import {getErrorMessageCode} from '../../view-models/Error';
+import {NoBackgroundCardLayout} from '../../containers/admin/NoBackgroundCardLayout';
 
 export interface LoginForm {
   email: string;
@@ -60,56 +61,48 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
           {t('admin')} - {t('login')}
         </title>
       </Head>
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-lg-4 col-md-6 col-10">
-            <div className="card-group">
-              <div className="card p-4">
-                <div className="card-body">
-                  <Formik
-                    initialValues={{
-                      email: '',
-                      password: '',
-                    }}
-                    onSubmit={handleLogin}>
-                    {(props: FormikProps<LoginForm>): JSX.Element => (
-                      <form onSubmit={props.handleSubmit}>
-                        <h1>{t('login')}</h1>
-                        <p className="text-muted">{t('loginToYourAccount')}</p>
-                        <FormGroup
-                          name="email"
-                          placeholder={t('email')}
-                          icon="cil-user"
-                        />
-                        <FormGroup
-                          name="password"
-                          placeholder={t('password')}
-                          icon="cil-lock-locked"
-                          type="password"
-                        />
-                        <div className="row">
-                          <div className="col-4">
-                            <FormikButton color="primary">
-                              {t('login')}
-                            </FormikButton>
-                          </div>
-                          <div className="col-8 text-right">
-                            <Link href="/admin/reset-password">
-                              <a className="btn btn-link px-0">
-                                {t('forgotPassword')}
-                              </a>
-                            </Link>
-                          </div>
-                        </div>
-                      </form>
-                    )}
-                  </Formik>
+      <NoBackgroundCardLayout>
+        <div className="card-body">
+          <Formik
+            initialValues={{
+              email: '',
+              password: '',
+            }}
+            onSubmit={handleLogin}>
+            {(props: FormikProps<LoginForm>): JSX.Element => (
+              <form onSubmit={props.handleSubmit}>
+                <h1>{t('login')}</h1>
+                <p className="text-muted">{t('loginToYourAccount')}</p>
+                <FormGroup
+                  name="email"
+                  placeholder={t('email')}
+                  icon="cil-user"
+                />
+                <FormGroup
+                  name="password"
+                  placeholder={t('password')}
+                  icon="cil-lock-locked"
+                  type="password"
+                />
+                <div className="row">
+                  <div className="col-4">
+                    <FormikButton color="primary">
+                      {t('login')}
+                    </FormikButton>
+                  </div>
+                  <div className="col-8 text-right">
+                    <Link href="/admin/reset-password">
+                      <a className="btn btn-link px-0">
+                        {t('forgotPassword')}
+                      </a>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
+              </form>
+            )}
+          </Formik>
         </div>
-      </div>
+      </NoBackgroundCardLayout>
     </div>
   );
 };

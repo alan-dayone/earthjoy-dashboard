@@ -10,6 +10,7 @@ import {adminResetPasswordFormSchema} from '../../view-models/Account';
 import {FormikButton} from '../../components/admin/FormikButton';
 import {getErrorMessageCode} from '../../view-models/Error';
 import {FormGroup} from '../../components/admin/FormGroup';
+import {NoBackgroundCardLayout} from '../../containers/admin/NoBackgroundCardLayout';
 
 interface ForgotPasswordForm {
   email: string;
@@ -44,49 +45,39 @@ const AdminResetPasswordPage: FC = () => {
           {t('admin')} - {t('forgotPassword')}
         </title>
       </Head>
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-lg-4 col-md-6">
-            <div className="card-group">
-              <div className="card p-4">
-                <div className="card-body">
-                  <h1>{t('forgotPassword')}</h1>
-                  {!isSubmitted ? (
-                    <Formik
-                      initialValues={{email: ''}}
-                      onSubmit={handleForgotPassword}
-                      validationSchema={adminResetPasswordFormSchema}>
-                      {(props: FormikProps<{email: string}>): JSX.Element => (
-                        <form onSubmit={props.handleSubmit}>
-                          <div>
-                            <p className="text-muted">
-                              {t('msgPleaseEnterEmail')}
-                            </p>
-                            <FormGroup
-                              name="email"
-                              type="text"
-                              placeholder={t('email')}
-                            />
-                            <FormikButton color="primary" className="btn-block">
-                              {t('submit')}
-                            </FormikButton>
-                          </div>
-                        </form>
-                      )}
-                    </Formik>
-                  ) : (
-                    <div className="mt-3">
-                      <div className="alert alert-success">
-                        {t('msgPleaseCheckEmail')}
-                      </div>
-                    </div>
-                  )}
-                </div>
+      <NoBackgroundCardLayout>
+        <div className="card-body">
+          <h1>{t('forgotPassword')}</h1>
+          {!isSubmitted ? (
+            <Formik
+              initialValues={{email: ''}}
+              onSubmit={handleForgotPassword}
+              validationSchema={adminResetPasswordFormSchema}>
+              {(props: FormikProps<{email: string}>): JSX.Element => (
+                <form onSubmit={props.handleSubmit}>
+                  <div>
+                    <p className="text-muted">{t('msgPleaseEnterEmail')}</p>
+                    <FormGroup
+                      name="email"
+                      type="text"
+                      placeholder={t('email')}
+                    />
+                    <FormikButton color="primary" className="btn-block">
+                      {t('submit')}
+                    </FormikButton>
+                  </div>
+                </form>
+              )}
+            </Formik>
+          ) : (
+            <div className="mt-3">
+              <div className="alert alert-success">
+                {t('msgPleaseCheckEmail')}
               </div>
             </div>
-          </div>
+          )}
         </div>
-      </div>
+      </NoBackgroundCardLayout>
     </div>
   );
 };

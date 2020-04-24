@@ -43,7 +43,7 @@
   "msgCreateFirstAdmin": "You can use this account to create other accounts and manage the system.",
   "msgPleaseCheckEmail": "We have just sent you an email to reset your password.",
   "msgPleaseEnterEmail": "Please enter your email address. We will send you an email to reset your password.",
-  "msgPleaseEnterNewPassword.": "Please enter new password.",
+  "msgPleaseEnterNewPassword": "Please enter new password.",
   "msgSystemInitialization": "Use secret system initialization password to initialize the system and create your first admin account.",
   "msgTokenInvalidOrExpired": "Token is invalid or expired",
   "newPassword": "New password",

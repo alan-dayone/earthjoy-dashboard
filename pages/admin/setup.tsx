@@ -10,6 +10,7 @@ import EnterPasswordForm from '../../containers/admin/setup/EnterPasswordForm';
 import CreateFirstAdminForm from '../../containers/admin/setup/CreateFirstAdminForm';
 import {CustomNextPageContext} from '../../hocs/types';
 import {systemService} from '../../services';
+import {NoBackgroundCardLayout} from '../../containers/admin/NoBackgroundCardLayout';
 
 enum STEP {
   ENTER_PASSWORD,
@@ -42,28 +43,22 @@ const AdminSetupPage: NextComponentType<
           {t('admin')} - {t('setup')}
         </title>
       </Head>
-      <div className="container">
-        <div className="justify-content-center row">
-          <div className="col-lg-4 col-md-6">
-            <div className="p-4 card">
-              <div className="card-body">
-                {step === STEP.CREATE_FIRST_ADMIN ? (
-                  <CreateFirstAdminForm
-                    correctSystemInitPassword={correctSystemInitPassword}
-                  />
-                ) : (
-                  <EnterPasswordForm
-                    onSuccess={(correctPassword): void => {
-                      setStep(STEP.CREATE_FIRST_ADMIN);
-                      setCorrectSystemInitPassword(correctPassword);
-                    }}
-                  />
-                )}
-              </div>
-            </div>
-          </div>
+      <NoBackgroundCardLayout>
+        <div className="card-body">
+          {step === STEP.CREATE_FIRST_ADMIN ? (
+            <CreateFirstAdminForm
+              correctSystemInitPassword={correctSystemInitPassword}
+            />
+          ) : (
+            <EnterPasswordForm
+              onSuccess={(correctPassword): void => {
+                setStep(STEP.CREATE_FIRST_ADMIN);
+                setCorrectSystemInitPassword(correctPassword);
+              }}
+            />
+          )}
         </div>
-      </div>
+      </NoBackgroundCardLayout>
     </div>
   );
 };
