@@ -32,6 +32,7 @@ const AdminAccountEditingPage: FC = () => {
       actions.setSubmitting(true);
       const userId = originalAccount.id;
       await accountService.updateAccount(userId, values);
+      setOriginalAccount({...originalAccount, ...values});
       toastr.success(t('success'));
     } catch (e) {
       toastr.error(t(getErrorMessageCode(e)));
@@ -51,6 +52,7 @@ const AdminAccountEditingPage: FC = () => {
         initialValues={originalAccount}
         enableReinitialize
         onSubmit={handleSave}
+        isInitialValid={false}
         validationSchema={userUpdateInformationFormValidationSchema}>
         {({handleSubmit, setFieldValue}: FormikProps<Account>): JSX.Element => (
           <form onSubmit={handleSubmit}>

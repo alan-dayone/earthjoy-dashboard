@@ -5,7 +5,6 @@ import toastr from 'toastr';
 import Router from 'next/router';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
-import _isEqual from 'lodash/isEqual';
 import {adminOnly} from '../../hocs/adminOnly';
 import {LoginUser} from '../../models/Account';
 import {authService} from '../../services';
@@ -51,10 +50,6 @@ const ProfilePage: FC<Props> = (props: Props) => {
   ): Promise<void> => {
     try {
       formikHelpers.setSubmitting(true);
-      if (_isEqual(values, loginUser)) {
-        toastr.warning(t('warning.nothingChange', {name: 'profile'}));
-        return;
-      }
       await updateLoginUserProfile(values);
       toastr.success(t('success'));
     } catch (e) {
@@ -132,6 +127,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
           <Formik
             initialValues={initialChangePasswordForm}
             onSubmit={handleChangePassword}
+            isInitialValid={false}
             validationSchema={adminUpdatePasswordSchema}>
             {({handleSubmit}): JSX.Element => (
               <form onSubmit={handleSubmit}>

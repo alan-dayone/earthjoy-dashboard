@@ -7,11 +7,12 @@ export const FormikButton: FC<ButtonProps> = ({
   disabled,
   ...otherProps
 }: ButtonProps) => {
-  const {isValid, isSubmitting} = useFormikContext();
+  const {isValid, isSubmitting, dirty} = useFormikContext();
+  console.log({dirty});
 
   return (
     <FormButton
-      disabled={isSubmitting || !isValid || disabled}
+      disabled={isSubmitting || !isValid || disabled || !dirty}
       loading={isSubmitting}
       type="submit"
       {...otherProps}

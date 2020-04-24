@@ -150,77 +150,79 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
   const showFiltersOnHeader = !!headers.find(header => header.canFilter);
 
   return (
-    <div className="table-responsive">
-      <table className="admin-table table">
-        <thead>
-          <tr>
-            {headers.map((header, index) => {
-              const {
-                style: headerStyle,
-                ...otherHeaderProps
-              } = header.getHeaderProps(header.getSortByToggleProps());
-              return (
-                <th
-                  key={`th-${index}`}
-                  style={{width: header.width, ...headerStyle}}
-                  {...otherHeaderProps}>
-                  {header.render('Header')}
-                  {header.isSorted && (
-                    <span className="float-right">
-                      <i
-                        className={
-                          header.isSortedDesc
-                            ? 'cil-sort-descending'
-                            : 'cil-sort-ascending'
-                        }
-                      />
-                    </span>
-                  )}
-                </th>
-              );
-            })}
-          </tr>
-          {showFiltersOnHeader && (
+    <div>
+      <div className="table-responsive">
+        <table className="admin-table table ">
+          <thead>
             <tr>
-              {headers.map((header, index) => (
-                <th key={`th-filter-${index}`}>
-                  {header.canFilter ? header.render('Filter') : null}
-                </th>
-              ))}
+              {headers.map((header, index) => {
+                const {
+                  style: headerStyle,
+                  ...otherHeaderProps
+                } = header.getHeaderProps(header.getSortByToggleProps());
+                return (
+                  <th
+                    key={`th-${index}`}
+                    style={{width: header.width, ...headerStyle}}
+                    {...otherHeaderProps}>
+                    {header.render('Header')}
+                    {header.isSorted && (
+                      <span className="float-right">
+                        <i
+                          className={
+                            header.isSortedDesc
+                              ? 'cil-sort-descending'
+                              : 'cil-sort-ascending'
+                          }
+                        />
+                      </span>
+                    )}
+                  </th>
+                );
+              })}
             </tr>
-          )}
-        </thead>
-        <tbody className="mh-50">
-          {loadingData ? (
-            <tr>
-              <td colSpan={tableColumns.length} className="text-center">
-                <div className="spinner-grow" />
-              </td>
-            </tr>
-          ) : page.length > 0 ? (
-            page.map(row => {
-              prepareRow(row);
-              return (
-                <tr key={row.id} {...row.getRowProps()}>
-                  {row.cells.map((cell, i) => {
-                    return (
-                      <td key={`${row.id}-${i}`} {...cell.getCellProps()}>
-                        {cell.render('Cell')}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })
-          ) : (
-            <tr>
-              <td colSpan={tableColumns.length} className="text-center">
-                <p className="text-center">No data</p>
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            {showFiltersOnHeader && (
+              <tr>
+                {headers.map((header, index) => (
+                  <th key={`th-filter-${index}`}>
+                    {header.canFilter ? header.render('Filter') : null}
+                  </th>
+                ))}
+              </tr>
+            )}
+          </thead>
+          <tbody className="mh-50">
+            {loadingData ? (
+              <tr>
+                <td colSpan={tableColumns.length} className="text-center">
+                  <div className="spinner-grow" />
+                </td>
+              </tr>
+            ) : page.length > 0 ? (
+              page.map(row => {
+                prepareRow(row);
+                return (
+                  <tr key={row.id} {...row.getRowProps()}>
+                    {row.cells.map((cell, i) => {
+                      return (
+                        <td key={`${row.id}-${i}`} {...cell.getCellProps()}>
+                          {cell.render('Cell')}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan={tableColumns.length} className="text-center">
+                  <p className="text-center">No data</p>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
       {data.length > 0 && (
         <div className="row">
           <div className="col-6 d-flex align-self-end align-items-center">
