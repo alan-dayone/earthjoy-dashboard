@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useEffect, useState, FC} from 'react';
 import Head from 'next/head';
-import {NextPageContext, NextPage} from 'next';
 import toastr from 'toastr';
 import {adminOnly} from '../../../../hocs/adminOnly';
 import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
@@ -11,15 +10,20 @@ import {accountService} from '../../../../services';
 import {FormGroup} from '../../../../components/admin/FormGroup';
 import {useTranslation} from 'react-i18next';
 import {FormikButton} from '../../../../components/admin/FormikButton';
+import {useRouter} from 'next/router';
 
-interface Props {
-  originalAccount: Account;
-}
-
-const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
-  originalAccount,
-}) => {
+const AdminAccountEditingPage: FC = () => {
   const {t} = useTranslation();
+  const [originalAccount, setOriginalAccount] = useState<Account>();
+  const router = useRouter();
+  useEffect(() => {
+    (async (): Promise<void> => {
+      const res = await accountService.findOneForAdmin(
+        router.query['userId'] as string,
+      );
+      setOriginalAccount(res);
+    })();
+  }, []);
   const handleSave = async (
     values: Account,
     actions: FormikActions<Account>,
@@ -45,6 +49,7 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
       </Head>
       <Formik
         initialValues={originalAccount}
+        enableReinitialize
         onSubmit={handleSave}
         validationSchema={userUpdateInformationFormValidationSchema}>
         {({handleSubmit, setFieldValue}: FormikProps<Account>): JSX.Element => (
@@ -122,16 +127,6 @@ const AdminAccountEditingPage: NextPage<Partial<Props>> = ({
       </Formik>
     </div>
   );
-};
-AdminAccountEditingPage.getInitialProps = async (
-  context: NextPageContext<Props>,
-): Promise<Partial<Props>> => {
-  const originalAccount = await accountService.findOneForAdmin(
-    context.query['userId'] as string,
-  );
-  return {
-    originalAccount,
-  };
 };
 
 export default adminOnly(AdminAccountEditingPage);
