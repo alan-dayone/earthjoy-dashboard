@@ -1,19 +1,10 @@
 import {AuthGateway} from '../gateways/AuthGateway';
-import {ServiceContext} from './index';
 import {LoginUser} from '../models/Account';
 
 export class AuthService {
-  public static error = {
-    LOGIN_FAILED: 'LOGIN_FAILED',
-    EMAIL_NOT_FOUND: 'EMAIL_NOT_FOUND',
-    INVALID_CURRENT_PASSWORD: 'INVALID_CURRENT_PASSWORD',
-    INVALID_EMAIL: 'INVALID_EMAIL',
-    ACCOUNT_INACTIVATED: 'ACCOUNT_INACTIVATED',
-  };
-
   private authGateway: AuthGateway;
 
-  constructor(options: ServiceContext) {
+  constructor(options: {authGateway: AuthGateway}) {
     this.authGateway = options.authGateway;
   }
 

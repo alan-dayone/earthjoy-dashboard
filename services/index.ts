@@ -15,18 +15,6 @@ const authGateway = new AuthGateway({restConnector});
 const accountGateway = new AccountGateway({restConnector});
 const systemGateway = new SystemGateway({restConnector});
 
-export interface ServiceContext {
-  authGateway: AuthGateway;
-  accountGateway: AccountGateway;
-  systemGateway: SystemGateway;
-}
-
-const injectServiceContext: ServiceContext = {
-  authGateway,
-  accountGateway,
-  systemGateway,
-};
-
-export const authService = new AuthService(injectServiceContext);
-export const systemService = new SystemService(injectServiceContext);
-export const accountService = new AccountService(injectServiceContext);
+export const authService = new AuthService({authGateway});
+export const systemService = new SystemService({systemGateway});
+export const accountService = new AccountService({accountGateway});

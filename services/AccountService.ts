@@ -1,11 +1,10 @@
-import {ServiceContext} from './index';
 import {AccountGateway} from '../gateways/AccountGateway';
 import {Account} from '../models/Account';
 
 export class AccountService {
-  protected accountGateway: AccountGateway;
+  private accountGateway: AccountGateway;
 
-  constructor(options: ServiceContext) {
+  constructor(options: {accountGateway: AccountGateway}) {
     this.accountGateway = options.accountGateway;
   }
 

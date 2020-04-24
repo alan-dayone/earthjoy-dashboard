@@ -1,11 +1,10 @@
 import {SystemGateway, ConfigurationData} from '../gateways/SystemGateway';
-import {ServiceContext} from './index';
 import {ConfigurationKey} from '../models/Configuration';
 
 export class SystemService {
   private systemGateway: SystemGateway;
 
-  constructor(options: ServiceContext) {
+  constructor(options: {systemGateway: SystemGateway}) {
     this.systemGateway = options.systemGateway;
   }
 
