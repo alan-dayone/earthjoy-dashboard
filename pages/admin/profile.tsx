@@ -5,16 +5,20 @@ import toastr from 'toastr';
 import Router from 'next/router';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
+import _isEqual from 'lodash/isEqual';
 import {adminOnly} from '../../hocs/adminOnly';
 import {LoginUser} from '../../models/Account';
-import {accountService, authService} from '../../services';
+import {authService} from '../../services';
 import {FormGroup} from '../../components/admin/FormGroup';
 import {AccountEmailVerificationLabel} from '../../components/admin/AccountEmailVerificationLabel';
 import {
   adminUpdatePasswordSchema,
   adminUpdateProfileSchema,
 } from '../../view-models/Account';
-import {selectors} from '../../redux/slices/loginUserSlice';
+import {
+  selectors,
+  updateLoginUserProfile,
+} from '../../redux/slices/loginUserSlice';
 import {RootState} from '../../redux/slices';
 import {useTranslation} from 'react-i18next';
 import {FormikButton} from '../../components/admin/FormikButton';
@@ -22,6 +26,7 @@ import {getErrorMessageCode} from '../../view-models/Error';
 
 interface Props {
   loginUser: LoginUser;
+  updateLoginUserProfile: (profile: LoginUser) => Promise<void>;
 }
 
 interface ChangePasswordForm {
@@ -36,7 +41,8 @@ const initialChangePasswordForm = {
   confirmPassword: '',
 };
 
-const ProfilePage: FC<Props> = ({loginUser}: Props) => {
+const ProfilePage: FC<Props> = (props: Props) => {
+  const {loginUser, updateLoginUserProfile} = props;
   const {t} = useTranslation();
 
   const handleUpdateProfile = async (
@@ -45,11 +51,14 @@ const ProfilePage: FC<Props> = ({loginUser}: Props) => {
   ): Promise<void> => {
     try {
       formikHelpers.setSubmitting(true);
-      // TODO: Change to use redux.
-      await accountService.updateAccount(loginUser.id, values);
-      toastr.success(t('success'));
-    } catch (e) {
-      toastr.error(t(getErrorMessageCode(e)));
+      if (_isEqual(values, loginUser)) {
+        toastr.warning('New profile is the same.');
+        return;
+      }
+      await updateLoginUserProfile(values);
+      toastr.success('Update profile succeed.');
+    } catch {
+      toastr.error('Update profile failed.');
     } finally {
       formikHelpers.setSubmitting(false);
     }
@@ -170,7 +179,10 @@ const ProfilePage: FC<Props> = ({loginUser}: Props) => {
 
 export default compose(
   adminOnly,
-  connect((state: RootState) => ({
-    loginUser: selectors.selectLoginUser(state),
-  })),
+  connect(
+    (state: RootState) => ({loginUser: selectors.selectLoginUser(state)}),
+    {
+      updateLoginUserProfile,
+    },
+  ),
 )(ProfilePage);

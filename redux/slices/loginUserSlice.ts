@@ -1,7 +1,7 @@
 import {createSlice, Dispatch} from '@reduxjs/toolkit';
-import {authService} from '../../services';
+import {authService, accountService} from '../../services';
 import {AppThunk} from '../store';
-import {LoginCredentials, LoginUser} from '../../models/Account';
+import {LoginCredentials, LoginUser, Account} from '../../models/Account';
 import {RootState} from './index';
 
 // Reducers
@@ -20,6 +20,20 @@ export const getLoginUser = (): AppThunk<Promise<LoginUser>> => async (
   const user = await authService.getLoginUser();
   dispatch(actions.setLoginUser(user));
   return user;
+};
+
+export const updateLoginUserProfile = (
+  profile: Account,
+): AppThunk<Promise<void>> => async (
+  dispatch: Dispatch,
+  getState,
+): Promise<void> => {
+  const loginUser = getState().loginUser;
+  await accountService.updateAccount(loginUser.id, {
+    ...loginUser,
+    ...profile,
+  });
+  dispatch(actions.setLoginUser({...loginUser, ...profile}));
 };
 
 export const loginWithEmail = (

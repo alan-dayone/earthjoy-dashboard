@@ -180,7 +180,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
                         nav
                         tag="a"
                         className="u-cursor-pointer">
-                        {loginUser.email}
+                        {loginUser.firstName || loginUser.email}
                       </DropdownToggle>
                       <DropdownMenu right>
                         <DropdownItem onClick={handleProfile}>
