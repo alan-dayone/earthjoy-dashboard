@@ -19,7 +19,6 @@ import {RootState} from '../redux/slices';
 import {AppDispatch} from '../redux/store';
 import {getBooleanCookieFromRequest} from '../utils/cookie';
 import {withI18next} from './withI18next';
-import {FormButton} from '../components/admin/FormButton';
 
 const SHOW_SIDEBAR_COOKIE = 'showSidebar';
 
@@ -46,7 +45,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
 
     const toggleSideBar = (): void => {
       const newValue = !showSidebar;
-      // setShowSidebar(newValue);
+      setShowSidebar(newValue);
       Cookies.set(SHOW_SIDEBAR_COOKIE, newValue.toString());
     };
 
@@ -160,11 +159,11 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
         </div>
         <div className="c-wrapper">
           <header className="c-header c-header-light c-header-fixed px-3">
-            <FormButton
-              className="c-header-toggler c-class-toggler d-md-down-none sidebar-toggler"
+            <button
+              className="c-header-toggler c-class-toggler d-md-down-none sidebar-toggler u-outline-none"
               onClick={toggleSideBar}>
               <span className="c-header-toggler-icon" />
-            </FormButton>
+            </button>
             <ul className="c-header-nav mfs-auto">
               <li className="c-header-nav-item dropdown">
                 {loginUser && (

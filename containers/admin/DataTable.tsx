@@ -150,8 +150,8 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
   const showFiltersOnHeader = !!headers.find(header => header.canFilter);
 
   return (
-    <div>
-      <table className="admin-table table table-responsive-sm">
+    <div className="table-responsive">
+      <table className="admin-table table">
         <thead>
           <tr>
             {headers.map((header, index) => {
