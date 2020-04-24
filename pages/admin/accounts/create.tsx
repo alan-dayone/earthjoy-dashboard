@@ -1,6 +1,5 @@
 import React, {FC} from 'react';
 import Head from 'next/head';
-import loGet from 'lodash/get';
 import toastr from 'toastr';
 import {Formik, FormikProps} from 'formik';
 import {useTranslation} from 'react-i18next';

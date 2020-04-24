@@ -1,7 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
 import {NextPageContext, NextPage} from 'next';
-import loGet from 'lodash/get';
 import toastr from 'toastr';
 import {adminOnly} from '../../../../hocs/adminOnly';
 import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
