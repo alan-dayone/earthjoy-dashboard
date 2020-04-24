@@ -20,11 +20,11 @@
   "edit": "Edit",
   "editAccount": "Edit account",
   "email": "Email",
+  "emailAddressVerification": "Email address verification",
   "emailTemplate": "Email template",
   "emailVerification": "Email verification",
   "error": {
     "ENTITY_NOT_FOUND": "The SMTP settings are not found",
-    "emailAddressVerification": "Email address verification",
     "emailAlreadyExist": "Email already existed",
     "emailNotFound": "Email not found",
     "incorrectEmailOrPassword": "Incorrect email or password",
