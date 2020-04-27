@@ -65,10 +65,18 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
       }
     };
 
-    const getSidebarNavItemLinkClass = (path): string => {
-      return router.asPath === path
-        ? 'c-sidebar-nav-link c-active'
-        : 'c-sidebar-nav-link';
+    const getSidebarNavItemLinkClass = (path: string): string => {
+      if (router.pathname === '/admin')
+        return path === '/admin'
+          ? 'c-sidebar-nav-link c-active'
+          : 'c-sidebar-nav-link';
+
+      if (router.pathname !== '/admin') {
+        if (path === '/admin') return 'c-sidebar-nav-link';
+        return router.pathname.substring(0, path.length) === path
+          ? 'c-sidebar-nav-link c-active'
+          : 'c-sidebar-nav-link';
+      }
     };
 
     return (
