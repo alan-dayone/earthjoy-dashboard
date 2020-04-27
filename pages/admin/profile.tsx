@@ -5,6 +5,7 @@ import toastr from 'toastr';
 import Router from 'next/router';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
+import {useTranslation} from 'react-i18next';
 import {adminOnly} from '../../hocs/adminOnly';
 import {LoginUser} from '../../models/Account';
 import {authService} from '../../services';
@@ -19,13 +20,13 @@ import {
   updateLoginUserProfile,
 } from '../../redux/slices/loginUserSlice';
 import {RootState} from '../../redux/slices';
-import {useTranslation} from 'react-i18next';
 import {SubmitButton} from '../../components/admin/Formik/SubmitButton';
 import {getErrorMessageCode} from '../../view-models/Error';
+import {AppDispatch} from '../../redux/store';
 
 interface Props {
   loginUser: LoginUser;
-  updateLoginUserProfile: (profile: LoginUser) => Promise<void>;
+  dispatch: AppDispatch;
 }
 
 interface ChangePasswordForm {
@@ -40,8 +41,7 @@ const initialChangePasswordForm = {
   confirmPassword: '',
 };
 
-const ProfilePage: FC<Props> = (props: Props) => {
-  const {loginUser, updateLoginUserProfile} = props;
+const ProfilePage: FC<Props> = ({loginUser, dispatch}: Props) => {
   const {t} = useTranslation();
 
   const handleUpdateProfile = async (
@@ -50,7 +50,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
   ): Promise<void> => {
     try {
       formikHelpers.setSubmitting(true);
-      await updateLoginUserProfile(values);
+      await dispatch(updateLoginUserProfile(values));
       toastr.success(t('success'));
     } catch (e) {
       toastr.error(t(getErrorMessageCode(e)));
@@ -175,10 +175,7 @@ const ProfilePage: FC<Props> = (props: Props) => {
 
 export default compose(
   adminOnly,
-  connect(
-    (state: RootState) => ({loginUser: selectors.selectLoginUser(state)}),
-    {
-      updateLoginUserProfile,
-    },
-  ),
+  connect((state: RootState) => ({
+    loginUser: selectors.selectLoginUser(state),
+  })),
 )(ProfilePage);

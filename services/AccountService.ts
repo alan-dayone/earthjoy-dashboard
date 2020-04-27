@@ -37,8 +37,11 @@ export class AccountService {
     return this.accountGateway.create(account);
   }
 
-  public async updateAccount(id: string, account: Account): Promise<Account> {
-    return this.accountGateway.update(id, account);
+  public async updateAccount(
+    id: string,
+    values: Partial<Account>,
+  ): Promise<void> {
+    return this.accountGateway.update(id, values);
   }
 
   public async findOneForAdmin(id: string): Promise<Account | null> {

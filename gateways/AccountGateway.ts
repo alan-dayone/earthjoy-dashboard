@@ -39,8 +39,8 @@ export class AccountGateway {
     return data.count;
   }
 
-  public async update(id: string, account: Account): Promise<Account> {
-    const {data} = await this.restConnector.patch(`accounts/${id}`, account);
+  public async update(id: string, values: Partial<Account>): Promise<void> {
+    const {data} = await this.restConnector.patch(`accounts/${id}`, values);
     return data;
   }
 

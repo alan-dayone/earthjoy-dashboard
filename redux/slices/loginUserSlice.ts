@@ -1,7 +1,7 @@
 import {createSlice, Dispatch} from '@reduxjs/toolkit';
 import {authService, accountService} from '../../services';
 import {AppThunk} from '../store';
-import {LoginCredentials, LoginUser, Account} from '../../models/Account';
+import {LoginCredentials, LoginUser} from '../../models/Account';
 import {RootState} from './index';
 
 // Reducers
@@ -23,17 +23,14 @@ export const getLoginUser = (): AppThunk<Promise<LoginUser>> => async (
 };
 
 export const updateLoginUserProfile = (
-  profile: Account,
+  values: Partial<LoginUser>,
 ): AppThunk<Promise<void>> => async (
   dispatch: Dispatch,
   getState,
 ): Promise<void> => {
   const loginUser = getState().loginUser;
-  await accountService.updateAccount(loginUser.id, {
-    ...loginUser,
-    ...profile,
-  });
-  dispatch(actions.setLoginUser({...loginUser, ...profile}));
+  await accountService.updateAccount(loginUser.id, {...values});
+  dispatch(actions.setLoginUser({...loginUser, ...values}));
 };
 
 export const loginWithEmail = (
