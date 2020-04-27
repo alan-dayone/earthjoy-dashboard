@@ -99,7 +99,7 @@ const Container = (props: Props): JSX.Element => {
           <li className="c-sidebar-nav-item">
             <Link href="/admin/accounts">
               <a className={getSidebarNavItemLinkClass('/admin/accounts')}>
-                <i className="c-sidebar-nav-icon cil-speedometer" />
+                <i className="c-sidebar-nav-icon cil-user" />
                 {t('accounts')}
               </a>
             </Link>
@@ -122,7 +122,7 @@ const Container = (props: Props): JSX.Element => {
                 className={getSidebarNavItemLinkClass(
                   '/admin/configurations/email-address-verification',
                 )}>
-                <i className="c-sidebar-nav-icon cil-send" />
+                <i className="c-sidebar-nav-icon cil-envelope-closed" />
                 {t('emailAddressVerification')}
               </a>
             </Link>
@@ -133,7 +133,7 @@ const Container = (props: Props): JSX.Element => {
                 className={getSidebarNavItemLinkClass(
                   '/admin/configurations/password-reset',
                 )}>
-                <i className="c-sidebar-nav-icon cil-send" />
+                <i className="c-sidebar-nav-icon cil-lock-locked" />
                 {t('passwordReset')}
               </a>
             </Link>
