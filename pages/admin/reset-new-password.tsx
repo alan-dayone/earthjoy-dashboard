@@ -8,9 +8,9 @@ import {Formik, FormikHelpers as FormikActions} from 'formik';
 import {guestOnly} from '../../hocs/guestOnly';
 import {authService} from '../../services';
 import {adminResetNewPasswordFormSchema} from '../../view-models/Account';
-import {FormikButton} from '../../components/admin/FormikButton';
+import {SubmitButton} from '../../components/admin/Formik/SubmitButton';
 import {withI18next} from '../../hocs/withI18next';
-import {NoBackgroundCardLayout} from '../../containers/admin/NoBackgroundCardLayout';
+import {UnauthenticatedLayout} from '../../containers/admin/layouts/UnauthenticatedLayout';
 
 interface ResetNewPasswordForm {
   newPassword: string;
@@ -55,7 +55,7 @@ const AdminResetNewPasswordPage: FC = () => {
           {t('admin')} - {t('resetPassword')}
         </title>
       </Head>
-      <NoBackgroundCardLayout>
+      <UnauthenticatedLayout>
         <div className="card-body">
           <Formik
             initialValues={{
@@ -116,14 +116,14 @@ const AdminResetNewPasswordPage: FC = () => {
                     )}
                   </div>
                 </div>
-                <FormikButton color="primary" className="btn-block">
+                <SubmitButton color="primary" className="btn-block">
                   {t('submit')}
-                </FormikButton>
+                </SubmitButton>
               </form>
             )}
           </Formik>
         </div>
-      </NoBackgroundCardLayout>
+      </UnauthenticatedLayout>
     </div>
   );
 };

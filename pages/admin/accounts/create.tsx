@@ -8,8 +8,8 @@ import {Account, AccountStatus, Role} from '../../../models/Account';
 import {userFormValidationSchema} from '../../../view-models/Account';
 import {getErrorMessageCode} from '../../../view-models/Error';
 import {accountService} from '../../../services';
-import {FormGroup} from '../../../components/admin/FormGroup';
-import {FormikButton} from '../../../components/admin/FormikButton';
+import {FormField} from '../../../components/admin/Formik/FormField';
+import {SubmitButton} from '../../../components/admin/Formik/SubmitButton';
 
 const initialValues: Account = {
   email: '',
@@ -62,40 +62,40 @@ const AdminAccountCreationPage: FC = () => {
               <div className="card-body">
                 <div className="row">
                   <div className="col-12">
-                    <FormGroup
+                    <FormField
                       name="email"
                       label={t('email')}
                       icon="cil-envelope-closed"
                       required
                     />
-                    <FormGroup
+                    <FormField
                       name="password"
                       type="password"
                       label={t('password')}
                       icon="cil-lock-locked"
                       required
                     />
-                    <FormGroup
+                    <FormField
                       name="firstName"
                       label={t('firstName')}
                       icon="cil-user"
                       required
                     />
-                    <FormGroup
+                    <FormField
                       name="lastName"
                       label={t('lastName')}
                       icon="cil-user"
                       required
                     />
-                    <FormGroup
+                    <FormField
                       name="role"
                       label={t('role')}
                       tag="select"
                       required>
                       <option value={Role.USER}>{t('user')}</option>
                       <option value={Role.ROOT_ADMIN}>{t('admin')}</option>
-                    </FormGroup>
-                    <FormGroup
+                    </FormField>
+                    <FormField
                       name="status"
                       label={t('accountStatus')}
                       tag="select"
@@ -106,8 +106,8 @@ const AdminAccountCreationPage: FC = () => {
                       <option value={AccountStatus.INACTIVE}>
                         {t('inactive')}
                       </option>
-                    </FormGroup>
-                    <FormGroup
+                    </FormField>
+                    <FormField
                       name="emailVerified"
                       label={t('emailVerification')}
                       tag="select"
@@ -120,14 +120,14 @@ const AdminAccountCreationPage: FC = () => {
                       required>
                       <option value="true">{t('verified')}</option>
                       <option value="false">{t('notVerified')}</option>
-                    </FormGroup>
+                    </FormField>
                   </div>
                 </div>
               </div>
               <div className="card-footer d-flex justify-content-end">
-                <FormikButton size="sm" color="primary">
+                <SubmitButton size="sm" color="primary">
                   {t('create')}
-                </FormikButton>
+                </SubmitButton>
               </div>
             </div>
           </form>

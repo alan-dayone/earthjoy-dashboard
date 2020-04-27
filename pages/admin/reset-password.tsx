@@ -7,10 +7,10 @@ import {withI18next} from '../../hocs/withI18next';
 import {guestOnly} from '../../hocs/guestOnly';
 import {authService} from '../../services';
 import {adminResetPasswordFormSchema} from '../../view-models/Account';
-import {FormikButton} from '../../components/admin/FormikButton';
+import {SubmitButton} from '../../components/admin/Formik/SubmitButton';
 import {getErrorMessageCode} from '../../view-models/Error';
-import {FormGroup} from '../../components/admin/FormGroup';
-import {NoBackgroundCardLayout} from '../../containers/admin/NoBackgroundCardLayout';
+import {FormField} from '../../components/admin/Formik/FormField';
+import {UnauthenticatedLayout} from '../../containers/admin/layouts/UnauthenticatedLayout';
 
 interface ForgotPasswordForm {
   email: string;
@@ -45,7 +45,7 @@ const AdminResetPasswordPage: FC = () => {
           {t('admin')} - {t('forgotPassword')}
         </title>
       </Head>
-      <NoBackgroundCardLayout>
+      <UnauthenticatedLayout>
         <div className="card-body">
           <h1>{t('forgotPassword')}</h1>
           {!isSubmitted ? (
@@ -57,14 +57,14 @@ const AdminResetPasswordPage: FC = () => {
                 <form onSubmit={props.handleSubmit}>
                   <div>
                     <p className="text-muted">{t('msgPleaseEnterEmail')}</p>
-                    <FormGroup
+                    <FormField
                       name="email"
                       type="text"
                       placeholder={t('email')}
                     />
-                    <FormikButton color="primary" className="btn-block">
+                    <SubmitButton color="primary" className="btn-block">
                       {t('submit')}
-                    </FormikButton>
+                    </SubmitButton>
                   </div>
                 </form>
               )}
@@ -77,7 +77,7 @@ const AdminResetPasswordPage: FC = () => {
             </div>
           )}
         </div>
-      </NoBackgroundCardLayout>
+      </UnauthenticatedLayout>
     </div>
   );
 };

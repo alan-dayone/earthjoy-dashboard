@@ -10,10 +10,10 @@ import {guestOnly} from '../../hocs/guestOnly';
 import {withI18next} from '../../hocs/withI18next';
 import {loginWithEmail} from '../../redux/slices/loginUserSlice';
 import {AppDispatch} from '../../redux/store';
-import {FormGroup} from '../../components/admin/FormGroup';
-import {FormikButton} from '../../components/admin/FormikButton';
+import {FormField} from '../../components/admin/Formik/FormField';
+import {SubmitButton} from '../../components/admin/Formik/SubmitButton';
 import {getErrorMessageCode} from '../../view-models/Error';
-import {NoBackgroundCardLayout} from '../../containers/admin/NoBackgroundCardLayout';
+import {UnauthenticatedLayout} from '../../containers/admin/layouts/UnauthenticatedLayout';
 
 export interface LoginForm {
   email: string;
@@ -61,7 +61,7 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
           {t('admin')} - {t('login')}
         </title>
       </Head>
-      <NoBackgroundCardLayout>
+      <UnauthenticatedLayout>
         <div className="card-body">
           <Formik
             initialValues={{
@@ -73,12 +73,12 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
               <form onSubmit={props.handleSubmit}>
                 <h1>{t('login')}</h1>
                 <p className="text-muted">{t('loginToYourAccount')}</p>
-                <FormGroup
+                <FormField
                   name="email"
                   placeholder={t('email')}
                   icon="cil-user"
                 />
-                <FormGroup
+                <FormField
                   name="password"
                   placeholder={t('password')}
                   icon="cil-lock-locked"
@@ -86,9 +86,9 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
                 />
                 <div className="row">
                   <div className="col-4">
-                    <FormikButton color="primary">
+                    <SubmitButton color="primary">
                       {t('login')}
-                    </FormikButton>
+                    </SubmitButton>
                   </div>
                   <div className="col-8 text-right">
                     <Link href="/admin/reset-password">
@@ -102,7 +102,7 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
             )}
           </Formik>
         </div>
-      </NoBackgroundCardLayout>
+      </UnauthenticatedLayout>
     </div>
   );
 };

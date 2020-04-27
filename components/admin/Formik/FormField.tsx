@@ -10,7 +10,7 @@ interface Props extends FieldAttributes<any> {
   tag?: string;
 }
 
-export const FormGroup: FC<Props> = ({
+export const FormField: FC<Props> = ({
   label,
   icon,
   required,

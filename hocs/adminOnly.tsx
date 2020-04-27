@@ -5,7 +5,7 @@ import {CustomNextPageContext} from './types';
 import {isAdmin} from '../models/Account';
 import {selectors} from '../redux/slices/loginUserSlice';
 import {getBooleanCookieFromRequest} from '../utils/cookie';
-import {LoggedInAdminLayout} from '../containers/admin/LoggedInAdminLayout';
+import {AuthenticatedLayout} from '../containers/admin/layouts/AuthenticatedLayout';
 import {withI18next} from './withI18next';
 
 const SHOW_SIDEBAR_COOKIE = 'showSidebar';
@@ -22,9 +22,9 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
     AdminWrapperServerProps
   > = (props: AdminWrapperServerProps): JSX.Element => {
     return (
-      <LoggedInAdminLayout showSidebar={props.showSidebar}>
+      <AuthenticatedLayout showSidebar={props.showSidebar}>
         <Content {...props.pageProps} />
-      </LoggedInAdminLayout>
+      </AuthenticatedLayout>
     );
   };
 

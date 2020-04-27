@@ -73,7 +73,6 @@ export const withI18next = <P, IP>(
     initialLanguage: string;
     pageProps: IP;
   }> => {
-    console.log('LoadI18next.getInitialProps');
     const {req} = ctx;
     const isServer = !!req;
 

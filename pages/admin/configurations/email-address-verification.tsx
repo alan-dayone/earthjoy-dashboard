@@ -10,10 +10,10 @@ import {
 } from '../../../models/Configuration';
 import {emailVerificationValidationSchema} from '../../../view-models/Configuration';
 import {getErrorMessageCode} from '../../../view-models/Error';
-import {FormGroup} from '../../../components/admin/FormGroup';
+import {FormField} from '../../../components/admin/Formik/FormField';
 import {systemService} from '../../../services';
 import {VerifyAccountSetting} from '../../../gateways/SystemGateway';
-import {FormikButton} from '../../../components/admin/FormikButton';
+import {SubmitButton} from '../../../components/admin/Formik/SubmitButton';
 
 const AdminEmailAddressVerificationPage: FC = () => {
   const {t} = useTranslation();
@@ -77,25 +77,25 @@ const AdminEmailAddressVerificationPage: FC = () => {
                   <div className="card-body">
                     <div className="row">
                       <div className="col-12">
-                        <FormGroup
+                        <FormField
                           name="senderName"
                           label={t('senderName')}
                           icon="cil-user"
                           required
                         />
-                        <FormGroup
+                        <FormField
                           name="senderEmail"
                           label={t('senderEmail')}
                           icon="cil-envelope-closed"
                           required
                         />
-                        <FormGroup
+                        <FormField
                           name="subject"
                           label={t('subject')}
                           icon="cil-user"
                           required
                         />
-                        <FormGroup
+                        <FormField
                           name="emailTemplate"
                           tag="textarea"
                           label={t('emailTemplate')}
@@ -107,9 +107,9 @@ const AdminEmailAddressVerificationPage: FC = () => {
                     </div>
                   </div>
                   <div className="card-footer d-flex justify-content-end">
-                    <FormikButton size="sm" color="primary">
+                    <SubmitButton size="sm" color="primary">
                       {t('save')}
-                    </FormikButton>
+                    </SubmitButton>
                   </div>
                 </div>
               </form>

@@ -11,11 +11,11 @@ import {useTranslation} from 'react-i18next';
 import Router, {useRouter} from 'next/router';
 import Cookies from 'js-cookie';
 import {connect} from 'react-redux';
-import {getAccountName} from '../../view-models/Account';
-import {logout, selectors} from '../../redux/slices/loginUserSlice';
-import {RootState} from '../../redux/slices';
-import {LoginUser} from '../../models/Account';
-import {AppDispatch} from '../../redux/store';
+import {getAccountName} from '../../../view-models/Account';
+import {logout, selectors} from '../../../redux/slices/loginUserSlice';
+import {RootState} from '../../../redux/slices';
+import {LoginUser} from '../../../models/Account';
+import {AppDispatch} from '../../../redux/store';
 
 const SHOW_SIDEBAR_COOKIE = 'showSidebar';
 
@@ -199,6 +199,6 @@ const Container = (props: Props): JSX.Element => {
   );
 };
 
-export const LoggedInAdminLayout = connect((state: RootState) => ({
+export const AuthenticatedLayout = connect((state: RootState) => ({
   loginUser: selectors.selectLoginUser(state),
 }))(Container);

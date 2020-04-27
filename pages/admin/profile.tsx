@@ -8,7 +8,7 @@ import {compose} from 'redux';
 import {adminOnly} from '../../hocs/adminOnly';
 import {LoginUser} from '../../models/Account';
 import {authService} from '../../services';
-import {FormGroup} from '../../components/admin/FormGroup';
+import {FormField} from '../../components/admin/Formik/FormField';
 import {AccountEmailVerificationLabel} from '../../components/admin/AccountEmailVerificationLabel';
 import {
   adminUpdatePasswordSchema,
@@ -20,7 +20,7 @@ import {
 } from '../../redux/slices/loginUserSlice';
 import {RootState} from '../../redux/slices';
 import {useTranslation} from 'react-i18next';
-import {FormikButton} from '../../components/admin/FormikButton';
+import {SubmitButton} from '../../components/admin/Formik/SubmitButton';
 import {getErrorMessageCode} from '../../view-models/Error';
 
 interface Props {
@@ -99,13 +99,13 @@ const ProfilePage: FC<Props> = (props: Props) => {
                     <strong>{t('profile')}</strong>
                   </div>
                   <div className="card-body">
-                    <FormGroup
+                    <FormField
                       name="firstName"
                       label={t('firstName')}
                       required
                     />
-                    <FormGroup name="lastName" label={t('lastName')} required />
-                    <FormGroup name="email" label={t('email')} readOnly />
+                    <FormField name="lastName" label={t('lastName')} required />
+                    <FormField name="email" label={t('email')} readOnly />
                     <div className="form-group">
                       {t('emailVerification')}:{' '}
                       <AccountEmailVerificationLabel
@@ -114,9 +114,9 @@ const ProfilePage: FC<Props> = (props: Props) => {
                     </div>
                   </div>
                   <div className="card-footer d-flex justify-content-end">
-                    <FormikButton size="sm" color="primary">
+                    <SubmitButton size="sm" color="primary">
                       {t('save')}
-                    </FormikButton>
+                    </SubmitButton>
                   </div>
                 </div>
               </form>
@@ -136,19 +136,19 @@ const ProfilePage: FC<Props> = (props: Props) => {
                     <strong>{t('changePassword')}</strong>
                   </div>
                   <div className="card-body">
-                    <FormGroup
+                    <FormField
                       name="currentPassword"
                       type="password"
                       label={t('currentPassword')}
                       required
                     />
-                    <FormGroup
+                    <FormField
                       name="newPassword"
                       type="password"
                       label={t('newPassword')}
                       required
                     />
-                    <FormGroup
+                    <FormField
                       name="confirmPassword"
                       type="password"
                       label={t('confirmPassword')}
@@ -156,12 +156,12 @@ const ProfilePage: FC<Props> = (props: Props) => {
                     />
                   </div>
                   <div className="card-footer d-flex justify-content-end">
-                    <FormikButton
+                    <SubmitButton
                       size="sm"
                       color="primary"
                       className="float-right">
                       {t('submit')}
-                    </FormikButton>
+                    </SubmitButton>
                   </div>
                 </div>
               </form>

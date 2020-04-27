@@ -11,8 +11,8 @@ import {
   ConfigurationKey,
   MailSmtpSettings,
 } from '../../../models/Configuration';
-import {FormGroup} from '../../../components/admin/FormGroup';
-import {FormikButton} from '../../../components/admin/FormikButton';
+import {FormField} from '../../../components/admin/Formik/FormField';
+import {SubmitButton} from '../../../components/admin/Formik/SubmitButton';
 import {FormButton} from '../../../components/admin/FormButton';
 
 const AdminSmtpSettingsPage: FC = () => {
@@ -101,37 +101,37 @@ const AdminSmtpSettingsPage: FC = () => {
                   <div className="card-body">
                     <div className="row">
                       <div className="col-12">
-                        <FormGroup
+                        <FormField
                           name="smtpHost"
                           label={t('smtpHost')}
                           icon="cil-cast"
                           required
                         />
-                        <FormGroup
+                        <FormField
                           name="smtpPort"
                           label={t('smtpPort')}
                           icon="cil-lan"
                           required
                         />
-                        <FormGroup
+                        <FormField
                           name="senderName"
                           label={t('senderName')}
                           icon="cil-user"
                           required
                         />
-                        <FormGroup
+                        <FormField
                           name="senderEmail"
                           label={t('senderEmail')}
                           icon="cil-envelope-closed"
                           required
                         />
-                        <FormGroup
+                        <FormField
                           name="username"
                           label={t('smtpAccountUsername')}
                           icon="cil-user"
                           required
                         />
-                        <FormGroup
+                        <FormField
                           name="password"
                           label={t('smtpAccountPassword')}
                           icon="cil-lock-locked"
@@ -152,9 +152,9 @@ const AdminSmtpSettingsPage: FC = () => {
                       {t('testConnection')}
                     </FormButton>
                     &nbsp;
-                    <FormikButton size="sm" color="primary">
+                    <SubmitButton size="sm" color="primary">
                       {t('save')}
-                    </FormikButton>
+                    </SubmitButton>
                   </div>
                 </div>
               </form>

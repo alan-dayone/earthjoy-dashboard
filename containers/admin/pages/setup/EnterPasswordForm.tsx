@@ -3,11 +3,11 @@ import {useTranslation} from 'react-i18next';
 import {Formik, FormikProps} from 'formik';
 import toastr from 'toastr';
 import {connect} from 'react-redux';
-import {withI18next} from '../../../hocs/withI18next';
-import {systemService} from '../../../services';
-import {systemInitializationFormSchema} from '../../../view-models/Account';
-import {FormikButton} from '../../../components/admin/FormikButton';
-import {FormGroup} from '../../../components/admin/FormGroup';
+import {withI18next} from '../../../../hocs/withI18next';
+import {systemService} from '../../../../services';
+import {systemInitializationFormSchema} from '../../../../view-models/Account';
+import {SubmitButton} from '../../../../components/admin/Formik/SubmitButton';
+import {FormField} from '../../../../components/admin/Formik/FormField';
 
 interface Props {
   onSuccess: (password: string) => void;
@@ -51,7 +51,7 @@ const EnterPasswordForm: FC<Props> = ({onSuccess}) => {
         onSubmit={handleSubmit}>
         {({handleSubmit}: FormikProps<Account>): JSX.Element => (
           <form onSubmit={handleSubmit}>
-            <FormGroup
+            <FormField
               name="password"
               type="password"
               label={t('password')}
@@ -59,9 +59,9 @@ const EnterPasswordForm: FC<Props> = ({onSuccess}) => {
               required
             />
             <div>
-              <FormikButton color="primary" className="px-4">
+              <SubmitButton color="primary" className="px-4">
                 {t('next')}
-              </FormikButton>
+              </SubmitButton>
             </div>
           </form>
         )}

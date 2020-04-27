@@ -6,11 +6,11 @@ import {connect} from 'react-redux';
 import Error from 'next/error';
 import {withI18next} from '../../hocs/withI18next';
 import {guestOnly} from '../../hocs/guestOnly';
-import EnterPasswordForm from '../../containers/admin/setup/EnterPasswordForm';
-import CreateFirstAdminForm from '../../containers/admin/setup/CreateFirstAdminForm';
+import EnterPasswordForm from '../../containers/admin/pages/setup/EnterPasswordForm';
+import CreateFirstAdminForm from '../../containers/admin/pages/setup/CreateFirstAdminForm';
 import {CustomNextPageContext} from '../../hocs/types';
 import {systemService} from '../../services';
-import {NoBackgroundCardLayout} from '../../containers/admin/NoBackgroundCardLayout';
+import {UnauthenticatedLayout} from '../../containers/admin/layouts/UnauthenticatedLayout';
 
 enum STEP {
   ENTER_PASSWORD,
@@ -43,7 +43,7 @@ const AdminSetupPage: NextComponentType<
           {t('admin')} - {t('setup')}
         </title>
       </Head>
-      <NoBackgroundCardLayout>
+      <UnauthenticatedLayout>
         <div className="card-body">
           {step === STEP.CREATE_FIRST_ADMIN ? (
             <CreateFirstAdminForm
@@ -58,7 +58,7 @@ const AdminSetupPage: NextComponentType<
             />
           )}
         </div>
-      </NoBackgroundCardLayout>
+      </UnauthenticatedLayout>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, {FC, ReactNode} from 'react';
 
-export const NoBackgroundCardLayout: FC = ({
+export const UnauthenticatedLayout: FC = ({
   children,
 }: {
   children: ReactNode;

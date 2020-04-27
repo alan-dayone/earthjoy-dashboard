@@ -1,21 +1,22 @@
 import React, {useEffect, useState, FC} from 'react';
 import Head from 'next/head';
 import toastr from 'toastr';
-import {adminOnly} from '../../../../hocs/adminOnly';
 import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
+import {useRouter} from 'next/router';
+import {useTranslation} from 'react-i18next';
+import {adminOnly} from '../../../../hocs/adminOnly';
 import {AccountStatus, Account, Role} from '../../../../models/Account';
 import {userUpdateInformationFormValidationSchema} from '../../../../view-models/Account';
 import {getErrorMessageCode} from '../../../../view-models/Error';
 import {accountService} from '../../../../services';
-import {FormGroup} from '../../../../components/admin/FormGroup';
-import {useTranslation} from 'react-i18next';
-import {FormikButton} from '../../../../components/admin/FormikButton';
-import {useRouter} from 'next/router';
+import {FormField} from '../../../../components/admin/Formik/FormField';
+import {SubmitButton} from '../../../../components/admin/Formik/SubmitButton';
 
 const AdminAccountEditingPage: FC = () => {
   const {t} = useTranslation();
   const [originalAccount, setOriginalAccount] = useState<Account>();
   const router = useRouter();
+
   useEffect(() => {
     (async (): Promise<void> => {
       const res = await accountService.findOneForAdmin(
@@ -24,15 +25,14 @@ const AdminAccountEditingPage: FC = () => {
       setOriginalAccount(res);
     })();
   }, []);
+
   const handleSave = async (
     values: Account,
     actions: FormikActions<Account>,
   ): Promise<void> => {
     try {
       actions.setSubmitting(true);
-      const userId = originalAccount.id;
-      await accountService.updateAccount(userId, values);
-      setOriginalAccount({...originalAccount, ...values});
+      await accountService.updateAccount(originalAccount.id, values);
       toastr.success(t('success'));
     } catch (e) {
       toastr.error(t(getErrorMessageCode(e)));
@@ -52,7 +52,6 @@ const AdminAccountEditingPage: FC = () => {
         initialValues={originalAccount}
         enableReinitialize
         onSubmit={handleSave}
-        isInitialValid={false}
         validationSchema={userUpdateInformationFormValidationSchema}>
         {({handleSubmit, setFieldValue}: FormikProps<Account>): JSX.Element => (
           <form onSubmit={handleSubmit}>
@@ -63,33 +62,33 @@ const AdminAccountEditingPage: FC = () => {
               <div className="card-body">
                 <div className="row">
                   <div className="col-12">
-                    <FormGroup
+                    <FormField
                       name="email"
                       label={t('email')}
                       icon="cil-envelope-closed"
                       required
                     />
-                    <FormGroup
+                    <FormField
                       name="firstName"
                       label={t('firstName')}
                       icon="cil-user"
                       required
                     />
-                    <FormGroup
+                    <FormField
                       name="lastName"
                       label={t('lastName')}
                       icon="cil-user"
                       required
                     />
-                    <FormGroup
+                    <FormField
                       name="role"
                       label={t('role')}
                       tag="select"
                       required>
                       <option value={Role.USER}>{t('user')}</option>
                       <option value={Role.ROOT_ADMIN}>{t('admin')}</option>
-                    </FormGroup>
-                    <FormGroup
+                    </FormField>
+                    <FormField
                       name="status"
                       label={t('accountStatus')}
                       tag="select"
@@ -100,8 +99,8 @@ const AdminAccountEditingPage: FC = () => {
                       <option value={AccountStatus.INACTIVE}>
                         {t('inactive')}
                       </option>
-                    </FormGroup>
-                    <FormGroup
+                    </FormField>
+                    <FormField
                       name="emailVerified"
                       label={t('emailVerification')}
                       tag="select"
@@ -114,14 +113,14 @@ const AdminAccountEditingPage: FC = () => {
                       required>
                       <option value="true">{t('verified')}</option>
                       <option value="false">{t('notVerified')}</option>
-                    </FormGroup>
+                    </FormField>
                   </div>
                 </div>
               </div>
               <div className="card-footer d-flex justify-content-end">
-                <FormikButton size="sm" color="primary">
+                <SubmitButton size="sm" color="primary">
                   {t('save')}
-                </FormikButton>
+                </SubmitButton>
               </div>
             </div>
           </form>

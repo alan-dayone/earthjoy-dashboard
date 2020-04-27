@@ -4,14 +4,14 @@ import {Formik, FormikProps, FormikHelpers} from 'formik';
 import toastr from 'toastr';
 import {connect} from 'react-redux';
 import Router from 'next/router';
-import {withI18next} from '../../../hocs/withI18next';
-import {Account} from '../../../models/Account';
-import {systemService} from '../../../services';
-import {AppDispatch} from '../../../redux/store';
-import {loginWithEmail} from '../../../redux/slices/loginUserSlice';
-import {userFormValidationSchema} from '../../../view-models/Account';
-import {FormikButton} from '../../../components/admin/FormikButton';
-import {FormGroup} from '../../../components/admin/FormGroup';
+import {withI18next} from '../../../../hocs/withI18next';
+import {Account} from '../../../../models/Account';
+import {systemService} from '../../../../services';
+import {AppDispatch} from '../../../../redux/store';
+import {loginWithEmail} from '../../../../redux/slices/loginUserSlice';
+import {userFormValidationSchema} from '../../../../view-models/Account';
+import {SubmitButton} from '../../../../components/admin/Formik/SubmitButton';
+import {FormField} from '../../../../components/admin/Formik/FormField';
 
 interface Props {
   dispatch: AppDispatch;
@@ -77,32 +77,32 @@ const CreateFirstAdminForm: FC<Props> = ({
         onSubmit={handleInitSystem}>
         {({handleSubmit}: FormikProps<FormData>): JSX.Element => (
           <form onSubmit={handleSubmit}>
-            <FormGroup
+            <FormField
               name="firstName"
               label={t('firstName')}
               icon="cil-user"
               required
             />
-            <FormGroup
+            <FormField
               name="lastName"
               label={t('lastName')}
               icon="cil-user"
               required
             />
-            <FormGroup
+            <FormField
               name="email"
               label={t('email')}
               icon="cil-envelope-closed"
               required
             />
-            <FormGroup
+            <FormField
               name="password"
               type="password"
               label={t('password')}
               icon="cil-lock-locked"
               required
             />
-            <FormGroup
+            <FormField
               name="confirmPassword"
               type="password"
               label={t('confirmPassword')}
@@ -110,9 +110,9 @@ const CreateFirstAdminForm: FC<Props> = ({
               required
             />
             <div>
-              <FormikButton color="primary" className="px-4">
+              <SubmitButton color="primary" className="px-4">
                 {t('submit')}
-              </FormikButton>
+              </SubmitButton>
             </div>
           </form>
         )}
