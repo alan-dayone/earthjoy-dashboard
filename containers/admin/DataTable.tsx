@@ -34,12 +34,15 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
     return null;
   }
 
+  const dataTable = qs.parse(Router.query['dataTable'] as string);
+  console.log({dataTable});
+
   const {
     filters: initialFilters = [],
     pageIndex: initialPageIndexStr = 0,
     pageSize: initialPageSizeStr = PAGE_SIZE_LIST[0],
     sortBy: initialSortBy = [],
-  } = qs.parse(Router.query);
+  } = dataTable;
   const initialPageIndex = parseInt(initialPageIndexStr);
   const initialPageSize = parseInt(initialPageSizeStr);
   const tableLoadedInitialData = useRef(false);
@@ -99,12 +102,16 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
     setTotal(count);
 
     if (tableLoadedInitialData.current) {
-      const queryStr = qs.stringify({
-        pageIndex: pageIndex || undefined,
-        filters,
-        sortBy,
-        pageSize,
-      });
+      const queryObject = {
+        ...Router.query,
+        dataTable: qs.stringify({
+          pageIndex: pageIndex || undefined,
+          filters,
+          sortBy,
+          pageSize,
+        }),
+      };
+      const queryStr = qs.stringify(queryObject);
       const basePath = Router.pathname;
       const newUrl = queryStr === '' ? basePath : `${basePath}?${queryStr}`;
       Router.replace(newUrl);
