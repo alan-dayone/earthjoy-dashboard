@@ -1,9 +1,8 @@
 import * as Yup from 'yup';
-import lopick from 'lodash/pick';
 import {constraint as AccountConstraint, Account} from '../models/Account';
 import {emailSchema} from './CommonValidationSchemas';
 
-const validationSchema = {
+export const sharedValidationSchema = {
   email: emailSchema,
   firstName: Yup.string()
     .required()
@@ -17,59 +16,9 @@ const validationSchema = {
     .max(AccountConstraint.password.MAX_LENGTH),
   confirmPassword: Yup.string()
     .required()
-    .oneOf(
-      [Yup.ref('password'), null],
-      // i18next.t('passwordsMustMatch'),
-    ),
+    .oneOf([Yup.ref('password'), null]),
 };
 
 export const getAccountName = (account: Account): string => {
   return [account.firstName, account.lastName].filter(str => !!str).join(' ');
 };
-
-export const userFormValidationSchema = Yup.object().shape(
-  lopick(validationSchema, ['email', 'firstName', 'lastName', 'password']),
-);
-
-export const userUpdateInformationFormValidationSchema = Yup.object().shape(
-  lopick(validationSchema, ['email', 'lastName', 'firstName']),
-);
-
-export const createFirstAdminFormSchema = Yup.object().shape({
-  name: validationSchema.firstName,
-  email: validationSchema.email,
-});
-
-export const systemInitializationFormSchema = Yup.object().shape({
-  password: validationSchema.password,
-});
-
-export const adminResetPasswordFormSchema = Yup.object().shape({
-  email: validationSchema.email,
-});
-
-export const adminResetNewPasswordFormSchema = Yup.object().shape({
-  newPassword: validationSchema.password,
-  confirmPassword: Yup.string()
-    .required()
-    .oneOf(
-      [Yup.ref('newPassword'), null],
-      // 'Passwords must match.',
-    ),
-});
-
-export const adminUpdateProfileSchema = Yup.object().shape({
-  firstName: validationSchema.firstName,
-  lastName: validationSchema.lastName,
-});
-
-export const adminUpdatePasswordSchema = Yup.object().shape({
-  currentPassword: validationSchema.password,
-  newPassword: validationSchema.password,
-  confirmPassword: Yup.string()
-    .required()
-    .oneOf(
-      [Yup.ref('newPassword'), null],
-      // 'Passwords must match.',
-    ),
-});

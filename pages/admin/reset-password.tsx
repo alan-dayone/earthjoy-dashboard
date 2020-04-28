@@ -3,14 +3,19 @@ import Head from 'next/head';
 import toastr from 'toastr';
 import {Formik, FormikHelpers, FormikProps} from 'formik';
 import {useTranslation} from 'react-i18next';
+import * as Yup from 'yup';
 import {withI18next} from '../../hocs/withI18next';
 import {guestOnly} from '../../hocs/guestOnly';
 import {authService} from '../../services';
-import {adminResetPasswordFormSchema} from '../../view-models/Account';
+import {sharedValidationSchema} from '../../view-models/Account';
 import {SubmitButton} from '../../components/admin/Formik/SubmitButton';
 import {getErrorMessageCode} from '../../view-models/Error';
 import {FormField} from '../../components/admin/Formik/FormField';
 import {UnauthenticatedLayout} from '../../containers/admin/layouts/UnauthenticatedLayout';
+
+const adminResetPasswordFormSchema = Yup.object().shape({
+  email: sharedValidationSchema.email,
+});
 
 interface ForgotPasswordForm {
   email: string;

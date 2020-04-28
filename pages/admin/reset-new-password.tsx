@@ -5,12 +5,18 @@ import Head from 'next/head';
 import toastr from 'toastr';
 import classnames from 'classnames';
 import {Formik, FormikHelpers as FormikActions} from 'formik';
+import * as Yup from 'yup';
 import {guestOnly} from '../../hocs/guestOnly';
 import {authService} from '../../services';
-import {adminResetNewPasswordFormSchema} from '../../view-models/Account';
+import {sharedValidationSchema} from '../../view-models/Account';
 import {SubmitButton} from '../../components/admin/Formik/SubmitButton';
 import {withI18next} from '../../hocs/withI18next';
 import {UnauthenticatedLayout} from '../../containers/admin/layouts/UnauthenticatedLayout';
+
+const adminResetNewPasswordFormSchema = Yup.object().shape({
+  newPassword: sharedValidationSchema.password,
+  confirmPassword: sharedValidationSchema.confirmPassword,
+});
 
 interface ResetNewPasswordForm {
   newPassword: string;

@@ -3,11 +3,17 @@ import {useTranslation} from 'react-i18next';
 import {Formik, FormikProps} from 'formik';
 import toastr from 'toastr';
 import {connect} from 'react-redux';
+import * as Yup from 'yup';
+import _pick from 'lodash/pick';
 import {withI18next} from '../../../../hocs/withI18next';
 import {systemService} from '../../../../services';
-import {systemInitializationFormSchema} from '../../../../view-models/Account';
+import {sharedValidationSchema} from '../../../../view-models/Account';
 import {SubmitButton} from '../../../../components/admin/Formik/SubmitButton';
 import {FormField} from '../../../../components/admin/Formik/FormField';
+
+export const systemInitializationFormSchema = Yup.object().shape(
+  _pick(sharedValidationSchema, 'password'),
+);
 
 interface Props {
   onSuccess: (password: string) => void;

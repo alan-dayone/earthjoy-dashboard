@@ -3,13 +3,19 @@ import Head from 'next/head';
 import toastr from 'toastr';
 import {Formik, FormikProps} from 'formik';
 import {useTranslation} from 'react-i18next';
+import * as Yup from 'yup';
+import _pick from 'lodash/pick';
 import {adminOnly} from '../../../hocs/adminOnly';
 import {Account, AccountStatus, Role} from '../../../models/Account';
-import {userFormValidationSchema} from '../../../view-models/Account';
 import {getErrorMessageCode} from '../../../view-models/Error';
 import {accountService} from '../../../services';
 import {FormField} from '../../../components/admin/Formik/FormField';
 import {SubmitButton} from '../../../components/admin/Formik/SubmitButton';
+import {sharedValidationSchema} from '../../../view-models/Account';
+
+const userFormValidationSchema = Yup.object().shape(
+  _pick(sharedValidationSchema, ['email', 'firstName', 'lastName', 'password']),
+);
 
 const initialValues: Account = {
   email: '',

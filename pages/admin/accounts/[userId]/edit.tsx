@@ -4,13 +4,19 @@ import toastr from 'toastr';
 import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import {useRouter} from 'next/router';
 import {useTranslation} from 'react-i18next';
+import * as Yup from 'yup';
+import _pick from 'lodash/pick';
 import {adminOnly} from '../../../../hocs/adminOnly';
 import {AccountStatus, Account, Role} from '../../../../models/Account';
-import {userUpdateInformationFormValidationSchema} from '../../../../view-models/Account';
+import {sharedValidationSchema} from '../../../../view-models/Account';
 import {getErrorMessageCode} from '../../../../view-models/Error';
 import {accountService} from '../../../../services';
 import {FormField} from '../../../../components/admin/Formik/FormField';
 import {SubmitButton} from '../../../../components/admin/Formik/SubmitButton';
+
+const userUpdateInformationFormValidationSchema = Yup.object().shape(
+  _pick(sharedValidationSchema, ['email', 'lastName', 'firstName']),
+);
 
 const AdminAccountEditingPage: FC = () => {
   const {t} = useTranslation();

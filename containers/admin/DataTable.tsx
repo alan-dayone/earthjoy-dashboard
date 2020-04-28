@@ -33,10 +33,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
   if (isServer) {
     return null;
   }
-
   const dataTable = qs.parse(Router.query['dataTable'] as string);
-  console.log({dataTable});
-
   const {
     filters: initialFilters = [],
     pageIndex: initialPageIndexStr = 0,

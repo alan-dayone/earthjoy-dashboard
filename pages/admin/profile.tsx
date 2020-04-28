@@ -5,16 +5,14 @@ import toastr from 'toastr';
 import Router from 'next/router';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
+import * as Yup from 'yup';
 import {useTranslation} from 'react-i18next';
 import {adminOnly} from '../../hocs/adminOnly';
 import {LoginUser} from '../../models/Account';
 import {authService} from '../../services';
 import {FormField} from '../../components/admin/Formik/FormField';
 import {AccountEmailVerificationLabel} from '../../components/admin/AccountEmailVerificationLabel';
-import {
-  adminUpdatePasswordSchema,
-  adminUpdateProfileSchema,
-} from '../../view-models/Account';
+import {sharedValidationSchema} from '../../view-models/Account';
 import {
   selectors,
   updateLoginUserProfile,
@@ -23,6 +21,22 @@ import {RootState} from '../../redux/slices';
 import {SubmitButton} from '../../components/admin/Formik/SubmitButton';
 import {getErrorMessageCode} from '../../view-models/Error';
 import {AppDispatch} from '../../redux/store';
+
+const adminUpdateProfileSchema = Yup.object().shape({
+  firstName: sharedValidationSchema.firstName,
+  lastName: sharedValidationSchema.lastName,
+});
+
+const adminUpdatePasswordSchema = Yup.object().shape({
+  currentPassword: sharedValidationSchema.password,
+  newPassword: sharedValidationSchema.password,
+  confirmPassword: Yup.string()
+    .required()
+    .oneOf(
+      [Yup.ref('newPassword'), null],
+      // 'Passwords must match.',
+    ),
+});
 
 interface Props {
   loginUser: LoginUser;

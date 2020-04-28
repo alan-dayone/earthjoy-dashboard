@@ -4,14 +4,20 @@ import {Formik, FormikProps, FormikHelpers} from 'formik';
 import toastr from 'toastr';
 import {connect} from 'react-redux';
 import Router from 'next/router';
+import _pick from 'lodash/pick';
+import * as Yup from 'yup';
 import {withI18next} from '../../../../hocs/withI18next';
 import {Account} from '../../../../models/Account';
 import {systemService} from '../../../../services';
 import {AppDispatch} from '../../../../redux/store';
 import {loginWithEmail} from '../../../../redux/slices/loginUserSlice';
-import {userFormValidationSchema} from '../../../../view-models/Account';
+import {sharedValidationSchema} from '../../../../view-models/Account';
 import {SubmitButton} from '../../../../components/admin/Formik/SubmitButton';
 import {FormField} from '../../../../components/admin/Formik/FormField';
+
+export const userFormValidationSchema = Yup.object().shape(
+  _pick(sharedValidationSchema, ['email', 'firstName', 'lastName', 'password']),
+);
 
 interface Props {
   dispatch: AppDispatch;
