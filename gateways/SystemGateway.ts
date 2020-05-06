@@ -1,5 +1,5 @@
+import {AxiosInstance} from 'axios';
 import {ConfigurationKey} from '../models/Configuration';
-import {RestConnector} from '../connectors/RestConnector';
 
 export interface SystemStatusData {
   status: string;
@@ -14,7 +14,7 @@ export interface MailSmtpSettings {
   senderName: string;
 }
 
-export interface ResetPasswordSettings {
+export interface ResetPasswordSetting {
   emailTemplate: string;
   subject: string;
   senderEmail: string;
@@ -28,7 +28,11 @@ export interface VerifyAccountSetting {
   senderName: string;
 }
 
-export type ConfigurationData = SystemStatusData | MailSmtpSettings | ResetPasswordSettings | VerifyAccountSetting;
+export type ConfigurationData =
+  | SystemStatusData
+  | MailSmtpSettings
+  | ResetPasswordSetting
+  | VerifyAccountSetting;
 
 export interface ConfigurationModel {
   id: string;
@@ -36,29 +40,44 @@ export interface ConfigurationModel {
 }
 
 export class SystemGateway {
-  private restConnector: RestConnector;
+  private restConnector: AxiosInstance;
 
-  constructor({restConnector}: {restConnector: RestConnector}) {
-    this.restConnector = restConnector;
+  constructor(options: {restConnector: AxiosInstance}) {
+    this.restConnector = options.restConnector;
   }
 
   public async initSystem(body: {
     password: string;
     admin: {
+      firstName: string;
+      lastName: string;
       email: string;
       password: string;
     };
   }): Promise<boolean> {
-    const {data} = await this.restConnector.post(`/configurations/initialize-system`, body);
+    const {data} = await this.restConnector.post(
+      `/configurations/initialize-system`,
+      body,
+    );
     return data.success;
   }
 
-  public async validateSystemInitializationPassword(password: string): Promise<boolean> {
-    const {data} = await this.restConnector.post('/configurations/validate-system-initialization-password', {password});
+  public async validateSystemInitializationPassword(
+    password: string,
+  ): Promise<boolean> {
+    const {
+      data,
+    } = await this.restConnector.post(
+      '/configurations/validate-system-initialization-password',
+      {password},
+    );
     return data.isValid;
   }
 
-  public async updateSystemConfiguration(id: ConfigurationKey, data: ConfigurationData) {
+  public async updateSystemConfiguration(
+    id: ConfigurationKey,
+    data: ConfigurationData,
+  ): Promise<{}> {
     const resp = await this.restConnector.put(`/configurations/${id}`, {
       id,
       data,
@@ -67,7 +86,9 @@ export class SystemGateway {
     return resp.data;
   }
 
-  public async getConfiguration(id: ConfigurationKey): Promise<ConfigurationModel | null> {
+  public async getConfiguration(
+    id: ConfigurationKey,
+  ): Promise<ConfigurationModel | null> {
     try {
       const resp = await this.restConnector.get(`/configurations/${id}`);
       return resp.data;
@@ -79,5 +100,20 @@ export class SystemGateway {
 
       throw e;
     }
+  }
+
+  public async isValidSmtpSettings(values: MailSmtpSettings): Promise<boolean> {
+    const {data} = await this.restConnector.post(
+      '/configurations/validate-mail-smtp-settings',
+      values,
+    );
+    return data.isValid;
+  }
+
+  public async checkSystemInitializationStatus(): Promise<boolean> {
+    const resp = await this.restConnector.post(
+      '/configurations/check-system-initialization-status',
+    );
+    return resp.data.isInitialized;
   }
 }

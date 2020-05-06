@@ -1,2 +1,7 @@
+@import './coreui/coreui';
 @import '~toastr/toastr';
 @import './utilities.scss';
+
+.app-layout {
+  // Add css for both user and admin layout here.
+}

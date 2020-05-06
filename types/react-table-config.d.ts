@@ -42,6 +42,7 @@ import {
   UseSortByInstanceProps,
   UseSortByOptions,
   UseSortByState,
+  UseGlobalFiltersOptions,
 } from 'react-table';
 
 declare module 'react-table' {
@@ -97,6 +98,7 @@ declare module 'react-table' {
 
   export interface Column<D extends object = {}>
     extends UseFiltersColumnOptions<D>,
+      UseGlobalFiltersOptions<D>,
       UseGroupByColumnOptions<D>,
       UseResizeColumnsColumnOptions<D>,
       UseSortByColumnOptions<D> {

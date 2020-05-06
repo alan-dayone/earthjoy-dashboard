@@ -4,5 +4,7 @@
   "plugins": [
     "stylelint-scss"
   ],
-  "ignoreFiles": "scss/vendors/**/*.scss"
+  "ignoreFiles": [
+    "scss/common/coreui/**/*"
+  ]
 }

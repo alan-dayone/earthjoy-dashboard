@@ -1,20 +1,26 @@
-import {ServiceContext} from './index';
 import {AccountGateway} from '../gateways/AccountGateway';
-import {Account, constraint} from '../models/User';
+import {Account} from '../models/Account';
 
 export class AccountService {
-  protected accountGateway: AccountGateway;
+  private accountGateway: AccountGateway;
 
-  constructor(options: ServiceContext) {
+  constructor(options: {accountGateway: AccountGateway}) {
     this.accountGateway = options.accountGateway;
   }
 
-  public async findAccountsForAdmin({pageIndex, pageSize, filters, orders}) {
-    const orderArray = await orders.map((value) => {
-      return `${value.id} ${value.desc ? 'desc' : 'asc'}`;
-    });
+  public async findAccountsForAdmin({
+    pageIndex,
+    pageSize,
+    filters,
+    orders,
+  }): Promise<{data: Array<Account>; count: number}> {
     const [data, count] = await Promise.all([
-      this.accountGateway.find({pageIndex, pageSize, filters, orders: orderArray}),
+      this.accountGateway.find({
+        pageIndex,
+        pageSize,
+        filters,
+        orders,
+      }),
       this.accountGateway.count({where: filters}),
     ]);
     return {
@@ -23,15 +29,22 @@ export class AccountService {
     };
   }
 
-  public async createAccount(account: Account) {
+  public async countAccount(filters = {}): Promise<number> {
+    return this.accountGateway.count({where: filters});
+  }
+
+  public async createAccount(account: Account): Promise<Account> {
     return this.accountGateway.create(account);
   }
 
-  public async updateAccount(id: string, account: Account) {
-    return this.accountGateway.update(id, account);
+  public async updateAccount(
+    id: string,
+    values: Partial<Account>,
+  ): Promise<void> {
+    return this.accountGateway.update(id, values);
   }
 
-  public async findOneForAdmin(id: string) {
+  public async findOneForAdmin(id: string): Promise<Account | null> {
     return this.accountGateway.findOne(id);
   }
 }

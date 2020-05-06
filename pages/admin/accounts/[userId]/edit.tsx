@@ -1,53 +1,47 @@
-/* tslint:disable:no-default-export */
-import React from 'react';
+import React, {useEffect, useState, FC} from 'react';
 import Head from 'next/head';
-import {NextComponentType, NextPageContext} from 'next';
-import loGet from 'lodash/get';
-import loIsEqual from 'lodash/isEqual';
 import toastr from 'toastr';
-import classNames from 'classnames';
-import {adminOnly} from '../../../../hocs';
-import {Formik} from 'formik';
-import {AccountStatus} from '../../../../models/User';
-import {
-  AccountEmailVerificationText,
-  AccountStatusText,
-  userUpdateInfomationFormValidationSchema,
-} from '../../../../view-models/User';
+import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
+import {useRouter} from 'next/router';
+import {useTranslation} from 'react-i18next';
+import * as Yup from 'yup';
+import _pick from 'lodash/pick';
+import {adminOnly} from '../../../../hocs/adminOnly';
+import {AccountStatus, Account, Role} from '../../../../models/Account';
+import {sharedValidationSchema} from '../../../../view-models/Account';
+import {getErrorMessageCode} from '../../../../view-models/Error';
 import {accountService} from '../../../../services';
-import {ToastrWarning} from '../../../../view-models/Toastr';
+import {FormField} from '../../../../components/admin/Formik/FormField';
+import {SubmitButton} from '../../../../components/admin/Formik/SubmitButton';
 
-export function getServerErrorMessage(error) {
-  const errorEnum = loGet(error, 'response.data.error.message');
-  if (errorEnum === 'EMAIL_EXISTED') {
-    return 'Email already existed';
-  }
-  return 'Unknown error';
-}
+const userUpdateInformationFormValidationSchema = Yup.object().shape(
+  _pick(sharedValidationSchema, ['email', 'lastName', 'firstName']),
+);
 
-class UserToastrWarning extends ToastrWarning {
-  public getWarningMessage(): string {
-    if (this.code === 'NOTHING_CHANGE') {
-      return 'The new user infomation is the same';
-    }
-    return 'Warning';
-  }
-  public alert() {
-    toastr.warning(this.getWarningMessage());
-  }
-}
+const AdminAccountEditingPage: FC = () => {
+  const {t} = useTranslation();
+  const [originalAccount, setOriginalAccount] = useState<Account>();
+  const router = useRouter();
 
-function AdminAccountEditingPage({router, originalAccount}) {
-  const _handleSave = async (values, actions) => {
+  useEffect(() => {
+    (async (): Promise<void> => {
+      const res = await accountService.findOneForAdmin(
+        router.query['userId'] as string,
+      );
+      setOriginalAccount(res);
+    })();
+  }, []);
+
+  const handleSave = async (
+    values: Account,
+    actions: FormikActions<Account>,
+  ): Promise<void> => {
     try {
       actions.setSubmitting(true);
-      if (loIsEqual(values, originalAccount)) throw new UserToastrWarning(UserToastrWarning.NOTHING_CHANGE);
-      const userId = await loGet(router, ['query', 'userId']);
-      await accountService.updateAccount(userId, values);
-      toastr.success('Success');
+      await accountService.updateAccount(originalAccount.id, values);
+      toastr.success(t('success'));
     } catch (e) {
-      if (e instanceof UserToastrWarning) e.alert();
-      else if (loGet(e, 'e.response.data.error', false)) toastr.error(getServerErrorMessage(e));
+      toastr.error(t(getErrorMessageCode(e)));
     } finally {
       actions.setSubmitting(false);
     }
@@ -56,101 +50,83 @@ function AdminAccountEditingPage({router, originalAccount}) {
   return (
     <div id="admin-edit-account-page" className="shadow">
       <Head>
-        <title>Admin - Edit account</title>
+        <title>
+          {t('admin')} - {t('editAccount')}
+        </title>
       </Head>
       <Formik
         initialValues={originalAccount}
-        onSubmit={_handleSave}
-        validationSchema={userUpdateInfomationFormValidationSchema}>
-        {({errors, handleChange, handleSubmit, values, isSubmitting, setFieldValue}) => (
+        enableReinitialize
+        onSubmit={handleSave}
+        validationSchema={userUpdateInformationFormValidationSchema}>
+        {({handleSubmit, setFieldValue}: FormikProps<Account>): JSX.Element => (
           <form onSubmit={handleSubmit}>
             <div className="card">
               <div className="card-header">
-                <strong>Edit account</strong>
+                <strong>{t('editAccount')}</strong>
               </div>
               <div className="card-body">
                 <div className="row">
                   <div className="col-12">
-                    <div className="form-group">
-                      <label>Email</label>
-                      <div className="input-group">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text">
-                            <i className="cil-envelope-closed" />
-                          </span>
-                        </div>
-                        <input
-                          className={classNames('form-control', {'is-invalid': errors.email})}
-                          name="email"
-                          onChange={handleChange}
-                          value={values.email}
-                        />
-                        {errors.email && <div className="invalid-feedback">{errors.email}</div>}
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>First name</label>
-                      <div className="input-group">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text">
-                            <i className="cil-user" />
-                          </span>
-                        </div>
-                        <input
-                          name="firstName"
-                          className={classNames('form-control', {'is-invalid': errors.firstName})}
-                          onChange={handleChange}
-                          value={values.firstName}
-                        />
-                        {errors.firstName && <div className="invalid-feedback">{errors.firstName}</div>}
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>Last name</label>
-                      <div className="input-group">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text">
-                            <i className="cil-user" />
-                          </span>
-                        </div>
-                        <input
-                          name="lastName"
-                          className={classNames('form-control', {'is-invalid': errors.lastName})}
-                          onChange={handleChange}
-                          value={values.lastName}
-                        />
-                        {errors.lastName && <div className="invalid-feedback">{errors.lastName}</div>}
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>Account status</label>
-                      <select name="status" className="form-control" value={values.status} onChange={handleChange}>
-                        <option value={AccountStatus.ACTIVE}>{AccountStatusText[AccountStatus.ACTIVE]}</option>
-                        <option value={AccountStatus.INACTIVE}>{AccountStatusText[AccountStatus.INACTIVE]}</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label>Email verification</label>
-                      <select
-                        name="emailVerified"
-                        className="form-control"
-                        value={values.emailVerified ? 'true' : 'false'}
-                        onChange={(e) => {
-                          if (e.target.value === 'true') setFieldValue('emailVerified', true);
-                          else setFieldValue('emailVerified', false);
-                        }}>
-                        <option value="true">{AccountEmailVerificationText.VERIFIED}</option>
-                        <option value="false">{AccountEmailVerificationText.NOT_VERIFIED}</option>
-                      </select>
-                    </div>
+                    <FormField
+                      name="email"
+                      label={t('email')}
+                      icon="cil-envelope-closed"
+                      required
+                    />
+                    <FormField
+                      name="firstName"
+                      label={t('firstName')}
+                      icon="cil-user"
+                      required
+                    />
+                    <FormField
+                      name="lastName"
+                      label={t('lastName')}
+                      icon="cil-user"
+                      required
+                    />
+                    <FormField
+                      name="role"
+                      label={t('role')}
+                      tag="select"
+                      required>
+                      <option value={Role.USER}>{t('user')}</option>
+                      <option value={Role.ROOT_ADMIN}>{t('admin')}</option>
+                    </FormField>
+                    <FormField
+                      name="status"
+                      label={t('accountStatus')}
+                      tag="select"
+                      required>
+                      <option value={AccountStatus.ACTIVE}>
+                        {t('active')}
+                      </option>
+                      <option value={AccountStatus.INACTIVE}>
+                        {t('inactive')}
+                      </option>
+                    </FormField>
+                    <FormField
+                      name="emailVerified"
+                      label={t('emailVerification')}
+                      tag="select"
+                      onChange={(e): void =>
+                        setFieldValue(
+                          'emailVerified',
+                          e.target.value === 'true',
+                        )
+                      }
+                      required>
+                      <option value="true">{t('verified')}</option>
+                      <option value="false">{t('notVerified')}</option>
+                    </FormField>
                   </div>
                 </div>
               </div>
-              <div className="card-footer">
-                <button className="btn btn-sm btn-primary" type="submit" disabled={isSubmitting}>
-                  {isSubmitting && <div className="spinner-border spinner-border-sm mr-1" role="status" />}
-                  {isSubmitting ? 'Saving...' : 'Save'}
-                </button>
+              <div className="card-footer d-flex justify-content-end">
+                <SubmitButton size="sm" color="primary">
+                  {t('save')}
+                </SubmitButton>
               </div>
             </div>
           </form>
@@ -158,12 +134,6 @@ function AdminAccountEditingPage({router, originalAccount}) {
       </Formik>
     </div>
   );
-}
-
-AdminAccountEditingPage.getInitialProps = async ({query}) => {
-  return {
-    originalAccount: await accountService.findOneForAdmin(query.userId),
-  };
 };
 
-export default adminOnly(AdminAccountEditingPage as NextComponentType<NextPageContext, any, any>);
+export default adminOnly(AdminAccountEditingPage);

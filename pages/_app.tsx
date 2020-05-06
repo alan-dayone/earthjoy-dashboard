@@ -1,36 +1,59 @@
-/* tslint:disable:no-default-export */
 import React from 'react';
 import {compose} from 'redux';
 import {Provider} from 'react-redux';
-import * as cookie from 'cookie';
-import App from 'next/app';
-import withRedux, {AppProps as NextReduxAppProps} from 'next-redux-wrapper';
-import {AppContext} from 'next/dist/pages/_app';
-import {nprogress} from '../hocs';
+import App, {AppContext} from 'next/app';
+import withRedux, {ReduxWrapperAppProps} from 'next-redux-wrapper';
+import {I18nextProvider} from 'react-i18next';
+import i18next from 'i18next';
+import {nprogress} from '../hocs/nprogress';
+import {CustomNextPageContext} from '../hocs/types';
 import {makeStore} from '../redux/store';
+import {RootState} from '../redux/slices';
 import {authService} from '../services';
+import {getCookieFromRequest} from '../utils/cookie';
+import {getLoginUser} from '../redux/slices/loginUserSlice';
+import {ACCESS_TOKEN_COOKIE} from '../gateways/AuthGateway';
+import '../scss/index.scss';
 
-class ComposedApp extends App<NextReduxAppProps> {
-  public static async getInitialProps(context: AppContext) {
+interface CustomNextAppContext extends AppContext {
+  ctx: CustomNextPageContext;
+}
+
+class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
+  public static async getInitialProps(
+    context: CustomNextAppContext,
+  ): Promise<{pageProps: object}> {
     const {Component, ctx} = context;
+    const isServer = !!ctx.req;
 
-    if (ctx.req?.headers.cookie) {
-      const cookies = cookie.parse(ctx.req.headers.cookie);
-      authService.setAccessToken(cookies.jwt);
+    if (isServer) {
+      const jwt = getCookieFromRequest(ACCESS_TOKEN_COOKIE, ctx.req);
+      if (jwt) {
+        authService.setAccessToken(jwt);
+        await ctx.store.dispatch(getLoginUser());
+      }
     }
 
-    const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
-    return {pageProps};
+    return {
+      pageProps: Component.getInitialProps
+        ? await Component.getInitialProps(ctx)
+        : {},
+    };
   }
 
-  public render() {
+  public render(): JSX.Element {
     const {Component, pageProps, store} = this.props;
     return (
       <Provider store={store}>
-        <Component {...pageProps} />
+        <I18nextProvider i18n={i18next}>
+          <Component {...pageProps} />
+        </I18nextProvider>
       </Provider>
     );
   }
 }
 
-export default compose(nprogress(300, {showSpinner: true}), withRedux(makeStore))(ComposedApp);
+export default compose(
+  nprogress(300, {showSpinner: true}),
+  withRedux(makeStore),
+)(ComposedApp);

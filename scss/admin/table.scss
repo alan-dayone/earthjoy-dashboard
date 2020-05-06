@@ -1,8 +1,13 @@
+/* stylelint-disable at-rule-no-unknown */
 .admin-table {
-  table-layout: fixed;
+  @include media-breakpoint-up(md) {
+    table-layout: fixed;
+  }
 
-  td {
-    white-space: nowrap;
-    overflow-x: scroll;
+  &__header-text {
+    @include media-breakpoint-up(md) {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
   }
 }

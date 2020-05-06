@@ -1,238 +1,169 @@
-/* tslint:disable:no-default-export */
-import React, {Component} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import Head from 'next/head';
-import {Formik, FormikActions} from 'formik';
+import {Formik, FormikHelpers as FormikActions, FormikProps} from 'formik';
 import toastr from 'toastr';
-import {NextComponentType, NextPageContext} from 'next';
-import classNames from 'classnames';
-import loIsEqual from 'lodash/isEqual';
-import {adminOnly} from '../../../hocs';
+import {useTranslation} from 'react-i18next';
+import {smtpSettingsValidationSchema} from '../../../view-models/Configuration';
+import {getErrorMessageCode} from '../../../view-models/Error';
+import {adminOnly} from '../../../hocs/adminOnly';
 import {systemService} from '../../../services';
-import {MailSmtpSettings} from '../../../models/Configuration';
-import {MailSmtpSettingsValidationSchema} from '../../../view-models/SmtpConfig';
-import {ToastrWarning} from '../../../view-models/Toastr';
+import {
+  ConfigurationKey,
+  MailSmtpSettings,
+} from '../../../models/Configuration';
+import {FormField} from '../../../components/admin/Formik/FormField';
+import {SubmitButton} from '../../../components/admin/Formik/SubmitButton';
+import {FormButton} from '../../../components/admin/FormButton';
 
-class SmtpSettingToastrWarning extends ToastrWarning {
-  public getWarningMessage(): string {
-    if (this.code === 'NOTHING_CHANGE') {
-      return 'The new SMTP settings are the same';
-    }
-    return 'Warning';
-  }
-  public alert() {
-    toastr.warning(this.getWarningMessage());
-  }
-}
+const AdminSmtpSettingsPage: FC = () => {
+  const [isTestingConnection, setIsTestingConnection] = useState(false);
+  const [initialSmtpSettings, setInitialSmtpSettings] = useState({
+    smtpHost: '',
+    smtpPort: '',
+    username: '',
+    password: '',
+    senderEmail: '',
+    senderName: '',
+  });
+  const {t} = useTranslation();
 
-class AdminSmtpSettingsPage extends Component<{initialSmtpSettings: MailSmtpSettings}> {
-  public state = {
-    isTestingConnection: false,
-  };
-
-  public static async getInitialProps() {
-    const initialSmtpSettings = await systemService.getSmtpSettings();
-    return {
-      initialSmtpSettings,
-    };
-  }
-
-  public render() {
-    const initialValues: MailSmtpSettings = this.props.initialSmtpSettings || {
-      smtpHost: '',
-      smtpPort: '',
-      username: '',
-      password: '',
-      senderEmail: '',
-      senderName: '',
-    };
-    const {isTestingConnection} = this.state;
-
-    return (
-      <div id="admin-smtp-settings-page">
-        <Head>
-          <title>Admin - Configuration: SMTP settings</title>
-        </Head>
-        <div className="row">
-          <div className="col-12">
-            <Formik
-              initialValues={initialValues}
-              onSubmit={this._handleSave}
-              validationSchema={MailSmtpSettingsValidationSchema}>
-              {({values, handleChange, isSubmitting, handleSubmit, errors}) => (
-                <form onSubmit={handleSubmit}>
-                  <div className="card">
-                    <div className="card-header">
-                      <strong>SMTP settings</strong>
-                    </div>
-                    <div className="card-body">
-                      <div className="row">
-                        <div className="col-12">
-                          <div className="form-group">
-                            <label>SMTP server host</label>
-                            <div className="input-group">
-                              <div className="input-group-prepend">
-                                <span className="input-group-text">
-                                  <i className="cil-cast" />
-                                </span>
-                              </div>
-                              <input
-                                className={classNames('form-control', {'is-invalid': errors.smtpHost})}
-                                name="smtpHost"
-                                onChange={handleChange}
-                                value={values.smtpHost}
-                              />
-                              {errors.smtpHost && <div className="invalid-feedback">{errors.smtpHost}</div>}
-                            </div>
-                          </div>
-                          <div className="form-group">
-                            <label>SMTP server port</label>
-                            <div className="input-group">
-                              <div className="input-group-prepend">
-                                <span className="input-group-text">
-                                  <i className="cil-lan" />
-                                </span>
-                              </div>
-                              <input
-                                className={classNames('form-control', {'is-invalid': errors.smtpPort})}
-                                name="smtpPort"
-                                onChange={handleChange}
-                                value={values.smtpPort}
-                              />
-                              {errors.smtpPort && <div className="invalid-feedback">{errors.smtpPort}</div>}
-                            </div>
-                          </div>
-                          <div className="form-group">
-                            <label>Sender name</label>
-                            <div className="input-group">
-                              <div className="input-group-prepend">
-                                <span className="input-group-text">
-                                  <i className="cil-user" />
-                                </span>
-                              </div>
-                              <input
-                                className={classNames('form-control', {'is-invalid': errors.senderName})}
-                                name="senderName"
-                                onChange={handleChange}
-                                value={values.senderName}
-                              />
-                              {errors.senderName && <div className="invalid-feedback">{errors.senderName}</div>}
-                            </div>
-                          </div>
-                          <div className="form-group">
-                            <label>Sender email</label>
-                            <div className="input-group">
-                              <div className="input-group-prepend">
-                                <span className="input-group-text">
-                                  <i className="cil-envelope-closed" />
-                                </span>
-                              </div>
-                              <input
-                                className={classNames('form-control', {'is-invalid': errors.senderEmail})}
-                                name="senderEmail"
-                                onChange={handleChange}
-                                value={values.senderEmail}
-                              />
-                              {errors.senderEmail && <div className="invalid-feedback">{errors.senderEmail}</div>}
-                            </div>
-                          </div>
-                          <div className="form-group">
-                            <label>SMTP account username</label>
-                            <div className="input-group">
-                              <div className="input-group-prepend">
-                                <span className="input-group-text">
-                                  <i className="cil-user" />
-                                </span>
-                              </div>
-                              <input
-                                className={classNames('form-control', {'is-invalid': errors.username})}
-                                name="username"
-                                onChange={handleChange}
-                                value={values.username}
-                              />
-                              {errors.username && <div className="invalid-feedback">{errors.username}</div>}
-                            </div>
-                          </div>
-                          <div className="form-group">
-                            <label>SMTP account password</label>
-                            <div className="input-group">
-                              <div className="input-group-prepend">
-                                <span className="input-group-text">
-                                  <i className="cil-lock-locked" />
-                                </span>
-                              </div>
-                              <input
-                                className={classNames('form-control', {'is-invalid': errors.password})}
-                                name="password"
-                                onChange={handleChange}
-                                value={values.password}
-                              />
-                              {errors.password && <div className="invalid-feedback">{errors.password}</div>}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="card-footer">
-                      <button className="btn btn-sm btn-primary" type="submit" disabled={isSubmitting}>
-                        {isSubmitting && <div className="spinner-border spinner-border-sm mr-1" role="status" />}
-                        {isSubmitting ? 'Saving...' : 'Save'}
-                      </button>
-                      &nbsp;
-                      <button
-                        className="btn btn-sm btn-info"
-                        onClick={async (e) => {
-                          e.preventDefault();
-                          await this._handleTestSmtpConnection(values);
-                        }}
-                        disabled={isTestingConnection}>
-                        {isTestingConnection && <div className="spinner-border spinner-border-sm mr-1" />}
-                        Test connection
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              )}
-            </Formik>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  public _handleTestSmtpConnection = async (values: MailSmtpSettings) => {
+  const handleTestSmtpConnection = async (
+    values: MailSmtpSettings,
+  ): Promise<void> => {
     try {
-      this.setState({isTestingConnection: true});
-      const isValid = await systemService.testSmtpConnection(values);
+      setIsTestingConnection(true);
 
+      const isValid = await systemService.testSmtpConnection(values);
       if (isValid) {
-        toastr.success('SMTP settings are valid');
+        toastr.success(t('smtpSettingsAreValid'));
       } else {
-        toastr.error('Invalid SMTP settings');
+        toastr.error(t('smtpSettingsAreInvalid'));
       }
     } catch (e) {
-      toastr.error(e.message);
+      toastr.error(t(getErrorMessageCode(e)));
     } finally {
-      this.setState({isTestingConnection: false});
+      setIsTestingConnection(false);
     }
   };
 
-  public _handleSave = async (values: MailSmtpSettings, actions: FormikActions<MailSmtpSettings>) => {
+  const handleSave = async (
+    values: MailSmtpSettings,
+    actions: FormikActions<MailSmtpSettings>,
+  ): Promise<void> => {
     try {
       actions.setSubmitting(true);
-      if (loIsEqual(values, this.props.initialSmtpSettings)) {
-        throw new SmtpSettingToastrWarning(SmtpSettingToastrWarning.NOTHING_CHANGE);
-      }
-      await systemService.saveSmtpSettings(values);
-      toastr.success('Saved');
+      await systemService.saveConfiguration<MailSmtpSettings>(
+        ConfigurationKey.MAIL_SMTP_SETTINGS,
+        values,
+      );
+      actions.setSubmitting(false);
+      toastr.success(t('saved'));
     } catch (e) {
-      if (e instanceof SmtpSettingToastrWarning) e.alert();
-      else {
-        toastr.error(e.message);
-      }
-    } finally {
+      toastr.error(t(getErrorMessageCode(e)));
       actions.setSubmitting(false);
     }
   };
-}
 
-export default adminOnly(AdminSmtpSettingsPage as NextComponentType<NextPageContext, any, any>);
+  useEffect(() => {
+    (async (): Promise<void> => {
+      const initialSmtpSettings = await systemService.getConfiguration<
+        MailSmtpSettings
+      >(ConfigurationKey.MAIL_SMTP_SETTINGS);
+      if (initialSmtpSettings) {
+        setInitialSmtpSettings(initialSmtpSettings);
+      }
+    })();
+  }, []);
+
+  return (
+    <div id="admin-smtp-settings-page">
+      <Head>
+        <title>
+          {t('admin')} - {t('configuration')}: {t('smtpSettings')}
+        </title>
+      </Head>
+      <div className="row">
+        <div className="col-12">
+          <Formik
+            initialValues={initialSmtpSettings}
+            enableReinitialize
+            onSubmit={handleSave}
+            validationSchema={smtpSettingsValidationSchema}>
+            {({
+              values,
+              handleSubmit,
+            }: FormikProps<MailSmtpSettings>): JSX.Element => (
+              <form onSubmit={handleSubmit}>
+                <div className="card">
+                  <div className="card-header">
+                    <strong>{t('smtpSettings')}</strong>
+                  </div>
+                  <div className="card-body">
+                    <div className="row">
+                      <div className="col-12">
+                        <FormField
+                          name="smtpHost"
+                          label={t('smtpHost')}
+                          icon="cil-cast"
+                          required
+                        />
+                        <FormField
+                          name="smtpPort"
+                          label={t('smtpPort')}
+                          icon="cil-lan"
+                          required
+                        />
+                        <FormField
+                          name="senderName"
+                          label={t('senderName')}
+                          icon="cil-user"
+                          required
+                        />
+                        <FormField
+                          name="senderEmail"
+                          label={t('senderEmail')}
+                          icon="cil-envelope-closed"
+                          required
+                        />
+                        <FormField
+                          name="username"
+                          label={t('smtpAccountUsername')}
+                          icon="cil-user"
+                          required
+                        />
+                        <FormField
+                          name="password"
+                          label={t('smtpAccountPassword')}
+                          icon="cil-lock-locked"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-footer d-flex justify-content-end">
+                    <FormButton
+                      size="sm"
+                      color="info"
+                      onClick={async (e): Promise<void> => {
+                        e.preventDefault();
+                        await handleTestSmtpConnection(values);
+                      }}
+                      loading={isTestingConnection}>
+                      {t('testConnection')}
+                    </FormButton>
+                    &nbsp;
+                    <SubmitButton size="sm" color="primary">
+                      {t('save')}
+                    </SubmitButton>
+                  </div>
+                </div>
+              </form>
+            )}
+          </Formik>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default adminOnly(AdminSmtpSettingsPage);

@@ -1,8 +1,10 @@
-const withSass = require('@zeit/next-sass');
-const config = withSass();
+/* eslint-disable no-undef, @typescript-eslint/no-var-requires */
+require('dotenv').config();
 
-config.publicRuntimeConfig = {
-  BASE_URL: process.env.BASE_URL,
+module.exports = {
+  publicRuntimeConfig: {
+    BASE_API_URL: process.env.BASE_API_URL,
+  },
+  compress: false, // Let Nginx or Apache do it.
+  poweredByHeader: false,
 };
-
-module.exports = config;

@@ -1,15 +1,22 @@
-import React from 'react';
+import React, {FC} from 'react';
 import classNames from 'classnames';
-import {AccountEmailVerificationText} from '../../view-models/User';
+import {useTranslation} from 'react-i18next';
 
-export function AccountEmailVerificationLabel({emailVerified}) {
+interface Props {
+  emailVerified: boolean;
+}
+
+export const AccountEmailVerificationLabel: FC<Props> = ({
+  emailVerified,
+}: Props) => {
+  const {t} = useTranslation();
   return (
     <span
       className={classNames('badge', {
         'badge-success': emailVerified,
         'badge-secondary': !emailVerified,
       })}>
-      {emailVerified ? AccountEmailVerificationText.VERIFIED : AccountEmailVerificationText.NOT_VERIFIED}
+      {emailVerified ? t('verified') : t('notVerified')}
     </span>
   );
-}
+};

@@ -1,18 +1,21 @@
-import React from 'react';
+import React, {FC} from 'react';
 import classNames from 'classnames';
-import {AccountStatusText} from '../../view-models/User';
-import {AccountStatus} from '../../models/User';
+import {useTranslation} from 'react-i18next';
+import {AccountStatus} from '../../models/Account';
 
-export function AccountStatusLabel({status}) {
-  const accountIsActive = status === AccountStatus.ACTIVE;
+interface Props {
+  status: AccountStatus;
+}
 
+export const AccountStatusLabel: FC<Props> = ({status}: Props) => {
+  const {t} = useTranslation();
   return (
     <span
-      className={classNames('badge', {
-        'badge-success': accountIsActive,
-        'badge-secondary': !accountIsActive,
-      })}>
-      {AccountStatusText[status]}
+      className={classNames(
+        'badge',
+        status === AccountStatus.ACTIVE ? 'badge-success' : 'badge-secondary',
+      )}>
+      {t(status === AccountStatus.ACTIVE ? 'active' : 'inactive')}
     </span>
   );
-}
+};

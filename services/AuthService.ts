@@ -1,70 +1,64 @@
 import {AuthGateway} from '../gateways/AuthGateway';
-import {ServiceContext} from './index';
+import {LoginUser} from '../models/Account';
 
 export class AuthService {
-  public static error = {
-    LOGIN_FAILED: 'LOGIN_FAILED',
-    EMAIL_NOT_FOUND: 'EMAIL_NOT_FOUND',
-    INVALID_CURRENT_PASSWORD: 'INVALID_CURRENT_PASSWORD',
-    INVALID_EMAIL: 'INVALID_EMAIL',
-    ACCOUNT_INACTIVATED: 'ACCOUNT_INACTIVATED',
-  };
-
-  public static event = {
-    USER_LOGIN: 'USER_LOGIN',
-    USER_SIGNUP: 'USER_SIGNUP',
-    USER_LOGOUT: 'USER_LOGOUT',
-  };
-
   private authGateway: AuthGateway;
 
-  constructor(options: ServiceContext) {
+  constructor(options: {authGateway: AuthGateway}) {
     this.authGateway = options.authGateway;
   }
 
-  public async loginWithEmail(body: {email: string; password: string}) {
+  public async loginWithEmail(body: {
+    email: string;
+    password: string;
+  }): Promise<LoginUser> {
     const {token} = await this.authGateway.loginWithEmail(body);
-    this.authGateway.storeAccessToken(token);
+    this.authGateway.setAccessToken(token);
     return this.getLoginUser();
   }
 
-  public async getLoginUser() {
+  public async getLoginUser(): Promise<LoginUser> {
     return this.authGateway.getLoginUser();
   }
 
-  public async signupWithEmail(body: {name: string; email: string; password: string}) {
-    return this.authGateway.create(body);
+  public logout(): void {
+    this.authGateway.logout();
   }
 
-  public async logout() {
-    await this.authGateway.logout();
-  }
-
-  public async sendResetPasswordEmail(email: string) {
+  public async sendResetPasswordEmail(email: string): Promise<void> {
     return this.authGateway.sendResetPasswordEmail(email);
   }
 
-  public async updateAccountInfo(body: {name: string; email: string; preferredLanguage: string}) {
+  public async updateAccountInfo(body: {
+    name: string;
+    email: string;
+    preferredLanguage: string;
+  }): Promise<void> {
     await this.authGateway.updateAccountInfo(body);
   }
 
-  public async updatePassword(body: {oldPassword: string; newPassword: string}) {
-    await this.authGateway.updatePassword(body);
+  public async setNewPassword(body: {
+    accountId: string;
+    newPassword: string;
+    resetPasswordToken: string;
+  }): Promise<void> {
+    await this.authGateway.setNewPassword(body);
   }
 
-  public async setNewPassword(body: {userId: string; newPassword: string}, accessToken: string) {
-    await this.authGateway.setNewPassword(body, accessToken);
+  public async verifyAccount(
+    accountVerificationToken: string,
+  ): Promise<boolean> {
+    return this.authGateway.verifyAccount(accountVerificationToken);
   }
 
-  public setAccessToken(accessToken: string) {
+  public setAccessToken(accessToken: string): void {
     this.authGateway.setAccessToken(accessToken);
   }
 
-  public async forgotPassword(email: string) {
-    return this.authGateway.forgotPassword(email);
-  }
-
-  public async changePassword(body: {newPassword: string; newPasswordConfirm: string}, accessToken: string) {
-    return this.authGateway.changePassword(body, accessToken);
+  public async changePassword(
+    oldPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    await this.authGateway.changePassword(oldPassword, newPassword);
   }
 }
