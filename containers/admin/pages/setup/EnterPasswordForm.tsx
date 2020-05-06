@@ -4,16 +4,10 @@ import {Formik, FormikProps} from 'formik';
 import toastr from 'toastr';
 import {connect} from 'react-redux';
 import * as Yup from 'yup';
-import _pick from 'lodash/pick';
 import {withI18next} from '../../../../hocs/withI18next';
 import {systemService} from '../../../../services';
-import {sharedValidationSchema} from '../../../../view-models/Account';
 import {SubmitButton} from '../../../../components/admin/Formik/SubmitButton';
 import {FormField} from '../../../../components/admin/Formik/FormField';
-
-export const systemInitializationFormSchema = Yup.object().shape(
-  _pick(sharedValidationSchema, 'password'),
-);
 
 interface Props {
   onSuccess: (password: string) => void;
@@ -35,7 +29,7 @@ const EnterPasswordForm: FC<Props> = ({onSuccess}) => {
       );
 
       if (!passwordIsCorrect) {
-        toastr.error(t('invalidPassword'));
+        toastr.error(t('error.invalidPassword'));
         return;
       }
 
@@ -53,7 +47,9 @@ const EnterPasswordForm: FC<Props> = ({onSuccess}) => {
       <p className="text-muted">{t('msgSystemInitialization')}</p>
       <Formik
         initialValues={initialValues}
-        validationSchema={systemInitializationFormSchema}
+        validationSchema={Yup.object().shape({
+          password: Yup.string().required(),
+        })}
         onSubmit={handleSubmit}>
         {({handleSubmit}: FormikProps<Account>): JSX.Element => (
           <form onSubmit={handleSubmit}>
