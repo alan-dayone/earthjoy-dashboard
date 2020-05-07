@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Column,
   FilterProps,
@@ -18,21 +18,28 @@ import {InputFilter} from '../../components/admin/DataTable/InputFilter';
 const PAGE_SIZE_LIST = [5, 10, 15, 20, 100];
 const DELAY_FILTER_CHANGE = 500; // Delay 500ms while typing search before calling API.
 
-interface Props {
-  tableColumns: Column[];
-  findData: Function;
-}
-
 const DefaultColumnFilter = ({
   column: {filterValue, setFilter},
 }: FilterProps<object>): Renderer<FilterProps<object>> => (
   <InputFilter value={filterValue} onChange={setFilter} />
 );
 
-export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
+export const DataTable = <D extends object>({
+  tableColumns,
+  findData,
+}: {
+  tableColumns: Array<Column<D>>;
+  findData: (options: {
+    pageIndex: number;
+    filters: Partial<D>;
+    pageSize: number;
+    orders: Array<string>;
+  }) => Promise<{data: Array<D>; count: number}>;
+}): JSX.Element => {
   if (isServer) {
     return null;
   }
+
   const dataTable = qs.parse(Router.query['dataTable'] as string);
   const {
     filters: initialFilters = [],
@@ -40,6 +47,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
     pageSize: initialPageSizeStr = PAGE_SIZE_LIST[0],
     sortBy: initialSortBy = [],
   } = dataTable;
+
   const initialPageIndex = parseInt(initialPageIndexStr);
   const initialPageSize = parseInt(initialPageSizeStr);
   const tableLoadedInitialData = useRef(false);
@@ -54,7 +62,7 @@ export const DataTable: FC<Props> = ({tableColumns, findData}: Props) => {
     gotoPage,
     state: {pageIndex, filters, pageSize, sortBy},
     setPageSize,
-  } = useTable(
+  } = useTable<D>(
     {
       columns: tableColumns,
       data,

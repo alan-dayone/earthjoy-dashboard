@@ -1,6 +1,4 @@
-import {MouseEventHandler} from 'react';
 import {
-  TableInstance,
   UseColumnOrderInstanceProps,
   UseColumnOrderState,
   UseExpandedHooks,
@@ -13,6 +11,7 @@ import {
   UseFiltersInstanceProps,
   UseFiltersOptions,
   UseFiltersState,
+  UseGlobalFiltersColumnOptions,
   UseGlobalFiltersInstanceProps,
   UseGlobalFiltersOptions,
   UseGlobalFiltersState,
@@ -36,34 +35,36 @@ import {
   UseRowSelectOptions,
   UseRowSelectRowProps,
   UseRowSelectState,
+  UseRowStateCellProps,
+  UseRowStateInstanceProps,
+  UseRowStateOptions,
+  UseRowStateRowProps,
+  UseRowStateState,
   UseSortByColumnOptions,
   UseSortByColumnProps,
   UseSortByHooks,
   UseSortByInstanceProps,
   UseSortByOptions,
-  UseSortByState,
-  UseGlobalFiltersOptions,
-} from 'react-table';
+  UseSortByState
+} from 'react-table'
 
 declare module 'react-table' {
-  export interface UseFlexLayoutInstanceProps<D extends object> {
-    totalColumnsMinWidth: number;
-  }
-
-  export interface UseFlexLayoutColumnProps<D extends object> {
-    totalMinWidth: number;
-  }
+  // take this file as-is, or comment out the sections that don't apply to your plugin configuration
 
   export interface TableOptions<D extends object>
     extends UseExpandedOptions<D>,
-      UseFiltersOptions<D>,
       UseFiltersOptions<D>,
       UseGlobalFiltersOptions<D>,
       UseGroupByOptions<D>,
       UsePaginationOptions<D>,
       UseResizeColumnsOptions<D>,
       UseRowSelectOptions<D>,
-      UseSortByOptions<D> {}
+      UseRowStateOptions<D>,
+      UseSortByOptions<D>,
+      // note that having Record here allows you to add anything to the options, this matches the spirit of the
+      // underlying js library, but might be cleaner if it's replaced by a more specific type that matches your
+      // feature set, this is a safe default.
+      Record<string, any> {}
 
   export interface Hooks<D extends object = {}>
     extends UseExpandedHooks<D>,
@@ -79,8 +80,7 @@ declare module 'react-table' {
       UseGroupByInstanceProps<D>,
       UsePaginationInstanceProps<D>,
       UseRowSelectInstanceProps<D>,
-      UseFlexLayoutInstanceProps<D>,
-      UsePaginationInstanceProps<D>,
+      UseRowStateInstanceProps<D>,
       UseSortByInstanceProps<D> {}
 
   export interface TableState<D extends object = {}>
@@ -92,32 +92,29 @@ declare module 'react-table' {
       UsePaginationState<D>,
       UseResizeColumnsState<D>,
       UseRowSelectState<D>,
-      UseSortByState<D> {
-    rowCount: number;
-  }
+      UseRowStateState<D>,
+      UseSortByState<D> {}
 
-  export interface Column<D extends object = {}>
+  export interface ColumnInterface<D extends object = {}>
     extends UseFiltersColumnOptions<D>,
-      UseGlobalFiltersOptions<D>,
+      UseGlobalFiltersColumnOptions<D>,
       UseGroupByColumnOptions<D>,
       UseResizeColumnsColumnOptions<D>,
-      UseSortByColumnOptions<D> {
-    align?: string;
-  }
+      UseSortByColumnOptions<D> {}
 
   export interface ColumnInstance<D extends object = {}>
     extends UseFiltersColumnProps<D>,
       UseGroupByColumnProps<D>,
       UseResizeColumnsColumnProps<D>,
-      UseFlexLayoutColumnProps<D>,
       UseSortByColumnProps<D> {}
 
-  export interface Cell<D extends object = {}> extends UseGroupByCellProps<D> {}
+  export interface Cell<D extends object = {}, V = any>
+    extends UseGroupByCellProps<D>,
+      UseRowStateCellProps<D> {}
 
   export interface Row<D extends object = {}>
     extends UseExpandedRowProps<D>,
       UseGroupByRowProps<D>,
-      UseRowSelectRowProps<D> {}
+      UseRowSelectRowProps<D>,
+      UseRowStateRowProps<D> {}
 }
-
-export type TableMouseEventHandler = (instance: TableInstance<T>) => MouseEventHandler;

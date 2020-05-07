@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import Head from 'next/head';
-import {Column, CellProps, Renderer} from 'react-table';
+import {CellProps, Column, Renderer} from 'react-table';
 import Link from 'next/link';
 import {useTranslation} from 'react-i18next';
 import {adminOnly} from '../../../hocs/adminOnly';
@@ -14,7 +14,7 @@ import {AccountRoleLabel} from '../../../components/admin/AccountRoleLabel';
 
 const AdminAccountsPage: FC = () => {
   const {t} = useTranslation();
-  const tableColumns: Column[] = [
+  const tableColumns: Array<Column<Account>> = [
     {
       Header: 'ID',
       accessor: 'id',
@@ -97,7 +97,7 @@ const AdminAccountsPage: FC = () => {
     },
     {
       Header: t('actions'),
-      sortType: null,
+      accessor: null,
       disableSortBy: true,
       disableFilters: true,
       width: '15%',
