@@ -16,6 +16,7 @@ export const getCookieFromRequest = (
 export const getBooleanCookieFromRequest = (
   cookieName: string,
   req: IncomingMessage,
+  defaultValue?: boolean,
 ): boolean => {
-  return getCookieFromRequest(cookieName, req) === 'true';
+  return getCookieFromRequest(cookieName, req) === 'true' || defaultValue;
 };

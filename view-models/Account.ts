@@ -14,9 +14,6 @@ export const sharedValidationSchema = {
     .required()
     .min(AccountConstraint.password.MIN_LENGTH)
     .max(AccountConstraint.password.MAX_LENGTH),
-  confirmPassword: Yup.string()
-    .required()
-    .oneOf([Yup.ref('password'), null]),
 };
 
 export const getAccountName = (account: Account): string => {

@@ -37,7 +37,7 @@ export const adminOnly = (Content: NextComponentType): ReactNode => {
     let showSidebar = true;
 
     if (isServer) {
-      showSidebar = getBooleanCookieFromRequest(SHOW_SIDEBAR_COOKIE, req);
+      showSidebar = getBooleanCookieFromRequest(SHOW_SIDEBAR_COOKIE, req, true);
 
       if (!loginUser) {
         res.writeHead(302, {Location: '/admin/login'});

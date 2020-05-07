@@ -33,10 +33,10 @@ const EnterPasswordForm: FC<Props> = ({onSuccess}) => {
         return;
       }
 
+      actions.setSubmitting(false);
       onSuccess(values.password);
     } catch (e) {
       toastr.error(e.message);
-    } finally {
       actions.setSubmitting(false);
     }
   };
@@ -57,6 +57,7 @@ const EnterPasswordForm: FC<Props> = ({onSuccess}) => {
               name="password"
               type="password"
               label={t('password')}
+              placeholder={t('password')}
               icon="cil-lock-locked"
               required
             />

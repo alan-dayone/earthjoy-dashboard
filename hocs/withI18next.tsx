@@ -13,11 +13,6 @@ Yup.setLocale({
     required: (props): string => {
       return i18next.t('validation.isRequired', {labelKey: props.path});
     },
-    oneOf: (props): string => {
-      if (props.path === 'confirmPassword')
-        return i18next.t('validation.passwordsMustMatch');
-      else return '';
-    },
   },
   string: {
     email: (): string => {

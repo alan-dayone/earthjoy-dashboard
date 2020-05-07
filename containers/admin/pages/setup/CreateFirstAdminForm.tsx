@@ -1,10 +1,10 @@
 import React, {FC} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Formik, FormikProps, FormikHelpers} from 'formik';
+import {Formik, FormikHelpers, FormikProps} from 'formik';
 import toastr from 'toastr';
 import {connect} from 'react-redux';
 import Router from 'next/router';
-import _pick from 'lodash/pick';
+import pick from 'lodash/pick';
 import * as Yup from 'yup';
 import {withI18next} from '../../../../hocs/withI18next';
 import {Account} from '../../../../models/Account';
@@ -14,10 +14,6 @@ import {loginWithEmail} from '../../../../redux/slices/loginUserSlice';
 import {sharedValidationSchema} from '../../../../view-models/Account';
 import {SubmitButton} from '../../../../components/admin/Formik/SubmitButton';
 import {FormField} from '../../../../components/admin/Formik/FormField';
-
-export const userFormValidationSchema = Yup.object().shape(
-  _pick(sharedValidationSchema, ['email', 'firstName', 'lastName', 'password']),
-);
 
 interface Props {
   dispatch: AppDispatch;
@@ -73,6 +69,18 @@ const CreateFirstAdminForm: FC<Props> = ({
     }
   };
 
+  const userFormValidationSchema = Yup.object().shape({
+    ...pick(sharedValidationSchema, [
+      'email',
+      'firstName',
+      'lastName',
+      'password',
+    ]),
+    confirmPassword: Yup.string()
+      .required()
+      .oneOf([Yup.ref('password')], t('validation.passwordsMustMatch')),
+  });
+
   return (
     <div>
       <h1>{t('createFirstAdmin')}</h1>
@@ -86,18 +94,21 @@ const CreateFirstAdminForm: FC<Props> = ({
             <FormField
               name="firstName"
               label={t('firstName')}
+              placeholder={t('firstName')}
               icon="cil-user"
               required
             />
             <FormField
               name="lastName"
               label={t('lastName')}
+              placeholder={t('lastName')}
               icon="cil-user"
               required
             />
             <FormField
               name="email"
               label={t('email')}
+              placeholder={t('email')}
               icon="cil-envelope-closed"
               required
             />
@@ -105,6 +116,7 @@ const CreateFirstAdminForm: FC<Props> = ({
               name="password"
               type="password"
               label={t('password')}
+              placeholder={t('password')}
               icon="cil-lock-locked"
               required
             />
@@ -112,6 +124,7 @@ const CreateFirstAdminForm: FC<Props> = ({
               name="confirmPassword"
               type="password"
               label={t('confirmPassword')}
+              placeholder={t('confirmPassword')}
               icon="cil-lock-locked"
               required
             />
