@@ -11,6 +11,7 @@ import {
 } from 'react-table';
 import Router from 'next/router';
 import qs from 'qs';
+import classNames from 'classnames';
 import {Pagination} from '../../components/admin/Pagination';
 import {isServer} from '../../utils/environment';
 import {InputFilter} from '../../components/admin/DataTable/InputFilter';
@@ -27,6 +28,7 @@ const DefaultColumnFilter = ({
 export const DataTable = <D extends object>({
   tableColumns,
   findData,
+  dataTableRef,
 }: {
   tableColumns: Array<Column<D>>;
   findData: (options: {
@@ -35,6 +37,7 @@ export const DataTable = <D extends object>({
     pageSize: number;
     orders: Array<string>;
   }) => Promise<{data: Array<D>; count: number}>;
+  dataTableRef?: ({refresh: Function}) => void;
 }): JSX.Element => {
   if (isServer) {
     return null;
@@ -127,6 +130,10 @@ export const DataTable = <D extends object>({
     setLoadingData(false);
   };
 
+  if (dataTableRef) {
+    dataTableRef({refresh: fetchData});
+  }
+
   const fetchAndResetToFirstPage = (): void => {
     if (pageIndex === 0) {
       fetchData();
@@ -207,8 +214,11 @@ export const DataTable = <D extends object>({
               </tr>
             )}
           </thead>
-          <tbody>
-            {loadingData ? (
+          <tbody
+            className={classNames({
+              'u-opacity--50 u-pointer-events--none': loadingData,
+            })}>
+            {loadingData && page.length === 0 ? (
               <tr>
                 <td colSpan={tableColumns.length} className="text-center">
                   <div className="spinner-grow" />

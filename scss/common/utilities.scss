@@ -2,6 +2,14 @@
   cursor: pointer !important;
 }
 
+.u-pointer-events--none {
+  pointer-events: none !important;
+}
+
 .u-outline-none {
   outline: none !important;
+}
+
+.u-opacity--50 {
+  opacity: 0.5 !important;
 }

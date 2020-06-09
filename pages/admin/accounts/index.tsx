@@ -14,6 +14,8 @@ import {AccountRoleLabel} from '../../../components/admin/AccountRoleLabel';
 
 const AdminAccountsPage: FC = () => {
   const {t} = useTranslation();
+  let dataTableRef;
+
   const tableColumns: Array<Column<Account>> = [
     {
       Header: 'ID',
@@ -125,18 +127,31 @@ const AdminAccountsPage: FC = () => {
           <div className="card">
             <div className="card-header">
               <strong>{t('accountManagement')}</strong>
-              <div className="card-header-actions">
+            </div>
+            <div className="card-body">
+              <div className="text-right mb-2">
+                <button
+                  className="btn btn-sm btn-primary"
+                  onClick={(): void => {
+                    if (dataTableRef) {
+                      dataTableRef.refresh();
+                    }
+                  }}>
+                  Refresh
+                </button>
+                &nbsp;
                 <Link href="/admin/accounts/create">
                   <a className="btn btn-sm btn-success">{t('create')}</a>
                 </Link>
               </div>
-            </div>
-            <div className="card-body">
               <DataTable
                 tableColumns={tableColumns}
                 findData={accountService.findAccountsForAdmin.bind(
                   accountService,
                 )}
+                dataTableRef={(ref): void => {
+                  dataTableRef = ref;
+                }}
               />
             </div>
           </div>
