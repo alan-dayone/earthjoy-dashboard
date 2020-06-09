@@ -137,7 +137,7 @@ const AdminAccountsPage: FC = () => {
                       dataTableRef.refresh();
                     }
                   }}>
-                  Refresh
+                  {t('refresh')}
                 </button>
                 &nbsp;
                 <Link href="/admin/accounts/create">

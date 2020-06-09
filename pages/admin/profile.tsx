@@ -100,7 +100,7 @@ const ProfilePage: FC<Props> = ({loginUser, dispatch}: Props) => {
         </title>
       </Head>
       <div className="row">
-        <div className="col-6">
+        <div className="col-12 col-md-6">
           <Formik
             initialValues={loginUser}
             enableReinitialize
@@ -137,7 +137,7 @@ const ProfilePage: FC<Props> = ({loginUser, dispatch}: Props) => {
             )}
           </Formik>
         </div>
-        <div className="col-6">
+        <div className="col-12 col-md-6">
           <Formik
             initialValues={initialChangePasswordForm}
             onSubmit={handleChangePassword}

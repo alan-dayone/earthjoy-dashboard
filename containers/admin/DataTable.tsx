@@ -9,8 +9,7 @@ import {
   useSortBy,
   useTable,
 } from 'react-table';
-import Router from 'next/router';
-import qs from 'qs';
+import {useRouter} from 'next/router';
 import classNames from 'classnames';
 import {Pagination} from '../../components/admin/Pagination';
 import {isServer} from '../../utils/environment';
@@ -43,17 +42,19 @@ export const DataTable = <D extends object>({
     return null;
   }
 
-  const dataTable = qs.parse(Router.query['dataTable'] as string);
+  const router = useRouter();
+
+  const dtQuery = JSON.parse((router.query['dtQuery'] as string) || '{}');
   const {
     filters: initialFilters = [],
     pageIndex: initialPageIndexStr = 0,
     pageSize: initialPageSizeStr = PAGE_SIZE_LIST[0],
     sortBy: initialSortBy = [],
-  } = dataTable;
+  } = dtQuery;
 
   const initialPageIndex = parseInt(initialPageIndexStr);
   const initialPageSize = parseInt(initialPageSizeStr);
-  const tableLoadedInitialData = useRef(false);
+  const initialDataLoaded = useRef(false);
   const [loadingData, setLoadingData] = useState(true);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
@@ -109,22 +110,20 @@ export const DataTable = <D extends object>({
     setData(data);
     setTotal(count);
 
-    if (tableLoadedInitialData.current) {
-      const queryObject = {
-        ...Router.query,
-        dataTable: qs.stringify({
+    if (initialDataLoaded.current) {
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.set(
+        'dtQuery',
+        JSON.stringify({
           pageIndex: pageIndex || undefined,
           filters,
           sortBy,
           pageSize,
         }),
-      };
-      const queryStr = qs.stringify(queryObject);
-      const basePath = Router.pathname;
-      const newUrl = queryStr === '' ? basePath : `${basePath}?${queryStr}`;
-      Router.replace(newUrl);
+      );
+      await router.replace(router.route, newUrl.toString());
     } else {
-      tableLoadedInitialData.current = true;
+      initialDataLoaded.current = true;
     }
 
     setLoadingData(false);
@@ -154,14 +153,14 @@ export const DataTable = <D extends object>({
 
   // Reset page index to 0 when user changes filters, but debounce the change to wait for user typing.
   useEffect(() => {
-    if (tableLoadedInitialData.current) {
+    if (initialDataLoaded.current) {
       handleFiltersChange();
     }
   }, [filters]);
 
   // Reset page index to 0 when user changes sorting.
   useEffect(() => {
-    if (tableLoadedInitialData.current) {
+    if (initialDataLoaded.current) {
       fetchAndResetToFirstPage();
     }
   }, [sortBy]);
