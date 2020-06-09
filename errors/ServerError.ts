@@ -3,10 +3,10 @@
 // {
 //   "error": {
 //     "statusCode": 422,
-//       "name": "UnprocessableEntityError",
-//       "message": "The request body is invalid. See error object `details` property for more info.",
-//       "code": "VALIDATION_FAILED",
-//       "details": [
+//     "name": "UnprocessableEntityError",
+//     "message": "The request body is invalid. See error object `details` property for more info.",
+//     "code": "VALIDATION_FAILED",
+//     "details": [
 //       {
 //         "path": "/email",
 //         "code": "format",

@@ -7,5 +7,7 @@ export const getErrorMessageCode = (error, messageMap?: object): string => {
     return `error.${messageMap[errorCode]}`;
   }
 
-  return errorCode ? `error.${errorCode}` : error.message;
+  return errorCode && /^\w+$/.test(errorCode)
+    ? `error.${errorCode}`
+    : error.message;
 };
