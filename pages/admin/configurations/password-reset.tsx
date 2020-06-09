@@ -55,7 +55,7 @@ const AdminPasswordResetPage: FC = () => {
   };
 
   return (
-    <div id="admin-smtp-settings-page">
+    <div id="admin-reset-password-page">
       <Head>
         <title>
           {t('admin')} - {t('configuration')}: {t('passwordReset')}

@@ -15,7 +15,12 @@ import {UnauthenticatedLayout} from '../../containers/admin/layouts/Unauthentica
 
 const adminResetNewPasswordFormSchema = Yup.object().shape({
   newPassword: sharedValidationSchema.password,
-  confirmPassword: sharedValidationSchema.confirmPassword,
+  confirmPassword: Yup.string()
+    .required()
+    .oneOf(
+      [Yup.ref('newPassword'), null],
+      // 'Passwords must match.',
+    ),
 });
 
 interface ResetNewPasswordForm {
@@ -54,7 +59,7 @@ const AdminResetNewPasswordPage: FC = () => {
 
   return (
     <div
-      id="admin-login-page"
+      id="admin-reset-new-password-page"
       className="align-items-center c-app flex-row pace-done">
       <Head>
         <title>
