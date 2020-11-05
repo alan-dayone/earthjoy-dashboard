@@ -24,7 +24,7 @@ export class AccountGateway {
       limit: pageSize,
       skip: pageIndex * pageSize,
       where: filters,
-      order: orders,
+      order: orders.length >= 1 ? orders : undefined,
     };
     const {data} = await this.restConnector.get(
       `/accounts?filter=${JSON.stringify(filter)}`,

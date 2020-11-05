@@ -145,6 +145,7 @@ const AdminAccountsPage: FC = () => {
                 </Link>
               </div>
               <DataTable
+                defaultOrders={[{id: 'status', desc: true}]}
                 tableColumns={tableColumns}
                 findData={accountService.findAccountsForAdmin.bind(
                   accountService,

@@ -24,12 +24,9 @@ const DefaultColumnFilter = ({
   <InputFilter value={filterValue} onChange={setFilter} />
 );
 
-export const DataTable = <D extends object>({
-  tableColumns,
-  findData,
-  dataTableRef,
-}: {
+export const DataTable = <D extends object>(props: {
   tableColumns: Array<Column<D>>;
+  defaultOrders?: Array<{id: string; desc: boolean}>;
   findData: (options: {
     pageIndex: number;
     filters: Partial<D>;
@@ -42,6 +39,7 @@ export const DataTable = <D extends object>({
     return null;
   }
 
+  const {defaultOrders, tableColumns, findData, dataTableRef} = props;
   const router = useRouter();
 
   const dtQuery = JSON.parse((router.query['dtQuery'] as string) || '{}');
@@ -49,7 +47,7 @@ export const DataTable = <D extends object>({
     filters: initialFilters = [],
     pageIndex: initialPageIndexStr = 0,
     pageSize: initialPageSizeStr = PAGE_SIZE_LIST[0],
-    sortBy: initialSortBy = [],
+    sortBy: initialSortBy = defaultOrders ?? [],
   } = dtQuery;
 
   const initialPageIndex = parseInt(initialPageIndexStr);
