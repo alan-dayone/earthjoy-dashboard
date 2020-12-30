@@ -2,8 +2,7 @@
   "name": "int-nextjs-ts",
   "version": "1.0.0",
   "engines": {
-    "node": "12.16.1",
-    "npm": "6.13.4"
+    "node": "14.x1"
   },
   "scripts": {
     "dev": "next dev",
