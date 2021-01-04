@@ -31,7 +31,7 @@ const AdminAccountsPage: FC = () => {
       Filter: createSelectFilter<Account>({
         items: [
           {
-            value: Role.ROOT_ADMIN,
+            value: Role.ADMIN,
             label: t('rootAdmin'),
           },
           {

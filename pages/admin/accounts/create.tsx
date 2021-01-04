@@ -19,12 +19,8 @@ const userFormValidationSchema = Yup.object().shape(
 
 const initialValues: Account = {
   email: '',
-  firstName: '',
-  lastName: '',
   password: '',
   role: Role.USER,
-  status: AccountStatus.ACTIVE,
-  emailVerified: true,
 };
 
 const AdminAccountCreationPage: FC = () => {
@@ -99,7 +95,7 @@ const AdminAccountCreationPage: FC = () => {
                       tag="select"
                       required>
                       <option value={Role.USER}>{t('user')}</option>
-                      <option value={Role.ROOT_ADMIN}>{t('admin')}</option>
+                      <option value={Role.ADMIN}>{t('admin')}</option>
                     </FormField>
                     <FormField
                       name="status"

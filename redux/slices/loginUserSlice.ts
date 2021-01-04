@@ -5,14 +5,15 @@ import {LoginCredentials, LoginUser} from '../../models/Account';
 import {RootState} from './index';
 
 // Reducers
-const {reducer, actions} = createSlice({
+const slice = createSlice({
   name: 'loginUser',
   initialState: null,
   reducers: {
-    setLoginUser: (state, action): LoginUser | null => action.payload,
+    setLoginUser: (state, action) => action.payload,
   },
 });
 
+export const {reducer, actions} = slice;
 // Actions
 export const getLoginUser = (): AppThunk<Promise<LoginUser>> => async (
   dispatch: Dispatch,

@@ -25,8 +25,6 @@ interface FormData extends Partial<Account> {
 }
 
 const initialValues: FormData = {
-  firstName: '',
-  lastName: '',
   email: '',
   password: '',
   confirmPassword: '',
@@ -47,8 +45,6 @@ const CreateFirstAdminForm: FC<Props> = ({
       await systemService.initSystem({
         password: correctSystemInitPassword,
         admin: {
-          firstName: values.firstName,
-          lastName: values.lastName,
           email: values.email,
           password: values.password,
         },

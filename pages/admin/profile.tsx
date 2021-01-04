@@ -11,7 +11,6 @@ import {adminOnly} from '../../hocs/adminOnly';
 import {LoginUser} from '../../models/Account';
 import {authService} from '../../services';
 import {FormField} from '../../components/admin/Formik/FormField';
-import {AccountEmailVerificationLabel} from '../../components/admin/AccountEmailVerificationLabel';
 import {sharedValidationSchema} from '../../view-models/Account';
 import {
   selectors,
@@ -22,10 +21,7 @@ import {SubmitButton} from '../../components/admin/Formik/SubmitButton';
 import {getErrorMessageCode} from '../../view-models/Error';
 import {AppDispatch} from '../../redux/store';
 
-const adminUpdateProfileSchema = Yup.object().shape({
-  firstName: sharedValidationSchema.firstName,
-  lastName: sharedValidationSchema.lastName,
-});
+const adminUpdateProfileSchema = Yup.object().shape({});
 
 const adminUpdatePasswordSchema = Yup.object().shape({
   currentPassword: sharedValidationSchema.password,
@@ -120,12 +116,6 @@ const ProfilePage: FC<Props> = ({loginUser, dispatch}: Props) => {
                     />
                     <FormField name="lastName" label={t('lastName')} required />
                     <FormField name="email" label={t('email')} readOnly />
-                    <div className="form-group">
-                      {t('emailVerification')}:{' '}
-                      <AccountEmailVerificationLabel
-                        emailVerified={values.emailVerified}
-                      />
-                    </div>
                   </div>
                   <div className="card-footer d-flex justify-content-end">
                     <SubmitButton size="sm" color="primary">

@@ -15,6 +15,7 @@ export enum AccountStatus {
 
 export interface Account {
   _id?: string;
+  password: string;
   email: string;
   role: Role;
 }

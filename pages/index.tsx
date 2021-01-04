@@ -1,8 +1,13 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import Head from 'next/head';
 import {everyone} from '../hocs/everyone';
+import {useRouter} from 'next/router';
 
 const IndexPage: FC = () => {
+  const router = useRouter();
+  useEffect(() => {
+    router.replace('admin/login');
+  }, []);
   return (
     <div className="container">
       <Head>

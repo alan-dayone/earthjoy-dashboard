@@ -51,7 +51,8 @@ export const LineChart: React.FC<Props> = ({
 
     if (analyticsData.length >= 1) {
       analyticsData.sort(
-        (elm1, elm2) => new Date(elm1._id) - new Date(elm2._id), // ascending
+        (elm1, elm2) =>
+          new Date(elm1._id).getTime() - new Date(elm2._id).getTime(), // ascending
       );
 
       const mappedAnalyticsData = analyticsData.reduce((accumulator, item) => {

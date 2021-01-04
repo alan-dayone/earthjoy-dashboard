@@ -38,7 +38,7 @@ const AdminAccountEditingPage: FC = () => {
   ): Promise<void> => {
     try {
       actions.setSubmitting(true);
-      await accountService.updateAccount(originalAccount.id, values);
+      await accountService.updateAccount(originalAccount._id, values);
       toastr.success(t('success'));
     } catch (e) {
       toastr.error(t(getErrorMessageCode(e)));
@@ -92,7 +92,7 @@ const AdminAccountEditingPage: FC = () => {
                       tag="select"
                       required>
                       <option value={Role.USER}>{t('user')}</option>
-                      <option value={Role.ROOT_ADMIN}>{t('admin')}</option>
+                      <option value={Role.ADMIN}>{t('admin')}</option>
                     </FormField>
                     <FormField
                       name="status"

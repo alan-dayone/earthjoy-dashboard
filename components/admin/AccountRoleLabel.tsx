@@ -13,9 +13,9 @@ export const AccountRoleLabel: FC<Props> = ({role}: Props) => {
     <span
       className={classNames(
         'badge',
-        role === Role.ROOT_ADMIN ? 'badge-danger' : 'badge-success',
+        role === Role.ADMIN ? 'badge-danger' : 'badge-success',
       )}>
-      {t(role === Role.ROOT_ADMIN ? 'rootAdmin' : 'user')}
+      {t(role === Role.ADMIN ? 'rootAdmin' : 'user')}
     </span>
   );
 };
