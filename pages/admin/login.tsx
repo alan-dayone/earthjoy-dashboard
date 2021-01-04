@@ -1,6 +1,5 @@
 import React, {FC} from 'react';
 import Router from 'next/router';
-import Link from 'next/link';
 import Head from 'next/head';
 import toastr from 'toastr';
 import {connect} from 'react-redux';
