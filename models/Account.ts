@@ -4,8 +4,8 @@ export interface LoginCredentials {
 }
 
 export enum Role {
-  ROOT_ADMIN = 'root_admin',
-  USER = 'user',
+  ADMIN = 'user::admin',
+  USER = 'user::user',
 }
 
 export enum AccountStatus {
@@ -14,36 +14,19 @@ export enum AccountStatus {
 }
 
 export interface Account {
-  id?: string;
+  _id?: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  password?: string;
-  status: AccountStatus;
-  emailVerified: boolean;
   role: Role;
 }
 
 export type LoginUser = Account;
 
 export const isAdmin = (user: LoginUser): boolean => {
-  return user.role === Role.ROOT_ADMIN;
+  return user.role === Role.ADMIN;
 };
 
 export const constraint = {
   email: {
-    MAX_LENGTH: 256,
-  },
-  name: {
-    MIN_LENGTH: 1,
-    MAX_LENGTH: 256,
-  },
-  firstName: {
-    MIN_LENGTH: 1,
-    MAX_LENGTH: 256,
-  },
-  lastName: {
-    MIN_LENGTH: 1,
     MAX_LENGTH: 256,
   },
   password: {

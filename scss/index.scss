@@ -1,3 +1,35 @@
 @import './common/index';
 @import './admin/index';
 @import './user/index';
+@import 'react-date-range/dist/styles.css';
+// main style file
+@import 'react-date-range/dist/theme/default.css';
+// theme css file
+@import 'tui-chart/dist/tui-chart.min.css'; // theme css file
+
+.dropdown-menu {
+  z-index: 1200;
+}
+
+div.dropdown-should-transparent .dropdown-menu {
+  border: none !important;
+  background: none !important;
+}
+
+div.analytics-page .custom-dropdown-toggle {
+  position: absolute;
+  right: 24px;
+}
+
+.flex-row-end {
+  justify-content: flex-end;
+}
+
+.rdrDateRangePickerWrapper {
+  border: 1px solid #c3c3c3;
+  z-index: 999;
+}
+
+.align-items-center {
+  align-items: center;
+}

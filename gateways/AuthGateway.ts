@@ -20,7 +20,7 @@ export class AuthGateway {
     email: string;
     password: string;
   }): Promise<{token: string}> {
-    const {data} = await this.restConnector.post('/accounts/login', body);
+    const {data} = await this.restConnector.post('login/', body);
     return {token: data.token};
   }
 
@@ -30,7 +30,7 @@ export class AuthGateway {
     }
 
     try {
-      const resp = await this.restConnector.get('/accounts/me');
+      const resp = await this.restConnector.get('/user/settings');
       return resp.data;
     } catch (e) {
       return null;

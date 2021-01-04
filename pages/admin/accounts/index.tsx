@@ -5,9 +5,7 @@ import Link from 'next/link';
 import {useTranslation} from 'react-i18next';
 import {adminOnly} from '../../../hocs/adminOnly';
 import {accountService} from '../../../services';
-import {Account, AccountStatus, Role} from '../../../models/Account';
-import {AccountEmailVerificationLabel} from '../../../components/admin/AccountEmailVerificationLabel';
-import {AccountStatusLabel} from '../../../components/admin/AccountStatusLabel';
+import {Account, Role} from '../../../models/Account';
 import {DataTable} from '../../../containers/admin/DataTable';
 import {createSelectFilter} from '../../../components/admin/DataTable/SelectFilter';
 import {AccountRoleLabel} from '../../../components/admin/AccountRoleLabel';
@@ -19,39 +17,13 @@ const AdminAccountsPage: FC = () => {
   const tableColumns: Array<Column<Account>> = [
     {
       Header: 'ID',
-      accessor: 'id',
+      accessor: '_id',
       width: '15%',
-    },
-    {
-      Header: t('firstName'),
-      accessor: 'firstName',
-      width: '10%',
-    },
-    {
-      Header: t('lastName'),
-      accessor: 'lastName',
-      width: '10%',
     },
     {
       Header: t('email'),
       accessor: 'email',
       width: '15%',
-    },
-    {
-      Header: t('emailVerification'),
-      accessor: 'emailVerified',
-      Filter: createSelectFilter<Account>({
-        items: [
-          {value: 'true', label: t('verified')},
-          {value: 'false', label: t('notVerified')},
-        ],
-      }),
-      width: '10%',
-      Cell: function EmailVerificationCell({
-        cell: {value},
-      }: CellProps<Account>): JSX.Element {
-        return <AccountEmailVerificationLabel emailVerified={value} />;
-      } as Renderer<CellProps<Account>>,
     },
     {
       Header: t('role'),
@@ -73,28 +45,6 @@ const AdminAccountsPage: FC = () => {
         cell: {value},
       }: CellProps<Account>): JSX.Element {
         return <AccountRoleLabel role={value} />;
-      } as Renderer<CellProps<Account>>,
-    },
-    {
-      Header: t('accountStatus'),
-      accessor: 'status',
-      Filter: createSelectFilter<Account>({
-        items: [
-          {
-            value: AccountStatus.ACTIVE,
-            label: t('active'),
-          },
-          {
-            value: AccountStatus.INACTIVE,
-            label: t('inactive'),
-          },
-        ],
-      }),
-      width: '10%',
-      Cell: function AccountStatusCell({
-        cell: {value},
-      }: CellProps<Account>): JSX.Element {
-        return <AccountStatusLabel status={value} />;
       } as Renderer<CellProps<Account>>,
     },
     {

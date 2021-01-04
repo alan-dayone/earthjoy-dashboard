@@ -4,12 +4,6 @@ import {emailSchema} from './CommonValidationSchemas';
 
 export const sharedValidationSchema = {
   email: emailSchema,
-  firstName: Yup.string()
-    .required()
-    .max(AccountConstraint.firstName.MAX_LENGTH),
-  lastName: Yup.string()
-    .required()
-    .max(AccountConstraint.lastName.MAX_LENGTH),
   password: Yup.string()
     .required()
     .min(AccountConstraint.password.MIN_LENGTH)
@@ -17,5 +11,5 @@ export const sharedValidationSchema = {
 };
 
 export const getAccountName = (account: Account): string => {
-  return [account.firstName, account.lastName].filter(str => !!str).join(' ');
+  return account.email;
 };

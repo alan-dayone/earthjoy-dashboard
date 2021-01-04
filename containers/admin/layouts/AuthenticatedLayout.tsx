@@ -73,13 +73,13 @@ const Container = (props: Props): JSX.Element => {
           <a className="c-sidebar-brand flex-column" style={{height: '56px'}}>
             <img
               className="c-sidebar-brand-full"
-              src="/static/img/admin_logo_bw_full.svg"
+              src="/static/img/logo.png"
               alt="ADMIN PORTAL"
               style={{height: 40}}
             />
             <img
               className="c-sidebar-brand-minimized"
-              src="/static/img/admin_logo_bw_minimized.svg"
+              src="/static/img/logo.png"
               alt="ADMIN"
               style={{height: 40}}
             />
@@ -88,56 +88,71 @@ const Container = (props: Props): JSX.Element => {
         <ul
           className="c-sidebar-nav ps ps--active-y"
           data-dropdown-accordion="true">
+          <li className="c-sidebar-nav-title">Analytics</li>
           <li className="c-sidebar-nav-item">
-            <Link href="/admin">
-              <a className={getSidebarNavItemLinkClass('/admin')}>
+            <Link href="/admin/analytics/new-users">
+              <a
+                className={getSidebarNavItemLinkClass(
+                  '/admin/analytics/new-users',
+                )}>
                 <i className="c-sidebar-nav-icon cil-speedometer" />
-                {t('dashboard')}
+                {t('New User')}
               </a>
             </Link>
           </li>
           <li className="c-sidebar-nav-item">
-            <Link href="/admin/accounts">
-              <a className={getSidebarNavItemLinkClass('/admin/accounts')}>
-                <i className="c-sidebar-nav-icon cil-user" />
-                {t('accounts')}
-              </a>
-            </Link>
-          </li>
-          <li className="c-sidebar-nav-title">EMAIL</li>
-          <li className="c-sidebar-nav-item">
-            <Link href="/admin/configurations/smtp-settings">
+            <Link href="/admin/analytics/paid-users">
               <a
                 className={getSidebarNavItemLinkClass(
-                  '/admin/configurations/smtp-settings',
+                  '/admin/analytics/paid-users',
                 )}>
-                <i className="c-sidebar-nav-icon cil-settings" />
-                {t('smtpSettings')}
+                <i className="c-sidebar-nav-icon cil-speedometer" />
+                {t('Paid User')}
               </a>
             </Link>
           </li>
-          <li className="c-sidebar-nav-item">
-            <Link href="/admin/configurations/email-address-verification">
-              <a
-                className={getSidebarNavItemLinkClass(
-                  '/admin/configurations/email-address-verification',
-                )}>
-                <i className="c-sidebar-nav-icon cil-envelope-closed" />
-                {t('emailAddressVerification')}
-              </a>
-            </Link>
-          </li>
-          <li className="c-sidebar-nav-item">
-            <Link href="/admin/configurations/password-reset">
-              <a
-                className={getSidebarNavItemLinkClass(
-                  '/admin/configurations/password-reset',
-                )}>
-                <i className="c-sidebar-nav-icon cil-lock-locked" />
-                {t('passwordReset')}
-              </a>
-            </Link>
-          </li>
+          {/*<li className="c-sidebar-nav-item">*/}
+          {/*  <Link href="/admin/accounts">*/}
+          {/*    <a className={getSidebarNavItemLinkClass('/admin/accounts')}>*/}
+          {/*      <i className="c-sidebar-nav-icon cil-user" />*/}
+          {/*      {t('accounts')}*/}
+          {/*    </a>*/}
+          {/*  </Link>*/}
+          {/*</li>*/}
+          {/*<li className="c-sidebar-nav-title">EMAIL</li>*/}
+          {/*<li className="c-sidebar-nav-item">*/}
+          {/*  <Link href="/admin/configurations/smtp-settings">*/}
+          {/*    <a*/}
+          {/*      className={getSidebarNavItemLinkClass(*/}
+          {/*        '/admin/configurations/smtp-settings',*/}
+          {/*      )}>*/}
+          {/*      <i className="c-sidebar-nav-icon cil-settings" />*/}
+          {/*      {t('smtpSettings')}*/}
+          {/*    </a>*/}
+          {/*  </Link>*/}
+          {/*</li>*/}
+          {/*<li className="c-sidebar-nav-item">*/}
+          {/*  <Link href="/admin/configurations/email-address-verification">*/}
+          {/*    <a*/}
+          {/*      className={getSidebarNavItemLinkClass(*/}
+          {/*        '/admin/configurations/email-address-verification',*/}
+          {/*      )}>*/}
+          {/*      <i className="c-sidebar-nav-icon cil-envelope-closed" />*/}
+          {/*      {t('emailAddressVerification')}*/}
+          {/*    </a>*/}
+          {/*  </Link>*/}
+          {/*</li>*/}
+          {/*<li className="c-sidebar-nav-item">*/}
+          {/*  <Link href="/admin/configurations/password-reset">*/}
+          {/*    <a*/}
+          {/*      className={getSidebarNavItemLinkClass(*/}
+          {/*        '/admin/configurations/password-reset',*/}
+          {/*      )}>*/}
+          {/*      <i className="c-sidebar-nav-icon cil-lock-locked" />*/}
+          {/*      {t('passwordReset')}*/}
+          {/*    </a>*/}
+          {/*  </Link>*/}
+          {/*</li>*/}
         </ul>
       </div>
       <div className="c-wrapper">
@@ -170,9 +185,9 @@ const Container = (props: Props): JSX.Element => {
                       {getAccountName(loginUser)}
                     </DropdownToggle>
                     <DropdownMenu right>
-                      <Link href="/admin/profile">
-                        <a className="dropdown-item">{t('profile')}</a>
-                      </Link>
+                      {/*<Link href="/admin/profile">*/}
+                      {/*  <a className="dropdown-item">{t('profile')}</a>*/}
+                      {/*</Link>*/}
                       <DropdownItem onClick={handleLogout}>
                         {t('logout')}
                       </DropdownItem>

@@ -90,13 +90,13 @@ const AdminLoginPage: FC<PageProps> = ({dispatch}: PageProps) => {
                       {t('login')}
                     </SubmitButton>
                   </div>
-                  <div className="col-8 text-right">
-                    <Link href="/admin/reset-password">
-                      <a className="btn btn-link px-0">
-                        {t('forgotPassword')}
-                      </a>
-                    </Link>
-                  </div>
+                  {/*<div className="col-8 text-right">*/}
+                  {/*  <Link href="/admin/reset-password">*/}
+                  {/*    <a className="btn btn-link px-0">*/}
+                  {/*      {t('forgotPassword')}*/}
+                  {/*    </a>*/}
+                  {/*  </Link>*/}
+                  {/*</div>*/}
                 </div>
               </form>
             )}
