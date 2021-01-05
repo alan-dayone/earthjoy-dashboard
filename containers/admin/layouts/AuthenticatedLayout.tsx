@@ -95,7 +95,7 @@ const Container = (props: Props): JSX.Element => {
                 className={getSidebarNavItemLinkClass(
                   '/admin/analytics/new-users',
                 )}>
-                {t('New User')}
+                {t('New Users')}
               </a>
             </Link>
           </li>
@@ -105,7 +105,7 @@ const Container = (props: Props): JSX.Element => {
                 className={getSidebarNavItemLinkClass(
                   '/admin/analytics/paid-users',
                 )}>
-                {t('Paid User')}
+                {t('Paid Users')}
               </a>
             </Link>
           </li>
