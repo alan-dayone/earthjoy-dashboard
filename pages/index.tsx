@@ -5,7 +5,7 @@ import {useRouter} from 'next/router';
 const IndexPage: FC = () => {
   const router = useRouter();
   useEffect(() => {
-    router.replace('admin/');
+    router.replace('admin/login');
   }, []);
   return (
     <div className="container">
