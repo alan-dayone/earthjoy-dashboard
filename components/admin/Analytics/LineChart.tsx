@@ -62,7 +62,7 @@ export const LineChart: React.FC<Props> = ({
 
       const enumeratedDates = enumerateDatesBetween(
         new Date(range.startDate),
-        new Date(range.endDate),
+        new Date(analyticsData[analyticsData.length - 1]._id),
       );
 
       enumeratedDates.map(date => {

@@ -19,16 +19,16 @@ const LineChart = dynamic(
 
 const PaidUserAnalytics: FC = () => {
   const {t} = useTranslation();
-  const initialMonth = new Date();
-  initialMonth.setDate(1);
-  initialMonth.setMonth(new Date().getMonth() - 1);
-
-  const currentMonth = new Date();
-  currentMonth.setDate(0);
+  const initialDate = moment()
+    .startOf('week')
+    .toDate();
+  const currentDate = moment()
+    .endOf('week')
+    .toDate();
 
   const [range, setRange] = useState({
-    startDate: initialMonth,
-    endDate: currentMonth,
+    startDate: initialDate,
+    endDate: currentDate,
     key: 'selection',
   });
 
