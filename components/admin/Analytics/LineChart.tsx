@@ -49,27 +49,27 @@ export const LineChart: React.FC<Props> = ({
 
     const analyticsData = await fetchData();
 
-    if (analyticsData.length >= 1) {
-      analyticsData.sort(
-        (elm1, elm2) =>
-          new Date(elm1._id).getTime() - new Date(elm2._id).getTime(), // ascending
-      );
+    analyticsData.sort(
+      (elm1, elm2) =>
+        new Date(elm1._id).getTime() - new Date(elm2._id).getTime(), // ascending
+    );
 
-      const mappedAnalyticsData = analyticsData.reduce((accumulator, item) => {
-        accumulator[item._id] = item.count;
-        return accumulator;
-      }, {});
+    const mappedAnalyticsData = analyticsData.reduce((accumulator, item) => {
+      accumulator[item._id] = item.count;
+      return accumulator;
+    }, {});
 
-      const enumeratedDates = enumerateDatesBetween(
-        new Date(range.startDate),
-        new Date(analyticsData[analyticsData.length - 1]._id),
-      );
+    const endDateRange = range.endDate;
 
-      enumeratedDates.map(date => {
-        chartedData.categories.push(date);
-        chartedData.series[0].data.push(mappedAnalyticsData[date] || 0);
-      });
-    }
+    const enumeratedDates = enumerateDatesBetween(
+      new Date(range.startDate),
+      new Date().getTime() > endDateRange.getTime() ? endDateRange : new Date(),
+    );
+
+    enumeratedDates.map(date => {
+      chartedData.categories.push(date);
+      chartedData.series[0].data.push(mappedAnalyticsData[date] || 0);
+    });
 
     console.log(chartedData);
     setData(chartedData);
