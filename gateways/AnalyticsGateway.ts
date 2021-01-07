@@ -16,12 +16,24 @@ export class AnalyticsGateway {
     this.loadAccessToken();
   }
 
+  public async getTotalUsers(): Promise<AnalyticsResponse> {
+    const {data} = await this.restConnector.get(`/user/analytics/total-users`);
+    return data;
+  }
+
+  public async getTotalPaidUsers(): Promise<AnalyticsResponse> {
+    const {data} = await this.restConnector.get(
+      `/user/analytics/total-paid-users`,
+    );
+    return data;
+  }
+
   public async getAnalyticsPaidUser(
     fromDate: string,
     toDate: string,
   ): Promise<AnalyticsResponse> {
     const {data} = await this.restConnector.get(
-      `/user/analytics/paid-user?fromDate=${fromDate}&toDate=${toDate}`,
+      `/user/analytics/paid-users?fromDate=${fromDate}&toDate=${toDate}`,
     );
     return data;
   }
@@ -30,7 +42,7 @@ export class AnalyticsGateway {
     toDate: string,
   ): Promise<AnalyticsResponse> {
     const {data} = await this.restConnector.get(
-      `/user/analytics/new-user?fromDate=${fromDate}&toDate=${toDate}`,
+      `/user/analytics/new-users?fromDate=${fromDate}&toDate=${toDate}`,
     );
     return data;
   }
