@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
-import {everyone} from '../hocs/everyone';
 import {useRouter} from 'next/router';
+import {adminOnly} from '../hocs/adminOnly';
 
 const IndexPage: FC = () => {
   const router = useRouter();
@@ -14,4 +14,4 @@ const IndexPage: FC = () => {
   );
 };
 
-export default everyone(IndexPage);
+export default adminOnly(IndexPage);
