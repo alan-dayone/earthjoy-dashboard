@@ -1,6 +1,6 @@
 {
   "name": "int-nextjs-ts",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "engines": {
     "node": "14.x"
   },
