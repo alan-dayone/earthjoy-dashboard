@@ -96,7 +96,7 @@ export const LineChart: React.FC<Props> = ({
         tickInterval: 'auto',
       },
       series: {
-        spline: true,
+        spline: false,
         showDot: false,
       },
     };
