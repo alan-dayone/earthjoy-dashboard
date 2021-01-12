@@ -56,12 +56,12 @@ export const AccountTableColumns = [
   {
     field: 'registeredOn',
     type: 'date',
-    label: 'Registered Date',
+    label: 'Signup Date',
     filterable: true,
   },
   {
     field: 'currentPlan',
-    label: 'Current Plan',
+    label: 'Membership Status',
     filterable: true,
     type: 'selection',
     items: [
@@ -77,20 +77,20 @@ export const AccountTableColumns = [
   },
   {
     field: 'journalStreak',
-    label: 'Journal Streak',
+    label: 'Current Streak',
   },
   {
     field: 'journalCounts',
-    label: 'Journal Count',
+    label: '# of journal entries',
   },
   {
     field: 'latestJournalDate',
-    label: 'Latest Journal Date',
+    label: 'Last date of entry',
     type: 'date',
   },
   {
     field: 'lastLoginDate',
-    label: 'Last Login Date',
+    label: 'Last date of login',
     type: 'date',
   },
   {
@@ -112,7 +112,7 @@ export const AccountTableColumns = [
   },
   {
     field: 'totalDonationAmount',
-    label: 'Total Donation Amount',
+    label: 'Total Donations Given',
   },
   {
     field: 'phoneOS',
@@ -120,14 +120,14 @@ export const AccountTableColumns = [
   },
   {
     field: 'stripeCustomerId',
-    label: 'Stripe Customer Id',
+    label: 'Stripe Customer ID',
   },
   {
     field: 'morningReminderTime',
-    label: 'Morning Reminder Time',
+    label: 'Morning Reminder',
   },
   {
     field: 'eveningReminderTime',
-    label: 'Evening Reminder Time',
+    label: 'Evening Reminder',
   },
 ];
