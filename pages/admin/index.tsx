@@ -6,7 +6,7 @@ import {adminOnly} from '../../hocs/adminOnly';
 const AdminDashboardPage: FC = () => {
   const router = useRouter();
   useEffect(() => {
-    router.replace('admin/analytics/new-users/');
+    router.replace('admin/accounts/');
   }, []);
   return (
     <div id="admin-dashboard-page">
