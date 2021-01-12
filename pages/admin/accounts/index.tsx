@@ -1,69 +1,81 @@
 import React, {FC} from 'react';
 import Head from 'next/head';
-import {CellProps, Column, Renderer} from 'react-table';
-import Link from 'next/link';
+import {CellProps, FilterProps, Renderer} from 'react-table';
 import {useTranslation} from 'react-i18next';
 import {adminOnly} from '../../../hocs/adminOnly';
-import {accountService} from '../../../services';
-import {Account, Role} from '../../../models/Account';
+import {analyticsService} from '../../../services';
+import {
+  Account,
+  AccountAnalyticsInfo,
+  AccountFilterPayload,
+  AccountTableColumns,
+} from '../../../models/Account';
 import {DataTable} from '../../../containers/admin/DataTable';
-import {createSelectFilter} from '../../../components/admin/DataTable/SelectFilter';
-import {AccountRoleLabel} from '../../../components/admin/AccountRoleLabel';
+import moment from 'moment';
+import {DateRangeFilter} from '../../../components/admin/DateRangeFilter';
 
 const AdminAccountsPage: FC = () => {
   const {t} = useTranslation();
   let dataTableRef;
+  //
+  const tableColumns: {
+    disableFilters: boolean;
+    Header: string;
+    accessor: string;
+    width: string;
+    disableSortBy: boolean;
+  }[] = AccountTableColumns.map(col => {
+    const builtColumn = {
+      Header: col.label,
+      accessor: col.field,
+      width: '15%',
+      disableFilters: !col.filterable,
+      disableSortBy: !col.sortable,
+      filterType: col.type,
+      Cell: function ActionsCell(
+        props: CellProps<AccountAnalyticsInfo>,
+      ): JSX.Element {
+        if (props.column.filterType === 'date' && props.row.values[col.field])
+          return (
+            <div>
+              {moment(new Date(props.row.values[col.field])).format(
+                'MMMM Do YYYY, h:mm:ss a',
+              )}
+            </div>
+          );
+        return <div>{props.row.values[col.field]}</div>;
+      } as Renderer<CellProps<Account>>,
+    };
+    if (col.type === 'date') {
+      // eslint-disable-next-line react/display-name
+      builtColumn.Filter = (props: FilterProps<any>) => (
+        <DateRangeFilter
+          initialDate={props.column.filterValue?.startDate}
+          currentDate={props.column.filterValue?.endDate}
+          onSelectedDateRange={props.column.setFilter}
+        />
+      );
+    }
 
-  const tableColumns: Array<Column<Account>> = [
-    {
-      Header: 'ID',
-      accessor: '_id',
-      width: '15%',
-    },
-    {
-      Header: t('email'),
-      accessor: 'email',
-      width: '15%',
-    },
-    {
-      Header: t('role'),
-      accessor: 'role',
-      Filter: createSelectFilter<Account>({
-        items: [
-          {
-            value: Role.ADMIN,
-            label: t('rootAdmin'),
-          },
-          {
-            value: Role.USER,
-            label: t('user'),
-          },
-        ],
-      }),
-      width: '10%',
-      Cell: function AccountRoleCell({
-        cell: {value},
-      }: CellProps<Account>): JSX.Element {
-        return <AccountRoleLabel role={value} />;
-      } as Renderer<CellProps<Account>>,
-    },
-    {
-      Header: t('actions'),
-      accessor: null,
-      disableSortBy: true,
-      disableFilters: true,
-      width: '15%',
-      Cell: function ActionsCell({row}: CellProps<Account>): JSX.Element {
-        return (
-          <Link
-            as={`/admin/accounts/${row.values.id}/edit`}
-            href="/admin/accounts/[userId]/edit">
-            <a className="btn btn-sm btn-info">{t('edit')}</a>
-          </Link>
-        );
-      } as Renderer<CellProps<Account>>,
-    },
-  ];
+    return builtColumn;
+  });
+
+  const findData = (payload: object) => {
+    const transformedPayload: AccountFilterPayload = {
+      limit: payload.pageSize,
+      page: payload.pageIndex + 1,
+      nameContains: payload.filters.name,
+      emailContains: payload.filters.email,
+      createdDateFrom: payload.filters.registeredOn?.startDate
+        ? moment(payload.filters.registeredOn.startDate).format('YYYY-MM-DD')
+        : undefined,
+      createdDateTo: payload.filters.registeredOn?.endDate
+        ? moment(payload.filters.registeredOn.endDate).format('YYYY-MM-DD')
+        : undefined,
+    } as AccountFilterPayload;
+    console.log({payload});
+    return analyticsService.getAnalyticAccountInfo(transformedPayload);
+  };
 
   return (
     <div id="admin-accounts-page">
@@ -89,17 +101,15 @@ const AdminAccountsPage: FC = () => {
                   }}>
                   {t('refresh')}
                 </button>
-                &nbsp;
-                <Link href="/admin/accounts/create">
-                  <a className="btn btn-sm btn-success">{t('create')}</a>
-                </Link>
+                {/*&nbsp;*/}
+                {/*<Link href="/admin/accounts/create">*/}
+                {/*  <a className="btn btn-sm btn-success">{t('create')}</a>*/}
+                {/*</Link>*/}
               </div>
               <DataTable
-                defaultOrders={[{id: 'status', desc: true}]}
+                defaultOrders={[{id: 'createdOn', desc: true}]}
                 tableColumns={tableColumns}
-                findData={accountService.findAccountsForAdmin.bind(
-                  accountService,
-                )}
+                findData={findData}
                 dataTableRef={(ref): void => {
                   dataTableRef = ref;
                 }}

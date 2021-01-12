@@ -88,6 +88,14 @@ const Container = (props: Props): JSX.Element => {
         <ul
           className="c-sidebar-nav ps ps--active-y"
           data-dropdown-accordion="true">
+          <li className="c-sidebar-nav-item">
+            <Link href="/admin/accounts">
+              <a className={getSidebarNavItemLinkClass('/admin/accounts')}>
+                <i className="c-sidebar-nav-icon cil-user" />
+                {t('accounts')}
+              </a>
+            </Link>
+          </li>
           <li className="c-sidebar-nav-title">Analytics</li>
           <li className="c-sidebar-nav-item">
             <Link href="/admin/analytics/new-users">
@@ -113,14 +121,7 @@ const Container = (props: Props): JSX.Element => {
               </a>
             </Link>
           </li>
-          {/*<li className="c-sidebar-nav-item">*/}
-          {/*  <Link href="/admin/accounts">*/}
-          {/*    <a className={getSidebarNavItemLinkClass('/admin/accounts')}>*/}
-          {/*      <i className="c-sidebar-nav-icon cil-user" />*/}
-          {/*      {t('accounts')}*/}
-          {/*    </a>*/}
-          {/*  </Link>*/}
-          {/*</li>*/}
+
           {/*<li className="c-sidebar-nav-title">EMAIL</li>*/}
           {/*<li className="c-sidebar-nav-item">*/}
           {/*  <Link href="/admin/configurations/smtp-settings">*/}

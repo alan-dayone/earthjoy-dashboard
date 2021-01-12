@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Column,
   FilterProps,
@@ -9,7 +9,7 @@ import {
   useSortBy,
   useTable,
 } from 'react-table';
-import {useRouter} from 'next/router';
+// import {useRouter} from 'next/router';
 import classNames from 'classnames';
 import {Pagination} from '../../components/admin/Pagination';
 import {isServer} from '../../utils/environment';
@@ -39,32 +39,35 @@ export const DataTable = <D extends object>(props: {
     return null;
   }
 
-  const {defaultOrders, tableColumns, findData, dataTableRef} = props;
-  const router = useRouter();
-
-  const dtQuery = JSON.parse((router.query['dtQuery'] as string) || '{}');
   const {
-    filters: initialFilters = [],
-    pageIndex: initialPageIndexStr = 0,
-    pageSize: initialPageSizeStr = PAGE_SIZE_LIST[0],
-    sortBy: initialSortBy = defaultOrders ?? [],
-  } = dtQuery;
+    // defaultOrders,
+    tableColumns,
+    findData,
+    dataTableRef,
+  } = props;
+  // const router = useRouter();
+  //
+  // const dtQuery = JSON.parse((router.query['dtQuery'] as string) || '{}');
+  // const {
+  //   filters: initialFilters = [],
+  //   pageIndex: initialPageIndexStr = 0,
+  //   pageSize: initialPageSizeStr = PAGE_SIZE_LIST[1],
+  //   sortBy: initialSortBy = defaultOrders ?? [],
+  // } = dtQuery;
+  //
+  // console.log({dtQuery});
 
-  const initialPageIndex = parseInt(initialPageIndexStr);
-  const initialPageSize = parseInt(initialPageSizeStr);
+  const initialPageIndex = parseInt('0');
+  const initialPageSize = parseInt(PAGE_SIZE_LIST[1].toString());
   const initialDataLoaded = useRef(false);
   const [loadingData, setLoadingData] = useState(true);
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0);
 
-  const {
-    headers,
-    page,
-    prepareRow,
-    gotoPage,
-    state: {pageIndex, filters, pageSize, sortBy},
-    setPageSize,
-  } = useTable<D>(
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  const {headers, page, prepareRow, gotoPage, state, setPageSize} = useTable(
     {
       columns: tableColumns,
       data,
@@ -72,8 +75,10 @@ export const DataTable = <D extends object>(props: {
       initialState: {
         pageIndex: initialPageIndex,
         pageSize: initialPageSize,
-        filters: initialFilters,
-        sortBy: initialSortBy,
+        // filters: initialFilters,
+        // sortBy: initialSortBy,
+        sortBy: [],
+        filters: [],
       },
       defaultColumn: {
         Filter: DefaultColumnFilter,
@@ -87,7 +92,9 @@ export const DataTable = <D extends object>(props: {
     usePagination,
   );
 
-  const fetchData = async (): Promise<void> => {
+  const {filters, pageSize, sortBy, pageIndex: statePageIndex} = state;
+
+  const fetchData = useCallback(async (): Promise<void> => {
     setLoadingData(true);
 
     const filterObj = filters.reduce(
@@ -98,7 +105,7 @@ export const DataTable = <D extends object>(props: {
       return `${value.id} ${value.desc ? 'desc' : 'asc'}`;
     });
 
-    const {data, count} = await findData({
+    const {docs: data, totalDocs: count} = await findData({
       pageIndex,
       filters: filterObj,
       pageSize,
@@ -109,23 +116,23 @@ export const DataTable = <D extends object>(props: {
     setTotal(count);
 
     if (initialDataLoaded.current) {
-      const newUrl = new URL(window.location.href);
-      newUrl.searchParams.set(
-        'dtQuery',
-        JSON.stringify({
-          pageIndex: pageIndex || undefined,
-          filters,
-          sortBy,
-          pageSize,
-        }),
-      );
-      await router.replace(router.route, newUrl.toString());
+      // const newUrl = new URL(window.location.href);
+      // newUrl.searchParams.set(
+      //   'dtQuery',
+      //   JSON.stringify({
+      //     pageIndex: pageIndex || undefined,
+      //     filters,
+      //     sortBy,
+      //     pageSize,
+      //   }),
+      // );
+      // await router.replace(router.route, newUrl.toString());
     } else {
       initialDataLoaded.current = true;
     }
 
     setLoadingData(false);
-  };
+  }, [pageIndex, pageSize, filters, sortBy]);
 
   if (dataTableRef) {
     dataTableRef({refresh: fetchData});
@@ -144,9 +151,13 @@ export const DataTable = <D extends object>(props: {
     DELAY_FILTER_CHANGE,
   );
 
+  useEffect(() => {
+    setPageIndex(statePageIndex);
+  }, [statePageIndex]);
   // Fetch initial data and listen to page index and page size change to fetch new data.
   useEffect(() => {
     fetchData();
+    console.log({pageIndex});
   }, [pageIndex, pageSize]);
 
   // Reset page index to 0 when user changes filters, but debounce the change to wait for user typing.
@@ -170,7 +181,7 @@ export const DataTable = <D extends object>(props: {
       <div className="table-responsive">
         <table className="admin-table table">
           <thead>
-            <tr>
+            <tr className={'d-flex'}>
               {headers.map((header, index) => {
                 const {
                   style: headerStyle,
@@ -178,6 +189,7 @@ export const DataTable = <D extends object>(props: {
                 } = header.getHeaderProps(header.getSortByToggleProps());
                 return (
                   <th
+                    className={'col-2'}
                     key={`th-${index}`}
                     style={{width: header.width, ...headerStyle}}
                     {...otherHeaderProps}>
@@ -202,9 +214,9 @@ export const DataTable = <D extends object>(props: {
               })}
             </tr>
             {showFiltersOnHeader && (
-              <tr>
+              <tr className={'d-flex'}>
                 {headers.map((header, index) => (
-                  <th key={`th-filter-${index}`}>
+                  <th key={`th-filter-${index}`} className={'col-2'}>
                     {header.canFilter ? header.render('Filter') : null}
                   </th>
                 ))}
@@ -225,10 +237,13 @@ export const DataTable = <D extends object>(props: {
               page.map(row => {
                 prepareRow(row);
                 return (
-                  <tr key={row.id} {...row.getRowProps()}>
+                  <tr className={'d-flex'} key={row.id} {...row.getRowProps()}>
                     {row.cells.map((cell, i) => {
                       return (
-                        <td key={`${row.id}-${i}`} {...cell.getCellProps()}>
+                        <td
+                          className={'col-2'}
+                          key={`${row.id}-${i}`}
+                          {...cell.getCellProps()}>
                           {cell.render('Cell')}
                         </td>
                       );
@@ -273,7 +288,10 @@ export const DataTable = <D extends object>(props: {
               alignRight
               pageCount={Math.ceil(total / pageSize)}
               pageIndex={pageIndex}
-              onPageChange={gotoPage}
+              onPageChange={page => {
+                setPageIndex(page);
+                gotoPage(page);
+              }}
             />
           </div>
         </div>

@@ -1,5 +1,6 @@
 import {AxiosInstance} from 'axios';
-import {Account} from '../models/Account';
+import {Account, AccountAnalyticsInfo} from '../models/Account';
+import qs from 'qs';
 
 export class AccountGateway {
   private restConnector: AxiosInstance;

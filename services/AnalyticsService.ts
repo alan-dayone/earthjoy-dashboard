@@ -1,6 +1,6 @@
 import {AnalyticsGateway} from '../gateways/AnalyticsGateway';
 import {AnalyticsResponse} from '../models/Analytics';
-import {Account, AccountFilterPayload} from '../models/Account';
+import {AccountAnalyticsInfo, AccountFilterPayload} from '../models/Account';
 
 export class AnalyticsService {
   private analyticsGateWay: AnalyticsGateway;
@@ -31,9 +31,9 @@ export class AnalyticsService {
     return this.analyticsGateWay.getAnalyticsNewUser(fromDate, toDate);
   }
 
-  public async getAnalyticsAccounts(
+  public async getAnalyticAccountInfo(
     payload: AccountFilterPayload,
-  ): Promise<Account[]> {
-    return this.analyticsGateWay.getAnalyticsAccounts(payload);
+  ): Promise<AccountAnalyticsInfo[]> {
+    return this.analyticsGateWay.getAnalyticAccountInfo(payload);
   }
 }

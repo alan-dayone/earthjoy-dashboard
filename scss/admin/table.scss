@@ -1,7 +1,7 @@
 /* stylelint-disable at-rule-no-unknown */
 .admin-table {
   @include media-breakpoint-up(md) {
-    table-layout: fixed;
+    //table-layout: fixed;
   }
 
   &__header-text {
