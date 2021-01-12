@@ -4,15 +4,15 @@ import {CellProps, FilterProps, Renderer} from 'react-table';
 import {useTranslation} from 'react-i18next';
 import {adminOnly} from '../../../hocs/adminOnly';
 import {analyticsService} from '../../../services';
-import {
-  Account,
-  AccountAnalyticsInfo,
-  AccountFilterPayload,
-  AccountTableColumns,
-} from '../../../models/Account';
+import {Account, AccountAnalyticsInfo} from '../../../models/Account';
 import {DataTable} from '../../../containers/admin/DataTable';
 import moment from 'moment';
 import {DateRangeFilter} from '../../../components/admin/DateRangeFilter';
+import {
+  AccountTableColumns,
+  transformPayload,
+} from '../../../view-models/Account';
+import {createSelectFilter} from '../../../components/admin/DataTable/SelectFilter';
 
 const AdminAccountsPage: FC = () => {
   const {t} = useTranslation();
@@ -46,34 +46,33 @@ const AdminAccountsPage: FC = () => {
         return <div>{props.row.values[col.field]}</div>;
       } as Renderer<CellProps<Account>>,
     };
-    if (col.type === 'date') {
-      // eslint-disable-next-line react/display-name
-      builtColumn.Filter = (props: FilterProps<any>) => (
-        <DateRangeFilter
-          initialDate={props.column.filterValue?.startDate}
-          currentDate={props.column.filterValue?.endDate}
-          onSelectedDateRange={props.column.setFilter}
-        />
-      );
+
+    switch (col.type) {
+      case 'date':
+        // eslint-disable-next-line react/display-name
+        builtColumn.Filter = (props: FilterProps<any>) => (
+          <DateRangeFilter
+            initialDate={props.column.filterValue?.startDate}
+            currentDate={props.column.filterValue?.endDate}
+            onSelectedDateRange={props.column.setFilter}
+          />
+        );
+        break;
+      case 'selection':
+        console.log({col});
+        builtColumn.Filter = createSelectFilter<AccountAnalyticsInfo>({
+          items: col.items,
+        });
+        break;
+      default:
+        break;
     }
 
     return builtColumn;
   });
 
   const findData = (payload: object) => {
-    const transformedPayload: AccountFilterPayload = {
-      limit: payload.pageSize,
-      page: payload.pageIndex + 1,
-      nameContains: payload.filters.name,
-      emailContains: payload.filters.email,
-      createdDateFrom: payload.filters.registeredOn?.startDate
-        ? moment(payload.filters.registeredOn.startDate).format('YYYY-MM-DD')
-        : undefined,
-      createdDateTo: payload.filters.registeredOn?.endDate
-        ? moment(payload.filters.registeredOn.endDate).format('YYYY-MM-DD')
-        : undefined,
-    } as AccountFilterPayload;
-    console.log({payload});
+    const transformedPayload = transformPayload(payload);
     return analyticsService.getAnalyticAccountInfo(transformedPayload);
   };
 
@@ -101,10 +100,6 @@ const AdminAccountsPage: FC = () => {
                   }}>
                   {t('refresh')}
                 </button>
-                {/*&nbsp;*/}
-                {/*<Link href="/admin/accounts/create">*/}
-                {/*  <a className="btn btn-sm btn-success">{t('create')}</a>*/}
-                {/*</Link>*/}
               </div>
               <DataTable
                 defaultOrders={[{id: 'createdOn', desc: true}]}

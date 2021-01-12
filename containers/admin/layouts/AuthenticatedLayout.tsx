@@ -103,7 +103,7 @@ const Container = (props: Props): JSX.Element => {
                 className={getSidebarNavItemLinkClass(
                   '/admin/analytics/new-users',
                 )}>
-                <i className="cil-user mr-sm-3"></i>
+                <i className="cil-user-follow mr-sm-3"></i>
 
                 {t('New Users')}
               </a>

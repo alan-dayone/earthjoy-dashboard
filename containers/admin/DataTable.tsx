@@ -39,23 +39,7 @@ export const DataTable = <D extends object>(props: {
     return null;
   }
 
-  const {
-    // defaultOrders,
-    tableColumns,
-    findData,
-    dataTableRef,
-  } = props;
-  // const router = useRouter();
-  //
-  // const dtQuery = JSON.parse((router.query['dtQuery'] as string) || '{}');
-  // const {
-  //   filters: initialFilters = [],
-  //   pageIndex: initialPageIndexStr = 0,
-  //   pageSize: initialPageSizeStr = PAGE_SIZE_LIST[1],
-  //   sortBy: initialSortBy = defaultOrders ?? [],
-  // } = dtQuery;
-  //
-  // console.log({dtQuery});
+  const {tableColumns, findData, dataTableRef} = props;
 
   const initialPageIndex = parseInt('0');
   const initialPageSize = parseInt(PAGE_SIZE_LIST[1].toString());
@@ -75,8 +59,6 @@ export const DataTable = <D extends object>(props: {
       initialState: {
         pageIndex: initialPageIndex,
         pageSize: initialPageSize,
-        // filters: initialFilters,
-        // sortBy: initialSortBy,
         sortBy: [],
         filters: [],
       },
@@ -115,19 +97,7 @@ export const DataTable = <D extends object>(props: {
     setData(data);
     setTotal(count);
 
-    if (initialDataLoaded.current) {
-      // const newUrl = new URL(window.location.href);
-      // newUrl.searchParams.set(
-      //   'dtQuery',
-      //   JSON.stringify({
-      //     pageIndex: pageIndex || undefined,
-      //     filters,
-      //     sortBy,
-      //     pageSize,
-      //   }),
-      // );
-      // await router.replace(router.route, newUrl.toString());
-    } else {
+    if (!initialDataLoaded.current) {
       initialDataLoaded.current = true;
     }
 
@@ -216,7 +186,7 @@ export const DataTable = <D extends object>(props: {
             {showFiltersOnHeader && (
               <tr className={'d-flex'}>
                 {headers.map((header, index) => (
-                  <th key={`th-filter-${index}`} className={'col-2'}>
+                  <th key={`th-filter-${index}`} className={'col-2 pr-2'}>
                     {header.canFilter ? header.render('Filter') : null}
                   </th>
                 ))}

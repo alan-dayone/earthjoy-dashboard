@@ -39,7 +39,11 @@ export const DateRangeFilter: React.FC<{
           {moment(range.endDate).format('YYYY/MM/DD')}
         </DropdownToggle>
         <DropdownMenu>
-          <DateRangePicker ranges={[range]} onChange={handleSelectDateRange} />
+          <DateRangePicker
+            showMonthAndYearPickers={true}
+            ranges={[range]}
+            onChange={handleSelectDateRange}
+          />
         </DropdownMenu>
       </UncontrolledDropdown>
     </div>
