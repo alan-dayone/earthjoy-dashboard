@@ -26,6 +26,15 @@ export const isAdmin = (user: LoginUser): boolean => {
   return user.role === Role.ADMIN;
 };
 
+export type AccountFilterPayload = {
+  createdDateFrom?: string;
+  createdDateTo?: string;
+  page: number;
+  limit: number;
+  nameContains: string;
+  emailContains: string;
+};
+
 export const constraint = {
   email: {
     MAX_LENGTH: 256,

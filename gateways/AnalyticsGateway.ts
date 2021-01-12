@@ -1,6 +1,8 @@
 import Cookies from 'js-cookie';
 import {AxiosInstance} from 'axios';
+import qs from 'qs';
 import {AnalyticsResponse} from '../models/Analytics';
+import {Account, AccountFilterPayload} from '../models/Account';
 
 const AUTHORIZATION_HEADER = 'Authorization';
 
@@ -37,6 +39,16 @@ export class AnalyticsGateway {
     );
     return data;
   }
+
+  public async getAnalyticsAccounts(
+    payload: AccountFilterPayload,
+  ): Promise<Account[]> {
+    const {data} = await this.restConnector.get(
+      `/user/analytics/accounts?${qs.stringify(payload)}`,
+    );
+    return data;
+  }
+
   public async getAnalyticsNewUser(
     fromDate: string,
     toDate: string,
