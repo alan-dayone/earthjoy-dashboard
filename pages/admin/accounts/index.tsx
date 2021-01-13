@@ -43,6 +43,10 @@ const AdminAccountsPage: FC = () => {
               )}
             </div>
           );
+
+        if (col.type === 'custom') {
+          return <div>{col.resolver(props.row.values[col.field])}</div>;
+        }
         return <div>{props.row.values[col.field]}</div>;
       } as Renderer<CellProps<Account>>,
     };

@@ -125,9 +125,17 @@ export const AccountTableColumns = [
   {
     field: 'morningReminderTime',
     label: 'Morning Reminder',
+    type: 'custom',
+    resolver: (val: string | number) => {
+      return moment(val).format('h:mm A');
+    },
   },
   {
     field: 'eveningReminderTime',
     label: 'Evening Reminder',
+    type: 'custom',
+    resolver: (val: string | number) => {
+      return moment(val).format('h:mm A');
+    },
   },
 ];
