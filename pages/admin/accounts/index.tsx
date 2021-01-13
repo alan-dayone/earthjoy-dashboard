@@ -63,7 +63,6 @@ const AdminAccountsPage: FC = () => {
         );
         break;
       case 'selection':
-        console.log({col});
         builtColumn.Filter = createSelectFilter<AccountAnalyticsInfo>({
           items: col.items,
         });

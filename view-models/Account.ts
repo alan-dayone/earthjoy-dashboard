@@ -36,8 +36,17 @@ export const transformPayload = payload => {
       ? moment(payload.filters.registeredOn.endDate).format('YYYY-MM-DD')
       : undefined,
   } as AccountFilterPayload;
-  console.log({payload});
   return transformedPayload;
+};
+
+const parseHours = (val: string | number) => {
+  const hour = Math.floor(val / 60);
+  const minute = val % 60;
+  return moment()
+    .hour(hour)
+    .minute(minute)
+    .second(0)
+    .format('h:mm A');
 };
 
 export const AccountTableColumns = [
@@ -126,16 +135,12 @@ export const AccountTableColumns = [
     field: 'morningReminderTime',
     label: 'Morning Reminder',
     type: 'custom',
-    resolver: (val: string | number) => {
-      return moment(val).format('h:mm A');
-    },
+    resolver: parseHours,
   },
   {
     field: 'eveningReminderTime',
     label: 'Evening Reminder',
     type: 'custom',
-    resolver: (val: string | number) => {
-      return moment(val).format('h:mm A');
-    },
+    resolver: parseHours,
   },
 ];
