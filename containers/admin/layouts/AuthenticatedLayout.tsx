@@ -91,7 +91,7 @@ const Container = (props: Props): JSX.Element => {
           <li className="c-sidebar-nav-item">
             <Link href="/admin/accounts">
               <a className={getSidebarNavItemLinkClass('/admin/accounts')}>
-                <i className="c-sidebar-nav-icon cil-user" />
+                <i className="mr-sm-3 cil-user" />
                 {t('accounts')}
               </a>
             </Link>

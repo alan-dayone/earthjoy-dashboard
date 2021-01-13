@@ -90,16 +90,16 @@ export const AccountTableColumns = [
   },
   {
     field: 'journalCounts',
-    label: '# of journal entries',
+    label: '# of Journal Entries',
   },
   {
     field: 'latestJournalDate',
-    label: 'Last date of entry',
+    label: 'Last Date of eEtry',
     type: 'date',
   },
   {
     field: 'lastLoginDate',
-    label: 'Last date of login',
+    label: 'Last Date of login',
     type: 'date',
   },
   {
