@@ -40,8 +40,8 @@ export const transformPayload = payload => {
 };
 
 const parseHours = (val: string | number) => {
-  const hour = Math.floor(val / 60);
-  const minute = val % 60;
+  const hour = Math.floor(Number(val) / 60);
+  const minute = Number(val) % 60;
   return moment()
     .hour(hour)
     .minute(minute)
