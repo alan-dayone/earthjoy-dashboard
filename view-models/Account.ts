@@ -6,6 +6,7 @@ import {
 } from '../models/Account';
 import {emailSchema} from './CommonValidationSchemas';
 import moment from 'moment';
+import {accountService} from '../services';
 
 export const sharedValidationSchema = {
   email: emailSchema,
@@ -50,6 +51,23 @@ const parseHours = (val: string | number) => {
 };
 
 export const AccountTableColumns = [
+  {
+    field: 'action',
+    type: 'action',
+    label: 'Delete',
+    handler: async (object: Account, callback: () => {}): Promise<void> => {
+      const result = confirm(`Delete user ${object.email} permanently?`);
+      if (result) {
+        await accountService.deleteAccount(object._id);
+        callback();
+      }
+    },
+  },
+  {
+    field: '_id',
+    type: 'string',
+    label: 'Id',
+  },
   {
     field: 'email',
     type: 'string',

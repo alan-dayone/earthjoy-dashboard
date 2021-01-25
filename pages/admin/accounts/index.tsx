@@ -13,6 +13,7 @@ import {
   transformPayload,
 } from '../../../view-models/Account';
 import {createSelectFilter} from '../../../components/admin/DataTable/SelectFilter';
+import {toast} from 'react-toastify';
 
 const AdminAccountsPage: FC = () => {
   const {t} = useTranslation();
@@ -28,7 +29,7 @@ const AdminAccountsPage: FC = () => {
     const builtColumn = {
       Header: col.label,
       accessor: col.field,
-      width: '15%',
+      width: '10%',
       disableFilters: !col.filterable,
       disableSortBy: !col.sortable,
       filterType: col.type,
@@ -46,6 +47,23 @@ const AdminAccountsPage: FC = () => {
 
         if (col.type === 'custom') {
           return <div>{col.resolver(props.row.values[col.field])}</div>;
+        }
+
+        if (col.type === 'action') {
+          return (
+            <button
+              onClick={() => {
+                col.handler(props.row.values, () => {
+                  toast.success('Deleted successfully');
+                  if (dataTableRef) {
+                    dataTableRef.refresh();
+                  }
+                });
+              }}
+              className={'btn btn-danger'}>
+              {col.label}
+            </button>
+          );
         }
         return <div>{props.row.values[col.field]}</div>;
       } as Renderer<CellProps<Account>>,

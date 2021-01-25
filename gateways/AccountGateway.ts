@@ -14,6 +14,12 @@ export class AccountGateway {
     return data;
   }
 
+  public async deleteAccount(id: string): Promise<void> {
+    await this.restConnector.post('/admin/delete-user', {
+      id,
+    });
+  }
+
   public async find({
     pageIndex,
     pageSize,

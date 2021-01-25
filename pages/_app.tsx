@@ -13,6 +13,8 @@ import {authService} from '../services';
 import {getCookieFromRequest} from '../utils/cookie';
 import {getLoginUser} from '../redux/slices/loginUserSlice';
 import {ACCESS_TOKEN_COOKIE} from '../gateways/AuthGateway';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../scss/index.scss';
 
 interface CustomNextAppContext extends AppContext {
@@ -45,6 +47,8 @@ class ComposedApp extends App<ReduxWrapperAppProps<RootState>> {
     const {Component, pageProps, store} = this.props;
     return (
       <Provider store={store}>
+        <ToastContainer />
+
         <I18nextProvider i18n={i18next}>
           <Component {...pageProps} />
         </I18nextProvider>

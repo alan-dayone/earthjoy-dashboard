@@ -47,4 +47,8 @@ export class AccountService {
   public async findOneForAdmin(id: string): Promise<Account | null> {
     return this.accountGateway.findOne(id);
   }
+
+  public async deleteAccount(id: string): Promise<void> {
+    return this.accountGateway.deleteAccount(id);
+  }
 }
