@@ -45,7 +45,7 @@ const PaidUserAnalytics: FC = () => {
 
   const fetchTotalPaidUsers = useCallback(async () => {
     const response = await analyticsService.getTotalPaidUsers();
-    setTotalPaidUsers(response[0]);
+    if (response.length) setTotalPaidUsers(response[0]);
   }, []);
 
   const fetchData = useCallback(() => {
